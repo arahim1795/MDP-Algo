@@ -6,12 +6,14 @@ package map;
  */
 public class Tile {
 
-	private boolean obstacle = false, waypoint = false;
+	private boolean obstacle = false; //if tile is obstacle
+	private boolean waypoint = false; //if tile is waypoint	
 	private int[] coor;
 	
 	/**
 	 * Tiles of field
 	 */
+	
 	public Tile(int x, int y) {
 		coor = new int[2];
 		
@@ -23,6 +25,7 @@ public class Tile {
 	 * Returns true is tile is marked as an obstacle
 	 * @return true if tile is set as an obstacle, false otherwise
 	 */
+	
 	public boolean isObstacle() {
 		return obstacle;
 	}
@@ -31,6 +34,7 @@ public class Tile {
 	 * Set tile as waypoint
 	 * @param obstacle If set to true, tile is set as obstacle
 	 */
+	
 	public void setObstacle(boolean obstacle) {
 		this.obstacle = obstacle;
 	}
@@ -39,6 +43,7 @@ public class Tile {
 	 * Returns true is tile is set as a waypoint
 	 * @return true if tile is set as a waypoint, false otherwise
 	 */
+	
 	public boolean isWaypoint() {
 		return waypoint;
 	}
@@ -47,6 +52,7 @@ public class Tile {
 	 * Set tile as waypoint
 	 * @param waypoint If set to true, tile is set as waypoint
 	 */
+	
 	public void setWaypoint(boolean waypoint) {
 		this.waypoint = waypoint;
 	}
@@ -56,6 +62,7 @@ public class Tile {
 	 * not with respect to the array index of the tile)
 	 * @return the x
 	 */
+	
 	public int[] getCoor() {
 		return coor;
 	}
