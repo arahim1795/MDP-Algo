@@ -8,8 +8,8 @@ import utility.GridOperation;
 public class FastestPath {
 	//
 	public void aStarSearch(int start, int goal, int[] mapBit, DIRECTION sDirection){
-		int[] gScore = new int[300]; //rea
-		int[] fscore = new int[300];
+		int[] gScore = new int[300]; //real cost matrix
+		int[] fscore = new int[300]; //heuristic cost matrix
 		int[] visibilityG = new int[300];
 		ArrayList<Integer> expandedNodes = new ArrayList<Integer>();
 		
