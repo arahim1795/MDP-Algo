@@ -11,22 +11,22 @@ public class GridOperation {
 	}
 	//positioning
 	public static int getRow(int gridNum){
-		return gridNum/Constants.MAP_COLS+1;
+		return gridNum/Constants.LEN+1;
 	}
 	public static int getCol(int gridNum){
-		return (gridNum%Constants.MAP_COLS)+1;
+		return (gridNum%Constants.LEN)+1;
 	}
 	public static int index(int row, int col){
-		return ((row-1)*Constants.MAP_COLS+col);
+		return ((row-1)*Constants.LEN+col);
 	}
 	//navigation
 	public static int incRow(int gridNum){
 		//+15
-		return gridNum+Constants.MAP_COLS;
+		return gridNum+Constants.LEN;
 	}
 	public static int decRow(int gridNum){
 		//-15
-		return gridNum-Constants.MAP_COLS;
+		return gridNum-Constants.LEN;
 	}
 	public static int incCol(int gridNum){
 		return gridNum+1;
@@ -47,7 +47,7 @@ public class GridOperation {
 				j++;
 			};
 			//down
-			case 2 : if(getRow(gridNum)+1<=Constants.MAP_ROWS){
+			case 2 : if(getRow(gridNum)+1<=Constants.WID){
 				output[j] = incRow(gridNum);
 				j++;
 			};
