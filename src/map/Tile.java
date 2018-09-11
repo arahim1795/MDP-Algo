@@ -2,18 +2,17 @@ package map;
 
 /**
  * @author 18/19 S1 G3
- *
  */
 public class Tile {
 
-	private boolean obstacle = false; //if tile is obstacle
-	private boolean waypoint = false; //if tile is waypoint	
+	private boolean obstacle = false, explored = false;
 	private int[] coor;
 	
 	/**
 	 * Tiles of field
+	 * @param x x-coordinate of Tile
+	 * @param y y-coordinate of Tile
 	 */
-	
 	public Tile(int x, int y) {
 		coor = new int[2];
 		
@@ -25,44 +24,41 @@ public class Tile {
 	 * Returns true is tile is marked as an obstacle
 	 * @return true if tile is set as an obstacle, false otherwise
 	 */
-	
 	public boolean isObstacle() {
 		return obstacle;
 	}
 
 	/**
-	 * Set tile as waypoint
+	 * Set tile as an obstacle
 	 * @param obstacle If set to true, tile is set as obstacle
 	 */
-	
 	public void setObstacle(boolean obstacle) {
 		this.obstacle = obstacle;
 	}
 
 	/**
-	 * Returns true is tile is set as a waypoint
-	 * @return true if tile is set as a waypoint, false otherwise
+	 * Returns true if tile has been explored by Robot
+	 * @return true if tile has been explored, false otherwise
+	 * @see robot.Robot
 	 */
-	
-	public boolean isWaypoint() {
-		return waypoint;
+	public boolean isExplored() {
+		return explored;
 	}
 
 	/**
-	 * Set tile as waypoint
-	 * @param waypoint If set to true, tile is set as waypoint
+	 * Set tile as explored by robot
+	 * @param explored If set to true, tile has been explored by Robot
+	 * @see robot.Robot
 	 */
-	
-	public void setWaypoint(boolean waypoint) {
-		this.waypoint = waypoint;
+	public void setExplored(boolean explored) {
+		this.explored = explored;
 	}
 
 	/**
-	 * Return the coordinates of tile (i.e. working coordinates,
-	 * not with respect to the array index of the tile)
-	 * @return the x
+	 * Return an integer array of tile coordinates (i.e. assigned coordinates,
+	 * not with respect to the array index of the Tile[][])
+	 * @return an array of coordinates [x,y]
 	 */
-	
 	public int[] getCoor() {
 		return coor;
 	}

@@ -1,13 +1,17 @@
 package map;
 import java.awt.Color;
+
+/**
+ * @author 18/19 S1 G3
+ */
 public final class Constants {
 
 	// Grid size - for rendering only
 	public static final int GRID_SIZE = 30;
 	
-	// Map size
-	public static final int MAP_COLS = 15;
-	public static final int MAP_ROWS = 20;
+	// Default map sizes
+	public static final int WID = 20;
+	public static final int LEN = 15;
         
     //Start grid information
     public static final int START_GRID_ROW = 17;
