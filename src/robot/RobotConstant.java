@@ -23,6 +23,7 @@ public final class RobotConstant {
 
 		public static DIRECTION getNext(DIRECTION currDirection) {
 			return values()[(currDirection.ordinal() + 1) % values().length];
+		}
 		
 		public static DIRECTION getPrevious(DIRECTION currDirection) {
 			return values()[(currDirection.ordinal() + values().length - 1)
