@@ -1,6 +1,14 @@
 package utility;
 import map.Constants;
 public class GridOperation {
+	//miscellanous
+	public static int[] populate(int[] neighbours){
+		int[] output = neighbours;
+		for (int i = 0; i < output.length;i++){
+			if(output[i] == 0){output[i] = -1;}
+		}
+		return output;
+	}
 	//positioning
 	public static int getRow(int gridNum){
 		return gridNum/Constants.MAP_COLS+1;
@@ -69,11 +77,14 @@ public class GridOperation {
 		for(int x = i-1; x<= (i+1);x++){
 			for(int y = j-1;y<=(j+1);y++){
 				n = index(x,y);
-				if(n == gridNum){;}
+				if(n == gridNum||n<0||n>299){;}
 				else{output[z] = n;z++;}
 			}
 		}
+		output = populate(output);
 		return output;
 	}
 	
+	//prevent instantiation
+	private GridOperation(){};
 }
