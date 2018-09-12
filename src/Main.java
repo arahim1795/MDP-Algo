@@ -1,6 +1,6 @@
 import java.io.IOException;
 
-import map.Field;
+import map.Map;
 import utility.Utility;
 
 public class Main {
@@ -8,7 +8,7 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 		
 		// example 
-		Field map = new Field();
+		Map map = new Map();
 		
 		String filename = "./map/test_1.txt";
 		

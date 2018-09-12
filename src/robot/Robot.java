@@ -1,6 +1,6 @@
 package robot;
 
-import map.Field;
+import map.Map;
 import utility.Utility.Orientation;
 
 /**
@@ -12,7 +12,7 @@ public class Robot {
 	private int[] coor;
 	private Orientation orientation;
 	private boolean valid;
-	private Field memory;
+	private Map memory;
 	
 	/**
 	 * Create an robot 'placed' with reference to the x and y 
@@ -27,7 +27,7 @@ public class Robot {
 	 * @see map
 	 */
 	public Robot(int size, int x, int y, Orientation direction, int len, int wid) {
-		memory = new Field(len, wid);
+		memory = new Map(len, wid);
 		
 		coor = new int[2];
 		coor[0] = x;

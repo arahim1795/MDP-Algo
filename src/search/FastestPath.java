@@ -4,10 +4,53 @@ import java.util.ArrayList;
 
 import robot.RobotConstant;
 import robot.RobotConstant.DIRECTION;
+import robot.RobotConstant.MOVEMENT;
 import utility.GridOperation;
+import map.Tile;
+import map.Constants;
+import java.util.HashMap;
 public class FastestPath {
-	//
-	public void aStarSearch(int start, int goal, int[] mapBit, DIRECTION sDirection){
+	
+	private ArrayList<Tile> toVisit;
+	private ArrayList<Tile> visited;
+	private HashMap<Tile,Tile>parents;
+	
+	private Tile current;
+	private Tile[] neighbours;
+	private DIRECTION curDir;
+	private double[][] gCosts;
+	private robot bot; //KIV
+	private int loopcount;
+	
+	/*
+    public FastestPathAlgo(Map exploredMap, Robot bot) {
+        this.realMap = null;
+        initObject(exploredMap, bot);
+    }
+
+    public FastestPathAlgo(Map exploredMap, Robot bot, Map realMap) {
+        this.realMap = realMap;
+        this.explorationMode = true;
+        initObject(exploredMap, bot);
+    }*/
+	//future uses???
+    
+	public void init(Map map){}	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+/*	public void aStarSearch(int start, int goal, int[] mapBit, DIRECTION sDirection){
 		int[] gScore = new int[300]; //real cost matrix
 		int[] fscore = new int[300]; //heuristic cost matrix
 		int[] visibilityG = new int[300];
@@ -28,5 +71,6 @@ public class FastestPath {
 		}
 		
 		
-	}
+	}*/
 }
+

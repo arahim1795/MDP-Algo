@@ -5,46 +5,48 @@ import java.util.List;
 /**
  * @author 18/19 S1 G3
  */
-public class Field {
+public class Map {
 	
-	private Tile[][] map;
-	private int wid, len;
+	private Tile[][] field;
 	
 	/**
 	 * Create map of Tiles with default sizes (len = 15, wid = 20)
 	 * @see Tile
 	 */
-	public Field() {
-		this.wid = Constants.WID;
-		this.len = Constants.LEN;
+	public Map() {
+		this.field = new Tile[Constants.LEN][Constants.WID];
 		
-		map = new Tile[wid][len];
-		
-		for (int i = 0; i < wid; i++) {
-			for (int j = 0; j < len; j++) {
-				map[i][j] = new Tile(wid-i,j+1);
+		for (int i = 0; i < Constants.WID; i++) {
+			for (int j = 0; j < Constants.LEN; j++) {
+				field[i][j] = new Tile(i,j);
+				if(i==0||j==0||i==Constants.LEN-1||j==Constants.WID){
+					field[i][j].setVirtualWall(true);
+				}
 			}
 		}
 	}
 	
-	/**
-	 * Create map of stated sizes (len, wid) 
-	 * @param len Length of map
-	 * @param wid Width of map
-	 * @see Tile
-	 */
-	public Field(int len, int wid) {
-		this.wid = wid;
-		this.len = len;
-		map = new Tile[this.wid][this.len];
-		
-		for (int i = 0; i < this.wid; i++) {
-			for (int j = 0; j < this.len; j++) {
-				map[i][j] = new Tile(this.wid-i,j+1);
-			}
-		}
+	// returns if a tile coordinate is within bounds of the map
+	public boolean isValid(int row, int col){
+		return (row>=0 && row < Constants.WID && col >=0 && col < Constants.LEN );}
+	
+	public Tile getTile(int row, int col){
+		return field[row][col];
 	}
-
+	
+	//sets a tile as obstacle and surrounding tiles as virtual walls
+	public void setObstacle(int row, int col){
+		
+	}
+	
+	
+	
+	/*  DEBUG PURPOSES
+	 * 
+	 * 
+	 * 
+	 */
+	 
 	/**
 	 * Returns map for evaluation
 	 * @return the map
