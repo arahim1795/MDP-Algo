@@ -7,20 +7,20 @@ import java.util.List;
  */
 public class Map {
 	
-	private Tile[][] field;
+	private Tile[][] map;
 	
 	/**
 	 * Create map of Tiles with default sizes (len = 15, wid = 20)
 	 * @see Tile
 	 */
 	public Map() {
-		this.field = new Tile[Constants.LEN][Constants.WID];
+		this.map = new Tile[Constants.LEN][Constants.WID];
 		
 		for (int i = 0; i < Constants.WID; i++) {
 			for (int j = 0; j < Constants.LEN; j++) {
-				field[i][j] = new Tile(i,j);
+				map[i][j] = new Tile(i,j);
 				if(i==0||j==0||i==Constants.LEN-1||j==Constants.WID){
-					field[i][j].setVirtualWall(true);
+					map[i][j].setVirtualWall(true);
 				}
 			}
 		}
@@ -31,7 +31,7 @@ public class Map {
 		return (row>=0 && row < Constants.WID && col >=0 && col < Constants.LEN );}
 	
 	public Tile getTile(int row, int col){
-		return field[row][col];
+		return map[row][col];
 	}
 	
 	//sets a tile as obstacle and surrounding tiles as virtual walls
