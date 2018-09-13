@@ -1,6 +1,9 @@
 package robot;
 
 import map.Map;
+import map.Constants;
+import robot.RobotConstant;
+import robot.RobotConstant.DIRECTION;
 import utility.Utility.Orientation;
 
 /**
@@ -10,7 +13,7 @@ import utility.Utility.Orientation;
 public class Robot {
 
 	private int[] coor;
-	private Orientation orientation;
+	private DIRECTION orientation;
 	private boolean valid;
 	private Map memory;
 	
@@ -26,24 +29,26 @@ public class Robot {
 	 * @param wid Width of map
 	 * @see map
 	 */
-	public Robot(int size, int x, int y, Orientation direction, int len, int wid) {
-		memory = new Map(len, wid);
+	public Robot(int size, int x, int y, DIRECTION direction, int len, int wid) {
+		this.memory = new Map();
 		
-		coor = new int[2];
-		coor[0] = x;
-		coor[1] = y;
+		this.coor = new int[2];
+		this.coor[0] = x;
+		this.coor[1] = y;
 		
 		orientation = direction;
-		
-		validate();
 	}
 	public int getRobotRow(){
-		return coor[0];
+		return this.coor[0];
 		
 	}
 	
 	public int getRobotCol(){
-		return coor[1];
+		return this.coor[1];
+	}
+	
+	public DIRECTION getRobotOrientation(){
+		return this.orientation;
 	}
 	/*
 	 * Checks if robot is in a valid position on the map

@@ -22,7 +22,14 @@ public class Tile {
 		coor[0] = x;
 		coor[1] = y;
 	}
-
+	
+	public int getRow(){
+		return coor[0];
+	}
+	
+	public int getCol(){
+		return coor[1];
+	}
 	/**
 	 * Returns true is tile is marked as an obstacle
 	 * @return true if tile is set as an obstacle, false otherwise

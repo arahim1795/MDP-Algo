@@ -39,7 +39,8 @@ public class FastestPath {
         initObject(exploredMap, bot);
     }*/
 	//future uses???
-    
+	
+	//constructor for object/algo initialization
 	public void init(Map map, Robot bot){
 		//initialize variables
 		this.bot = bot;
@@ -48,12 +49,48 @@ public class FastestPath {
 		this.visited = new ArrayList<>();
 		this.parents = new HashMap<>();
 		this.neighbours = new Tile[4];
+		//initialize robot orientation
 		this.current = map.getTile(bot.getRobotRow(), bot.getRobotCol());
+		this.curDir = bot.getRobotOrientation();
 		
+		//initialize gCost array
+		this.gCosts = new double[Constants.WID][Constants.LEN];
+		for(int i=0;i<Constants.LEN;i++){
+			for(int j=0;j<Constants.WID;j++){
+				if(!canBeVisited(this.exploredMap.getTile(i, j))){
+					gCosts[i][j] = RobotConstant.INFINITE_COST;
+			}
+				else{
+					gCosts[i][j] = 1;
+				}
+		}
+		}
+		
+		//
+		toVisit.add(current);
+		
+		//initialize starting point
+		gCosts[bot.getRobotRow()][bot.getRobotCol()] = 0;
+		this.loopcount = 0;
 	}	
+	/*Private methods
+	 */
 	
+	//checks if tile can be visited
+	private boolean canBeVisited(Tile t) {
+        return  !t.isObstacle() && !t.isVirtualWall();
+    }
 	
+	//
 	
+	private Tile minimumCostTile(int goalRow,int col){
+		int size = toVisit.size();
+		int minCost = RobotConstant.INFINITE_COST;	
+		Tile output = null;
+		for (int i=size-1;i>=0;i++){
+			int gCost = gCosts[(toVisit.get(i).get)]
+		}
+	}
 	
 	
 	
