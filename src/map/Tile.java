@@ -8,6 +8,7 @@ public class Tile {
 	private boolean obstacle = false;
 	private boolean explored = false;
 	private boolean virtualWall= false;
+	private boolean persistent = false;
 	private int[] coor;
 	
 	/**
@@ -65,8 +66,14 @@ public class Tile {
 	public boolean isVirtualWall() {
 		return this.virtualWall;
 	}
-	
+	public void setPersistent(){
+		this.persistent = true;
+	}
+	public boolean isPersistent(){
+		return this.persistent;
+	}
 	public void setVirtualWall(boolean virtualWall) {
+		if(!virtualWall && this.persistent){return;}
 		this.virtualWall = virtualWall;
 	}
 	

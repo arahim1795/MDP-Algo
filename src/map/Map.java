@@ -30,24 +30,23 @@ public class Map {
 	public boolean isValid(int row, int col){
 		return (row>=0 && row < Constants.WID && col >=0 && col < Constants.LEN );}
 	
+	
 	public Tile getTile(int row, int col){
 		return field[row][col];
 	}
-	//flips status of tile as obstacle/non obstacle
-	//return 1 if flipped to obstacle, flip to 0 if flipped to normal tile
-	public int flipObstacle(int row, int col){
-		if(field[row][col].isObstacle()){
-			field[row][col].setObstacle(false);
-			return 0;
-		}
-		else{field[row][col].setObstacle(true);
-		return 1;
-		}
-	}
+	
 	//sets a tile as obstacle and surrounding tiles as virtual walls
-	public void setObstacle(int row, int col){
-		
+	public void setObstacle(int row, int col,boolean obstacle){
+		for(int i = -1;i<2;i++){
+			for(int j=-1;j<2;j++){
+				if(i!=0 || j!=0){
+					this.field[row+i][col+j].setVirtualWall(obstacle);
+				}
+			}
+		}
+		return;
 	}
+		
 	
 	
 	
@@ -62,7 +61,7 @@ public class Map {
 	 * @return the map
 	 */
 	public Tile[][] getMap() {
-		return map;
+		return this.field;
 	}
 	
 	/**
