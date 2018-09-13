@@ -2,14 +2,18 @@ package search;
 
 import java.util.ArrayList;
 
+import robot.Robot;
 import robot.RobotConstant;
 import robot.RobotConstant.DIRECTION;
 import robot.RobotConstant.MOVEMENT;
 import utility.GridOperation;
+import map.Map;
 import map.Tile;
 import map.Constants;
 import java.util.HashMap;
+import java.util.ArrayList;
 public class FastestPath {
+
 	
 	private ArrayList<Tile> toVisit;
 	private ArrayList<Tile> visited;
@@ -17,9 +21,10 @@ public class FastestPath {
 	
 	private Tile current;
 	private Tile[] neighbours;
+	private Map exploredMap;
 	private DIRECTION curDir;
 	private double[][] gCosts;
-	private robot bot; //KIV
+	private Robot bot; //KIV
 	private int loopcount;
 	
 	/*
@@ -35,8 +40,17 @@ public class FastestPath {
     }*/
 	//future uses???
     
-	public void init(Map map){}	
-	
+	public void init(Map map, Robot bot){
+		//initialize variables
+		this.bot = bot;
+		this.exploredMap = map;
+		this.toVisit = new ArrayList<>();
+		this.visited = new ArrayList<>();
+		this.parents = new HashMap<>();
+		this.neighbours = new Tile[4];
+		this.current = map.getTile(bot.getRobotRow(), bot.getRobotCol());
+		
+	}	
 	
 	
 	

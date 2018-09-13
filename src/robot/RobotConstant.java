@@ -19,6 +19,28 @@ public final class RobotConstant {
 	public static final int LONG_IR_MIN = 1;
 	public static final int LONG_IR_MAX = 4;
 	
+	public enum MOVEMENT {
+        FORWARD, BACKWARD, RIGHT, LEFT, CALIBRATE, ERROR;
+
+        public static char print(MOVEMENT m) {
+            switch (m) {
+                case FORWARD:
+                    return 'F';
+                case BACKWARD:
+                    return 'B';
+                case RIGHT:
+                    return 'R';
+                case LEFT:
+                    return 'L';
+                case CALIBRATE:
+                    return 'C';
+                case ERROR:
+                default:
+                    return 'E';
+            }
+        }
+    }
+	
 	public static enum DIRECTION {
 		NORTH, EAST, SOUTH, WEST;
 

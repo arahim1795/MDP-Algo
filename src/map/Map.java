@@ -33,7 +33,17 @@ public class Map {
 	public Tile getTile(int row, int col){
 		return field[row][col];
 	}
-	
+	//flips status of tile as obstacle/non obstacle
+	//return 1 if flipped to obstacle, flip to 0 if flipped to normal tile
+	public int flipObstacle(int row, int col){
+		if(field[row][col].isObstacle()){
+			field[row][col].setObstacle(false);
+			return 0;
+		}
+		else{field[row][col].setObstacle(true);
+		return 1;
+		}
+	}
 	//sets a tile as obstacle and surrounding tiles as virtual walls
 	public void setObstacle(int row, int col){
 		

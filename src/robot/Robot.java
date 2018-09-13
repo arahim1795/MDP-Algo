@@ -37,7 +37,14 @@ public class Robot {
 		
 		validate();
 	}
+	public int getRobotRow(){
+		return coor[0];
+		
+	}
 	
+	public int getRobotCol(){
+		return coor[1];
+	}
 	/*
 	 * Checks if robot is in a valid position on the map
 	 */
