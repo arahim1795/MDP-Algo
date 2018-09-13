@@ -23,7 +23,7 @@ public class FastestPath {
 	private Tile[] neighbours;
 	private Map exploredMap;
 	private DIRECTION curDir;
-	private double[][] gCosts;
+	private int[][] gCosts;
 	private Robot bot; //KIV
 	private int loopcount;
 	
@@ -54,7 +54,7 @@ public class FastestPath {
 		this.curDir = bot.getRobotOrientation();
 		
 		//initialize gCost array
-		this.gCosts = new double[Constants.WID][Constants.LEN];
+		this.gCosts = new int[Constants.WID][Constants.LEN];
 		for(int i=0;i<Constants.LEN;i++){
 			for(int j=0;j<Constants.WID;j++){
 				if(!canBeVisited(this.exploredMap.getTile(i, j))){
@@ -88,8 +88,24 @@ public class FastestPath {
 		int minCost = RobotConstant.INFINITE_COST;	
 		Tile output = null;
 		for (int i=size-1;i>=0;i++){
-			int gCost = gCosts[(toVisit.get(i).get)]
+			int gCost = (int) gCosts[(toVisit.get(i).getRow())][toVisit.get(i).getCol()];
+			if(minCost > gCost){
+				minCost = gCost;
+				output = toVisit.get(i);
+			}
 		}
+		return output;
+	}
+	
+	//return heuristic cost calculation
+	private double getHcost(Tile T, int goalRow, int goalCol){
+		//no of rows and column moves needed to get to goal
+		int movementCost = (T.getRow()-goalRow)+(T.getCol()-goalCol);
+		//factor 1 turn if not on same row or col as goal
+		int turnCost = 0;
+		if(T.getRow() != goalRow || T.getCol() != goalCol){turnCost += RobotConstant.TURN_COST;}
+		
+		return movementCost + turnCost;
 	}
 	
 	
