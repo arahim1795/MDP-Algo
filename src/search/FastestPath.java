@@ -11,13 +11,14 @@ import map.Map;
 import map.Tile;
 import map.Constants;
 import java.util.HashMap;
+import java.util.Stack;
 import java.util.ArrayList;
 public class FastestPath {
 
 	
 	private ArrayList<Tile> toVisit;
 	private ArrayList<Tile> visited;
-	private HashMap<Tile,Tile>parents;
+	private HashMap<Tile,Tile>parents;//child -> parent
 	
 	private Tile current;
 	private Tile[] neighbours;
@@ -25,7 +26,7 @@ public class FastestPath {
 	private DIRECTION curDir;
 	private int[][] gCosts;
 	private Robot bot; //KIV
-	private int loopcount;
+	private int loopCount;
 	
 	/*
     public FastestPathAlgo(Map exploredMap, Robot bot) {
@@ -71,7 +72,7 @@ public class FastestPath {
 		
 		//initialize starting point
 		gCosts[bot.getRobotRow()][bot.getRobotCol()] = 0;
-		this.loopcount = 0;
+		this.loopCount = 0;
 	}	
 	/*Private methods
 	 */
@@ -108,6 +109,52 @@ public class FastestPath {
 		return movementCost + turnCost;
 	}
 	
+	//return target direction from robot to specific tile
+	
+	private DIRECTION getTargetDirection(int botRow,int botCol, DIRECTION botDir, Tile target){
+		//robot column > cell column
+		if (botCol - target.getCol() >0){return DIRECTION.LEFT;}
+		//robot column < cell column
+		else if (botCol - target.getCol() <0){return DIRECTION.LEFT;}
+		else{if(botRow-target.getRow()>0){return DIRECTION.UP;}
+		else{return DIRECTION.DOWN;}}
+		}
+
+	
+	//aStarSearch
+	public String searchFastestPath(int goalRow, int goalCol){
+		Stack<Tile> path;
+		do{
+			loopCount++;
+			//get next Tile (with minimum cost) to expand 
+			current = 	minimumCostTile(goalRow,goalCol);
+			
+			//point robot 
+			if(parents.containsKey(current)){
+				curDir = getTargetDirection(parents.get(current).getRow(),parents.get(current).getCol(),curDir,current);
+			}
+			
+			//add current tile to visited
+			visited.add(current);
+			toVisit.remove(current);
+			
+			//if goal is found
+			if(visited.contains(exploredMap.getTile(goalRow, goalCol)){
+				//message : path found
+				path = getPath(goalRow,goalCol);
+				//printFastestPath(path);
+				//return executePath(path, goalRow,goalCol);
+				return "toDO" ;
+			}
+			
+			//get list of neighbours
+			if(exploredMap.isValid(current.getRow()+1, current.getCol())){
+				neighbours[0] = exploredMap.getTile(current.getRow()+1, current.getCol());
+			}
+			
+		}
+	}
+		
 	
 	
 	

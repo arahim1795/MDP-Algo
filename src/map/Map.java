@@ -7,20 +7,20 @@ import java.util.List;
  */
 public class Map {
 	
-	private Tile[][] map;
+	private Tile[][] field;
 	
 	/**
 	 * Create map of Tiles with default sizes (len = 15, wid = 20)
 	 * @see Tile
 	 */
 	public Map() {
-		this.map = new Tile[Constants.LEN][Constants.WID];
+		this.field = new Tile[Constants.LEN][Constants.WID];
 		
 		for (int i = 0; i < Constants.WID; i++) {
 			for (int j = 0; j < Constants.LEN; j++) {
-				map[i][j] = new Tile(i,j);
+				field[i][j] = new Tile(i,j);
 				if(i==0||j==0||i==Constants.LEN-1||j==Constants.WID){
-					map[i][j].setVirtualWall(true);
+					field[i][j].setVirtualWall(true);
 				}
 			}
 		}
@@ -32,7 +32,7 @@ public class Map {
 	
 	
 	public Tile getTile(int row, int col){
-		return map[row][col];
+		return field[row][col];
 	}
 	
 	//sets a tile as obstacle and surrounding tiles as virtual walls
@@ -73,7 +73,7 @@ public class Map {
 			for (int j = 0; j < this.len; j++) {
 				switch (mapcomp.get(i).charAt(j)) {
 					case '1':
-						this.map[i][j].setObstacle(true);
+						this.field[i][j].setObstacle(true);
 						break;
 					default:
 						break;
@@ -88,7 +88,7 @@ public class Map {
 	public void printMap() {
 		for (int i = 0; i < this.wid; i++) {
 			for (int j = 0; j < this.len; j++) {
-				if (map[i][j].isObstacle()) System.out.print("1");
+				if (field[i][j].isObstacle()) System.out.print("1");
 				else System.out.print("0");
 				if (j == (this.len-1)) System.out.print("\n");
 			}
