@@ -42,7 +42,7 @@ public final class RobotConstant {
     }
 	
 	public static enum DIRECTION {
-		UP, DOWN, LEFT, RIGHT;
+		UP, RIGHT, DOWN, LEFT;
 
 		public static DIRECTION getNext(DIRECTION currDirection) {
 			return values()[(currDirection.ordinal() + 1) % values().length];

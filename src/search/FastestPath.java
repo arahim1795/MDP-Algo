@@ -24,7 +24,7 @@ public class FastestPath {
 	private Tile[] neighbours;
 	private Map exploredMap;
 	private DIRECTION curDir;
-	private int[][] gCosts;
+	private double[][] gCosts;
 	private Robot bot; //KIV
 	private int loopCount;
 	
@@ -55,7 +55,7 @@ public class FastestPath {
 		this.curDir = bot.getRobotOrientation();
 		
 		//initialize gCost array
-		this.gCosts = new int[Constants.WID][Constants.LEN];
+		this.gCosts = new double[Constants.WID][Constants.LEN];
 		for(int i=0;i<Constants.LEN;i++){
 			for(int j=0;j<Constants.WID;j++){
 				if(!canBeVisited(this.exploredMap.getTile(i, j))){
@@ -74,6 +74,7 @@ public class FastestPath {
 		gCosts[bot.getRobotRow()][bot.getRobotCol()] = 0;
 		this.loopCount = 0;
 	}	
+	
 	/*Private methods
 	 */
 	
@@ -119,7 +120,38 @@ public class FastestPath {
 		else{if(botRow-target.getRow()>0){return DIRECTION.UP;}
 		else{return DIRECTION.DOWN;}}
 		}
+	
+	//calculate ACTUAL g-cost when travelling from one node to another
+	private double getGCost(Tile a, Tile b, DIRECTION aDir) {
+        double moveCost = robot.RobotConstant.MOVE_COST; // one movement to neighbor
 
+        double turnCost;
+        DIRECTION targetDir = getTargetDirection(a.getRow(), a.getCol(), aDir, b);
+        turnCost = getTurnCost(aDir, targetDir);
+
+        return moveCost + turnCost;
+	}
+    //calcuate ACTUAL turn cost 
+    private double getTurnCost(DIRECTION cDir, DIRECTION aDir){
+    		int turns = Math.abs(aDir.ordinal()-cDir.ordinal());
+    		//turn the other direction if turns >2
+    		if(turns >2){turns = turns%2;}
+    		return (turns*RobotConstant.TURN_COST);
+    	}
+
+    //generates path in reverse from HashMap parents
+    private Stack<Tile> getPath(int goalRow, int goalCol){
+    	Stack<Tile> actualPath = new Stack<>();
+    	Tile temp = this.exploredMap.getTile(goalRow, goalCol);
+    	
+    	do{
+    		actualPath.push(temp);
+    		temp = parents.get(temp);
+    		if(temp==null){break;}
+    	}while(true);
+    	
+    	return actualPath;
+    }
 	
 	//aStarSearch
 	public String searchFastestPath(int goalRow, int goalCol){
@@ -139,7 +171,7 @@ public class FastestPath {
 			toVisit.remove(current);
 			
 			//if goal is found
-			if(visited.contains(exploredMap.getTile(goalRow, goalCol)){
+			if(visited.contains(exploredMap.getTile(goalRow, goalCol))){
 				//message : path found
 				path = getPath(goalRow,goalCol);
 				//printFastestPath(path);
@@ -147,44 +179,61 @@ public class FastestPath {
 				return "toDO" ;
 			}
 			
-			//get list of neighbours
+			//get list of neighbours (4 cardinal directions)
+			//down
 			if(exploredMap.isValid(current.getRow()+1, current.getCol())){
 				neighbours[0] = exploredMap.getTile(current.getRow()+1, current.getCol());
-			}
+			}			
+			//up
+			if (exploredMap.isValid(current.getRow() - 1, current.getCol())) {
+                neighbours[1] = exploredMap.getTile(current.getRow() - 1, current.getCol());
+                if (!canBeVisited(neighbours[1])) {
+                    neighbours[1] = null;
+                }
+            }			
+			//left
+            if (exploredMap.isValid(current.getRow(), current.getCol() - 1)) {
+                neighbours[2] = exploredMap.getTile(current.getRow(), current.getCol() - 1);
+                if (!canBeVisited(neighbours[2])) {
+                    neighbours[2] = null;
+                }
+            }
+            //right
+            if (exploredMap.isValid(current.getRow(), current.getCol() + 1)) {
+                neighbours[3] = exploredMap.getTile(current.getRow(), current.getCol() + 1);
+                if (!canBeVisited(neighbours[3])) {
+                    neighbours[3] = null;
+                }
+            }
+            
+            //iterate and update G values for each neighbour
+            for(int i=0;i<4;i++){
+            	if(neighbours[i] != null){
+            		//check if node is already visited
+            		if(visited.contains(neighbours[i])){continue;}
+            		//if node is not already in toVisit list
+            		if(!toVisit.contains(neighbours[i])){
+            			parents.put(neighbours[i], current);
+            			this.gCosts[neighbours[i].getRow()][neighbours[i].getCol()]=gCosts[current.getRow()][current.getCol()] + getGCost(current, neighbours[i],curDir);
+            			toVisit.add(neighbours[i]);
+            		
+            		}else{
+            			//calculate and update gCost if path to neighbour is shorter
+            			double currentGScore = gCosts[neighbours[i].getRow()][neighbours[i].getCol()];
+            			double newGScore = gCosts[current.getRow()][current.getCol()] + getGCost(current, neighbours[i], curDir);
+            			if(newGScore < currentGScore){
+            				gCosts[neighbours[i].getRow()][neighbours[i].getCol()] = newGScore;
+            				parents.put(neighbours[i], current); //change parent of neighbour node to current node
+            			}
+            		}
+            	}
+            }
 			
-		}
+		}while(!toVisit.isEmpty());
+		return null;
 	}
-		
 	
 	
 	
-	
-	
-	
-	
-	
-	
-/*	public void aStarSearch(int start, int goal, int[] mapBit, DIRECTION sDirection){
-		int[] gScore = new int[300]; //real cost matrix
-		int[] fscore = new int[300]; //heuristic cost matrix
-		int[] visibilityG = new int[300];
-		ArrayList<Integer> expandedNodes = new ArrayList<Integer>();
-		
-		//render visibility graph
-		int[] neighbours = new int[8];
-		for(int i = 0;i<300;i++){
-			//mark danger area for obstacle
-			if(mapBit[i]>0){
-				visibilityG[i] = 999;
-				neighbours = GridOperation.getRadius(i);
-				//marking danger area for radius
-				for(int j=0;j<8;j++){
-					visibilityG[neighbours[j]] += 15;
-				}
-			}
-		}
-		
-		
-	}*/
 }
 
