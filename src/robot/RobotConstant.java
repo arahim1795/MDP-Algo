@@ -10,6 +10,7 @@ public final class RobotConstant {
 	// G values used for A* algorithm
 	public static final int MOVE_COST = 1;
 	public static final int TURN_COST = 20;
+	public static final int INFINITE_COST = 9999;
 	
 	// Sensors default range (In grids)
 	public static final int SHORT_IR_MIN = 1;
@@ -18,8 +19,30 @@ public final class RobotConstant {
 	public static final int LONG_IR_MIN = 1;
 	public static final int LONG_IR_MAX = 4;
 	
+	public enum MOVEMENT {
+        FORWARD, BACKWARD, RIGHT, LEFT, CALIBRATE, ERROR;
+
+        public static char print(MOVEMENT m) {
+            switch (m) {
+                case FORWARD:
+                    return 'F';
+                case BACKWARD:
+                    return 'B';
+                case RIGHT:
+                    return 'R';
+                case LEFT:
+                    return 'L';
+                case CALIBRATE:
+                    return 'C';
+                case ERROR:
+                default:
+                    return 'E';
+            }
+        }
+    }
+	
 	public static enum DIRECTION {
-		NORTH, EAST, SOUTH, WEST;
+		UP, RIGHT, DOWN, LEFT;
 
 		public static DIRECTION getNext(DIRECTION currDirection) {
 			return values()[(currDirection.ordinal() + 1) % values().length];
