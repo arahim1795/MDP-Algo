@@ -236,15 +236,93 @@ public class FastestPath {
 	
 	//executes the fastest path and returns a path String
 	
-	private String executeFastestPath(Stack<Tile> path, int goalRow, int goatlCol){
+	private String executeFastestPath(Stack<Tile> path, int goalRow, int goalCol){
 		StringBuilder outputString = new StringBuilder();
 		
 		Tile temp = path.pop();
-		Direction targetDir;
+		DIRECTION targetDir;
 		
 		ArrayList<MOVEMENT> movementList = new ArrayList<>();
-		Robot tempBot = new Robot(goatlCol, goatlCol, goatlCol, curDir, goatlCol, goatlCol);
+		Robot tempBot = new Robot(1,1);
+		//tempBot.setSpeed(0);
+		//while robot position not on goal tile
+		while((tempBot.getRobotRow()!= goalRow) || (tempBot.getRobotCol()!= goalCol)){
+			//if robot on path tile
+			if(tempBot.getRobotRow()==temp.getRow() && tempBot.getRobotCol()==temp.getCol()){
+				temp = path.pop();
+				
+			}
+			targetDir = getTargetDirection(tempBot.getRobotRow(),tempBot.getRobotCol(),tempBot.getRobotOrientation(),temp);
+			
+			MOVEMENT m;
+			
+			//if robot not facing correct direction, orientate robot
+			if(tempBot.getRobotOrientation() != targetDir){
+				m = getTargetMove(tempBot.getRobotOrientation(),targetDir);
+			}else{
+				m = MOVEMENT.FORWARD;
+			}
+			System.out.println("Movement " + MOVEMENT.print(m) + " from (" + tempBot.getRobotRow()+ ", " + tempBot.getRobotCol() + ") to (" + temp.getRow() + ", " + temp.getCol() + ")");
+
+            tempBot.move(m);
+            movements.add(m);
+            outputString.append(MOVEMENT.print(m));
+		}
 		
 	}
+
+	//return a movement given target direction and current direction
+	private MOVEMENT getTargetMove(DIRECTION current, DIRECTION goal) {
+        switch (current) {
+            case UP:
+                switch (goal) {
+                    case UP:
+                        return MOVEMENT.ERROR;
+                    case DOWN: 
+                        return MOVEMENT.TURNLEFT;
+                    case LEFT:
+                        return MOVEMENT.TURNLEFT;
+                    case RIGHT:
+                        return MOVEMENT.TURNRIGHT;
+                }
+                break;
+            case DOWN:
+                switch (goal) {
+                    case UP:
+                        return MOVEMENT.TURNLEFT;
+                    case DOWN:
+                        return MOVEMENT.ERROR;
+                    case LEFT:
+                        return MOVEMENT.TURNRIGHT;
+                    case RIGHT:
+                        return MOVEMENT.TURNLEFT;
+                }
+                break;
+            case LEFT:
+                switch (goal) {
+                    case UP:
+                        return MOVEMENT.TURNRIGHT;
+                    case DOWN:
+                        return MOVEMENT.TURNLEFT;
+                    case LEFT:
+                        return MOVEMENT.ERROR;
+                    case RIGHT:
+                        return MOVEMENT.TURNLEFT;
+                }
+                break;
+            case RIGHT:
+                switch (goal) {
+                    case UP:
+                        return MOVEMENT.TURNLEFT;
+                    case DOWN:
+                        return MOVEMENT.TURNRIGHT;
+                    case LEFT:
+                        return MOVEMENT.TURNLEFT;
+                    case RIGHT:
+                        return MOVEMENT.ERROR;
+                }
+        }
+        return MOVEMENT.ERROR;
+    }
 }
 

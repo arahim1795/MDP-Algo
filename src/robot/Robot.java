@@ -29,6 +29,15 @@ public class Robot {
 	 * @param wid Width of map
 	 * @see map
 	 */
+	public Robot ( int x, int y){
+		this.memory = new Map();
+		
+		this.coor = new int[2];
+		this.coor[0] = x;
+		this.coor[1] = y;
+		
+		this.orientation = RobotConstant.DEFAULT_START_DIR;
+	}
 	public Robot(int size, int x, int y, DIRECTION direction) {
 		this.memory = new Map();
 		
@@ -36,7 +45,7 @@ public class Robot {
 		this.coor[0] = x;
 		this.coor[1] = y;
 		
-		orientation = direction;
+		this.orientation = direction;
 	}
 	public int getRobotRow(){
 		return this.coor[0];
