@@ -262,12 +262,19 @@ public class FastestPath {
 			}else{
 				m = MOVEMENT.FORWARD;
 			}
+			
 			System.out.println("Movement " + MOVEMENT.print(m) + " from (" + tempBot.getRobotRow()+ ", " + tempBot.getRobotCol() + ") to (" + temp.getRow() + ", " + temp.getCol() + ")");
-
-            tempBot.move(m);
-            movements.add(m);
+			
+			//TODO : move method in Robot class
+            //tempBot.move(m);
+            movementList.add(m);
             outputString.append(MOVEMENT.print(m));
+           
 		}
+		//TODO : exploration code?
+		
+		System.out.println("\nMovements: " + outputString.toString());
+        return outputString.toString();
 		
 	}
 
@@ -324,5 +331,9 @@ public class FastestPath {
         }
         return MOVEMENT.ERROR;
     }
+	//print fastest path
+	//
+	//print gCosts array
+	//
 }
 
