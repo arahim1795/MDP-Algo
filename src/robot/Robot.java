@@ -29,7 +29,7 @@ public class Robot {
 	 * @param wid Width of map
 	 * @see map
 	 */
-	public Robot(int size, int x, int y, DIRECTION direction, int len, int wid) {
+	public Robot(int size, int x, int y, DIRECTION direction) {
 		this.memory = new Map();
 		
 		this.coor = new int[2];

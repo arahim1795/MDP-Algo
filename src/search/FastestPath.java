@@ -234,6 +234,17 @@ public class FastestPath {
 	}
 	
 	
+	//executes the fastest path and returns a path String
 	
+	private String executeFastestPath(Stack<Tile> path, int goalRow, int goatlCol){
+		StringBuilder outputString = new StringBuilder();
+		
+		Tile temp = path.pop();
+		Direction targetDir;
+		
+		ArrayList<MOVEMENT> movementList = new ArrayList<>();
+		Robot tempBot = new Robot(goatlCol, goatlCol, goatlCol, curDir, goatlCol, goatlCol);
+		
+	}
 }
 
