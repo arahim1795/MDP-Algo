@@ -5,21 +5,21 @@ package map;
  */
 public class Tile {
 
-	private boolean obstacle = false;
 	private boolean explored = false;
-	private boolean virtualWall= false;
+	private boolean obstacle = false;
+	private boolean boundary = false;
 	private int[] coor;
 	
 	/**
 	 * Tiles of field
-	 * @param x x-coordinate of Tile
-	 * @param y y-coordinate of Tile
+	 * @param c x-coordinate of Tile
+	 * @param r y-coordinate of Tile
 	 */
-	public Tile(int x, int y) {
+	public Tile(int c, int r) {
 		coor = new int[2];
 		
-		coor[0] = x;
-		coor[1] = y;
+		coor[0] = c;
+		coor[1] = r;
 	}
 
 	/**
@@ -57,24 +57,25 @@ public class Tile {
 	}
 	
 	/**
-	 * returns true if tile is virtual wall
-	 * @param is virtual wall If set to true, tile is at edge of map
-	 * @see robot.Robot
+	 * Returns true if this Tile is bounded by adjacent obstacle(s) or map edge(s)
+	 * @return true Tile is a boundary tile, false otherwise
 	 */
-	
-	public boolean isVirtualWall() {
-		return this.virtualWall;
+	public boolean isBoundary() {
+		return this.boundary;
 	}
 	
-	public void setVirtualWall(boolean virtualWall) {
-		this.virtualWall = virtualWall;
+	/**
+	 * 
+	 * @param virtualWall
+	 */
+	public void setBoundary(boolean boundary) {
+		this.boundary = boundary;
 	}
-	
 
 	/**
 	 * Return an integer array of tile coordinates (i.e. assigned coordinates,
 	 * not with respect to the array index of the Tile[][])
-	 * @return an array of coordinates [x,y]
+	 * @return an array of coordinates [c,r]
 	 */
 	public int[] getCoor() {
 		return coor;

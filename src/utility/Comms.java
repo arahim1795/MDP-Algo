@@ -11,7 +11,7 @@ import java.net.UnknownHostException;
  */
 public class Comms {
 	
-	private static String robotName = "test";
+	private static String robotName = "192.168.3.1";
 	private static int portNum = 1224;
 	
 	private static Socket robotComms = null;
@@ -34,7 +34,7 @@ public class Comms {
 	}
 	
 	/**
-	 * Closes communication streams with Pi, connection (socket closed afterwards
+	 * Closes communication streams with Pi, connection (socket) closed afterwards
 	 */
 	public static void closeSocket() {
 		try {
