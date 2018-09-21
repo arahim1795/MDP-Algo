@@ -14,12 +14,12 @@ public class Map {
 	 * @see Tile
 	 */
 	public Map() {
-		this.field = new Tile[Constants.LEN][Constants.WID];
+		this.field = new Tile[Constants.MAP_COLS][Constants.MAP_ROWS];
 		
-		for (int i = 0; i < Constants.WID; i++) {
-			for (int j = 0; j < Constants.LEN; j++) {
+		for (int i = 0; i < Constants.MAP_ROWS; i++) {
+			for (int j = 0; j < Constants.MAP_COLS; j++) {
 				field[i][j] = new Tile(i,j);
-				if(i==0||j==0||i==Constants.LEN-1||j==Constants.WID){
+				if(i==0||j==0||i==Constants.MAP_COLS-1||j==Constants.MAP_ROWS){
 					field[i][j].setVirtualWall(true);
 				}
 			}
@@ -28,7 +28,7 @@ public class Map {
 	
 	// returns if a tile coordinate is within bounds of the map
 	public boolean isValid(int row, int col){
-		return (row>=0 && row < Constants.WID && col >=0 && col < Constants.LEN );}
+		return (row>=0 && row < Constants.MAP_ROWS && col >=0 && col < Constants.MAP_COLS );}
 	
 	
 	public Tile getTile(int row, int col){

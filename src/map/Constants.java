@@ -10,8 +10,8 @@ public final class Constants {
 	public static final int GRID_SIZE = 30;
 	
 	// Default map sizes
-	public static final int WID = 20;
-	public static final int LEN = 15;
+	public static final int MAP_ROWS = 20;
+	public static final int MAP_COLS = 15;
         
     //Start grid information
     public static final int START_GRID_ROW = 17;

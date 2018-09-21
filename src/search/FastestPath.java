@@ -55,9 +55,9 @@ public class FastestPath {
 		this.curDir = bot.getRobotOrientation();
 		
 		//initialize gCost array
-		this.gCosts = new double[Constants.WID][Constants.LEN];
-		for(int i=0;i<Constants.LEN;i++){
-			for(int j=0;j<Constants.WID;j++){
+		this.gCosts = new double[Constants.MAP_ROWS][Constants.MAP_COLS];
+		for(int i=0;i<Constants.MAP_COLS;i++){
+			for(int j=0;j<Constants.MAP_ROWS;j++){
 				if(!canBeVisited(this.exploredMap.getTile(i, j))){
 					gCosts[i][j] = RobotConstant.INFINITE_COST;
 			}
