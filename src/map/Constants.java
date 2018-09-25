@@ -12,12 +12,12 @@ public final class Constants {
 	// Default map sizes
 	public static final int ROW = 20;
 	public static final int COL = 15;
-        
-    //Start grid information
-    public static final int START_GRID_ROW = 17;
+	
+	// Start information
+	public static final int START_GRID_ROW = 17;
     public static final int START_GRID_COL = 0;
 	
-	// Goal grid information
+	// Goal Grid
 	public static final int GOAL_GRID_ROW = 0;
 	public static final int GOAL_GRID_COL = 12;
 	
@@ -26,13 +26,13 @@ public final class Constants {
 	
 	public static final Color C_START = Color.BLUE;
 	public static final Color C_GOAL = Color.GREEN;
-    public static final Color C_MID = Color.YELLOW;
+	public static final Color C_MID = Color.YELLOW;
 	
 	public static final Color C_UNEXPLORED = Color.LIGHT_GRAY;
 	public static final Color C_FREE = Color.WHITE;
 	public static final Color C_OBSTACLE = Color.BLACK;
 	
-	// Prevent instantiation
+	// Prevent Instantiation
 	private Constants() {}
 
 }

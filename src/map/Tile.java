@@ -7,7 +7,8 @@ public class Tile {
 
 	private boolean explored = false;
 	private boolean obstacle = false;
-	private boolean boundary = false;
+	private boolean virtualWall = false;
+	private boolean persistent = false;
 	private int[] coor;
 	
 	/**
@@ -23,24 +24,24 @@ public class Tile {
 	}
 
 	/**
-	 * Returns true is tile is marked as an obstacle
-	 * @return true if tile is set as an obstacle, false otherwise
+	 * Returns true is Tile is marked as an obstacle
+	 * @return true if Tile is set as an obstacle, false otherwise
 	 */
 	public boolean isObstacle() {
 		return this.obstacle;
 	}
 
 	/**
-	 * Set tile as an obstacle
+	 * Set Tile as an obstacle
 	 * @param obstacle If set to true, tile is set as obstacle
 	 */
-	public void setObstacle(boolean obstacle) {
-		this.obstacle = obstacle;
+	public void setObstacle() {
+		this.obstacle = true;
 	}
 
 	/**
-	 * Returns true if tile has been explored by Robot
-	 * @return true if tile has been explored, false otherwise
+	 * Returns true if Tile has been explored by Robot
+	 * @return true if Tile has been explored, false otherwise
 	 * @see robot.Robot
 	 */
 	public boolean isExplored() {
@@ -48,37 +49,60 @@ public class Tile {
 	}
 
 	/**
-	 * Set tile as explored by robot
+	 * Set Tile as explored by robot
 	 * @param explored If set to true, tile has been explored by Robot
 	 * @see robot.Robot
 	 */
-	public void setExplored(boolean explored) {
-		this.explored = explored;
+	public void setExplored() {
+		this.explored = true;
 	}
 	
 	/**
 	 * Returns true if this Tile is bounded by adjacent obstacle(s) or map edge(s)
-	 * @return true Tile is a boundary tile, false otherwise
+	 * @return true if Tile is a boundary Tile, false otherwise
 	 */
-	public boolean isBoundary() {
-		return this.boundary;
+	public boolean isVirtualWall() {
+		return this.virtualWall;
 	}
 	
 	/**
-	 * 
-	 * @param virtualWall
+	 * Set Tile as a virtual wall (i.e. Tile must not be traversed by robot)
+	 * @param virtualWall If set to true, Tile is set as virtual wall
 	 */
-	public void setBoundary(boolean boundary) {
-		this.boundary = boundary;
+	public void setVirtualWall(boolean bool) {
+		this.virtualWall = bool;
+	}
+	
+	/**
+	 * Return true if Tile is persistent
+	 * @return true if Tile is a persistent Tile, false otherwise
+	 */
+	public boolean isPersistent() {
+		return this.persistent;
+	}
+	
+	/**
+	 * Set Tile as a persistent Tile
+	 * @param persistent If set to true, Tile is set as persistent
+	 */
+	public void setPersistent(boolean persistent) {
+		this.persistent = persistent;
 	}
 
 	/**
-	 * Return an integer array of tile coordinates (i.e. assigned coordinates,
+	 * Return an integer array of Tile coordinates (i.e. assigned coordinates,
 	 * not with respect to the array index of the Tile[][])
 	 * @return an array of coordinates [c,r]
 	 */
 	public int[] getCoor() {
 		return coor;
+	}
+	
+	public void reset() {
+		this.explored = false;
+		this.obstacle = false;
+		this.virtualWall = false;
+		this.persistent = false;
 	}
 
 	

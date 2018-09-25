@@ -3,12 +3,14 @@ package map;
 import java.util.ArrayList;
 import java.util.List;
 
+import utility.Utility;
+
 /**
  * @author 18/19 S1 G3
  */
 public class Map {
 	
-	private Tile[][] field;
+	private static Tile[][] field;
 	private int row, col;
 	
 	/**
@@ -23,61 +25,54 @@ public class Map {
 		
 		this.field = new Tile[row][col];
 		
-		for (int r = 0; r < row; r++) 
-			for (int c = 0; c < col; c++)
-				field[r][c] = new Tile(r,c);
-	}
-	
-	public void setBoundary() {
-		for (Tile[] row : field) {
-			for (Tile col : row) {
-				int[] coor = col.getCoor();
-				int r = coor[0], c = coor[1];
-				if (col.isObstacle()) {
-					
-					
-				} else if (r == 0 || r == this.row-1 || c == 0 || c == this.col-1) { // at map edge(s)
-					col.setBoundary(true);
-				}
-			}
-		}
+		for (int y = 0; y < row; y++) 
+			for (int x = 0; x < col; x++)
+				field[y][x] = new Tile(y,x);
 	}
 	
 	/**
 	 * 
-	 * @param ref
-	 * @return 
 	 */
-	public List<int[]> getAdjCoor(int[] ref) {
-		List<int[]> listCoor = new ArrayList<int[]>();		
-		int refC = ref[0], refR = ref[1];
-		int[] adj;
-		for (int r = -1; r <= 1; r++) {
-			for (int c = -1; c <= 1; c++) {
-				adj = new int[2];
-				adj[0] = refC + c;
-				adj[1] = refR + r;
-				if (!((adj[0] == ref[0]) && (adj[1] == ref[1]) && isValid)) {
-					
-				}
+	public void setBoundary() {
+		for (Tile[] row : this.field) 
+			for (Tile tile : row) {
+				// reset virtualWall settings
+				tile.setVirtualWall(false); 
+				
+				// get coordinates
+				int[] coor = tile.getCoor();
+				int x, y;
+				
+				// find adjacent coordinate and set them as virtualWall if
+				// current Tile is either an obstacle or located at map boundary
+				List<int[]> adjCoors = Utility.getAdjCoor(coor);
+				if (tile.isObstacle() || isBoundaryTile(coor))
+					if (!adjCoors.isEmpty()) {
+						for (int[] adj : adjCoors) {
+							x = adj[0]; y = adj[1];
+							Tile tmp = this.field[y][x];
+							if (!tmp.isObstacle()) tmp.setVirtualWall(true);
+						}
+					}
+				
 			}
-		}
 	}
-	
+
 	/**
-	 * Returns true if coordinates are within map
-	 * @param coor x and y-coordinates
-	 * @return true if x and y-coordinates are valid, false otherwise 
+	 * 
+	 * @param coor
+	 * @return
 	 */
-	public boolean isValid(int[] coor){
-		return !(coor[0] < 0 || coor[0] < this.col || coor[1] < 0 && coor[1] < this.row );
+	private boolean isBoundaryTile(int[] coor) {
+		int x = coor[0], y = coor[1];
+		return x == 0 || x == this.row-1 || y == 0 || y == this.col-1;
 	}
 	
 	/**
 	 * Returns map for evaluation
 	 * @return the map
 	 */
-	public Tile[][] getMap() {
+	public static Tile[][] getMap() {
 		return field;
 	}
 	
@@ -87,8 +82,8 @@ public class Map {
 	 * @param col y-coordinates
 	 * @return Tile at coordinate row,col
 	 */
-	public Tile getTile(int col, int row){
-		return field[row][col];
+	public Tile getTile(int[] coor){
+		return this.field[coor[1]][coor[2]];
 	}
 	 
 	
@@ -98,32 +93,43 @@ public class Map {
 	 * @param mapcomp List of strings that represent the map
 	 */
 	public void parseMap(List<String> mapcomp) {
-		for (int i = 0; i < this.wid; i++) {
-			for (int j = 0; j < this.len; j++) {
+		for (int i = 0; i < this.col; i++) {
+			for (int j = 0; j < this.row; j++) {
 				switch (mapcomp.get(i).charAt(j)) {
 					case '1':
-						this.field[i][j].setObstacle(true);
+						this.field[i][j].setObstacle();
 						break;
 					default:
 						break;
 				}
 			}
 		}
+		setBoundary();
 	}
 	
 	/**
 	 * Prints map to console for debugging purposes
 	 */
 	public void printMap() {
-		for (int i = 0; i < this.wid; i++) {
-			for (int j = 0; j < this.len; j++) {
+		for (int i = 0; i < this.row; i++) {
+			for (int j = 0; j < this.col; j++) {
 				if (field[i][j].isObstacle()) System.out.print("1");
 				else System.out.print("0");
-				if (j == (this.len-1)) System.out.print("\n");
+				if (j == (this.col-1)) System.out.print("\n");
 			}
 		}
 		
 	}
+	
+	/**
+	 * 
+	 */
+	public void resetMap() {
+		for (Tile[] row : this.field)
+			for (Tile tile : row)
+				tile.reset();
+	}
+	
 	
 
 }
