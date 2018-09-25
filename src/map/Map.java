@@ -10,7 +10,7 @@ import utility.Utility;
  */
 public class Map {
 	
-	private static Tile[][] field;
+	private Tile[][] field;
 	private int row, col;
 	
 	/**
