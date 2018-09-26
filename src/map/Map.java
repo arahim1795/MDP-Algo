@@ -20,6 +20,8 @@ public class Map {
 	 * @see Tile
 	 */
 	public Map() {
+		row = Constants.MAP_ROWS;
+		col = Constants.MAP_COLS;
 
 		this.field = new Tile[Constants.MAP_COLS][Constants.MAP_ROWS];
 		
@@ -51,18 +53,8 @@ public class Map {
 				}
 			}
 		}
-		return;
-
-		row = Constants.ROW;
-		col = Constants.COL;
-		
-		this.field = new Tile[row][col];
-		
-		for (int y = 0; y < row; y++) 
-			for (int x = 0; x < col; x++)
-				field[y][x] = new Tile(y,x);
 	}
-		
+
 	
 	/**
 	 * 
@@ -132,11 +124,7 @@ public class Map {
 			for (int j = 0; j < this.row; j++) {
 				switch (mapcomp.get(i).charAt(j)) {
 					case '1':
-
 						this.field[i][j].setObstacle(true);
-
-						this.field[i][j].setObstacle();
-
 						break;
 					default:
 						break;
