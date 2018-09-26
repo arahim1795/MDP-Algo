@@ -6,8 +6,9 @@ package map;
 public class Tile {
 
 	private boolean explored = false;
+
+	private boolean virtualWall= false;
 	private boolean obstacle = false;
-	private boolean virtualWall = false;
 	private boolean persistent = false;
 	private int[] coor;
 	
@@ -22,7 +23,14 @@ public class Tile {
 		coor[0] = c;
 		coor[1] = r;
 	}
-
+	
+	public int getRow(){
+		return coor[0];
+	}
+	
+	public int getCol(){
+		return coor[1];
+	}
 	/**
 	 * Returns true is Tile is marked as an obstacle
 	 * @return true if Tile is set as an obstacle, false otherwise
@@ -64,13 +72,23 @@ public class Tile {
 	public boolean isVirtualWall() {
 		return this.virtualWall;
 	}
-	
-	/**
+
+	public void setPersistent(){
+		this.persistent = true;
+	}
+	public boolean isPersistent(){
+		return this.persistent;
+	}
+  
+  /**
 	 * Set Tile as a virtual wall (i.e. Tile must not be traversed by robot)
 	 * @param virtualWall If set to true, Tile is set as virtual wall
 	 */
-	public void setVirtualWall(boolean bool) {
-		this.virtualWall = bool;
+  
+	public void setVirtualWall(boolean virtualWall) {
+		if(!virtualWall && this.persistent){return;}
+		this.virtualWall = virtualWall;
+
 	}
 	
 	/**
