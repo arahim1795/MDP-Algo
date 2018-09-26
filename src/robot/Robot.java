@@ -18,7 +18,7 @@ import utility.Utility.Orientation;
  *
  */
 public class Robot {
-  
+ 
 	private int robotRow; // Coordinate of centre component
 	private int robotCol; // Coordinate of centre component
 	private DIRECTION orientation
