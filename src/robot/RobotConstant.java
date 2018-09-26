@@ -2,6 +2,8 @@ package robot;
 
 import java.awt.Color;
 
+import robot.RobotConstant.DIRECTION;
+
 public final class RobotConstant {
 	
 	// Robot size
@@ -43,11 +45,13 @@ public final class RobotConstant {
 	
 	public static enum DIRECTION {
 		UP, RIGHT, DOWN, LEFT;
-
+		
+		//clockwise
 		public static DIRECTION getNext(DIRECTION currDirection) {
 			return values()[(currDirection.ordinal() + 1) % values().length];
 		}
 		
+		//anti-clockwise
 		public static DIRECTION getPrevious(DIRECTION currDirection) {
 			return values()[(currDirection.ordinal() + values().length - 1)
 					% values().length];
@@ -105,4 +109,7 @@ public final class RobotConstant {
 	
 	// Prevent instantiation
 	private RobotConstant() {}
+
+
+
 }

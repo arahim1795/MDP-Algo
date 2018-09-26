@@ -4,6 +4,7 @@ import map.Map;
 import map.Constants;
 import robot.RobotConstant;
 import robot.RobotConstant.DIRECTION;
+import robot.RobotConstant.MOVEMENT;
 import utility.Utility.Orientation;
 
 /**
@@ -12,7 +13,8 @@ import utility.Utility.Orientation;
  */
 public class Robot {
 
-	private int[] coor;
+	private int robotRow;
+	private int robotCol;
 	private DIRECTION orientation;
 	private boolean valid;
 	private Map memory;
@@ -32,38 +34,101 @@ public class Robot {
 	public Robot (int x, int y){
 		this.memory = new Map();
 		
-		this.coor = new int[2];
-		this.coor[0] = x;
-		this.coor[1] = y;
+		this.robotRow = x;
+		this.robotCol = y;
 		
 		this.orientation = RobotConstant.DEFAULT_START_DIR;
 	}
 	public Robot(int size, int x, int y, DIRECTION direction) {
 		this.memory = new Map();
 		
-		this.coor = new int[2];
-		this.coor[0] = x;
-		this.coor[1] = y;
+		this.robotRow = x;
+		this.robotCol = y;
 		
 		this.orientation = direction;
 	}
 	public int getRobotRow(){
-		return this.coor[0];
+		return this.robotRow;
 		
 	}
 	
 	public int getRobotCol(){
-		return this.coor[1];
+		return this.robotCol;
 	}
 	
 	public DIRECTION getRobotOrientation(){
 		return this.orientation;
 	}
-	/*
-	 * Checks if robot is in a valid position on the map
-	 */
-	public void validate() {
+	
+	public void move(MOVEMENT m, boolean sendToAndroid) {
+        /*if (!realBot) {
+            // Emulate real movement by pausing execution.
+            try {
+                TimeUnit.MILLISECONDS.sleep(speed);
+            } catch (InterruptedException e) {
+                System.out.println("Something went wrong in Robot.move()!");
+            }
+        }*/
+
+        switch (m) {
+            case FORWARD:
+                switch (this.orientation ) {
+                    case UP:
+                        robotRow++;
+                        break;
+                    case RIGHT:
+                        robotCol++;
+                        break;
+                    case DOWN:
+                        robotRow--;
+                        break;
+                    case LEFT:
+                        robotCol--;
+                        break;
+                }
+                break;
+            case BACKWARD:
+                switch (this.orientation) {
+                    case UP:
+                        robotRow--;
+                        break;
+                    case RIGHT:
+                        robotCol--;
+                        break;
+                    case DOWN:
+                        robotRow++;
+                        break;
+                    case LEFT:
+                        robotCol++;
+                        break;
+                }
+                break;
+            case TURNRIGHT:
+            case TURNLEFT:
+                this.orientation = updateTurnDirection(m);
+                break;
+            case CALIBRATE:
+                break;  
+            default:
+                System.out.println("Error in Robot.move()!");
+                break;
+        }
+
+        if (realBot) sendMovement(m, sendToAndroid);
+        else System.out.println("Move: " + MOVEMENT.print(m));
+
+        updateTouchedGoal();
+    }
+	
+	private DIRECTION updateTurnDirection(MOVEMENT m){
+		if(m == MOVEMENT.TURNLEFT){
+			return DIRECTION.getNext(this.orientation);
+		}
+		else{
+			return DIRECTION.getNext(this.orientation);
+		}
 		
 	}
+
 	
 }
