@@ -81,7 +81,7 @@ public class Utility {
 	 * @return true if x and y-coordinates are valid, false otherwise 
 	 */
 	public static boolean isValid(int[] coor){
-		return coor[0] > 0 && coor[0] < Constants.ROW && coor[1] > 0 && coor[1] < Constants.COL;
+		return coor[0] > 0 && coor[0] < Constants.MAP_ROWS && coor[1] > 0 && coor[1] < Constants.MAP_COLS;
 	}
 
 }
