@@ -55,9 +55,9 @@ public class FastestPath {
 		this.curDir = bot.getRobotOrientation();
 		
 		//initialize gCost array
-		this.gCosts = new double[Constants.WID][Constants.LEN];
-		for(int i=0;i<Constants.LEN;i++){
-			for(int j=0;j<Constants.WID;j++){
+		this.gCosts = new double[Constants.MAP_ROWS][Constants.MAP_COLS];
+		for(int i=0;i<Constants.MAP_COLS;i++){
+			for(int j=0;j<Constants.MAP_ROWS;j++){
 				if(!canBeVisited(this.exploredMap.getTile(i, j))){
 					gCosts[i][j] = RobotConstant.INFINITE_COST;
 			}
@@ -234,6 +234,106 @@ public class FastestPath {
 	}
 	
 	
+	//executes the fastest path and returns a path String
 	
+	private String executeFastestPath(Stack<Tile> path, int goalRow, int goalCol){
+		StringBuilder outputString = new StringBuilder();
+		
+		Tile temp = path.pop();
+		DIRECTION targetDir;
+		
+		ArrayList<MOVEMENT> movementList = new ArrayList<>();
+		Robot tempBot = new Robot(1,1);
+		//tempBot.setSpeed(0);
+		//while robot position not on goal tile
+		while((tempBot.getRobotRow()!= goalRow) || (tempBot.getRobotCol()!= goalCol)){
+			//if robot on path tile
+			if(tempBot.getRobotRow()==temp.getRow() && tempBot.getRobotCol()==temp.getCol()){
+				temp = path.pop();
+				
+			}
+			targetDir = getTargetDirection(tempBot.getRobotRow(),tempBot.getRobotCol(),tempBot.getRobotOrientation(),temp);
+			
+			MOVEMENT m;
+			
+			//if robot not facing correct direction, orientate robot
+			if(tempBot.getRobotOrientation() != targetDir){
+				m = getTargetMove(tempBot.getRobotOrientation(),targetDir);
+			}else{
+				m = MOVEMENT.FORWARD;
+			}
+			
+			System.out.println("Movement " + MOVEMENT.print(m) + " from (" + tempBot.getRobotRow()+ ", " + tempBot.getRobotCol() + ") to (" + temp.getRow() + ", " + temp.getCol() + ")");
+			
+			//TODO : move method in Robot class
+            //tempBot.move(m);
+            movementList.add(m);
+            outputString.append(MOVEMENT.print(m));
+           
+		}
+		//TODO : exploration code?
+		
+		System.out.println("\nMovements: " + outputString.toString());
+        return outputString.toString();
+		
+	}
+
+	//return a movement given target direction and current direction
+	private MOVEMENT getTargetMove(DIRECTION current, DIRECTION goal) {
+        switch (current) {
+            case UP:
+                switch (goal) {
+                    case UP:
+                        return MOVEMENT.ERROR;
+                    case DOWN: 
+                        return MOVEMENT.TURNLEFT;
+                    case LEFT:
+                        return MOVEMENT.TURNLEFT;
+                    case RIGHT:
+                        return MOVEMENT.TURNRIGHT;
+                }
+                break;
+            case DOWN:
+                switch (goal) {
+                    case UP:
+                        return MOVEMENT.TURNLEFT;
+                    case DOWN:
+                        return MOVEMENT.ERROR;
+                    case LEFT:
+                        return MOVEMENT.TURNRIGHT;
+                    case RIGHT:
+                        return MOVEMENT.TURNLEFT;
+                }
+                break;
+            case LEFT:
+                switch (goal) {
+                    case UP:
+                        return MOVEMENT.TURNRIGHT;
+                    case DOWN:
+                        return MOVEMENT.TURNLEFT;
+                    case LEFT:
+                        return MOVEMENT.ERROR;
+                    case RIGHT:
+                        return MOVEMENT.TURNLEFT;
+                }
+                break;
+            case RIGHT:
+                switch (goal) {
+                    case UP:
+                        return MOVEMENT.TURNLEFT;
+                    case DOWN:
+                        return MOVEMENT.TURNRIGHT;
+                    case LEFT:
+                        return MOVEMENT.TURNLEFT;
+                    case RIGHT:
+                        return MOVEMENT.ERROR;
+                }
+        }
+        return MOVEMENT.ERROR;
+    }
+	//print fastest path
+	//
+	//print gCosts array
+	//
 }
 

@@ -2,6 +2,8 @@ package robot;
 
 import java.awt.Color;
 
+import robot.RobotConstant.DIRECTION;
+
 public final class RobotConstant {
 	
 	// Robot size
@@ -20,7 +22,7 @@ public final class RobotConstant {
 	public static final int LONG_IR_MAX = 4;
 	
 	public enum MOVEMENT {
-        FORWARD, BACKWARD, RIGHT, LEFT, CALIBRATE, ERROR;
+        FORWARD, BACKWARD, TURNRIGHT, TURNLEFT, CALIBRATE, ERROR;
 
         public static char print(MOVEMENT m) {
             switch (m) {
@@ -28,9 +30,9 @@ public final class RobotConstant {
                     return 'F';
                 case BACKWARD:
                     return 'B';
-                case RIGHT:
+                case TURNRIGHT:
                     return 'R';
-                case LEFT:
+                case TURNLEFT:
                     return 'L';
                 case CALIBRATE:
                     return 'C';
@@ -43,11 +45,13 @@ public final class RobotConstant {
 	
 	public static enum DIRECTION {
 		UP, RIGHT, DOWN, LEFT;
-
+		
+		//clockwise
 		public static DIRECTION getNext(DIRECTION currDirection) {
 			return values()[(currDirection.ordinal() + 1) % values().length];
 		}
 		
+		//anti-clockwise
 		public static DIRECTION getPrevious(DIRECTION currDirection) {
 			return values()[(currDirection.ordinal() + values().length - 1)
 					% values().length];
@@ -94,8 +98,8 @@ public final class RobotConstant {
 	// Robot Default Configuration
 	public static final int DEFAULT_START_ROW = 17; // Changed to 1 based on ROBOT_SIZE
 	public static final int DEFAULT_START_COL = 0;
-	public static final DIRECTION DEFAULT_START_DIR = DIRECTION.NORTH;
-        public static final DIRECTION DEFAULT_START_SP_DIR = DIRECTION.NORTH;
+	public static final DIRECTION DEFAULT_START_DIR = DIRECTION.UP;
+        public static final DIRECTION DEFAULT_START_SP_DIR = DIRECTION.UP;
 	
 	// Robot Exploration Configuration
 	public static final int DEFAULT_STEPS_PER_SECOND = 25;
@@ -105,4 +109,7 @@ public final class RobotConstant {
 	
 	// Prevent instantiation
 	private RobotConstant() {}
+
+
+
 }
