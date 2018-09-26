@@ -47,7 +47,9 @@ public class GridOperation {
 				j++;
 			};
 			//down
+
 			case 2 : if(getRow(gridNum)+1<=Constants.MAP_ROWS){
+
 				output[j] = incRow(gridNum);
 				j++;
 			};
