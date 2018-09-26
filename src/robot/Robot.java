@@ -21,7 +21,7 @@ public class Robot {
  
 	private int robotRow; // Coordinate of centre component
 	private int robotCol; // Coordinate of centre component
-	private DIRECTION orientation
+	private DIRECTION orientation;
 	private Map memory;
 	
 	/**
@@ -130,26 +130,10 @@ public class Robot {
 		}
 		else{
 			return DIRECTION.getNext(this.orientation);
-		this.valid = validate();
-		if (!valid) System.err.println("Invalid Robot Location");
+		}
 	}
 	
-	/*
-	 * Checks if robot is in a valid position on the map
-	 */
-	public boolean validate() {
-		List<int[]> adjCoor = Utility.getAdjCoor(this.coor);
-		int validCount = 0;
-		
-		for (int[] coor : adjCoor) {
-			Tile[][] actualField = Map.getMap();
-			if (!actualField[coor[1]][coor[2]].isObstacle()) {
-				validCount++;
-			}
-		}
-		
-		return validCount == 8;
-	}
+
 
 	
 }
