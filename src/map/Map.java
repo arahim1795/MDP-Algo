@@ -95,13 +95,12 @@ public class Map {
 	}
 	
 	/**
-	 * Returns map for evaluation
+	 * Returns Map object for evaluation
 	 * @return the map
 	 */
-
-	public Tile[][] getMap() {
-		return this.field;
-  }
+	public Map getMap() {
+		return this;
+	}
 	
 	/**
 	 * Return Tile with corresponding 
