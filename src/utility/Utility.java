@@ -3,6 +3,8 @@ package utility;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
+
 import map.Constants;
 
 /**
@@ -10,7 +12,7 @@ import map.Constants;
  */
 public class Utility {
 	
-	public final int portnumber = 1224;
+	public static Scanner scanner = new Scanner(System.in);
 	
 	/**
 	 * Orientations the Robot can face
