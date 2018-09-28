@@ -6,7 +6,6 @@ import robot.Robot;
 import robot.RobotConstant;
 import robot.RobotConstant.DIRECTION;
 import robot.RobotConstant.MOVEMENT;
-import utility.GridOperation;
 import map.Map;
 import map.Tile;
 import map.Constants;
