@@ -23,6 +23,7 @@ public class Robot {
 	private int robotCol; // Coordinate of centre component
 	private DIRECTION orientation;
 	private Map memory;
+	private boolean realBot; //distinguish simulation or real physical bot object
 	
 	/**
 	 * Create an robot 'placed' with reference to the x and y 

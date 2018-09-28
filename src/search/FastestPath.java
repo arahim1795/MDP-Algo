@@ -22,23 +22,24 @@ public class FastestPath {
 	private Tile current;
 	private Tile[] neighbours;
 	private Map exploredMap;
+	private final Map realMap; //real physical map
 	private DIRECTION curDir;
 	private double[][] gCosts;
 	private Robot bot; //KIV
 	private int loopCount;
+	private boolean exploreMode;
 	
-	/*
-    public FastestPathAlgo(Map exploredMap, Robot bot) {
+	
+    public FastestPath(Map exploredMap, Robot bot) {
         this.realMap = null;
-        initObject(exploredMap, bot);
+        init(exploredMap, bot);
     }
 
-    public FastestPathAlgo(Map exploredMap, Robot bot, Map realMap) {
+    public FastestPath(Map exploredMap, Robot bot, Map realMap) {
         this.realMap = realMap;
-        this.explorationMode = true;
-        initObject(exploredMap, bot);
-    }*/
-	//future uses???
+        this.exploreMode = true;
+        init(exploredMap, bot);
+    }
 	
 	//constructor for object/algo initialization
 	public void init(Map map, Robot bot){

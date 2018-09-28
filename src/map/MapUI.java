@@ -83,7 +83,7 @@ public class MapUI extends Map {
                 System.out.println(generateMapString());
             }
         }
-    });
+    
     
     
     public void paintComponent(Graphics g) {
