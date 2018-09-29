@@ -1,6 +1,7 @@
 package map;
 
 import java.util.ArrayList;
+import javax.swing.*;
 import java.util.List;
 
 import utility.Utility;
@@ -8,7 +9,7 @@ import utility.Utility;
 /**
  * @author 18/19 S1 G3
  */
-public class Map {
+public class Map extends JPanel {
 	
 	private Tile[][] field;
 	private int row, col;
