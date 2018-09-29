@@ -29,28 +29,31 @@ public class Robot {
 	 * Create an robot 'placed' with reference to the x and y 
 	 * coordinates of the centre component, fitted with an internal 
 	 * map
-	 * @param size Set size of square robot
 	 * @param x Centre x-coordinate of Robot
 	 * @param y Centre y-coordinate of Robot
+	 * @param realBot TODO
+	 * @param size Set size of square robot
 	 * @param direction Robot's orientation
 	 * @see map
 	 */
 
-	public Robot (int x, int y){
+	public Robot (int x, int y, boolean realBot){
 		this.memory = new Map();
 
 		
 		this.robotRow = x;
 		this.robotCol = y;
 		
+		this.realBot = realBot;
 		this.orientation = RobotConstant.DEFAULT_START_DIR;
 	}
-	public Robot(int size, int x, int y, DIRECTION direction) {
+	public Robot(int size, int x, int y, DIRECTION direction, boolean realBot) {
 		this.memory = new Map();
 		
 		this.robotRow = x;
 		this.robotCol = y;
 		
+		this.realBot = realBot;
 		this.orientation = direction;
 	}
 	public int getRobotRow(){
@@ -63,6 +66,10 @@ public class Robot {
 	
 	public DIRECTION getRobotOrientation(){
 		return this.orientation;
+	}
+	
+	public boolean isRealBot(){
+		return this.realBot;
 	}
 	
 	public void move(MOVEMENT m, boolean sendToAndroid) {

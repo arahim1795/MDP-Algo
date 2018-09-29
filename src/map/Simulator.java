@@ -26,7 +26,7 @@ public class Simulator {
 
 	public static void main(String[] args) {
 		
-		bot = new Robot(1,1,1,DIRECTION.UP);
+		bot = new Robot(1,1,1,DIRECTION.UP, null);
 		
 		//main display frame
 		 frame = new JFrame();

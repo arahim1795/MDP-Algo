@@ -243,7 +243,7 @@ public class FastestPath {
 		DIRECTION targetDir;
 		
 		ArrayList<MOVEMENT> movementList = new ArrayList<>();
-		Robot tempBot = new Robot(1,1);
+		Robot tempBot = new Robot(1,1, null);
 		//tempBot.setSpeed(0);
 		//while robot position not on goal tile
 		while((tempBot.getRobotRow()!= goalRow) || (tempBot.getRobotCol()!= goalCol)){
