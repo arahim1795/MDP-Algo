@@ -130,12 +130,12 @@ public class MapUI extends Map {
     private void addObstacle(int row, int col) {
         if (mapTiles[row][col].isObstacle()) {
             //remove obstacle
-            mapTiles[row][col].removeObstacle();
+            mapTiles[row][col].setObstacle(false);
         } else if (isStartZone(row, col) || isGoalZone(row, col)) {
             JOptionPane.showMessageDialog(null, "Grid clicked is the start/goal zone. Please select another tile.", "Warning",
                     JOptionPane.WARNING_MESSAGE);
         } else {
-            mapTiles[row][col].setObstacle();
+            mapTiles[row][col].setObstacle(true);
         }
     }
     
@@ -148,7 +148,7 @@ public class MapUI extends Map {
                         + " attempt to kill the robot!", "Warning",
                         JOptionPane.WARNING_MESSAGE);
             } else {
-                mapTiles[row][col].removeObstacle();
+                mapTiles[row][col].setObstacle(false);
             }
         }
     }
@@ -242,9 +242,9 @@ public class MapUI extends Map {
 
                 // Obstacle - Border walls
                 if (mapString.charAt(charIndex) == '1') {
-                    mapTiles[row][col].setObstacle();
+                    mapTiles[row][col].setObstacle(true);
                 } else {
-                    mapTiles[row][col].removeObstacle();
+                    mapTiles[row][col].setObstacle(false);
                 }
             }
         }
@@ -254,7 +254,7 @@ public class MapUI extends Map {
 
         for (int row = 0; row < (Constants.MAP_ROWS); row++) {
             for (int col = 0; col < (Constants.MAP_COLS); col++) {
-                mapTiles[row][col].removeObstacle();
+                mapTiles[row][col].setObstacle(false);
             }
         }
     }

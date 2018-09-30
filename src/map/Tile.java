@@ -43,8 +43,8 @@ public class Tile {
 	 * Set Tile as an obstacle
 	 * @param obstacle If set to true, tile is set as obstacle
 	 */
-	public void setObstacle() {
-		this.obstacle = true;
+	public void setObstacle(boolean obstacle) {
+		this.obstacle = obstacle;
 	}
 
 	/**
