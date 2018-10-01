@@ -22,8 +22,7 @@ public final class RobotConstant {
 	public static final int LONG_IR_MAX = 4;
 	
 	public enum MOVEMENT {
-        FORWARD, BACKWARD, TURNRIGHT, TURNLEFT, CALIBRATE, ERROR;
-
+        FORWARD, BACKWARD, TURNLEFT, TURNRIGHT, CALIBRATE, ERROR;
         public static char print(MOVEMENT m) {
             switch (m) {
                 case FORWARD:
@@ -36,7 +35,6 @@ public final class RobotConstant {
                     return 'L';
                 case CALIBRATE:
                     return 'C';
-                case ERROR:
                 default:
                     return 'E';
             }
@@ -99,17 +97,30 @@ public final class RobotConstant {
 	public static final int DEFAULT_START_ROW = 17; // Changed to 1 based on ROBOT_SIZE
 	public static final int DEFAULT_START_COL = 0;
 	public static final DIRECTION DEFAULT_START_DIR = DIRECTION.UP;
-        public static final DIRECTION DEFAULT_START_SP_DIR = DIRECTION.UP;
+    public static final DIRECTION DEFAULT_START_SP_DIR = DIRECTION.UP;
 	
 	// Robot Exploration Configuration
 	public static final int DEFAULT_STEPS_PER_SECOND = 25;
 	public static final int DEFAULT_COVERAGE_LIMIT = 50;
 	public static final int DEFAULT_TIME_LIMIT = 360;
 	
+	/**
+	 * 
+	 * @return
+	 */
+	public static boolean isAtStart(int row, int col) {
+		return row == 1 && col == 18;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public static boolean isAtGoal(int row, int col) {
+		return row == 18 && col == 1;
+	}
 	
 	// Prevent instantiation
 	private RobotConstant() {}
-
-
 
 }

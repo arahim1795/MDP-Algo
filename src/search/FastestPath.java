@@ -6,13 +6,16 @@ import robot.Robot;
 import robot.RobotConstant;
 import robot.RobotConstant.DIRECTION;
 import robot.RobotConstant.MOVEMENT;
-import utility.GridOperation;
 import map.Map;
 import map.Tile;
 import map.Constants;
 import java.util.HashMap;
 import java.util.Stack;
 import java.util.ArrayList;
+
+/**
+ * @author ARAHIM-WPC
+ */
 public class FastestPath {
 
 	
@@ -23,26 +26,36 @@ public class FastestPath {
 	private Tile current;
 	private Tile[] neighbours;
 	private Map exploredMap;
+	private final Map realMap; //real physical map
 	private DIRECTION curDir;
 	private double[][] gCosts;
 	private Robot bot; //KIV
 	private int loopCount;
+	private boolean exploreMode;
 	
-	/*
-    public FastestPathAlgo(Map exploredMap, Robot bot) {
+	/**
+	 * 
+	 * @param exploredMap
+	 * @param bot
+	 */
+    public void FastestPathAlgo(Map exploredMap, Robot bot) {
         this.realMap = null;
-        initObject(exploredMap, bot);
+        init(exploredMap, bot);
     }
 
-    public FastestPathAlgo(Map exploredMap, Robot bot, Map realMap) {
+    public FastestPath(Map exploredMap, Robot bot, Map realMap) {
         this.realMap = realMap;
-        this.explorationMode = true;
-        initObject(exploredMap, bot);
-    }*/
-	//future uses???
+        this.exploreMode = true;
+        init(exploredMap, bot);
+    }
 	
 	//constructor for object/algo initialization
-	public void init(Map map, Robot bot){
+	/**
+	 * 
+	 * @param map
+	 * @param bot
+	 */
+    public void init(Map map, Robot bot){
 		//initialize variables
 		this.bot = bot;
 		this.exploredMap = map;
@@ -52,7 +65,7 @@ public class FastestPath {
 		this.neighbours = new Tile[4];
 		//initialize robot orientation
 		this.current = map.getTile(bot.getRobotRow(), bot.getRobotCol());
-		this.curDir = bot.getRobotOrientation();
+		this.curDir = bot.getRobotDir();
 		
 		//initialize gCost array
 		this.gCosts = new double[Constants.MAP_ROWS][Constants.MAP_COLS];
@@ -75,16 +88,23 @@ public class FastestPath {
 		this.loopCount = 0;
 	}	
 	
-	/*Private methods
-	 */
-	
+	/*Private methods*/
 	//checks if tile can be visited
-	private boolean canBeVisited(Tile t) {
+	/**
+	 * 
+	 * @param t
+	 * @return
+	 */
+    private boolean canBeVisited(Tile t) {
         return  !t.isObstacle() && !t.isVirtualWall();
     }
 	
-	//
-	
+	/**
+	 * 
+	 * @param goalRow
+	 * @param col
+	 * @return
+	 */
 	private Tile minimumCostTile(int goalRow,int col){
 		int size = toVisit.size();
 		int minCost = RobotConstant.INFINITE_COST;	
@@ -100,6 +120,13 @@ public class FastestPath {
 	}
 	
 	//return heuristic cost calculation
+	/**
+	 * 
+	 * @param T
+	 * @param goalRow
+	 * @param goalCol
+	 * @return
+	 */
 	private double getHcost(Tile T, int goalRow, int goalCol){
 		//no of rows and column moves needed to get to goal
 		int movementCost = (T.getRow()-goalRow)+(T.getCol()-goalCol);
@@ -111,7 +138,14 @@ public class FastestPath {
 	}
 	
 	//return target direction from robot to specific tile
-	
+	/**
+	 * 
+	 * @param botRow
+	 * @param botCol
+	 * @param botDir
+	 * @param target
+	 * @return
+	 */
 	private DIRECTION getTargetDirection(int botRow,int botCol, DIRECTION botDir, Tile target){
 		//robot column > cell column
 		if (botCol - target.getCol() >0){return DIRECTION.LEFT;}
@@ -122,6 +156,13 @@ public class FastestPath {
 		}
 	
 	//calculate ACTUAL g-cost when travelling from one node to another
+	/**
+	 * 
+	 * @param a
+	 * @param b
+	 * @param aDir
+	 * @return
+	 */
 	private double getGCost(Tile a, Tile b, DIRECTION aDir) {
         double moveCost = robot.RobotConstant.MOVE_COST; // one movement to neighbor
 
@@ -131,8 +172,15 @@ public class FastestPath {
 
         return moveCost + turnCost;
 	}
-    //calcuate ACTUAL turn cost 
-    private double getTurnCost(DIRECTION cDir, DIRECTION aDir){
+    
+	//calcuate ACTUAL turn cost 
+    /**
+     * 
+     * @param cDir
+     * @param aDir
+     * @return
+     */
+	private double getTurnCost(DIRECTION cDir, DIRECTION aDir){
     		int turns = Math.abs(aDir.ordinal()-cDir.ordinal());
     		//turn the other direction if turns >2
     		if(turns >2){turns = turns%2;}
@@ -154,7 +202,13 @@ public class FastestPath {
     }
 	
 	//aStarSearch
-	public String searchFastestPath(int goalRow, int goalCol){
+	/**
+	 * 
+	 * @param goalRow
+	 * @param goalCol
+	 * @return
+	 */
+    public String searchFastestPath(int goalRow, int goalCol){
 		Stack<Tile> path;
 		do{
 			loopCount++;
@@ -235,7 +289,13 @@ public class FastestPath {
 	
 	
 	//executes the fastest path and returns a path String
-	
+	/**
+	 * 
+	 * @param path
+	 * @param goalRow
+	 * @param goalCol
+	 * @return
+	 */
 	private String executeFastestPath(Stack<Tile> path, int goalRow, int goalCol){
 		StringBuilder outputString = new StringBuilder();
 		
@@ -243,7 +303,7 @@ public class FastestPath {
 		DIRECTION targetDir;
 		
 		ArrayList<MOVEMENT> movementList = new ArrayList<>();
-		Robot tempBot = new Robot(1,1);
+		Robot tempBot = new Robot(1,1, false);
 		//tempBot.setSpeed(0);
 		//while robot position not on goal tile
 		while((tempBot.getRobotRow()!= goalRow) || (tempBot.getRobotCol()!= goalCol)){
@@ -252,13 +312,13 @@ public class FastestPath {
 				temp = path.pop();
 				
 			}
-			targetDir = getTargetDirection(tempBot.getRobotRow(),tempBot.getRobotCol(),tempBot.getRobotOrientation(),temp);
+			targetDir = getTargetDirection(tempBot.getRobotRow(),tempBot.getRobotCol(),tempBot.getRobotDir(),temp);
 			
 			MOVEMENT m;
 			
 			//if robot not facing correct direction, orientate robot
-			if(tempBot.getRobotOrientation() != targetDir){
-				m = getTargetMove(tempBot.getRobotOrientation(),targetDir);
+			if(tempBot.getRobotDir() != targetDir){
+				m = getTargetMove(tempBot.getRobotDir(),targetDir);
 			}else{
 				m = MOVEMENT.FORWARD;
 			}
@@ -279,6 +339,12 @@ public class FastestPath {
 	}
 
 	//return a movement given target direction and current direction
+	/**
+	 * 
+	 * @param current
+	 * @param goal
+	 * @return
+	 */
 	private MOVEMENT getTargetMove(DIRECTION current, DIRECTION goal) {
         switch (current) {
             case UP:
@@ -336,4 +402,3 @@ public class FastestPath {
 	//print gCosts array
 	//
 }
-
