@@ -148,7 +148,7 @@ public class Explore {
 	private boolean notObs(int col, int row) {
 		if (Map.isValid(col, row)) {
 			Tile tile = mapActual.getTile(col, row);
-			return tile.isExplored() && !tile.isObstacle();
+			return tile.setExplored() && !tile.isObstacle();
 		}
 		return false;
 	}
@@ -162,7 +162,7 @@ public class Explore {
 	private boolean notVirtual(int col, int row) {
 		if (Map.isValid(col, row)) {
 			Tile tile = mapActual.getTile(col, row);
-			return tile.isExplored() && !tile.isObstacle() && !tile.isVirtualWall();
+			return tile.setExplored() && !tile.isObstacle() && !tile.isVirtualWall();
 		}
 		return false;
 	}

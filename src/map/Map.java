@@ -52,7 +52,8 @@ public class Map {
 	 * @param col
 	 * @param obstacle
 	 */
-	public void setObstacle(int col, int row) {
+	public void setObstacleTile(int col, int row,boolean obstacle) {
+		this.field[row][col].setObstacle(obstacle);
 		for(int i = -1; i < 2; i++)
 			for(int j = -1; j < 2; j++)
 				if(i != 0 || j != 0) field[row+i][col+j].setVirtualWall(true);
@@ -113,7 +114,7 @@ public class Map {
 	 * @param coor x and y-coordinates
 	 * @return true if x and y-coordinates are valid, false otherwise
 	 */
-	public static boolean isValid(int row, int col){
+	public static boolean isValidTile(int row, int col){
 		return row > 0 && row < Constants.MAP_ROWS && col > 0 && col < Constants.MAP_COLS;
 	}
 	

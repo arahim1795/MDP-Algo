@@ -52,19 +52,10 @@ public class Tile {
 	 * @return true if Tile has been explored, false otherwise
 	 * @see robot.Robot
 	 */
-	public boolean isExplored() {
+	public boolean setExplored(boolean explored) {
 		return explored;
 	}
 
-	/**
-	 * Set Tile as explored by robot
-	 * @param explored If set to true, tile has been explored by Robot
-	 * @see robot.Robot
-	 */
-	public void setExplored() {
-		this.explored = true;
-	}
-	
 	/**
 	 * Returns true if this Tile is bounded by adjacent obstacle(s) or map edge(s)
 	 * @return true if Tile is a boundary Tile, false otherwise
