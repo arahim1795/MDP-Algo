@@ -98,8 +98,8 @@ public final class RobotConstant {
 	// Robot Default Configuration
 	public static final int DEFAULT_START_ROW = 18; // Changed to 1 based on ROBOT_SIZE
 	public static final int DEFAULT_START_COL = 1;
-	public static final int DEFAULT_GOAL_ROW = 18; 
-	public static final int DEFAULT_GOAL_COL = 1;
+	public static final int DEFAULT_GOAL_ROW = 1; 
+	public static final int DEFAULT_GOAL_COL = 18;
 	public static final DIRECTION DEFAULT_START_DIR = DIRECTION.UP;
     public static final DIRECTION DEFAULT_START_SP_DIR = DIRECTION.UP;
 	
