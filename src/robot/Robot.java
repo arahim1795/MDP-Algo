@@ -50,8 +50,6 @@ public class Robot {
 	 * @param direction Direction Robot's facing
 	 */
 	public Robot(int startRow, int startCol, DIRECTION startDir, boolean isReal) {
-	public Robot(int startRow, int startCol, DIRECTION startDir) {
-
 		row = startRow;
 		col = startCol;
 		direction = startDir;

@@ -3,6 +3,7 @@ package utility;
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 
 /**
  * @author 18/19 S1 G3
@@ -14,8 +15,10 @@ public class Comms {
 	private static int portNum = 1224;
 	
 	private static Socket robotComms = null;
-	private static BufferedReader is = null; // read from Pi
-	private static BufferedWriter os = null; // write to Pi
+	// private static BufferedReader is = null; // read from Pi
+	private static DataInputStream is = null;
+	// private static BufferedWriter os = null; // write to Pi
+	private static DataOutputStream os = null;
 	
 	/**
 	 * Open connection (socket) with Pi, communication streams open afterwards 
@@ -23,8 +26,10 @@ public class Comms {
 	public static void openSocket() {
 		try {
 			robotComms = new Socket(robotName, portNum);
-			is = new BufferedReader( new InputStreamReader(robotComms.getInputStream()));
-			os = new BufferedWriter( new OutputStreamWriter(robotComms.getOutputStream()));
+			// is = new BufferedReader( new InputStreamReader(robotComms.getInputStream()));
+			is = new DataInputStream( robotComms.getInputStream());
+			// os = new BufferedWriter ( new OutputStreamReader(robotComms.getOutputStream()));
+			os = new DataOutputStream(robotComms.getOutputStream());
 		} catch (UnknownHostException u) {
 			System.err.println("Cannot Resolve Host: " + robotName);
 		} catch (IOException e) {
@@ -55,7 +60,7 @@ public class Comms {
 	public static boolean sendMsg(String msg) {
 		boolean sent;
 		try {
-			os.write(msg);
+			os.writeBytes(msg);
 			sent = true;
 		} catch (IOException e) {
 			System.err.println(e);
@@ -69,6 +74,7 @@ public class Comms {
 	 * @return message
 	 */
 	public static String receiveMsg() {
+		
 		StringBuilder msg = new StringBuilder();
 		try {
 			msg.append(is.readLine());
@@ -77,6 +83,20 @@ public class Comms {
 			System.err.println(e);
 		}
 		return msg.toString();
+		
+		/*
+		byte[] buffer = new byte[1024];
+		try {
+			int read = 0;
+			while ((read = is.read(buffer, 0, buffer.length)) != -1) {
+				is.read(buffer);
+			}
+			
+		} catch (IOException e) {
+			System.err.println(e);
+		}
+		return Arrays.toString(buffer);
+		*/
 	}
 	
 	/**
@@ -84,10 +104,7 @@ public class Comms {
 	 * @return true if connection and communication streams are active, false otherwise
 	 */
 	public static boolean connectionActive() {
-		if (robotComms == null && is == null && os == null)
-			return false;
-		else
-			return true;
+		return robotComms == null && is == null && os == null;
 	}
 	
 }
