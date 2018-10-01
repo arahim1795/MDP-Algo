@@ -12,10 +12,10 @@ public class Explore {
 	
 	// Robot Tracker
 	private Robot robot;
-	private Map mapRobot;
 	
 	// Map Exploration Tracker
 	private int coverage;
+	private Map map;
 	
 	// Obstacles Tracker
 	private ArrayList<ExploreTile> obstacles = new ArrayList<ExploreTile>();
@@ -28,7 +28,6 @@ public class Explore {
 	 * @param map
 	 */
 	public void explore(Map map, Robot bot) {
-		mapRobot = new Map();
 		mapActual = map;
 		robot = bot;
 		
@@ -109,7 +108,7 @@ public class Explore {
 	 */
 	private boolean isUpFree() {
 		int x = robot.getRobotRow(), y = robot.getRobotCol();
-		return notObs(x-1, y-1) && notObs(x+1, y-1) && notVirtual(x, y-1);
+		return notObs(x-1, y-1) && notObs(x+1, y-1) && notVir(x, y-1);
 	}
 	
 	/**
@@ -118,7 +117,7 @@ public class Explore {
 	 */
 	private boolean isDownFree() {
 		int x = robot.getRobotRow(), y = robot.getRobotCol();
-		return notObs(x-1, y+1) && notObs(x+1, y+1) && notVirtual(x, y+1);
+		return notObs(x-1, y+1) && notObs(x+1, y+1) && notVir(x, y+1);
 	}
 	
 	/**
@@ -127,7 +126,7 @@ public class Explore {
 	 */
 	private boolean isLeftFree() {
 		int x = robot.getRobotRow(), y = robot.getRobotCol();
-		return notObs(x-1, y+1) && notObs(x-1, y-1) && notVirtual(x-1, y);
+		return notObs(x-1, y+1) && notObs(x-1, y-1) && notVir(x-1, y);
 	}
 	
 	/**
@@ -136,7 +135,7 @@ public class Explore {
 	 */
 	private boolean isRightFree() {
 		int x = robot.getRobotRow(), y = robot.getRobotCol();
-		return notObs(x+1, y+1) && notObs(x+1, y-1) && notVirtual(x+1, y);
+		return notObs(x+1, y+1) && notObs(x+1, y-1) && notVir(x+1, y);
 	}
 	
 	/**
@@ -145,7 +144,7 @@ public class Explore {
 	 * @param row
 	 * @return
 	 */
-	private boolean notObs(int col, int row) {
+	private boolean notObs(int row, int col) {
 		if (Map.isValidTile(col, row)) {
 			Tile tile = mapActual.getTile(col, row);
 			return tile.isExplored() && !tile.isObstacle();
@@ -159,7 +158,7 @@ public class Explore {
 	 * @param row
 	 * @return
 	 */
-	private boolean notVirtual(int col, int row) {
+	private boolean notVir(int row, int col) {
 		if (Map.isValidTile(col, row)) {
 			Tile tile = mapActual.getTile(col, row);
 			return tile.isExplored() && !tile.isObstacle() && !tile.isVirtualWall();
@@ -173,7 +172,13 @@ public class Explore {
 	 */
 	private void moveRobot(MOVEMENT move) {
 		robot.move(move, true); // sendToAndroid);
-		mapRobot.update();
+	}
+	
+	/**
+	 * 
+	 */
+	private void updateRobotMap() {
+		
 	}
 
 }

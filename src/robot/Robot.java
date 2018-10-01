@@ -1,6 +1,7 @@
 package robot;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import map.Map;
 import map.Constants;
@@ -29,8 +30,8 @@ public class Robot {
 	private DIRECTION robotDir;
 	
 	//OTHERS
-	private Map map;
 	private boolean realBot;
+	private int speed;
 
 	
 	// Constructor(s)
@@ -44,7 +45,6 @@ public class Robot {
 	 * @see map
 	 */
 	public Robot (int startRow, int startCol, boolean isReal){
-		
 		SRFrontLeft = new Sensor(RobotConstant.SHORT_IR_MIN, RobotConstant.SHORT_IR_MAX, this.robotRow + 1, this.robotCol - 1, this.robotDir, "SRFL");
         SRFrontCenter = new Sensor(RobotConstant.SHORT_IR_MIN, RobotConstant.SHORT_IR_MAX, this.robotRow + 1, this.robotCol, this.robotDir, "SRFC");
         SRFrontRight = new Sensor(RobotConstant.SHORT_IR_MIN, RobotConstant.SHORT_IR_MAX, this.robotRow + 1, this.robotCol + 1, this.robotDir, "SRFR");
@@ -55,8 +55,7 @@ public class Robot {
 		robotRow = startRow;
 		robotCol = startCol;
 		robotDir = RobotConstant.DEFAULT_START_DIR;
-		map = new Map();
-
+		speed = RobotConstant.SPEED;
 		realBot = isReal;
 	}
 	
@@ -80,7 +79,8 @@ public class Robot {
 		robotRow = startRow;
 		robotCol = startCol;
 		robotDir = startDir;
-		map = new Map();
+		speed = RobotConstant.SPEED;
+
 		realBot = isReal;
 	}
 	
@@ -138,14 +138,14 @@ public class Robot {
 	
 
 	public void move(MOVEMENT m, boolean sendToAndroid) {
-        /* if (!realBot) {
+         if (!realBot) {
             // Emulate real movement by pausing execution.
             try {
                 TimeUnit.MILLISECONDS.sleep(speed);
             } catch (InterruptedException e) {
                 System.out.println("Something went wrong in Robot.move()!");
             }
-        } */
+        } 
 
         switch (m) {
             case FORWARD:
@@ -196,6 +196,9 @@ public class Robot {
 
         updateTouchedGoal();
     }
+	public void move(MOVEMENT m){
+		this.move(m,true);
+	}
 	
 	/**
 	 * 
@@ -204,10 +207,10 @@ public class Robot {
 	 */
 	private DIRECTION updateTurnDirection(MOVEMENT m){
 		if(m == MOVEMENT.TURNLEFT) {
-			return DIRECTION.getNext(robotDir);
+			return DIRECTION.getRight(robotDir);
 		}
 		else {
-			return DIRECTION.getNext(robotDir);
+			return DIRECTION.getRight(robotDir);
 		}
 	}
 	
@@ -216,9 +219,9 @@ public class Robot {
      */
     private DIRECTION findNewDirection(MOVEMENT m) {
         if (m == MOVEMENT.TURNRIGHT) {
-            return DIRECTION.getNext(robotDir);
+            return DIRECTION.getRight(robotDir);
         } else {
-            return DIRECTION.getPrevious(robotDir);
+            return DIRECTION.getLeft(robotDir);
         }
     }
 
@@ -265,4 +268,42 @@ public class Robot {
         return result;
     }
 	
+    public void setSensors() {
+        switch (robotDir) {
+            case UP:
+                SRFrontLeft.setSensor(this.robotRow + 1, this.robotCol - 1, this.robotDir);
+                SRFrontCenter.setSensor(this.robotRow + 1, this.robotCol, this.robotDir);
+                SRFrontRight.setSensor(this.robotRow + 1, this.robotCol + 1, this.robotDir);
+                SRLeft.setSensor(this.robotRow + 1, this.robotCol - 1, findNewDirection(MOVEMENT.TURNLEFT));
+                LRLeft.setSensor(this.robotRow, this.robotCol - 1, findNewDirection(MOVEMENT.TURNLEFT));
+                SRRight.setSensor(this.robotRow + 1, this.robotCol + 1, findNewDirection(MOVEMENT.TURNRIGHT));
+                break;
+            case RIGHT:
+                SRFrontLeft.setSensor(this.robotRow + 1, this.robotCol + 1, this.robotDir);
+                SRFrontCenter.setSensor(this.robotRow, this.robotCol + 1, this.robotDir);
+                SRFrontRight.setSensor(this.robotRow - 1, this.robotCol + 1, this.robotDir);
+                SRLeft.setSensor(this.robotRow + 1, this.robotCol + 1, findNewDirection(MOVEMENT.TURNLEFT));
+                LRLeft.setSensor(this.robotRow + 1, this.robotCol, findNewDirection(MOVEMENT.TURNLEFT));
+                SRRight.setSensor(this.robotRow - 1, this.robotCol + 1, findNewDirection(MOVEMENT.TURNRIGHT));
+                break;
+            case DOWN:
+                SRFrontLeft.setSensor(this.robotRow - 1, this.robotCol + 1, this.robotDir);
+                SRFrontCenter.setSensor(this.robotRow - 1, this.robotCol, this.robotDir);
+                SRFrontRight.setSensor(this.robotRow - 1, this.robotCol - 1, this.robotDir);
+                SRLeft.setSensor(this.robotRow - 1, this.robotCol + 1, findNewDirection(MOVEMENT.TURNLEFT));
+                LRLeft.setSensor(this.robotRow, this.robotCol + 1, findNewDirection(MOVEMENT.TURNLEFT));
+                SRRight.setSensor(this.robotRow - 1, this.robotCol - 1, findNewDirection(MOVEMENT.TURNRIGHT));
+                break;
+            case LEFT:
+                SRFrontLeft.setSensor(this.robotRow - 1, this.robotCol - 1, this.robotDir);
+                SRFrontCenter.setSensor(this.robotRow, this.robotCol - 1, this.robotDir);
+                SRFrontRight.setSensor(this.robotRow + 1, this.robotCol - 1, this.robotDir);
+                SRLeft.setSensor(this.robotRow - 1, this.robotCol - 1, findNewDirection(MOVEMENT.TURNLEFT));
+                LRLeft.setSensor(this.robotRow - 1, this.robotCol, findNewDirection(MOVEMENT.TURNLEFT));
+                SRRight.setSensor(this.robotRow + 1, this.robotCol - 1, findNewDirection(MOVEMENT.TURNRIGHT));
+                break;
+        }
+
+    }
+    
 }

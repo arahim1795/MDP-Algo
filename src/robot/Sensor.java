@@ -4,61 +4,78 @@ import map.Map;
 import robot.RobotConstant.DIRECTION;
 
 /**
- * Represents a sensor mounted on the robot.
- *
- * @author 
+ * @author 18/19 S1 G3
  */
-
 public class Sensor {
-    private final int lowerRange;
-    private final int upperRange;
-    private int sensorPosRow;
-    private int sensorPosCol;
-    private DIRECTION sensorDir;
-    private final String id;
-
-    public Sensor(int lowerRange, int upperRange, int row, int col, DIRECTION dir, String id) {
-        this.lowerRange = lowerRange;
-        this.upperRange = upperRange;
-        this.sensorPosRow = row;
-        this.sensorPosCol = col;
-        this.sensorDir = dir;
-        this.id = id;
-    }
-
-    public void setSensor(int row, int col, DIRECTION dir) {
-        this.sensorPosRow = row;
-        this.sensorPosCol = col;
-        this.sensorDir = dir;
-    }
-
-    /**
-     * Returns the number of cells to the nearest detected obstacle or -1 if no obstacle is detected.
-     */
-    public int sense(Map exploredMap, Map realMap) {
-        switch (sensorDir) {
-            case UP:
-                return getSensorVal(exploredMap, realMap, 1, 0);
-            case RIGHT:
-                return getSensorVal(exploredMap, realMap, 0, 1);
-            case DOWN:
-                return getSensorVal(exploredMap, realMap, -1, 0);
-            case LEFT:
-                return getSensorVal(exploredMap, realMap, 0, -1);
-        }
-        return -1;
-    }
-
-    /**
-     * Sets the appropriate obstacle cell in the map and returns the row or column value of the obstacle cell. Returns
-     * -1 if no obstacle is detected.
-     */
-    private int getSensorVal(Map exploredMap, Map realMap, int rowInc, int colInc) {
-        // Check if starting point is valid for sensors with lowerRange > 1.
-        if (lowerRange > 1) {
-            for (int i = 1; i < this.lowerRange; i++) {
-                int row = this.sensorPosRow + (rowInc * i);
-                int col = this.sensorPosCol + (colInc * i);
+	
+	// Variables
+	private final int sensorLowerLimit, sensorUpperLimit; // 1 unit = 1 10cm block
+	int sensorRow, sensorCol;
+	DIRECTION sensorDir;
+	String sensorID;
+	
+	// Constructor
+	/**
+	 * 
+	 * @param lowerLimit
+	 * @param upperLimit
+	 */
+	public Sensor (int lowerLimit, int upperLimit, int row, int col, DIRECTION dir, String id) {
+		sensorLowerLimit = lowerLimit;
+		sensorUpperLimit = upperLimit;
+		sensorRow = row;
+		sensorCol = col;
+		sensorDir = dir;
+		sensorID = id;
+	}
+	
+	// Setter(s)
+	/**
+	 * 
+	 * @param row
+	 * @param col
+	 * @param dir
+	 */
+	public void setSensor(int row, int col, DIRECTION dir) {
+		sensorRow = row;
+		sensorCol = col;
+		sensorDir = dir;
+	}
+	
+	// Other Function(s)
+	/**
+	 * Returns number of cells that could be seen by the sensor
+	 * -1 is returned if obstacle, invalid map coordinates is first detected
+	 * @param exploredMap
+	 * @param realMap
+	 * @return number of cells that is seen by the sensor, -1 if an obstacle or invalid map coordinates is first detected
+	 */
+	public int sense(Map exploredMap, Map realMap) {
+		switch (sensorDir) {
+			case UP:
+				return getSensorVal(exploredMap, realMap, 0, -1);
+			case DOWN:
+				return getSensorVal(exploredMap, realMap, 0, 1);
+			case LEFT:
+				return getSensorVal(exploredMap, realMap, -1, 0);
+			default:
+				return getSensorVal(exploredMap, realMap, 1, 0);
+		}		
+	}
+	
+	/**
+	 * Update map  in the map and returns the row or column value of the obstacle cell
+	 * @param exploredMap
+	 * @param realMap
+	 * @param colMul
+	 * @param rowMul
+	 * @return
+	 */
+    private int getSensorVal(Map exploredMap, Map realMap, int colMul, int rowMul) {
+        if (sensorLowerLimit > 1) {
+            for (int i = 1; i < this.sensorLowerLimit; i++) {
+                int row = this.sensorRow + (colMul * i);
+                int col = this.sensorCol + (rowMul * i);
 
                 if (!Map.isValidTile(row, col)) return i;
                 if (realMap.getTile(row, col).isObstacle()) return i;
@@ -66,9 +83,9 @@ public class Sensor {
         }
 
         // Check if anything is detected by the sensor and return that value.
-        for (int i = this.lowerRange; i <= this.upperRange; i++) {
-            int row = this.sensorPosRow + (rowInc * i);
-            int col = this.sensorPosCol + (colInc * i);
+        for (int i = this.sensorLowerLimit; i <= this.sensorUpperLimit; i++) {
+            int row = this.sensorRow + (colMul * i);
+            int col = this.sensorCol + (rowMul * i);
 
             if (!Map.isValidTile(row, col)) return i;
 
@@ -84,6 +101,11 @@ public class Sensor {
         return -1;
     }
 
+    /**
+     * Sets the appropriate obstacle cell in the map and returns the row or column value of the obstacle cell. Returns
+     * -1 if no obstacle is detected.
+     */
+    
     /**
      * Uses the sensor direction and given value from the actual sensor to update the map.
      */
@@ -111,18 +133,18 @@ public class Sensor {
         if (sensorVal == 0) return;  // return value for LR sensor if obstacle before lowerRange
 
         // If above fails, check if starting point is valid for sensors with lowerRange > 1.
-        for (int i = 1; i < this.lowerRange; i++) {
-            int row = this.sensorPosRow + (rowInc * i);
-            int col = this.sensorPosCol + (colInc * i);
+        for (int i = 1; i < this.sensorLowerLimit; i++) {
+            int row = this.sensorRow + (rowInc * i);
+            int col = this.sensorCol + (colInc * i);
 
             if (!Map.isValidTile(row, col)) return;
             if (exploredMap.getTile(row, col).isObstacle()) return;
         }
 
         // Update map according to sensor's value.
-        for (int i = this.lowerRange; i <= this.upperRange; i++) {
-            int row = this.sensorPosRow + (rowInc * i);
-            int col = this.sensorPosCol + (colInc * i);
+        for (int i = this.sensorLowerLimit; i <= this.sensorUpperLimit; i++) {
+            int row = this.sensorRow + (rowInc * i);
+            int col = this.sensorCol + (colInc * i);
 
             if (!Map.isValidTile(row, col)) continue;
 
@@ -135,7 +157,7 @@ public class Sensor {
 
             // Override previous obstacle value if front sensors detect no obstacle.
             if (exploredMap.getTile(row, col).isObstacle()) {
-                if (id.equals("SRFL") || id.equals("SRFC") || id.equals("SRFR")) {
+                if (sensorID.equals("SRFL") || sensorID.equals("SRFC") || sensorID.equals("SRFR")) {
                     exploredMap.setObstacleTile(row, col, false);
                 } else {
                     break;
@@ -143,4 +165,6 @@ public class Sensor {
             }
         }
     }
+    
+    
 }

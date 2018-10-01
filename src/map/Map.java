@@ -3,13 +3,19 @@ package map;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JPanel;
+
 import utility.Utility;
+import javax.swing.*;
 
 /**
  * @author 18/19 S1 G3
  */
-public class Map {
+public class Map extends JPanel{
 	
+	/**
+	 * 
+	 */
 	private Tile[][] field;
 	private static int col = Constants.MAP_ROWS, row = Constants.MAP_ROWS ;
 	
@@ -157,13 +163,6 @@ public class Map {
 				if (j == (col-1)) System.out.print("\n");
 			}
 		}
-		
-	}
-	
-	/**
-	 * 
-	 */
-	public void update() {
 		
 	}
 	
