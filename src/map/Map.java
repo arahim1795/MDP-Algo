@@ -101,7 +101,7 @@ public class Map {
 				adj = new int[2];
 				adj[0] = refx + c;
 				adj[1] = refy + r;
-				if ((!(adj[0] == refx) || !(adj[1] == refy)) && isValid(adj[0], adj[1])) {
+				if ((!(adj[0] == refx) || !(adj[1] == refy)) && isValidTile(adj[0], adj[1])) {
 					listCoor.add(adj);
 				}
 			}

@@ -70,7 +70,6 @@ public class Robot {
 	 * @param direction Direction Robot's facing
 	 */
 	public Robot(int startRow, int startCol, DIRECTION startDir, boolean isReal) {
-		
 		SRFrontLeft = new Sensor(RobotConstant.SHORT_IR_MIN, RobotConstant.SHORT_IR_MAX, this.robotRow + 1, this.robotCol - 1, this.robotDir, "SRFL");
         SRFrontCenter = new Sensor(RobotConstant.SHORT_IR_MIN, RobotConstant.SHORT_IR_MAX, this.robotRow + 1, this.robotCol, this.robotDir, "SRFC");
         SRFrontRight = new Sensor(RobotConstant.SHORT_IR_MIN, RobotConstant.SHORT_IR_MAX, this.robotRow + 1, this.robotCol + 1, this.robotDir, "SRFR");

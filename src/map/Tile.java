@@ -47,13 +47,16 @@ public class Tile {
 		this.obstacle = true;
 	}
 
-	/**
-	 * Returns true if Tile has been explored by Robot
-	 * @return true if Tile has been explored, false otherwise
-	 * @see robot.Robot
-	 */
-	public boolean setExplored(boolean explored) {
+	public boolean isExplored() {
 		return explored;
+	}
+	
+	/**
+	 * 
+	 * @param bool
+	 */
+	public void setExplored(boolean bool) {
+		explored = bool;
 	}
 
 	/**
