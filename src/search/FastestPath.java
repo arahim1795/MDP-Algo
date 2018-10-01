@@ -228,9 +228,8 @@ public class FastestPath {
 			if(visited.contains(exploredMap.getTile(goalRow, goalCol))){
 				//message : path found
 				path = getPath(goalRow,goalCol);
-				//printFastestPath(path);
-				//return executePath(path, goalRow,goalCol);
-				return "toDO" ;
+				printPath(path);
+				return executeFastestPath(path, goalRow,goalCol);
 			}
 			
 			//get list of neighbours (4 cardinal directions)
@@ -477,8 +476,21 @@ public class FastestPath {
         //if no obstacles found
         return true;
     }
-	//print fastest path
-	//
-	//print gCosts array
+	private void printPath(Stack<Tile> path) {
+        System.out.println("\nLooped " + loopCount + " times.");
+        System.out.println("The number of steps is: " + (path.size() - 1) + "\n");
+
+        Stack<Tile> pathForPrint = (Stack<Tile>) path.clone();
+        Tile temp;
+        System.out.println("Path:");
+        while (!pathForPrint.isEmpty()) {
+            temp = pathForPrint.pop();
+            if (!pathForPrint.isEmpty()) System.out.print("(" + temp.getRow() + ", " + temp.getCol() + ") --> ");
+            else System.out.print("(" + temp.getRow() + ", " + temp.getCol() + ")");
+        }
+
+        System.out.println("\n");
+    }
+	//print gCosts array	
 	//
 }
