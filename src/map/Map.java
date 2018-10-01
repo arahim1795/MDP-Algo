@@ -11,8 +11,9 @@ import utility.Utility;
 public class Map {
 	
 	private Tile[][] field;
-	private int row, col;
+	private static int col = Constants.MAP_ROWS, row = Constants.MAP_ROWS ;
 	
+	// Constructor
 	/**
 	 * Create map of Tiles with row = 20 and col = 15
 	 * Up-Left Coordinates: 0,0
@@ -20,63 +21,64 @@ public class Map {
 	 * @see Tile
 	 */
 	public Map() {
-		row = Constants.MAP_ROWS;
-		col = Constants.MAP_COLS;
 
 		this.field = new Tile[Constants.MAP_COLS][Constants.MAP_ROWS];
 		
 		for (int i = 0; i < Constants.MAP_ROWS; i++) {
 			for (int j = 0; j < Constants.MAP_COLS; j++) {
 				field[i][j] = new Tile(i,j);
-				if(i==0||j==0||i==Constants.MAP_COLS-1||j==Constants.MAP_ROWS){
+				if(i==0 || j==0 || i==Constants.MAP_COLS-1 || j==Constants.MAP_ROWS)
 					field[i][j].setVirtualWall(true);
-				}
 			}
 		}
 	}
 	
-	// returns if a tile coordinate is within bounds of the map
-	public boolean isValid(int row, int col){
-		return (row>=0 && row < Constants.MAP_ROWS && col >=0 && col < Constants.MAP_COLS );}
-	
-	
-	public Tile getTile(int row, int col){
+	// Getters
+	/**
+	 * 
+	 * @param col
+	 * @param row
+	 * @return
+	 */
+	public Tile getTile(int col, int row){
 		return field[row][col];
 	}
 	
-	//sets a tile as obstacle and surrounding tiles as virtual walls
-	public void setObstacle(int row, int col,boolean obstacle){
-		for(int i = -1;i<2;i++){
-			for(int j=-1;j<2;j++){
-				if(i!=0 || j!=0){
-					this.field[row+i][col+j].setVirtualWall(obstacle);
-				}
-			}
-		}
+	// Setters
+	// TODO setObstacle & setBoundary to merge, remove redundancies
+	/**
+	 * Sets Tile as an obstacles, adjacent Tile(s) are set as virtualWalls 
+	 * @param row
+	 * @param col
+	 * @param obstacle
+	 */
+	public void setObstacle(int col, int row) {
+		for(int i = -1; i < 2; i++)
+			for(int j = -1; j < 2; j++)
+				if(i != 0 || j != 0) field[row+i][col+j].setVirtualWall(true);
 	}
 
-	
 	/**
 	 * 
 	 */
 	public void setBoundary() {
-		for (Tile[] row : this.field) 
+		for (Tile[] row : field) 
 			for (Tile tile : row) {
 				// reset virtualWall settings
 				tile.setVirtualWall(false); 
 				
 				// get coordinates
 				int[] coor = tile.getCoor();
-				int x, y;
+				int x = coor[0], y = coor[1];
 				
 				// find adjacent coordinate and set them as virtualWall if
 				// current Tile is either an obstacle or located at map boundary
-				List<int[]> adjCoors = Utility.getAdjCoor(coor);
-				if (tile.isObstacle() || isBoundaryTile(coor))
+				List<int[]> adjCoors = getAdjCoor(x, y);
+				if (tile.isObstacle() || isBoundaryTile(x, y))
 					if (!adjCoors.isEmpty()) {
 						for (int[] adj : adjCoors) {
 							x = adj[0]; y = adj[1];
-							Tile tmp = this.field[y][x];
+							Tile tmp = field[y][x];
 							if (!tmp.isObstacle()) tmp.setVirtualWall(true);
 						}
 					}
@@ -84,35 +86,45 @@ public class Map {
 			}
 	}
 
+	// Validity Functions
+	/**
+	 * Returns a list of valid adjacent coordinates
+	 * @param ref Grid coordinate
+	 * @return list of valid adjacent coordinates to the passed-in coordinates
+	 */
+	public static List<int[]> getAdjCoor(int refx, int refy) {
+		List<int[]> listCoor = new ArrayList<int[]>();
+		int[] adj;
+		for (int r = -1; r <= 1; r++) {
+			for (int c = -1; c <= 1; c++) {
+				adj = new int[2];
+				adj[0] = refx + c;
+				adj[1] = refy + r;
+				if ((!(adj[0] == refx) || !(adj[1] == refy)) && isValid(adj[0], adj[1])) {
+					listCoor.add(adj);
+				}
+			}
+		}
+		return listCoor;
+	}
+	
+	/**
+	 * Returns true if coordinates are within map
+	 * @param coor x and y-coordinates
+	 * @return true if x and y-coordinates are valid, false otherwise
+	 */
+	public static boolean isValid(int row, int col){
+		return row > 0 && row < Constants.MAP_ROWS && col > 0 && col < Constants.MAP_COLS;
+	}
+	
 	/**
 	 * 
 	 * @param coor
 	 * @return
 	 */
-	private boolean isBoundaryTile(int[] coor) {
-		int x = coor[0], y = coor[1];
-		return x == 0 || x == this.row-1 || y == 0 || y == this.col-1;
+	public static boolean isBoundaryTile(int col, int row) {
+		return col == 0 || col == Constants.MAP_COLS || row == 0 || row == Constants.MAP_ROWS;
 	}
-	
-	/**
-	 * Returns Map object for evaluation
-	 * @return the map
-	 */
-	public Map getMap() {
-		return this;
-	}
-	
-	/**
-	 * Return Tile with corresponding 
-	 * @param row x-coordinate
-	 * @param col y-coordinates
-	 * @return Tile at coordinate row,col
-	 */
-	public Tile getTile(int[] coor){
-		return this.field[coor[1]][coor[2]];
-	}
-	 
-	
 	
 	/**
 	 * Convert from map read by Reader in List of Strings form to Tile[][] map
@@ -137,11 +149,11 @@ public class Map {
 	 * Prints map to console for debugging purposes
 	 */
 	public void printMap() {
-		for (int i = 0; i < this.row; i++) {
-			for (int j = 0; j < this.col; j++) {
+		for (int i = 0; i < row; i++) {
+			for (int j = 0; j < col; j++) {
 				if (field[i][j].isObstacle()) System.out.print("1");
 				else System.out.print("0");
-				if (j == (this.col-1)) System.out.print("\n");
+				if (j == (col-1)) System.out.print("\n");
 			}
 		}
 		
@@ -150,12 +162,18 @@ public class Map {
 	/**
 	 * 
 	 */
-	public void resetMap() {
+	public void update() {
+		
+	}
+	
+	/**
+	 * 
+	 */
+	public void reset() {
 		for (Tile[] row : this.field)
 			for (Tile tile : row)
 				tile.reset();
 	}
-	
 	
 
 }

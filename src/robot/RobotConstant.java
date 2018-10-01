@@ -22,21 +22,20 @@ public final class RobotConstant {
 	public static final int LONG_IR_MAX = 4;
 	
 	public enum MOVEMENT {
-        FORWARD, BACKWARD, TURNRIGHT, TURNLEFT, CALIBRATE, ERROR;
+        UPWARD, DOWNWARD, LEFTWARD, RIGHTWARD, CALIBRATE, ERROR;
 
         public static char print(MOVEMENT m) {
             switch (m) {
-                case FORWARD:
-                    return 'F';
-                case BACKWARD:
-                    return 'B';
-                case TURNRIGHT:
+                case UPWARD:
+                    return 'U';
+                case DOWNWARD:
+                    return 'D';
+                case RIGHTWARD:
                     return 'R';
-                case TURNLEFT:
+                case LEFTWARD:
                     return 'L';
                 case CALIBRATE:
                     return 'C';
-                case ERROR:
                 default:
                     return 'E';
             }
@@ -99,7 +98,7 @@ public final class RobotConstant {
 	public static final int DEFAULT_START_ROW = 17; // Changed to 1 based on ROBOT_SIZE
 	public static final int DEFAULT_START_COL = 0;
 	public static final DIRECTION DEFAULT_START_DIR = DIRECTION.UP;
-        public static final DIRECTION DEFAULT_START_SP_DIR = DIRECTION.UP;
+    public static final DIRECTION DEFAULT_START_SP_DIR = DIRECTION.UP;
 	
 	// Robot Exploration Configuration
 	public static final int DEFAULT_STEPS_PER_SECOND = 25;

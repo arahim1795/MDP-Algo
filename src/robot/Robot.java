@@ -3,113 +3,145 @@ package robot;
 import java.util.List;
 
 import map.Map;
-
 import map.Constants;
 import robot.RobotConstant;
 import robot.RobotConstant.DIRECTION;
 import robot.RobotConstant.MOVEMENT;
-
 import map.Tile;
-
-import utility.Utility.Orientation;
 
 /**
  * @author 18/19 S1 G3
- *
  */
 public class Robot {
  
-	private int robotRow; // Coordinate of centre component
-	private int robotCol; // Coordinate of centre component
-	private DIRECTION orientation;
-	private Map memory;
+	private int row; // Coordinate of centre component
+	private int col; // Coordinate of centre component
+	private DIRECTION direction;
+	private Map map;
 	
+	// Constructor(s)
 	/**
-	 * Create an robot 'placed' with reference to the x and y 
-	 * coordinates of the centre component, fitted with an internal 
-	 * map
-	 * @param size Set size of square robot
-	 * @param x Centre x-coordinate of Robot
-	 * @param y Centre y-coordinate of Robot
-	 * @param direction Robot's orientation
+	 * Instantiate a robot 'placed' at coordinate row(x) and col(y)
+	 * facing up (default), with an blank map
+	 * @param startRow Centre row(x)-coordinate of Robot
+	 * @param startCol Centre row(y)-coordinate of Robot
 	 * @see map
 	 */
-
-	public Robot (int x, int y){
-		this.memory = new Map();
-
-		
-		this.robotRow = x;
-		this.robotCol = y;
-		
-		this.orientation = RobotConstant.DEFAULT_START_DIR;
+	public Robot (int startRow, int startCol){
+		row = startRow;
+		col = startCol;
+		direction = RobotConstant.DEFAULT_START_DIR;
+		map = new Map();
 	}
-	public Robot(int size, int x, int y, DIRECTION direction) {
-		this.memory = new Map();
-		
-		this.robotRow = x;
-		this.robotCol = y;
-		
-		this.orientation = direction;
+	
+	/**
+	 * Instantiate a robot 'placed' at coordinate row(x) and col(y)
+	 * facing in set direction, with an blank map
+	 * @param startRow Centre row(x)-coordinate of Robot
+	 * @param startCol Centre col(y)-coordinate of Robot
+	 * @param direction Direction Robot's facing
+	 */
+	public Robot(int startRow, int startCol, DIRECTION startDir) {
+		row = startRow;
+		col = startCol;
+		direction = startDir;
+		map = new Map();
 	}
-	public int getRobotRow(){
-		return this.robotRow;
-  }
+	
+	// Getter(s)
+	/**
+	 * 
+	 * @return
+	 */
+	public int getRobotRow() {
+		return row;
+	}
   
-	public int getRobotCol(){
-		return this.robotCol;
+	public int getRobotCol() {
+		return col;
 	}
 	
-	public DIRECTION getRobotOrientation(){
-		return this.orientation;
+	public DIRECTION getRobotDir() {
+		return direction;
 	}
 	
+	// Setter
+	/**
+	 * 
+	 * @param row
+	 */
+	public void setRobotRow(int newRow) {
+		row = newRow;
+	}
+	
+	/**
+	 * 
+	 * @param col
+	 */
+	public void setRobotCol(int newCol) {
+		col = newCol;
+	}
+	
+	/**
+	 * 
+	 * @param newDir
+	 */
+	public void setRobotDir(DIRECTION newDir) {
+		direction = newDir;
+	}
+	
+	// Other Functions
+	/**
+	 * 
+	 * @param m
+	 * @param sendToAndroid
+	 */
 	public void move(MOVEMENT m, boolean sendToAndroid) {
-        /*if (!realBot) {
+        if (!realBot) {
             // Emulate real movement by pausing execution.
             try {
                 TimeUnit.MILLISECONDS.sleep(speed);
             } catch (InterruptedException e) {
                 System.out.println("Something went wrong in Robot.move()!");
             }
-        }*/
+        }
 
         switch (m) {
-            case FORWARD:
-                switch (this.orientation ) {
+            case UPWARD:
+                switch (direction) {
                     case UP:
-                        robotRow++;
+                        row++;
                         break;
                     case RIGHT:
-                        robotCol++;
+                        col++;
                         break;
                     case DOWN:
-                        robotRow--;
+                        row--;
                         break;
                     case LEFT:
-                        robotCol--;
+                        col--;
                         break;
                 }
                 break;
-            case BACKWARD:
-                switch (this.orientation) {
+            case DOWNWARD:
+                switch (direction) {
                     case UP:
-                        robotRow--;
+                        row--;
                         break;
                     case RIGHT:
-                        robotCol--;
+                        col--;
                         break;
                     case DOWN:
-                        robotRow++;
+                        row++;
                         break;
                     case LEFT:
-                        robotCol++;
+                        col++;
                         break;
                 }
                 break;
-            case TURNRIGHT:
-            case TURNLEFT:
-                this.orientation = updateTurnDirection(m);
+            case RIGHTWARD:
+            case LEFTWARD:
+                direction = updateTurnDirection(m);
                 break;
             case CALIBRATE:
                 break;  
@@ -124,16 +156,34 @@ public class Robot {
         updateTouchedGoal();
     }
 	
+	/**
+	 * 
+	 * @param m
+	 * @return
+	 */
 	private DIRECTION updateTurnDirection(MOVEMENT m){
-		if(m == MOVEMENT.TURNLEFT){
-			return DIRECTION.getNext(this.orientation);
+		if(m == MOVEMENT.LEFTWARD){
+			return DIRECTION.getNext(direction);
 		}
 		else{
-			return DIRECTION.getNext(this.orientation);
+			return DIRECTION.getNext(direction);
 		}
 	}
 	
-
-
+	/**
+	 * 
+	 * @return
+	 */
+	public boolean isAtStart() {
+		return row == 1 && col == 18;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public boolean isAtGoal() {
+		return row == 18 && col == 1;
+	}
 	
 }
