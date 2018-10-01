@@ -1,16 +1,16 @@
-//MapUI
-
 package map;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
-
 import javax.swing.*;
-
 import map.Map;
 import map.Tile;
 import map.*;
 import map.Constants;
+
+/**
+ * @author ARAHIM-WPC
+ */
 public class MapUI extends Map {
 	
 	private Tile[][] tile = null;
@@ -225,36 +225,49 @@ public class MapUI extends Map {
         }
     }
 	
-	 private void removeObstacle(int row, int col) {
-	        if (tile[row][col].isObstacle()) {
-	            if (tile[row][col].isVirtualWall) {
-	                JOptionPane.showMessageDialog(null,
-	                        "Removing the border walls will cause the robot to"
-	                        + " fall off the edge of the arena. Please do not"
-	                        + " attempt to kill the robot!", "Warning",
-	                        JOptionPane.WARNING_MESSAGE);
-	            } 
-	            else {
-	                tile[row][col].setObstacle(false);
-	            }
-	        }
-	    }
-	 
-	 public void toggleMidPoint(){
-	        if(!_bSetMid){
-	            _bSetMid = true;
-	            System.out.println("Click on a map grid to set mid point.");
-	        } else {
-	            _bSetMid = false;
-	        }
-	    }
-	    
-	    public void addMidPoint(int row, int col) {
-	        midRow = row;
-	        midCol = col;
-	    }
-	    
-	    public int getMidIndex(){
-	        return (midRow * 15) + midCol;
-	    }
+	/**
+	 * 
+	 * @param row
+	 * @param col
+	 */
+	private void removeObstacle(int row, int col) {
+		if (tile[row][col].isObstacle())
+			if (tile[row][col].isVirtualWall)
+				JOptionPane.showMessageDialog(null,
+						"Removing the border walls will cause the robot to"
+						+ " fall off the edge of the arena. Please do not"
+						+ " attempt to kill the robot!", "Warning",
+						JOptionPane.WARNING_MESSAGE); 
+		else
+			tile[row][col].setObstacle(false);
+	}
+	
+	/**
+	 * 
+	 */
+	public void toggleMidPoint(){
+		if(!_bSetMid) {
+			_bSetMid = true;
+			System.out.println("Click on a map grid to set mid point.")
+		} else
+			_bSetMid = false;
+	}
+	
+	/**
+	 * 
+	 * @param row
+	 * @param col
+	 */
+	public void addMidPoint(int row, int col) {
+		midRow = row;
+		midCol = col;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public int getMidIndex() {
+		return (midRow * 15) + midCol;
+	}
 }

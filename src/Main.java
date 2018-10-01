@@ -1,19 +1,20 @@
 import java.io.IOException;
 
-import map.Map;
-import utility.Utility;
+import utility.Comms;
 
+/**
+ * @author ARAHIM-WPC
+ */
 public class Main {
 	
 	public static void main(String[] args) throws IOException {
 		
-		// example 
-		Map map = new Map();
+		Comms cm = new Comms();
+		cm.openSocket();
 		
-		String filename = "./map/test_1.txt";
-		
-		map.parseMap(Utility.getmap(filename));
-		map.printMap();
+		boolean test = cm.sendMsg("A");
+		System.out.println(test);
+		cm.closeSocket();
 		
 	}
 
