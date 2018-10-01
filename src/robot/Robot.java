@@ -18,6 +18,7 @@ public class Robot {
 	private int col; // Coordinate of centre component
 	private DIRECTION direction;
 	private Map map;
+	private boolean realBot;
 	
 	// Constructor(s)
 	/**
@@ -25,13 +26,15 @@ public class Robot {
 	 * facing up (default), with an blank map
 	 * @param startRow Centre row(x)-coordinate of Robot
 	 * @param startCol Centre row(y)-coordinate of Robot
+	 * @param isReal
 	 * @see map
 	 */
-	public Robot (int startRow, int startCol){
+	public Robot (int startRow, int startCol, boolean isReal){
 		row = startRow;
 		col = startCol;
 		direction = RobotConstant.DEFAULT_START_DIR;
 		map = new Map();
+		realBot = isReal;
 	}
 	
 	/**
@@ -39,13 +42,15 @@ public class Robot {
 	 * facing in set direction, with an blank map
 	 * @param startRow Centre row(x)-coordinate of Robot
 	 * @param startCol Centre col(y)-coordinate of Robot
+	 * @param isReal
 	 * @param direction Direction Robot's facing
 	 */
-	public Robot(int startRow, int startCol, DIRECTION startDir) {
+	public Robot(int startRow, int startCol, DIRECTION startDir, boolean isReal) {
 		row = startRow;
 		col = startCol;
 		direction = startDir;
 		map = new Map();
+		realBot = isReal;
 	}
 	
 	// Getter(s)
@@ -96,18 +101,25 @@ public class Robot {
 	 * @param m
 	 * @param sendToAndroid
 	 */
+
+	public boolean isRealBot(){
+		return this.realBot;
+	}
+	
+
 	public void move(MOVEMENT m, boolean sendToAndroid) {
-        if (!realBot) {
+        /*
+		if (!realBot) {
             // Emulate real movement by pausing execution.
             try {
                 TimeUnit.MILLISECONDS.sleep(speed);
             } catch (InterruptedException e) {
                 System.out.println("Something went wrong in Robot.move()!");
             }
-        }
+        } */
 
         switch (m) {
-            case UPWARD:
+            case FORWARD:
                 switch (direction) {
                     case UP:
                         row++;
@@ -123,7 +135,7 @@ public class Robot {
                         break;
                 }
                 break;
-            case DOWNWARD:
+            case BACKWARD:
                 switch (direction) {
                     case UP:
                         row--;
@@ -139,8 +151,8 @@ public class Robot {
                         break;
                 }
                 break;
-            case RIGHTWARD:
-            case LEFTWARD:
+            case TURNRIGHT:
+            case TURNLEFT:
                 direction = updateTurnDirection(m);
                 break;
             case CALIBRATE:
@@ -162,28 +174,15 @@ public class Robot {
 	 * @return
 	 */
 	private DIRECTION updateTurnDirection(MOVEMENT m){
-		if(m == MOVEMENT.LEFTWARD){
+		if(m == MOVEMENT.LEFTWARD) {
 			return DIRECTION.getNext(direction);
 		}
-		else{
+		else {
 			return DIRECTION.getNext(direction);
 		}
 	}
 	
-	/**
-	 * 
-	 * @return
-	 */
-	public boolean isAtStart() {
-		return row == 1 && col == 18;
-	}
 	
-	/**
-	 * 
-	 * @return
-	 */
-	public boolean isAtGoal() {
-		return row == 18 && col == 1;
-	}
+
 	
 }

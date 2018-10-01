@@ -21,6 +21,8 @@ public class Map {
 	 * @see Tile
 	 */
 	public Map() {
+		row = Constants.MAP_ROWS;
+		col = Constants.MAP_COLS;
 
 		this.field = new Tile[Constants.MAP_COLS][Constants.MAP_ROWS];
 		

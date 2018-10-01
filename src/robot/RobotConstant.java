@@ -22,17 +22,17 @@ public final class RobotConstant {
 	public static final int LONG_IR_MAX = 4;
 	
 	public enum MOVEMENT {
-        UPWARD, DOWNWARD, LEFTWARD, RIGHTWARD, CALIBRATE, ERROR;
+        FORWARD, BACKWARD, TURNLEFT, TURNRIGHT, CALIBRATE, ERROR;
 
         public static char print(MOVEMENT m) {
             switch (m) {
-                case UPWARD:
-                    return 'U';
-                case DOWNWARD:
-                    return 'D';
-                case RIGHTWARD:
+                case FORWARD:
+                    return 'F';
+                case BACKWARD:
+                    return 'B';
+                case TURNRIGHT:
                     return 'R';
-                case LEFTWARD:
+                case TURNLEFT:
                     return 'L';
                 case CALIBRATE:
                     return 'C';
@@ -105,10 +105,23 @@ public final class RobotConstant {
 	public static final int DEFAULT_COVERAGE_LIMIT = 50;
 	public static final int DEFAULT_TIME_LIMIT = 360;
 	
+	/**
+	 * 
+	 * @return
+	 */
+	public static boolean isAtStart(int row, int col) {
+		return row == 1 && col == 18;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public static boolean isAtGoal(int row, int col) {
+		return row == 18 && col == 1;
+	}
 	
 	// Prevent instantiation
 	private RobotConstant() {}
-
-
 
 }

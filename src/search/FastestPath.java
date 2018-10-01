@@ -6,7 +6,6 @@ import robot.Robot;
 import robot.RobotConstant;
 import robot.RobotConstant.DIRECTION;
 import robot.RobotConstant.MOVEMENT;
-import utility.GridOperation;
 import map.Map;
 import map.Tile;
 import map.Constants;
@@ -27,10 +26,12 @@ public class FastestPath {
 	private Tile current;
 	private Tile[] neighbours;
 	private Map exploredMap;
+	private final Map realMap; //real physical map
 	private DIRECTION curDir;
 	private double[][] gCosts;
 	private Robot bot; //KIV
 	private int loopCount;
+	private boolean exploreMode;
 	
 	/**
 	 * 
@@ -39,22 +40,14 @@ public class FastestPath {
 	 */
     public void FastestPathAlgo(Map exploredMap, Robot bot) {
         this.realMap = null;
-        initObject(exploredMap, bot);
+        init(exploredMap, bot);
     }
 
-    /**
-     * 
-     * @param exploredMap
-     * @param bot
-     * @param realMap
-     */
-    public void FastestPathAlgo(Map exploredMap, Robot bot, Map realMap) {
+    public FastestPath(Map exploredMap, Robot bot, Map realMap) {
         this.realMap = realMap;
-        this.explorationMode = true;
-        initObject(exploredMap, bot);
+        this.exploreMode = true;
+        init(exploredMap, bot);
     }
-	
-    //future uses???
 	
 	//constructor for object/algo initialization
 	/**
@@ -72,7 +65,7 @@ public class FastestPath {
 		this.neighbours = new Tile[4];
 		//initialize robot orientation
 		this.current = map.getTile(bot.getRobotRow(), bot.getRobotCol());
-		this.curDir = bot.getRobotOrientation();
+		this.curDir = bot.getRobotDir();
 		
 		//initialize gCost array
 		this.gCosts = new double[Constants.MAP_ROWS][Constants.MAP_COLS];
@@ -310,7 +303,7 @@ public class FastestPath {
 		DIRECTION targetDir;
 		
 		ArrayList<MOVEMENT> movementList = new ArrayList<>();
-		Robot tempBot = new Robot(1,1);
+		Robot tempBot = new Robot(1,1, false);
 		//tempBot.setSpeed(0);
 		//while robot position not on goal tile
 		while((tempBot.getRobotRow()!= goalRow) || (tempBot.getRobotCol()!= goalCol)){
@@ -319,13 +312,13 @@ public class FastestPath {
 				temp = path.pop();
 				
 			}
-			targetDir = getTargetDirection(tempBot.getRobotRow(),tempBot.getRobotCol(),tempBot.getRobotOrientation(),temp);
+			targetDir = getTargetDirection(tempBot.getRobotRow(),tempBot.getRobotCol(),tempBot.getRobotDir(),temp);
 			
 			MOVEMENT m;
 			
 			//if robot not facing correct direction, orientate robot
-			if(tempBot.getRobotOrientation() != targetDir){
-				m = getTargetMove(tempBot.getRobotOrientation(),targetDir);
+			if(tempBot.getRobotDir() != targetDir){
+				m = getTargetMove(tempBot.getRobotDir(),targetDir);
 			}else{
 				m = MOVEMENT.FORWARD;
 			}

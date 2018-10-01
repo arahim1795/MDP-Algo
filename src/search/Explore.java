@@ -35,7 +35,7 @@ public class Explore {
 		
 		do {
 			move();
-		} while (!bot.isAtStart());
+		} while (!RobotConstant.isAtStart(bot.getRobotRow(), bot.getRobotCol()));
 		
 	}
 	
@@ -44,13 +44,13 @@ public class Explore {
 	 */
 	private void move() {
 		if (peekLeft()) {
-			moveRobot(MOVEMENT.LEFTWARD);
+			moveRobot(MOVEMENT.TURNLEFT);
 		} else if (peekRight()) {
-			moveRobot(MOVEMENT.RIGHTWARD);
+			moveRobot(MOVEMENT.TURNRIGHT);
 		} else if (peekUp()) {
-			moveRobot(MOVEMENT.UPWARD);
+			moveRobot(MOVEMENT.FORWARD);
 		} else {
-			moveRobot(MOVEMENT.DOWNWARD);
+			moveRobot(MOVEMENT.BACKWARD);
 		}
 	}
 	
