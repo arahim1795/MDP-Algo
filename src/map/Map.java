@@ -6,11 +6,12 @@ import java.util.List;
 import javax.swing.JPanel;
 
 import utility.Utility;
+import javax.swing.*;
 
 /**
  * @author 18/19 S1 G3
  */
-public class Map {
+public class Map extends JPanel{
 	
 	/**
 	 * 
