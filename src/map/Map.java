@@ -3,6 +3,8 @@ package map;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JPanel;
+
 import utility.Utility;
 
 /**
@@ -10,6 +12,9 @@ import utility.Utility;
  */
 public class Map {
 	
+	/**
+	 * 
+	 */
 	private Tile[][] field;
 	private static int col = Constants.MAP_ROWS, row = Constants.MAP_ROWS ;
 	
@@ -157,13 +162,6 @@ public class Map {
 				if (j == (col-1)) System.out.print("\n");
 			}
 		}
-		
-	}
-	
-	/**
-	 * 
-	 */
-	public void update() {
 		
 	}
 	

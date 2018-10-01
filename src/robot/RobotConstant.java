@@ -41,7 +41,7 @@ public final class RobotConstant {
         }
     }
 	
-	public static enum DIRECTION {
+	public enum DIRECTION {
 		UP, RIGHT, DOWN, LEFT;
 		
 		//clockwise
