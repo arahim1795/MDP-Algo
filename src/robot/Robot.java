@@ -19,6 +19,7 @@ public class Robot {
 	private DIRECTION direction;
 	private Map map;
 	private boolean realBot;
+
 	
 	// Constructor(s)
 	/**
@@ -26,6 +27,7 @@ public class Robot {
 	 * facing up (default), with an blank map
 	 * @param startRow Centre row(x)-coordinate of Robot
 	 * @param startCol Centre row(y)-coordinate of Robot
+
 	 * @param isReal
 	 * @see map
 	 */
@@ -34,6 +36,7 @@ public class Robot {
 		col = startCol;
 		direction = RobotConstant.DEFAULT_START_DIR;
 		map = new Map();
+
 		realBot = isReal;
 	}
 	
@@ -42,10 +45,13 @@ public class Robot {
 	 * facing in set direction, with an blank map
 	 * @param startRow Centre row(x)-coordinate of Robot
 	 * @param startCol Centre col(y)-coordinate of Robot
+
 	 * @param isReal
 	 * @param direction Direction Robot's facing
 	 */
 	public Robot(int startRow, int startCol, DIRECTION startDir, boolean isReal) {
+	public Robot(int startRow, int startCol, DIRECTION startDir) {
+
 		row = startRow;
 		col = startCol;
 		direction = startDir;
@@ -94,22 +100,20 @@ public class Robot {
 	public void setRobotDir(DIRECTION newDir) {
 		direction = newDir;
 	}
-	
 	// Other Functions
 	/**
 	 * 
 	 * @param m
 	 * @param sendToAndroid
 	 */
-
+	
 	public boolean isRealBot(){
 		return this.realBot;
 	}
 	
 
 	public void move(MOVEMENT m, boolean sendToAndroid) {
-        /*
-		if (!realBot) {
+        /* if (!realBot) {
             // Emulate real movement by pausing execution.
             try {
                 TimeUnit.MILLISECONDS.sleep(speed);
@@ -174,15 +178,12 @@ public class Robot {
 	 * @return
 	 */
 	private DIRECTION updateTurnDirection(MOVEMENT m){
-		if(m == MOVEMENT.LEFTWARD) {
+		if(m == MOVEMENT.TURNLEFT) {
 			return DIRECTION.getNext(direction);
 		}
 		else {
 			return DIRECTION.getNext(direction);
 		}
 	}
-	
-	
-
 	
 }

@@ -5,7 +5,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
 import java.io.*;
-
 import map.Constants;
 import map.MapUI;
 import robot.RobotConstant;
@@ -127,4 +126,5 @@ public class Simulator {
 		JButton btn_Explore = new JButton ("Explore");
 		JButton btn_FastestPath = new JButton ("Fastest Path");
 	}
+	
 }

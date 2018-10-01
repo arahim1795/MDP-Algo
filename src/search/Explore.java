@@ -28,7 +28,6 @@ public class Explore {
 	 * @param map
 	 */
 	public void explore(Map map, Robot bot) {
-		
 		mapRobot = new Map();
 		mapActual = map;
 		robot = bot;
@@ -36,7 +35,6 @@ public class Explore {
 		do {
 			move();
 		} while (!RobotConstant.isAtStart(bot.getRobotRow(), bot.getRobotCol()));
-		
 	}
 	
 	/**

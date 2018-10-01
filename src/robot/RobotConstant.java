@@ -23,7 +23,6 @@ public final class RobotConstant {
 	
 	public enum MOVEMENT {
         FORWARD, BACKWARD, TURNLEFT, TURNRIGHT, CALIBRATE, ERROR;
-
         public static char print(MOVEMENT m) {
             switch (m) {
                 case FORWARD:
