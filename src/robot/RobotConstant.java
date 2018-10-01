@@ -5,7 +5,9 @@ import java.awt.Color;
 import robot.RobotConstant.DIRECTION;
 
 public final class RobotConstant {
-	
+	//
+	 public static final int SPEED = 100;		// delay between movements (ms)
+	 
 	// Robot size
 	public static final int ROBOT_SIZE = 3;
 	
@@ -15,10 +17,10 @@ public final class RobotConstant {
 	public static final int INFINITE_COST = 9999;
 	
 	// Sensors default range (In grids)
-	public static final int SHORT_IR_MIN = 1;
+	public static final int SHORT_IR_MIN = 1;	//short range sensor(cells)
 	public static final int SHORT_IR_MAX = 2;
 	
-	public static final int LONG_IR_MIN = 1;
+	public static final int LONG_IR_MIN = 1;	//long range sensor(cells)
 	public static final int LONG_IR_MAX = 4;
 	
 	public enum MOVEMENT {
@@ -45,12 +47,12 @@ public final class RobotConstant {
 		UP, RIGHT, DOWN, LEFT;
 		
 		//clockwise
-		public static DIRECTION getNext(DIRECTION currDirection) {
+		public static DIRECTION getRight(DIRECTION currDirection) {
 			return values()[(currDirection.ordinal() + 1) % values().length];
 		}
 		
 		//anti-clockwise
-		public static DIRECTION getPrevious(DIRECTION currDirection) {
+		public static DIRECTION getLeft(DIRECTION currDirection) {
 			return values()[(currDirection.ordinal() + values().length - 1)
 					% values().length];
 		}
@@ -94,8 +96,10 @@ public final class RobotConstant {
 	public static final Color C_SENSOR_BEAM_INNER = new Color(255, 0, 0, 190);
 	
 	// Robot Default Configuration
-	public static final int DEFAULT_START_ROW = 17; // Changed to 1 based on ROBOT_SIZE
-	public static final int DEFAULT_START_COL = 0;
+	public static final int DEFAULT_START_ROW = 18; // Changed to 1 based on ROBOT_SIZE
+	public static final int DEFAULT_START_COL = 1;
+	public static final int DEFAULT_GOAL_ROW = 18; 
+	public static final int DEFAULT_GOAL_COL = 1;
 	public static final DIRECTION DEFAULT_START_DIR = DIRECTION.UP;
     public static final DIRECTION DEFAULT_START_SP_DIR = DIRECTION.UP;
 	
@@ -109,7 +113,7 @@ public final class RobotConstant {
 	 * @return
 	 */
 	public static boolean isAtStart(int row, int col) {
-		return row == 1 && col == 18;
+		return row == DEFAULT_START_ROW && col == DEFAULT_START_COL;
 	}
 	
 	/**
@@ -117,7 +121,7 @@ public final class RobotConstant {
 	 * @return
 	 */
 	public static boolean isAtGoal(int row, int col) {
-		return row == 18 && col == 1;
+		return (row <= DEFAULT_GOAL_ROW+1 && row>= DEFAULT_GOAL_ROW-1)&&(col <= DEFAULT_GOAL_COL+1 && col>= DEFAULT_GOAL_COL-1);
 	}
 	
 	// Prevent instantiation

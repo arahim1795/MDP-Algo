@@ -39,7 +39,7 @@ public class FastestPath {
 	 * @param bot
 	 */
     public void FastestPathAlgo(Map exploredMap, Robot bot) {
-        this.realMap = null;
+        //this.realMap = null;
         init(exploredMap, bot);
     }
 
@@ -235,25 +235,25 @@ public class FastestPath {
 			
 			//get list of neighbours (4 cardinal directions)
 			//down
-			if(exploredMap.isValid(current.getRow()+1, current.getCol())){
+			if(Map.isValidTile(current.getRow()+1, current.getCol())){
 				neighbours[0] = exploredMap.getTile(current.getRow()+1, current.getCol());
 			}			
 			//up
-			if (exploredMap.isValid(current.getRow() - 1, current.getCol())) {
+			if (Map.isValidTile(current.getRow() - 1, current.getCol())) {
                 neighbours[1] = exploredMap.getTile(current.getRow() - 1, current.getCol());
                 if (!canBeVisited(neighbours[1])) {
                     neighbours[1] = null;
                 }
             }			
 			//left
-            if (exploredMap.isValid(current.getRow(), current.getCol() - 1)) {
+            if (Map.isValidTile(current.getRow(), current.getCol() - 1)) {
                 neighbours[2] = exploredMap.getTile(current.getRow(), current.getCol() - 1);
                 if (!canBeVisited(neighbours[2])) {
                     neighbours[2] = null;
                 }
             }
             //right
-            if (exploredMap.isValid(current.getRow(), current.getCol() + 1)) {
+            if (Map.isValidTile(current.getRow(), current.getCol() + 1)) {
                 neighbours[3] = exploredMap.getTile(current.getRow(), current.getCol() + 1);
                 if (!canBeVisited(neighbours[3])) {
                     neighbours[3] = null;
@@ -326,10 +326,65 @@ public class FastestPath {
 			System.out.println("Movement " + MOVEMENT.print(m) + " from (" + tempBot.getRobotRow()+ ", " + tempBot.getRobotCol() + ") to (" + temp.getRow() + ", " + temp.getCol() + ")");
 			
 			//TODO : move method in Robot class
-            //tempBot.move(m);
+            tempBot.move(m);
             movementList.add(m);
             outputString.append(MOVEMENT.print(m));
            
+		}
+		
+		if(!bot.isRealBot()||this.exploreMode){
+			for (MOVEMENT n : movementList){
+				if(n==MOVEMENT.FORWARD){
+					if(!this.canMoveForward()){
+						System.out.println("Early termination of fastest path execution.");
+                        return "T";
+					}
+				}
+				
+				bot.move(n);
+                this.exploredMap.repaint();
+                
+                if (this.exploreMode) {
+                    bot.setSensors();
+                    bot.sense(this.exploredMap, this.realMap);
+                    this.exploredMap.repaint();
+                }
+                
+                
+			}
+		}else{
+			for(MOVEMENT x : movementList){
+				bot.move(x);
+				this.exploredMap.repaint();
+			}
+			
+			//FUTURE IMPLEMENTATION
+			/*int fCount = 0; //forwardCount
+			
+            for (MOVEMENT x : movementList) {
+                if (x == MOVEMENT.FORWARD) {
+                    fCount++;
+                    if (fCount == 10) {
+                        bot.moveForwardMultiple(fCount);
+                        fCount = 0;
+                        exploredMap.repaint();
+                    }
+                } else if (x == MOVEMENT.TURNRIGHT || x == MOVEMENT.TURNLEFT) {
+                    if (fCount > 0) {
+                        bot.moveForwardMultiple(fCount);
+                        fCount = 0;
+                        exploredMap.repaint();
+                    }
+
+                    bot.move(x);
+                    exploredMap.repaint();
+                }
+            }
+
+            if (fCount > 0) {
+                bot.moveForwardMultiple(fCount);
+                exploredMap.repaint();
+            }*/
 		}
 		//TODO : exploration code?
 		
@@ -396,6 +451,31 @@ public class FastestPath {
                 }
         }
         return MOVEMENT.ERROR;
+    }
+	
+	//determines if path ahead can be traversed
+	private boolean canMoveForward() {
+        int row = bot.getRobotRow();
+        int col = bot.getRobotCol();
+        int rowMIN=-5,rowMAX=-5,colMIN=-5,colMAX=-5;
+        switch (bot.getRobotDir()) {
+        
+            case UP:
+                rowMIN=2;rowMAX=2;colMIN=-1;colMAX=1;                
+            case RIGHT:
+            	rowMIN=-1;rowMAX=1;colMIN=2;colMAX=2;
+            case DOWN:
+                rowMIN=-2;rowMAX=-2;colMIN=0;colMAX=0;
+            case LEFT:
+                rowMIN=-1;rowMAX=1;colMIN=-2;colMAX=-2;
+        }
+        for(int x=row+rowMIN;x<=row+rowMAX;x++){
+        	for(int y=col+colMIN;y<=col+colMAX;y++){
+        		if(this.exploredMap.getTile(x, y).isObstacle()){return false;}        		
+        	}
+        }
+        //if no obstacles found
+        return true;
     }
 	//print fastest path
 	//
