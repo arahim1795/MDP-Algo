@@ -11,10 +11,13 @@ import map.Map;
 import map.Tile;
 import map.GraphicConstant;
 
+import robot.Robot;
+import robot.RobotConstant;
 
 public class MapUI extends Map {
 	
 	private Tile[][] mapTiles;
+	private final Robot bot;
 	
 	// For measuring size of the canvas
     private boolean _bMeasured = false;
@@ -48,9 +51,10 @@ public class MapUI extends Map {
     }
     
     
-    public MapUI() {
-    	
+    public MapUI(Robot bot) {
     	super();
+    	
+    	this.bot=bot;
     	
     	this.mapTiles = new Tile [MapConstant.MAP_ROWS][MapConstant.MAP_COLS];
     	for(int i = 0;i<MapConstant.MAP_ROWS;i++) {
@@ -218,7 +222,32 @@ public class MapUI extends Map {
 
             }
         } // End outer for loop	
+        
+     // Paint the robot on-screen.
+        g.setColor(GraphicConstant.C_ROBOT);
+        int r = bot.getRobotRow();
+        int c = bot.getRobotCol();
+        g.fillOval((c - 1) * GraphicConstant.TILE_SIZE + GraphicConstant.ROBOT_X_OFFSET + GraphicConstant.MAP_X_OFFSET, GraphicConstant.MAP_H - (r * GraphicConstant.TILE_SIZE + GraphicConstant.ROBOT_Y_OFFSET), GraphicConstant.ROBOT_W, GraphicConstant.ROBOT_H);
+
+        // Paint the robot's direction indicator on-screen.
+        g.setColor(GraphicConstant.C_ROBOT_DIR);
+        RobotConstant.DIRECTION d = bot.getRobotDir();
+        switch (d) {
+            case UP:
+                g.fillOval(c * GraphicConstant.TILE_SIZE + 10 + GraphicConstant.MAP_X_OFFSET, GraphicConstant.MAP_H - r * GraphicConstant.TILE_SIZE - 15, GraphicConstant.ROBOT_DIR_W, GraphicConstant.ROBOT_DIR_H);
+                break;
+            case RIGHT:
+                g.fillOval(c * GraphicConstant.TILE_SIZE + 35 + GraphicConstant.MAP_X_OFFSET, GraphicConstant.MAP_H - r * GraphicConstant.TILE_SIZE + 10, GraphicConstant.ROBOT_DIR_W, GraphicConstant.ROBOT_DIR_H);
+                break;
+            case DOWN:
+                g.fillOval(c * GraphicConstant.TILE_SIZE + 10 + GraphicConstant.MAP_X_OFFSET, GraphicConstant.MAP_H - r * GraphicConstant.TILE_SIZE + 35, GraphicConstant.ROBOT_DIR_W, GraphicConstant.ROBOT_DIR_H);
+                break;
+            case LEFT:
+                g.fillOval(c * GraphicConstant.TILE_SIZE - 15 + GraphicConstant.MAP_X_OFFSET, GraphicConstant.MAP_H - r * GraphicConstant.TILE_SIZE + 10, GraphicConstant.ROBOT_DIR_W, GraphicConstant.ROBOT_DIR_H);
+                break;
+        }
     }
+    
     
     public String generateMapString() {
 

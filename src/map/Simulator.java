@@ -5,11 +5,15 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
 import java.io.*;
+import java.util.Stack;
+
 import map.MapConstant;
 import map.MapUI;
 import robot.RobotConstant;
 import robot.RobotConstant.DIRECTION;
 import robot.Robot;
+import search.FastestPath;
+import search.Explore;
 
 
 public class Simulator {
@@ -18,11 +22,14 @@ public class Simulator {
 	public static JFrame mainFrame = null;
 	
 	//mainPanel for laying out different views
-	private static JPanel mainPanel = null;
+//	private static JPanel mainPanel = null;
+	private static JPanel mapCards = null; //for viewing the different maps
 	private static JPanel mainButtons = null;
 	
 	private static MapUI mapUI = null;
-	private static Map map = null;
+//	private static Map map = null;
+	private static MapUI realMap = null;
+	private static MapUI exploredMap = null;
 	
 	// Robot's starting position and direction
 	private static int robotSize = RobotConstant.ROBOT_SIZE;
@@ -32,6 +39,7 @@ public class Simulator {
     
     // The robot
     private static robot.Robot roboCop = null;
+    private static final boolean realRun = true;
 
     // Map width & length used to render real & robot map
     private static int mapWidth;
@@ -42,47 +50,73 @@ public class Simulator {
 
 	public static void main(String[] args) {
 		
-		roboCop = new Robot(startPosRow, startPosCol, startDir, false);
+		roboCop = new Robot(1,1 , startDir, true);
+		
+		if (!realRun) {
+			realMap = new MapUI (roboCop);
+			realMap.reset();
+		}
+		
+		exploredMap = new MapUI (roboCop);
+		exploredMap.reset();
 		
 		// Calculate map width & length based on grid size
         mapWidth = MapConstant.MAP_COLS * GraphicConstant.TILE_SIZE;
         mapLength = MapConstant.MAP_ROWS * GraphicConstant.TILE_SIZE;
-		
+        
 		//init main display mainFrame
 		 mainFrame = new JFrame("Map Simulator");
 	     mainFrame.setLocation(120,80);
-	    // mainFrame.setSize(new Dimension(690, 700));
+	     mainFrame.setSize(new Dimension(960, 657));
 	     mainFrame.setLayout(new GridLayout(1,2,3,3));
-	     mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+	     
+	     
 	    
 	     //init map mainPanel
-	     mainPanel = new JPanel(new CardLayout());
+//	     mainPanel = new JPanel(new CardLayout());
 	     
-	     mapUI = new MapUI();
-	     mainPanel.add(mapUI, "Main");
+	     mapUI = new MapUI(roboCop);
+//	     mainPanel.add(mapUI, "Main");
 	     
-	     /* MARK FOR DELETION
-	     map = new Map();
-	     mainPanel.add(map, "Map");
-	    */
+	     //JPanel for map views
+	     mapCards = new JPanel(new CardLayout());
+	     mapCards.add(mapUI, "Main");
 	     
 	     // Show the real map (main menu) by default
-	     CardLayout cl = ((CardLayout) mainPanel.getLayout());
-	     cl.show(mainPanel, "MAIN");
+//	     CardLayout cl = ((CardLayout) mainPanel.getLayout());
+//	     cl.show(mainPanel, "MAIN");
 	     
 	    addButtons();
-	    mainFrame.add(mainPanel);
+	    
+//	    mainFrame.add(mainPanel);
+	    mainFrame.add(mapCards);
 	    mainFrame.add(mainButtons);
+	    
+	    initMainLayout();
 	     
 	     //add cardLayouts to main frame
 	     Container contentPane = mainFrame.getContentPane();
-	     contentPane.add(mainPanel, BorderLayout.WEST);
+//	     contentPane.add(mainPanel, BorderLayout.WEST);
+	     contentPane.add(mapCards, BorderLayout.CENTER); //add mapCards to main frame's content pane
 	     contentPane.add(mainButtons, BorderLayout.EAST);
 	     
-	     mainFrame.setSize(new Dimension(928, 657));
 	     mainFrame.setVisible(true);
-	     mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	     mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
 	}
+	
+	private static void initMainLayout() {
+        if (!realRun) {
+            mapCards.add(realMap, "REAL_MAP");
+        }
+        mapCards.add(exploredMap, "EXPLORATION");
+
+        CardLayout cl = ((CardLayout) mapCards.getLayout());
+        if (!realRun) {
+            cl.show(mapCards, "REAL_MAP");
+        } else {
+            cl.show(mapCards, "EXPLORATION");
+        }
+    }
 	
 	private static void addButtons() {
 		mainButtons = new JPanel();
@@ -176,6 +210,8 @@ public class Simulator {
                 // Clear the current map
                 System.out.println("Clearing Obstacles..");
                 mapUI.clearMap();
+//                realMap.clearMap();
+                exploredMap.clearMap();
             }
         });
 		mainButtons.add(btn_ClearMap);
@@ -191,6 +227,8 @@ public class Simulator {
                 // Clear the current map
                 System.out.println("Clearing Obstacles..");
                 mapUI.clearMap();
+//                realMap.clearMap();
+                exploredMap.clearMap();
             }
         });
         mainButtons.add(btn_clearObs);
@@ -200,15 +238,44 @@ public class Simulator {
         btn_SetMid.setMargin(new Insets(10, 15, 10, 15));
         btn_SetMid.setFocusPainted(false);
         
-		JButton btn_Explore = new JButton ("Explore");
-		 btn_Explore.setFont(new Font("Arial", Font.BOLD, 18));
-	     btn_Explore.setMargin(new Insets(10, 15, 10, 15));
-	     btn_Explore.setFocusPainted(false);
-	        
-		JButton btn_FastestPath = new JButton ("Fastest Path");
-		 btn_FastestPath.setFont(new Font("Arial", Font.BOLD, 18));
-	     btn_FastestPath.setMargin(new Insets(10, 15, 10, 15));
-	     btn_FastestPath.setFocusPainted(false);
+        JButton btn_Explore = new JButton("Explore");
+        btn_Explore.setFont(new Font("Arial", Font.BOLD, 18));
+        btn_Explore.setMargin(new Insets(10, 15, 10, 15));
+        btn_Explore.setFocusPainted(false);
+        
+        btn_Explore.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+//                CardLayout cl = ((CardLayout) mapCards.getLayout());
+//                cl.show(mapCards, "EXPLORATION");
+//                roboCop.setRobotRow(RobotConstant.DEFAULT_START_ROW); 
+  //              roboCop.setRobotCol(RobotConstant.DEFAULT_START_COL);
+                exploredMap.repaint();
+                Explore exploration;
+                exploration = new Explore (roboCop, realMap);
+                exploration.explore(realMap, roboCop);
+            }
+        });
+        mainButtons.add(btn_Explore);
+
+        JButton btn_FastestPath = new JButton("Fastest Path");
+        btn_FastestPath.setFont(new Font("Arial", Font.BOLD, 18));
+        btn_FastestPath.setMargin(new Insets(10, 15, 10, 15));
+        btn_FastestPath.setFocusPainted(false);
+        
+        btn_FastestPath.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+//                CardLayout cl = ((CardLayout) mapCards.getLayout());
+//                cl.show(mapCards, "EXPLORATION");
+//                roboCop.setRobotRow(RobotConstant.DEFAULT_START_ROW); 
+  //              roboCop.setRobotCol(RobotConstant.DEFAULT_START_COL);
+                exploredMap.repaint();
+                FastestPath fastestPath;
+                fastestPath = new FastestPath (exploredMap, roboCop, realMap);
+   //             fastestPath.executeFastestPath(RobotConstant.DEFAULT_GOAL_ROW, RobotConstant.DEFAULT_GOAL_COL);
+                
+            }
+        });
+        mainButtons.add(btn_FastestPath);
 		
 		/* buttonPanel.add(mainButtons, "BUTTONS");
         CardLayout cl = ((CardLayout) buttonPanel.getLayout());
