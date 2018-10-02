@@ -23,6 +23,23 @@ public class Explore {
 	// Simulation Tracker
 	private Map mapActual;
 	
+	// Constructor
+	public Explore(Robot bot, Map actual) {
+		robot = bot;
+		map = new Map();
+		mapActual = actual;
+	}
+	
+	// Getter(s)
+	/**
+	 * 
+	 * @return
+	 */
+	public Map getMap() {
+		return map;
+	}
+	
+	// Other Function(s)
 	/**
 	 * 
 	 * @param map

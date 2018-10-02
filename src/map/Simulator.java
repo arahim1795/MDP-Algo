@@ -19,12 +19,9 @@ public class Simulator {
 	
 	//mainPanel for laying out different views
 	private static JPanel mainPanel = null;
-	private static JPanel buttonPanel = null;
-	
-	private static MapUI mapUI = null;
 	private static JPanel mainButtons = null;
 	
-	//robot map??
+	private static MapUI mapUI = null;
 	private static Map map = null;
 	
 	// Robot's starting position and direction
@@ -60,26 +57,29 @@ public class Simulator {
 	    
 	     //init map mainPanel
 	     mainPanel = new JPanel(new CardLayout());
-	     //init button mainPanel
 	     
 	     mapUI = new MapUI();
 	     mainPanel.add(mapUI, "Main");
 	     
+	     /* MARK FOR DELETION
 	     map = new Map();
 	     mainPanel.add(map, "Map");
+	    */
 	     
 	     // Show the real map (main menu) by default
 	     CardLayout cl = ((CardLayout) mainPanel.getLayout());
 	     cl.show(mainPanel, "MAIN");
 	     
-	     addButtons();
+	    addButtons();
+	    mainFrame.add(mainPanel);
+	    mainFrame.add(mainButtons);
 	     
 	     //add cardLayouts to main frame
 	     Container contentPane = mainFrame.getContentPane();
 	     contentPane.add(mainPanel, BorderLayout.WEST);
-	     contentPane.add(buttonPanel, BorderLayout.EAST); 
+	     contentPane.add(mainButtons, BorderLayout.EAST);
 	     
-	     mainFrame.setSize(new Dimension(920, 648));
+	     mainFrame.setSize(new Dimension(928, 657));
 	     mainFrame.setVisible(true);
 	     mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
@@ -210,9 +210,9 @@ public class Simulator {
 	     btn_FastestPath.setMargin(new Insets(10, 15, 10, 15));
 	     btn_FastestPath.setFocusPainted(false);
 		
-		buttonPanel.add(mainButtons, "BUTTONS");
+		/* buttonPanel.add(mainButtons, "BUTTONS");
         CardLayout cl = ((CardLayout) buttonPanel.getLayout());
-        cl.show(buttonPanel, "BUTTONS");
+        cl.show(buttonPanel, "BUTTONS"); */
 	}
 	
 }

@@ -20,36 +20,35 @@ import javax.swing.*;
  */
 public class Map extends JPanel{
 	private Tile[][] field;
-	private static int col = MapConstant.MAP_ROWS, row = MapConstant.MAP_ROWS ;
+	private static int row = MapConstant.MAP_ROWS, col = MapConstant.MAP_COLS ;
 	
 	// Constructor
 	/**
-	 * Create map of Tiles with row = 20 and col = 15
+	 * Create map of Tiles with col = 15 and row = 15
 	 * Up-Left Coordinates: 0,0
 	 * Down-Right Coordinates: 14,19
 	 * @see Tile
 	 */
 	public Map() {
 
-		this.field = new Tile[MapConstant.MAP_ROWS][MapConstant.MAP_COLS];
+		field = new Tile[row][col];
 		
-		for (int i = 0; i < MapConstant.MAP_ROWS; i++) {
-			for (int j = 0; j < MapConstant.MAP_COLS; j++) {
-				field[i][j] = new Tile(i,j);
-				if(i==0 || j==0 || i==MapConstant.MAP_ROWS-1 || j==MapConstant.MAP_COLS)
-					field[i][j].setVirtualWall(true);
+		for (int r = 0; r < row; r++)
+			for (int c = 0; c < col; c++) {
+				field[r][c] = new Tile(r,c);
+				if (r == 0 || r == (row - 1) || c == 0 || c == (col -1)) 
+					field[r][c].setVirtualWall(true);
 			}
-		}
 	}
 	
 	// Getters
 	/**
 	 * 
-	 * @param col
 	 * @param row
+	 * @param col
 	 * @return
 	 */
-	public Tile getTile(int col, int row){
+	public Tile getTile(int row, int col){
 		return field[row][col];
 	}
 	
@@ -61,16 +60,15 @@ public class Map extends JPanel{
 	 * @param col
 	 * @param obstacle
 	 */
-	public void setObstacleTile(int col, int row,boolean obstacle) {
-		this.field[row][col].setObstacle(obstacle);
-		for(int i = -1; i < 2; i++)
-			for(int j = -1; j < 2; j++)
-				if(i != 0 || j != 0) field[row+i][col+j].setVirtualWall(true);
+	public void setObstacleTile(int row, int col,boolean obstacle) {
+		field[row][col].setObstacle(obstacle);
+		for (int i = -1; i < 2; i++)
+			for (int j = -1; j < 2; j++)
+				if (!((i == 0) && (j == 0))) field[row+i][col+j].setVirtualWall(true);
 	}
 
-	/**
-	 * 
-	 */
+	// TODO account for format difference in getAdjCoor (i.e. [row,col] instead of [col,row])
+	/*
 	public void setBoundary() {
 		for (Tile[] row : field) 
 			for (Tile tile : row) {
@@ -93,24 +91,30 @@ public class Map extends JPanel{
 					}
 				
 			}
-	}
+	}*/
 
 	// Validity Functions
 	/**
-	 * Returns a list of valid adjacent coordinates
-	 * @param ref Grid coordinate
-	 * @return list of valid adjacent coordinates to the passed-in coordinates
+	 * 
+	 * @param row 
+	 * @param col 
+	 * @return list of integer arrays in [row,col] format (valid adjacent coordinates to passed row & col)
 	 */
-	public static List<int[]> getAdjCoor(int refx, int refy) {
+	public static List<int[]> getAdjCoor(int row, int col) {
 		List<int[]> listCoor = new ArrayList<int[]>();
-		int[] adj;
-		for (int r = -1; r <= 1; r++) {
-			for (int c = -1; c <= 1; c++) {
-				adj = new int[2];
-				adj[0] = refx + c;
-				adj[1] = refy + r;
-				if ((!(adj[0] == refx) || !(adj[1] == refy)) && isValidTile(adj[0], adj[1])) {
-					listCoor.add(adj);
+		
+		int r, c;
+		int[] coor = new int[2];
+		
+		for (int y = -1; y <= 1; y++) {
+			for (int x = -1; x <= 1; x++) {
+				r = row + y;
+				c = col + x;
+				
+				if (!((y == 0) || (x == 0))) {
+					coor[0] = r;
+					coor[1] = c;
+					listCoor.add(coor);
 				}
 			}
 		}
@@ -118,27 +122,42 @@ public class Map extends JPanel{
 	}
 	
 	/**
-	 * Returns true if coordinates are within map
-	 * @param coor x and y-coordinates
-	 * @return true if x and y-coordinates are valid, false otherwise
+	 * 
+	 * @param checkRow row(y)-coordinates
+	 * @param checkCol col(x)-coordinates
+	 * @return true if row(y) and col(x)-coordinates are within 0 and maxRow(19) or maxCol(14)
+	 * respectively, false otherwise
 	 */
-	public static boolean isValidTile(int row, int col){
-		return row > 0 && row < MapConstant.MAP_ROWS && col > 0 && col < MapConstant.MAP_COLS;
+	public static boolean isValidTile(int checkRow, int checkCol){
+		return checkRow > 0 && checkRow < row && checkCol > 0 && checkCol < col;
 	}
 	
 	/**
 	 * 
-	 * @param coor
-	 * @return
+	 * @param checkRow row(y)-coordinates
+	 * @param checkCol col(x)-coordinates
+	 * @return true if either row(y) and col(x)-coordinates are 0 or at maxRow(19) or maxCol(14)
+	 * respectively, false otherwise
 	 */
-	public static boolean isBoundaryTile(int col, int row) {
-		return col == 0 || col == MapConstant.MAP_COLS || row == 0 || row == MapConstant.MAP_ROWS;
+	public static boolean isBoundaryTile(int checkRow, int checkCol) {
+		return checkRow == 0 || checkRow == (row - 1) || checkCol == 0 || checkCol == (col - 1);
 	}
 	
 	/**
+	 * 
+	 * @param row
+	 * @param col
+	 * @return
+	 */
+	public boolean isObstacleTile(int row, int col) {
+		return this.field[row][col].isObstacle();
+	}
+	
+	/* TODO convert into row,col format
+	/**
 	 * Convert from map read by Reader in List of Strings form to Tile[][] map
 	 * @param mapcomp List of strings that represent the map
-	 */
+	 
 	public void parseMap(List<String> mapcomp) {
 		for (int i = 0; i < this.col; i++) {
 			for (int j = 0; j < this.row; j++) {
@@ -152,37 +171,36 @@ public class Map extends JPanel{
 			}
 		}
 		setBoundary();
-	}
+	} */
 	
 	/**
 	 * Prints map to console for debugging purposes
 	 */
 	public void printMap() {
-		for (int i = 0; i < row; i++) {
-			for (int j = 0; j < col; j++) {
-				if (field[i][j].isObstacle()) System.out.print("1");
+		for (int r = 0; r < row; r++) 
+			for (int c = 0; c < col; c++) {
+				if (field[r][c].isObstacle()) System.out.print("1");
 				else System.out.print("0");
-				if (j == (col-1)) System.out.print("\n");
+				if (c == (col-1)) System.out.print("\n");
 			}
-		}
-		
 	}
 	
 	/**
 	 * 
 	 */
 	public void reset() {
-		for (Tile[] row : this.field)
+		for (Tile[] row : field)
 			for (Tile tile : row)
 				tile.reset();
 	}
 	
-	public void setAllExplored(){
-		for(Tile[] row : this.field){
-			for (Tile tile : row){
+	/**
+	 * 
+	 */
+	public void setAllExplored() {
+		for(Tile[] row : field)
+			for (Tile tile : row)
 				tile.setExplored(true);
-			}
-		}
 	}
 	
 

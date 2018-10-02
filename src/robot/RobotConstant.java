@@ -118,7 +118,7 @@ public final class RobotConstant {
 	 * @return
 	 */
 	public static boolean isAtGoal(int row, int col) {
-		return (row <= DEFAULT_GOAL_ROW+1 && row>= DEFAULT_GOAL_ROW-1)&&(col <= DEFAULT_GOAL_COL+1 && col>= DEFAULT_GOAL_COL-1);
+		return row == DEFAULT_GOAL_ROW && col == DEFAULT_GOAL_COL;
 	}
 	
 	// Prevent instantiation
