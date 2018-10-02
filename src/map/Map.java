@@ -10,14 +10,16 @@ import javax.swing.*;
 
 /**
  * @author 18/19 S1 G3
+ * getTile
+ * setObstacleTile
+ * setBoundary
+ * getAdjCoor
+ * 
  */
 public class Map extends JPanel{
 	
-	/**
-	 * 
-	 */
 	private Tile[][] field;
-	private static int col = Constants.MAP_ROWS, row = Constants.MAP_ROWS ;
+	private static int col = MapConstant.MAP_ROWS, row = MapConstant.MAP_ROWS ;
 	
 	// Constructor
 	/**
@@ -28,12 +30,12 @@ public class Map extends JPanel{
 	 */
 	public Map() {
 
-		this.field = new Tile[Constants.MAP_COLS][Constants.MAP_ROWS];
+		this.field = new Tile[MapConstant.MAP_COLS][MapConstant.MAP_ROWS];
 		
-		for (int i = 0; i < Constants.MAP_ROWS; i++) {
-			for (int j = 0; j < Constants.MAP_COLS; j++) {
+		for (int i = 0; i < MapConstant.MAP_ROWS; i++) {
+			for (int j = 0; j < MapConstant.MAP_COLS; j++) {
 				field[i][j] = new Tile(i,j);
-				if(i==0 || j==0 || i==Constants.MAP_COLS-1 || j==Constants.MAP_ROWS)
+				if(i==0 || j==0 || i==MapConstant.MAP_COLS-1 || j==MapConstant.MAP_ROWS)
 					field[i][j].setVirtualWall(true);
 			}
 		}
@@ -121,7 +123,7 @@ public class Map extends JPanel{
 	 * @return true if x and y-coordinates are valid, false otherwise
 	 */
 	public static boolean isValidTile(int row, int col){
-		return row > 0 && row < Constants.MAP_ROWS && col > 0 && col < Constants.MAP_COLS;
+		return row > 0 && row < MapConstant.MAP_ROWS && col > 0 && col < MapConstant.MAP_COLS;
 	}
 	
 	/**
@@ -130,7 +132,7 @@ public class Map extends JPanel{
 	 * @return
 	 */
 	public static boolean isBoundaryTile(int col, int row) {
-		return col == 0 || col == Constants.MAP_COLS || row == 0 || row == Constants.MAP_ROWS;
+		return col == 0 || col == MapConstant.MAP_COLS || row == 0 || row == MapConstant.MAP_ROWS;
 	}
 	
 	/**
@@ -173,6 +175,14 @@ public class Map extends JPanel{
 		for (Tile[] row : this.field)
 			for (Tile tile : row)
 				tile.reset();
+	}
+	
+	public void setAllExplored(){
+		for(Tile[] row : this.field){
+			for (Tile tile : row){
+				tile.setExplored(true);
+			}
+		}
 	}
 	
 

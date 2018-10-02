@@ -12,13 +12,13 @@ import java.util.Arrays;
 public class Comms {
 	
 	//headers for message
-    public static final String EX_START = "EX_START";       // Android --> PC
-    public static final String FP_START = "FP_START";       // Android --> PC
-    public static final String MAP_STRINGS = "MAP";         // PC --> Android
-    public static final String BOT_POS = "BOT_POS";         // PC --> Android
-    public static final String BOT_START = "BOT_START";     // PC --> Arduino
-    public static final String INSTRUCTIONS = "INSTR";      // PC --> Arduino
-    public static final String SENSOR_DATA = "SDATA";       // Arduino --> PC
+    public static final String EX_START = "EX_START";       // Android --> PC	//start exploration
+    public static final String FP_START = "FP_START";       // Android --> PC	//start fastest path
+    public static final String MAP_STRINGS = "MAP";         // PC --> Android	//map descriptor string
+    public static final String BOT_POS = "BOT_POS";         // PC --> Android	//bot position
+    public static final String BOT_START = "BOT_START";     // PC --> Arduino	//start bot
+    public static final String INSTRUCTIONS = "INSTR";      // PC --> Arduino	//move instrucions
+    public static final String SENSOR_DATA = "SDATA";       // Arduino --> PC	//sensor data
     
 	private static String robotName = "192.168.3.1";
 	private static int portNum = 1224;
@@ -82,6 +82,7 @@ public class Comms {
 	 * Receives messages from Pi
 	 * @return message
 	 */
+	@SuppressWarnings("deprecation")
 	public static String receiveMsg() {
 		StringBuilder msg = new StringBuilder();
 		try {

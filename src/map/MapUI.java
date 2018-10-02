@@ -12,7 +12,7 @@ import map.*;
 
 public class MapUI extends Map {
 	
-	private Tile[][] mapTiles = new Tile [Constants.MAP_ROWS][Constants.MAP_COLS];
+	private Tile[][] mapTiles = new Tile [MapConstant.MAP_ROWS][MapConstant.MAP_COLS];
 	
 	//private Map map = new Map();
 	
@@ -25,19 +25,19 @@ public class MapUI extends Map {
     private int _mapWidth = 0;
     
     // Mid Point
-    public static int midRow = Constants.START_GRID_ROW;
-    public static int midCol = Constants.START_GRID_COL;
+    public static int midRow = MapConstant.START_GRID_ROW;
+    public static int midCol = MapConstant.START_GRID_COL;
     
     private ColorTile[][] mapColorTiles = null;
     
     // check if given tile is in start zone
     public boolean isStartZone(int row, int col) {
-    	return ((row >= (Constants.START_GRID_ROW)) && (row <= (Constants.START_GRID_ROW +2)) && (col >= (Constants.START_GRID_COL)) && (col <= (Constants.START_GRID_COL +2)));
+    	return ((row >= (MapConstant.START_GRID_ROW)) && (row <= (MapConstant.START_GRID_ROW +2)) && (col >= (MapConstant.START_GRID_COL)) && (col <= (MapConstant.START_GRID_COL +2)));
 	}
     
     // check if given tile is in goal zone
     public boolean isGoalZone(int row, int col) {
-    	return ((row >= (Constants.GOAL_GRID_ROW)) && (row <= (Constants.GOAL_GRID_ROW +2)) && (col >= (Constants.GOAL_GRID_COL)) && (col <= (Constants.GOAL_GRID_COL +2)));
+    	return ((row >= (MapConstant.GOAL_GRID_ROW)) && (row <= (MapConstant.GOAL_GRID_ROW +2)) && (col >= (MapConstant.GOAL_GRID_COL)) && (col <= (MapConstant.GOAL_GRID_COL +2)));
 	}
     
     public boolean isMidZone(int row, int col, int midRow, int midCol) {
@@ -60,8 +60,8 @@ public class MapUI extends Map {
                 System.out.println("(" + gridCol + "," + gridRow + ")");
                 
                 if (_bSetMid) {
-                    if ((gridRow < Constants.MAP_COLS && gridRow + 1 < Constants.MAP_ROWS && gridRow + 2 < Constants.MAP_ROWS)
-                            && (gridCol < Constants.MAP_COLS && gridCol + 1 < Constants.MAP_COLS && gridCol + 2 < Constants.MAP_COLS)) {
+                    if ((gridRow < MapConstant.MAP_COLS && gridRow + 1 < MapConstant.MAP_ROWS && gridRow + 2 < MapConstant.MAP_ROWS)
+                            && (gridCol < MapConstant.MAP_COLS && gridCol + 1 < MapConstant.MAP_COLS && gridCol + 2 < MapConstant.MAP_COLS)) {
                         if (bControlDown) {
                         } 
                         else {
@@ -89,8 +89,8 @@ public class MapUI extends Map {
                     }
                 } 
                 else {
-                    if ((gridRow < Constants.MAP_ROWS)
-                            && (gridCol < Constants.MAP_COLS)) {
+                    if ((gridRow < MapConstant.MAP_ROWS)
+                            && (gridCol < MapConstant.MAP_COLS)) {
                         if (bControlDown) {
                         	setObstacleTile(gridRow, gridCol, false);
                         } 
@@ -158,10 +158,10 @@ public class MapUI extends Map {
             System.out.println("Map width: " + _mapWidth + ", Map height: " + _mapWidth);
 
             // Calculate the map grids for rendering
-            mapColorTiles = new ColorTile [Constants.MAP_ROWS][Constants.MAP_COLS];
-            for (int mapRow = 0; mapRow < Constants.MAP_ROWS; mapRow++) {
-                for (int mapCol = 0; mapCol < Constants.MAP_COLS; mapCol++) {
-                    mapColorTiles [mapRow][mapCol] = new ColorTile (mapCol * GraphicConstant.TILE_SIZE, mapRow * Constants.TILE_SIZE, Constants.TILE_SIZE);
+            mapColorTiles = new ColorTile [MapConstant.MAP_ROWS][MapConstant.MAP_COLS];
+            for (int mapRow = 0; mapRow < MapConstant.MAP_ROWS; mapRow++) {
+                for (int mapCol = 0; mapCol < MapConstant.MAP_COLS; mapCol++) {
+                    mapColorTiles [mapRow][mapCol] = new ColorTile (mapCol * GraphicConstant.TILE_SIZE, mapRow * MapConstant.TILE_SIZE, MapConstant.TILE_SIZE);
                 }
             }
 
@@ -176,9 +176,9 @@ public class MapUI extends Map {
         this.setBorder(border);
 
         // Paint the grids
-        for (int mapRow = 0; mapRow < Constants.MAP_ROWS; mapRow++) {
-            for (int mapCol = 0; mapCol < Constants.MAP_COLS; mapCol++) {
-                g.setColor(Constants.C_GRID_LINE);
+        for (int mapRow = 0; mapRow < MapConstant.MAP_ROWS; mapRow++) {
+            for (int mapCol = 0; mapCol < MapConstant.MAP_COLS; mapCol++) {
+                g.setColor(MapConstant.C_GRID_LINE);
                 g.fillRect(	mapColorTiles[mapRow][mapCol].borderX,
                         	mapColorTiles[mapRow][mapCol].borderY,
                         	mapColorTiles[mapRow][mapCol].borderSize,
@@ -187,15 +187,15 @@ public class MapUI extends Map {
                 Color gridColor = null;
                 
                 if (isStartZone(mapRow, mapCol)) {
-                    gridColor = Constants.C_START;
+                    gridColor = MapConstant.C_START;
                 } else if (isGoalZone(mapRow, mapCol)) {
-                    gridColor = Constants.C_GOAL;
+                    gridColor = MapConstant.C_GOAL;
                 } else if (isMidZone(mapRow,mapCol, midRow, midCol)){
-                    gridColor = Constants.C_MID;
+                    gridColor = MapConstant.C_MID;
                 } else if (mapTiles[mapRow][mapCol].isObstacle()) {
-                    gridColor = Constants.C_OBSTACLE;
+                    gridColor = MapConstant.C_OBSTACLE;
                 } else {
-                    gridColor = Constants.C_FREE;
+                    gridColor = MapConstant.C_FREE;
                 }
 
                 g.setColor(gridColor);
@@ -212,9 +212,9 @@ public class MapUI extends Map {
 
         String mapString = "";
 
-        for (int row = 0; row < Constants.MAP_ROWS ; row++) 
+        for (int row = 0; row < MapConstant.MAP_ROWS ; row++) 
             {
-                for (int col = 0; col < Constants.MAP_COLS; col++) {
+                for (int col = 0; col < MapConstant.MAP_COLS; col++) {
                 // Obstacle - Border walls
                 if (!mapTiles[row][col].isObstacle()) {
                     mapString += "0";
@@ -233,10 +233,10 @@ public class MapUI extends Map {
      */
     public void loadFromMapString(String mapString) {
 
-        for (int row = 0; row < Constants.MAP_ROWS ; row++) 
+        for (int row = 0; row < MapConstant.MAP_ROWS ; row++) 
         {
-            for (int col = 0; col < (Constants.MAP_COLS); col++) {
-                int charIndex = (row * Constants.MAP_COLS )
+            for (int col = 0; col < (MapConstant.MAP_COLS); col++) {
+                int charIndex = (row * MapConstant.MAP_COLS )
                         + col;
 
                 // Obstacle - Border walls
@@ -251,8 +251,8 @@ public class MapUI extends Map {
 
     public void clearMap() {
 
-        for (int row = 0; row < (Constants.MAP_ROWS); row++) {
-            for (int col = 0; col < (Constants.MAP_COLS); col++) {
+        for (int row = 0; row < (MapConstant.MAP_ROWS); row++) {
+            for (int col = 0; col < (MapConstant.MAP_COLS); col++) {
                 mapTiles[row][col].setObstacle(false);;
             }
         }

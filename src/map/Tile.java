@@ -10,18 +10,17 @@ public class Tile {
 	private boolean virtualWall= false;
 	private boolean obstacle = false;
 	private boolean persistent = false;
-	private int[] coor;
+	private int x;
+	private int y;
 	
 	/**
 	 * Tiles of field
 	 * @param c x-coordinate of Tile
 	 * @param r y-coordinate of Tile
 	 */
-	public Tile(int c, int r) {
-		coor = new int[2];
-		
-		coor[0] = c;
-		coor[1] = r;
+	public Tile(int row, int col) {
+		this.x = col;
+		this.y = row;
 	}
 	
 	public int getRow(){

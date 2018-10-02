@@ -5,7 +5,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
 import java.io.*;
-import map.Constants;
+import map.MapConstant;
 import map.MapUI;
 import robot.RobotConstant;
 import robot.RobotConstant.DIRECTION;
@@ -23,7 +23,8 @@ public class Simulator {
 	public static void main(String[] args) {
 		
 		bot = new Robot(1,1,DIRECTION.UP, false);
-		
+		System.out.println("clear");
+		/*
 		//main display frame
 		 frame = new JFrame();
 	     frame.setTitle("Map Simulator");
@@ -47,7 +48,7 @@ public class Simulator {
 	     
 	     mapUI = new MapUI();
 	     //panel.add(mapUI);
-		
+		*/
 	}
 	
 	private static void addButtons() {

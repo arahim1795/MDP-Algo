@@ -4,7 +4,7 @@ import java.awt.Color;
 /**
  * @author 18/19 S1 G3
  */
-public final class Constants {
+public final class MapConstant {
 
 	
 	// Default map sizes
@@ -32,6 +32,6 @@ public final class Constants {
 	*/
 	
 	// Prevent Instantiation
-	private Constants() {}
+	private MapConstant() {}
 
 }

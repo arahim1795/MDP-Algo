@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import map.Map;
-import map.Constants;
+import map.MapConstant;
 import robot.RobotConstant;
 import robot.RobotConstant.DIRECTION;
 import robot.RobotConstant.MOVEMENT;
@@ -306,7 +306,7 @@ public class Robot {
 
     }
     private void sendMovement(MOVEMENT m, boolean sendMovetoAndroid){
-    	Comms.sendMsg(MOVEMENT.print(m)+"",Comms.INSTRUCTIONS);
+    	Comms.sendMsg(MOVEMENT.print(m)+""+Comms.INSTRUCTIONS);
     	
     	
     }
