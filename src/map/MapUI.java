@@ -24,7 +24,7 @@ public class MapUI extends Map {
     private int _mapLength = 0;
     private int _mapWidth = 0;
     
-    // Mid Point TODO
+    // Mid Point TODO set mid point must be dynamic
     public int midRow = -5;
     public int midCol = -5;
     
