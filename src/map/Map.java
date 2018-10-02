@@ -30,12 +30,12 @@ public class Map extends JPanel{
 	 */
 	public Map() {
 
-		this.field = new Tile[MapConstant.MAP_COLS][MapConstant.MAP_ROWS];
+		this.field = new Tile[MapConstant.MAP_ROWS][MapConstant.MAP_COLS];
 		
 		for (int i = 0; i < MapConstant.MAP_ROWS; i++) {
 			for (int j = 0; j < MapConstant.MAP_COLS; j++) {
 				field[i][j] = new Tile(i,j);
-				if(i==0 || j==0 || i==MapConstant.MAP_COLS-1 || j==MapConstant.MAP_ROWS)
+				if(i==0 || j==0 || i==MapConstant.MAP_ROWS-1 || j==MapConstant.MAP_COLS)
 					field[i][j].setVirtualWall(true);
 			}
 		}

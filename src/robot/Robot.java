@@ -45,18 +45,19 @@ public class Robot {
 	 * @see map
 	 */
 	public Robot (int startRow, int startCol, boolean isReal){
-		SRFrontLeft = new Sensor(RobotConstant.SHORT_IR_MIN, RobotConstant.SHORT_IR_MAX, this.robotRow + 1, this.robotCol - 1, this.robotDir, "SRFL");
-        SRFrontCenter = new Sensor(RobotConstant.SHORT_IR_MIN, RobotConstant.SHORT_IR_MAX, this.robotRow + 1, this.robotCol, this.robotDir, "SRFC");
-        SRFrontRight = new Sensor(RobotConstant.SHORT_IR_MIN, RobotConstant.SHORT_IR_MAX, this.robotRow + 1, this.robotCol + 1, this.robotDir, "SRFR");
-        SRLeft = new Sensor(RobotConstant.SHORT_IR_MIN, RobotConstant.SHORT_IR_MAX, this.robotRow + 1, this.robotCol - 1, findNewDirection(MOVEMENT.TURNLEFT), "SRL");
-        SRRight = new Sensor(RobotConstant.SHORT_IR_MIN, RobotConstant.SHORT_IR_MAX, this.robotRow + 1, this.robotCol + 1, findNewDirection(MOVEMENT.TURNRIGHT), "SRR");
-        LRLeft = new Sensor(RobotConstant.LONG_IR_MIN, RobotConstant.LONG_IR_MAX, this.robotRow, this.robotCol - 1, findNewDirection(MOVEMENT.TURNLEFT), "LRL");
 		
 		robotRow = startRow;
 		robotCol = startCol;
 		robotDir = RobotConstant.DEFAULT_START_DIR;
 		speed = RobotConstant.SPEED;
 		realBot = isReal;
+		
+		SRFrontLeft = new Sensor(RobotConstant.SHORT_IR_MIN, RobotConstant.SHORT_IR_MAX, this.robotRow + 1, this.robotCol - 1, this.robotDir, "SRFL");
+        SRFrontCenter = new Sensor(RobotConstant.SHORT_IR_MIN, RobotConstant.SHORT_IR_MAX, this.robotRow + 1, this.robotCol, this.robotDir, "SRFC");
+        SRFrontRight = new Sensor(RobotConstant.SHORT_IR_MIN, RobotConstant.SHORT_IR_MAX, this.robotRow + 1, this.robotCol + 1, this.robotDir, "SRFR");
+        SRLeft = new Sensor(RobotConstant.SHORT_IR_MIN, RobotConstant.SHORT_IR_MAX, this.robotRow + 1, this.robotCol - 1, findNewDirection(MOVEMENT.TURNLEFT), "SRL");
+        SRRight = new Sensor(RobotConstant.SHORT_IR_MIN, RobotConstant.SHORT_IR_MAX, this.robotRow + 1, this.robotCol + 1, findNewDirection(MOVEMENT.TURNRIGHT), "SRR");
+        LRLeft = new Sensor(RobotConstant.LONG_IR_MIN, RobotConstant.LONG_IR_MAX, this.robotRow, this.robotCol - 1, findNewDirection(MOVEMENT.TURNLEFT), "LRL");
 	}
 	
 	/**
@@ -69,19 +70,20 @@ public class Robot {
 	 * @param direction Direction Robot's facing
 	 */
 	public Robot(int startRow, int startCol, DIRECTION startDir, boolean isReal) {
-		SRFrontLeft = new Sensor(RobotConstant.SHORT_IR_MIN, RobotConstant.SHORT_IR_MAX, this.robotRow + 1, this.robotCol - 1, this.robotDir, "SRFL");
-        SRFrontCenter = new Sensor(RobotConstant.SHORT_IR_MIN, RobotConstant.SHORT_IR_MAX, this.robotRow + 1, this.robotCol, this.robotDir, "SRFC");
-        SRFrontRight = new Sensor(RobotConstant.SHORT_IR_MIN, RobotConstant.SHORT_IR_MAX, this.robotRow + 1, this.robotCol + 1, this.robotDir, "SRFR");
-        SRLeft = new Sensor(RobotConstant.SHORT_IR_MIN, RobotConstant.SHORT_IR_MAX, this.robotRow + 1, this.robotCol - 1, findNewDirection(MOVEMENT.TURNLEFT), "SRL");
-        SRRight = new Sensor(RobotConstant.SHORT_IR_MIN, RobotConstant.SHORT_IR_MAX, this.robotRow + 1, this.robotCol + 1, findNewDirection(MOVEMENT.TURNRIGHT), "SRR");
-        LRLeft = new Sensor(RobotConstant.LONG_IR_MIN, RobotConstant.LONG_IR_MAX, this.robotRow, this.robotCol - 1, findNewDirection(MOVEMENT.TURNLEFT), "LRL");
-
+		
 		robotRow = startRow;
 		robotCol = startCol;
 		robotDir = startDir;
 		speed = RobotConstant.SPEED;
 
 		realBot = isReal;
+		
+		SRFrontLeft = new Sensor(RobotConstant.SHORT_IR_MIN, RobotConstant.SHORT_IR_MAX, this.robotRow + 1, this.robotCol - 1, this.robotDir, "SRFL");
+        SRFrontCenter = new Sensor(RobotConstant.SHORT_IR_MIN, RobotConstant.SHORT_IR_MAX, this.robotRow + 1, this.robotCol, this.robotDir, "SRFC");
+        SRFrontRight = new Sensor(RobotConstant.SHORT_IR_MIN, RobotConstant.SHORT_IR_MAX, this.robotRow + 1, this.robotCol + 1, this.robotDir, "SRFR");
+        SRLeft = new Sensor(RobotConstant.SHORT_IR_MIN, RobotConstant.SHORT_IR_MAX, this.robotRow + 1, this.robotCol - 1, findNewDirection(MOVEMENT.TURNLEFT), "SRL");
+        SRRight = new Sensor(RobotConstant.SHORT_IR_MIN, RobotConstant.SHORT_IR_MAX, this.robotRow + 1, this.robotCol + 1, findNewDirection(MOVEMENT.TURNRIGHT), "SRR");
+        LRLeft = new Sensor(RobotConstant.LONG_IR_MIN, RobotConstant.LONG_IR_MAX, this.robotRow, this.robotCol - 1, findNewDirection(MOVEMENT.TURNLEFT), "LRL");
 	}
 	
 	// Getter(s)

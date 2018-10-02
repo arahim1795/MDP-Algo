@@ -60,7 +60,7 @@ public class MapUI extends Map {
                 System.out.println("(" + gridCol + "," + gridRow + ")");
                 
                 if (_bSetMid) {
-                    if ((gridRow < MapConstant.MAP_COLS && gridRow + 1 < MapConstant.MAP_ROWS && gridRow + 2 < MapConstant.MAP_ROWS)
+                    if ((gridRow < MapConstant.MAP_ROWS && gridRow + 1 < MapConstant.MAP_ROWS && gridRow + 2 < MapConstant.MAP_ROWS)
                             && (gridCol < MapConstant.MAP_COLS && gridCol + 1 < MapConstant.MAP_COLS && gridCol + 2 < MapConstant.MAP_COLS)) {
                         if (bControlDown) {
                         } 

@@ -54,7 +54,6 @@ public final class RobotConstant {
 		//anti-clockwise
 		public static DIRECTION getLeft(DIRECTION currDirection) {
 			return values()[(currDirection.ordinal() + values().length - 1)% values().length];
-
 		}
 		
 		/**

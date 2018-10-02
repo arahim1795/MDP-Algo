@@ -24,7 +24,7 @@ public class Simulator {
 		
 		bot = new Robot(1,1,DIRECTION.UP, false);
 		System.out.println("clear");
-		/*
+		
 		//main display frame
 		 frame = new JFrame();
 	     frame.setTitle("Map Simulator");
@@ -48,7 +48,7 @@ public class Simulator {
 	     
 	     mapUI = new MapUI();
 	     //panel.add(mapUI);
-		*/
+		
 	}
 	
 	private static void addButtons() {
