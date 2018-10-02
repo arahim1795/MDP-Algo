@@ -2,8 +2,6 @@ package robot;
 
 import java.awt.Color;
 
-import robot.RobotConstant.DIRECTION;
-
 public final class RobotConstant {
 	//
 	 public static final int SPEED = 100;		// delay between movements (ms)
@@ -53,8 +51,7 @@ public final class RobotConstant {
 		
 		//anti-clockwise
 		public static DIRECTION getLeft(DIRECTION currDirection) {
-			return values()[(currDirection.ordinal() + values().length - 1)
-					% values().length];
+			return values()[(currDirection.ordinal() + values().length - 1)% values().length];
 		}
 		
 		/**
