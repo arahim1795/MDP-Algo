@@ -10,26 +10,25 @@ public class Tile {
 	private boolean virtualWall= false;
 	private boolean obstacle = false;
 	private boolean persistent = false;
-	private int[] coor;
+	private int x;
+	private int y;
 	
 	/**
 	 * Tiles of field
 	 * @param c x-coordinate of Tile
 	 * @param r y-coordinate of Tile
 	 */
-	public Tile(int c, int r) {
-		coor = new int[2];
-		
-		coor[0] = c;
-		coor[1] = r;
+	public Tile(int row, int col) {
+		this.x = col;
+		this.y = row;
 	}
 	
 	public int getRow(){
-		return coor[0];
+		return x;
 	}
 	
 	public int getCol(){
-		return coor[1];
+		return y;
 	}
 	/**
 	 * Returns true is Tile is marked as an obstacle
@@ -44,7 +43,7 @@ public class Tile {
 	 * @param obstacle If set to true, tile is set as obstacle
 	 */
 	public void setObstacle(boolean obstacle) {
-		this.obstacle = true;
+		this.obstacle = obstacle;
 	}
 
 	public boolean isExplored() {
@@ -66,7 +65,6 @@ public class Tile {
 	public boolean isVirtualWall() {
 		return this.virtualWall;
 	}
-
   
   /**
 	 * Set Tile as a virtual wall (i.e. Tile must not be traversed by robot)
@@ -93,15 +91,6 @@ public class Tile {
 	 */
 	public void setPersistent(boolean persistent) {
 		this.persistent = persistent;
-	}
-
-	/**
-	 * Return an integer array of Tile coordinates (i.e. assigned coordinates,
-	 * not with respect to the array index of the Tile[][])
-	 * @return an array of coordinates [c,r]
-	 */
-	public int[] getCoor() {
-		return coor;
 	}
 	
 	public void reset() {

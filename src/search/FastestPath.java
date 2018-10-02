@@ -8,7 +8,7 @@ import robot.RobotConstant.DIRECTION;
 import robot.RobotConstant.MOVEMENT;
 import map.Map;
 import map.Tile;
-import map.Constants;
+import map.MapConstant;
 import java.util.HashMap;
 import java.util.Stack;
 import java.util.ArrayList;
@@ -68,9 +68,9 @@ public class FastestPath {
 		this.curDir = bot.getRobotDir();
 		
 		//initialize gCost array
-		this.gCosts = new double[Constants.MAP_ROWS][Constants.MAP_COLS];
-		for(int i=0;i<Constants.MAP_COLS;i++){
-			for(int j=0;j<Constants.MAP_ROWS;j++){
+		this.gCosts = new double[MapConstant.MAP_ROWS][MapConstant.MAP_COLS];
+		for(int i=0;i<MapConstant.MAP_COLS;i++){
+			for(int j=0;j<MapConstant.MAP_ROWS;j++){
 				if(!canBeVisited(this.exploredMap.getTile(i, j))){
 					gCosts[i][j] = RobotConstant.INFINITE_COST;
 			}
