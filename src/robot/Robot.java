@@ -21,7 +21,7 @@ public class Robot {
  
 	private int robotRow; // Coordinate of centre component
 	private int robotCol; // Coordinate of centre component
-	private DIRECTION orientation
+	private DIRECTION orientation;
 	private Map memory;
 	
 	/**
