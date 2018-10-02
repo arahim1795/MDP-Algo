@@ -236,12 +236,12 @@ public class Robot {
         int[] result = new int[6];
 
         if (!realBot) {
-            result[0] = SRFrontLeft.sense(explorationMap, realMap);
-            result[1] = SRFrontCenter.sense(explorationMap, realMap);
-            result[2] = SRFrontRight.sense(explorationMap, realMap);
-            result[3] = SRLeft.sense(explorationMap, realMap);
-            result[4] = SRRight.sense(explorationMap, realMap);
-            result[5] = LRLeft.sense(explorationMap, realMap);
+            result[0] = SRFrontLeft.senseSim(explorationMap, realMap);
+            result[1] = SRFrontCenter.senseSim(explorationMap, realMap);
+            result[2] = SRFrontRight.senseSim(explorationMap, realMap);
+            result[3] = SRLeft.senseSim(explorationMap, realMap);
+            result[4] = SRRight.senseSim(explorationMap, realMap);
+            result[5] = LRLeft.senseSim(explorationMap, realMap);
         } else {
             Comms robotComm = robotComm.getCommMgr();
             String msg = robotComm.recvMsg();
@@ -256,12 +256,12 @@ public class Robot {
                 result[5] = Integer.parseInt(msgArr[6].split("_")[1]);
             }
 
-            SRFrontLeft.senseReal(explorationMap, result[0]);
-            SRFrontCenter.senseReal(explorationMap, result[1]);
-            SRFrontRight.senseReal(explorationMap, result[2]);
-            SRLeft.senseReal(explorationMap, result[3]);
-            SRRight.senseReal(explorationMap, result[4]);
-            LRLeft.senseReal(explorationMap, result[5]);
+            SRFrontLeft.sensePhys(explorationMap, result[0]);
+            SRFrontCenter.sensePhys(explorationMap, result[1]);
+            SRFrontRight.sensePhys(explorationMap, result[2]);
+            SRLeft.sensePhys(explorationMap, result[3]);
+            SRRight.sensePhys(explorationMap, result[4]);
+            LRLeft.sensePhys(explorationMap, result[5]);
 
             String[] mapStrings = MapDescriptor.generateMapDescriptor(explorationMap);
             robotComm.sendMsg(mapStrings[0] + " " + mapStrings[1], robotComm.MAP_STRINGS);

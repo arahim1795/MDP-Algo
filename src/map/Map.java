@@ -1,7 +1,9 @@
 package map;
 
 import java.util.ArrayList;
+import javax.swing.*;
 import java.util.List;
+import javax.swing.*;
 
 import javax.swing.JPanel;
 
@@ -17,7 +19,6 @@ import javax.swing.*;
  * 
  */
 public class Map extends JPanel{
-	
 	private Tile[][] field;
 	private static int col = MapConstant.MAP_ROWS, row = MapConstant.MAP_ROWS ;
 	
@@ -77,8 +78,7 @@ public class Map extends JPanel{
 				tile.setVirtualWall(false); 
 				
 				// get coordinates
-				int[] coor = tile.getCoor();
-				int x = coor[0], y = coor[1];
+				int x = tile.getRow(), y = tile.getCol();
 				
 				// find adjacent coordinate and set them as virtualWall if
 				// current Tile is either an obstacle or located at map boundary

@@ -2,8 +2,6 @@ package robot;
 
 import java.awt.Color;
 
-import robot.RobotConstant.DIRECTION;
-
 public final class RobotConstant {
 	//
 	 public static final int SPEED = 100;		// delay between movements (ms)

@@ -3,11 +3,13 @@ package map;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
-
 import javax.swing.*;
 import javax.swing.border.Border;
 
 import map.*;
+import map.Map;
+import map.Tile;
+import map.GraphicConstant;
 
 
 public class MapUI extends Map {
@@ -129,7 +131,7 @@ public class MapUI extends Map {
     private void addObstacle(int row, int col) {
         if (mapTiles[row][col].isObstacle()) {
             //remove obstacle
-            mapTiles[row][col].setObstacle(false);;
+            mapTiles[row][col].setObstacle(false);
         } else if (isStartZone(row, col) || isGoalZone(row, col)) {
             JOptionPane.showMessageDialog(null, "Grid clicked is the start/goal zone. Please select another tile.", "Warning",
                     JOptionPane.WARNING_MESSAGE);
@@ -147,7 +149,7 @@ public class MapUI extends Map {
                         + " attempt to kill the robot!", "Warning",
                         JOptionPane.WARNING_MESSAGE);
             } else {
-                mapTiles[row][col].setObstacle(false);;
+                mapTiles[row][col].setObstacle(false);
             }
         }
     }
@@ -161,7 +163,7 @@ public class MapUI extends Map {
             mapColorTiles = new ColorTile [MapConstant.MAP_ROWS][MapConstant.MAP_COLS];
             for (int mapRow = 0; mapRow < MapConstant.MAP_ROWS; mapRow++) {
                 for (int mapCol = 0; mapCol < MapConstant.MAP_COLS; mapCol++) {
-                    mapColorTiles [mapRow][mapCol] = new ColorTile (mapCol * GraphicConstant.TILE_SIZE, mapRow * MapConstant.TILE_SIZE, MapConstant.TILE_SIZE);
+                    mapColorTiles [mapRow][mapCol] = new ColorTile (mapCol * GraphicConstant.TILE_SIZE, mapRow * GraphicConstant.TILE_SIZE, GraphicConstant.TILE_SIZE);
                 }
             }
 
@@ -172,13 +174,13 @@ public class MapUI extends Map {
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, _mapWidth, _mapLength);
 
-        Border border = BorderFactory.createLineBorder(GraphicConstant.C_GRID_LINE, GraphicConstant.GRID_LINE_WEIGHT);
+        Border border = BorderFactory.createLineBorder(GraphicConstant.C_GRID_LINE, GraphicConstant.TILE_LINE_WEIGHT);
         this.setBorder(border);
 
         // Paint the grids
         for (int mapRow = 0; mapRow < MapConstant.MAP_ROWS; mapRow++) {
             for (int mapCol = 0; mapCol < MapConstant.MAP_COLS; mapCol++) {
-                g.setColor(MapConstant.C_GRID_LINE);
+                g.setColor(GraphicConstant.C_GRID_LINE);
                 g.fillRect(	mapColorTiles[mapRow][mapCol].borderX,
                         	mapColorTiles[mapRow][mapCol].borderY,
                         	mapColorTiles[mapRow][mapCol].borderSize,
@@ -187,15 +189,15 @@ public class MapUI extends Map {
                 Color gridColor = null;
                 
                 if (isStartZone(mapRow, mapCol)) {
-                    gridColor = MapConstant.C_START;
+                    gridColor = GraphicConstant.C_START;
                 } else if (isGoalZone(mapRow, mapCol)) {
-                    gridColor = MapConstant.C_GOAL;
+                    gridColor = GraphicConstant.C_GOAL;
                 } else if (isMidZone(mapRow,mapCol, midRow, midCol)){
-                    gridColor = MapConstant.C_MID;
+                    gridColor = GraphicConstant.C_MID;
                 } else if (mapTiles[mapRow][mapCol].isObstacle()) {
-                    gridColor = MapConstant.C_OBSTACLE;
+                    gridColor = GraphicConstant.C_OBSTACLE;
                 } else {
-                    gridColor = MapConstant.C_FREE;
+                    gridColor = GraphicConstant.C_FREE;
                 }
 
                 g.setColor(gridColor);
@@ -243,14 +245,13 @@ public class MapUI extends Map {
                 if (mapString.charAt(charIndex) == '1') {
                     mapTiles[row][col].setObstacle(true);
                 } else {
-                    mapTiles[row][col].removeObstacle();
+                    mapTiles[row][col].setObstacle(false);
                 }
             }
         }
     }
 
     public void clearMap() {
-
         for (int row = 0; row < (MapConstant.MAP_ROWS); row++) {
             for (int col = 0; col < (MapConstant.MAP_COLS); col++) {
                 mapTiles[row][col].setObstacle(false);;
