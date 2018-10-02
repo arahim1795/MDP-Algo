@@ -4,6 +4,8 @@ import map.Map;
 import robot.RobotConstant.DIRECTION;
 
 /**
+ * DO NOT USE YET
+ * TODO update simulated sensors
  * @author 18/19 S1 G3
  */
 public class Sensor {
@@ -32,11 +34,11 @@ public class Sensor {
 	// Setter(s)
 	/**
 	 * 
-	 * @param row
 	 * @param col
+	 * @param row
 	 * @param dir
 	 */
-	public void setSensor(int row, int col, DIRECTION dir) {
+	public void setSensor(int col, int row, DIRECTION dir) {
 		sensorRow = row;
 		sensorCol = col;
 		sensorDir = dir;
@@ -44,33 +46,31 @@ public class Sensor {
 	
 	// Simulator Function(s)
 	/**
-	 * Returns number of cells 'seen' by a simulated sensor, based on its direction, lacks
-	 * enumeration function
-	 * -1 is returned if no obstacle/invalid map coordinates is between sensor and its upper 
-	 * limit
+	 * 
 	 * @param mapExplore Map used to track exploration
 	 * @param mapActual Simulated map
 	 * @return number of cells that is seen by the sensor, -1 if no obstacle/invalid map coordinates 
 	 * is within sensor and its upper limit
 	 */
-	public int senseSim(Map mapExplore, Map mapActual) {
+	public void senseSim(Map mapExplore, Map mapActual) {
 		switch (sensorDir) {
 			case UP:
-				return sensorInfoSim(mapExplore, mapActual, 0, -1);
+				sensorInfoSim(mapExplore, mapActual, 0, -1);
+				return;
 			case DOWN:
-				return sensorInfoSim(mapExplore, mapActual, 0, 1);
+				sensorInfoSim(mapExplore, mapActual, 0, 1);
+				return;
 			case LEFT:
-				return sensorInfoSim(mapExplore, mapActual, -1, 0);
+				sensorInfoSim(mapExplore, mapActual, -1, 0);
+				return;
 			default:
-				return sensorInfoSim(mapExplore, mapActual, 1, 0);
+				sensorInfoSim(mapExplore, mapActual, 1, 0);
+				return;
 		}		
 	}
 	
 	/**
-	 * Returns the number of cells 'seen' by the sensor, not based on its direction and provides
-	 * enumeration of cells function 
-	 * -1 is returned if no obstacle/invalid map coordinates is between sensor and its upper 
-	 * limit
+	 * 
 	 * @param mapExplore Map used to track exploration
 	 * @param mapActual Simulated map
 	 * @param rowMul Numerically adjust where the sense would occur, on the row(x)-axis
@@ -78,7 +78,7 @@ public class Sensor {
 	 * @return number of cells 'seen' by the sensor, -1 returned is no obstacle/invalid map 
 	 * coordinates is between sensor and its upper limit
 	 */
-	private int sensorInfoSim(Map mapExplore, Map mapActual, int rowMul, int colMul) {
+	private void sensorInfoSim(Map mapExplore, Map mapActual, int colMul, int rowMul) {
 		/*
 		 * Checks whether there is an obstacle/invalid map coordinates between the sensor and
 		 * its sensor's lower limit, applicable to sensors which lower limit beyond 1 unit/10 cm
@@ -89,10 +89,10 @@ public class Sensor {
 				row = sensorRow + (rowMul * i);
 				col = sensorCol + (colMul * i);
 				
-				// Check for invalid map coordinates
-				if (!Map.isValidTile(row, col)) return i;
-				// Check for any obstacles
-				if (mapActual.getTile(row, col).isObstacle()) return i;
+				// Invalid map coordinates between sensor and lower limit, to immediately return
+				if (!Map.isValidTile(row, col)) return;
+				// Obstacle is between sensor and lower limit, to immediately return
+				if (mapActual.getTile(row, col).isObstacle()) return;
 			}
 		}
 		
@@ -105,7 +105,7 @@ public class Sensor {
 			col = sensorCol + (colMul * i);
 			
 			// Check for invalid map coordinates
-			if (!Map.isValidTile(row, col)) return i;
+			if (!Map.isValidTile(row, col)) return;
 			
 			mapExplore.getTile(row, col).setExplored(true);
 			
@@ -115,20 +115,17 @@ public class Sensor {
 			 */
 			if (mapActual.getTile(row, col).isObstacle()) {
 				mapExplore.setObstacleTile(row, col, true);
-				return i;
+				return;
 			}
 		}
 		
 		// If no obstacles detected between sensor's lower and upper limit, return -1
-		return -1;
+		return;
 	}
 
 	// Physical Function(s)
 	/**
-	 * Returns number of cells that is seen by the physical sensor, based on its direction, lacks
-	 * enumeration function
-	 * -1 is returned if no obstacle/invalid map coordinates is within sensor's lower and upper 
-	 * limit
+	 * 
 	 * @param mapExplore Map used to track exploration
 	 * @param sensorVal Sensor values
 	 */
@@ -149,16 +146,27 @@ public class Sensor {
 		}
 	}
 
-    /**
-     * Sets the correct cells to explored and/or obstacle according to the actual sensor value.
-     */
-    private void sensorInfoPhys(Map exploredMap, int sensorVal, int rowInc, int colInc) {
-        if (sensorVal == 0) return;  // return value for LR sensor if obstacle before lowerRange
-
+	/**
+	 * 
+	 * @param exploredMap Map used to track exploration
+	 * @param sensorVal Sensor values
+	 * @param rowMul Numerically adjust where the sense would occur, on the row(x)-axis
+	 * @param colMul Numerically adjust where the sense would occur, on the col(y)-axis
+	 */
+    private void sensorInfoPhys(Map exploredMap, int sensorVal, int colMul, int rowMul) {
+       
+    	/*
+    	 * Check if obstacle exist between sensor and lower limit
+    	 * (used only by sensor with lower limit above 1)
+    	 */
+    	if (sensorVal == 0) return;  // return value for LR sensor if obstacle before lowerRange
+        
+        int row, col;
         // If above fails, check if starting point is valid for sensors with lowerRange > 1.
-        for (int i = 1; i < this.sensorLowerLimit; i++) {
-            int row = this.sensorRow + (rowInc * i);
-            int col = this.sensorCol + (colInc * i);
+        for (int i = 1; i < sensorLowerLimit; i++) {
+        	col = sensorCol + (colMul * i);
+        	row = sensorRow + (rowMul * i);
+            
 
             if (!Map.isValidTile(row, col)) return;
             if (exploredMap.getTile(row, col).isObstacle()) return;
@@ -166,9 +174,10 @@ public class Sensor {
 
         // Update map according to sensor's value.
         for (int i = this.sensorLowerLimit; i <= this.sensorUpperLimit; i++) {
-            int row = this.sensorRow + (rowInc * i);
-            int col = this.sensorCol + (colInc * i);
-
+            
+            col = this.sensorCol + (colMul * i);
+            row = this.sensorRow + (rowMul * i);
+            
             if (!Map.isValidTile(row, col)) continue;
 
             exploredMap.getTile(row, col).setExplored(true);

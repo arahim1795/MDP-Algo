@@ -345,7 +345,8 @@ public class FastestPath {
                 
                 if (this.exploreMode) {
                     bot.setSensors();
-                    bot.sense(this.exploredMap, this.realMap);
+                    // TODO correct sensing to do correct stuff
+                    // bot.sense(this.exploredMap, this.realMap);
                     this.exploredMap.repaint();
                 }
                 
