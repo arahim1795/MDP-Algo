@@ -2,13 +2,14 @@ package map;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.*;
 
 import utility.Utility;
 
 /**
  * @author 18/19 S1 G3
  */
-public class Map {
+public class Map extends JPanel {
 	
 	private Tile[][] field;
 	private int row, col;
@@ -53,8 +54,8 @@ public class Map {
 		}
 		return;
 
-		row = Constants.ROW;
-		col = Constants.COL;
+		row = Constants.MAP_ROWS;
+		col = Constants.MAP_COLS;
 		
 		this.field = new Tile[row][col];
 		
@@ -133,7 +134,7 @@ public class Map {
 				switch (mapcomp.get(i).charAt(j)) {
 					case '1':
 
-						this.field[i][j].setObstacle(true);
+						this.field[i][j].setObstacle();
 
 						this.field[i][j].setObstacle();
 

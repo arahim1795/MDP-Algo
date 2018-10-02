@@ -46,6 +46,10 @@ public class Tile {
 	public void setObstacle() {
 		this.obstacle = true;
 	}
+	
+	public void removeObstacle() {
+		this.obstacle=false;
+	}
 
 	/**
 	 * Returns true if Tile has been explored by Robot
@@ -76,9 +80,7 @@ public class Tile {
 	public void setPersistent(){
 		this.persistent = true;
 	}
-	public boolean isPersistent(){
-		return this.persistent;
-	}
+	
   
   /**
 	 * Set Tile as a virtual wall (i.e. Tile must not be traversed by robot)
