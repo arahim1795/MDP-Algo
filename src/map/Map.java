@@ -143,6 +143,16 @@ public class Map extends JPanel{
 		return checkRow == 0 || checkRow == (row - 1) || checkCol == 0 || checkCol == (col - 1);
 	}
 	
+	/**
+	 * 
+	 * @param row
+	 * @param col
+	 * @return
+	 */
+	public boolean isObstacleTile(int row, int col) {
+		return this.field[row][col].isObstacle();
+	}
+	
 	/* TODO convert into row,col format
 	/**
 	 * Convert from map read by Reader in List of Strings form to Tile[][] map

@@ -13,7 +13,6 @@ public class Tile {
 	private boolean virtualWall = false;
 	private boolean persistent = false;
 	
-	
 	// Constructor
 	/**
 	 * Tiles of field

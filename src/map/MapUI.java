@@ -14,9 +14,7 @@ import map.GraphicConstant;
 
 public class MapUI extends Map {
 	
-	private Tile[][] mapTiles = new Tile [MapConstant.MAP_ROWS][MapConstant.MAP_COLS];
-	
-	//private Map map = new Map();
+	private Tile[][] mapTiles;
 	
 	// For measuring size of the canvas
     private boolean _bMeasured = false;
@@ -26,40 +24,51 @@ public class MapUI extends Map {
     private int _mapLength = 0;
     private int _mapWidth = 0;
     
-    // Mid Point
-    public static int midRow = MapConstant.START_GRID_ROW;
-    public static int midCol = MapConstant.START_GRID_COL;
+    // Mid Point TODO
+    public int midRow = -5;
+    public int midCol = -5;
     
     private ColorTile[][] mapColorTiles = null;
     
     // check if given tile is in start zone
     public boolean isStartZone(int row, int col) {
-    	return ((row >= (MapConstant.START_GRID_ROW)) && (row <= (MapConstant.START_GRID_ROW +2)) && (col >= (MapConstant.START_GRID_COL)) && (col <= (MapConstant.START_GRID_COL +2)));
+    	return ((row >= (MapConstant.START_GRID_ROW-1)) && (row <= (MapConstant.START_GRID_ROW +1)) && 
+    			(col >= (MapConstant.START_GRID_COL-1)) && (col <= (MapConstant.START_GRID_COL +1)));
 	}
     
     // check if given tile is in goal zone
     public boolean isGoalZone(int row, int col) {
-    	return ((row >= (MapConstant.GOAL_GRID_ROW)) && (row <= (MapConstant.GOAL_GRID_ROW +2)) && (col >= (MapConstant.GOAL_GRID_COL)) && (col <= (MapConstant.GOAL_GRID_COL +2)));
+    	return ((row >= (MapConstant.GOAL_GRID_ROW-1)) && (row <= (MapConstant.GOAL_GRID_ROW +1)) 
+    			&& (col >= (MapConstant.GOAL_GRID_COL-1)) && (col <= (MapConstant.GOAL_GRID_COL +1)));
 	}
     
     public boolean isMidZone(int row, int col, int midRow, int midCol) {
-        return (row >= midRow && row <= midRow + 2 && col >= midCol && col <= midCol + 2);
+        return (row >= midRow-1 && row <= midRow + 1 
+        		&& col >= midCol-1 && col <= midCol + 1);
     }
     
     
     public MapUI() {
+    	
     	super();
+    	
+    	this.mapTiles = new Tile [MapConstant.MAP_ROWS][MapConstant.MAP_COLS];
+    	for(int i = 0;i<MapConstant.MAP_ROWS;i++) {
+    		for(int j = 0;j<MapConstant.MAP_COLS;j++) {
+    			mapTiles[i][j] = new Tile(i,j);
+    		}
+    	}
     	this.addMouseListener(new MouseAdapter() {
     		public void mousePressed(MouseEvent e) {
 
-                boolean bControlDown = e.isControlDown();
+                boolean bControlDown = e.isControlDown(); //if Control key is pressed
 
                 int mouseClickX = e.getX();
                 int mouseClickY = e.getY();
 
                 int gridRow = mouseClickY / GraphicConstant.TILE_SIZE;
                 int gridCol = mouseClickX / GraphicConstant.TILE_SIZE;
-                System.out.println("(" + gridCol + "," + gridRow + ")");
+                System.out.println("(" + gridRow + "," + gridCol + ")");
                 
                 if (_bSetMid) {
                     if ((gridRow < MapConstant.MAP_ROWS && gridRow + 1 < MapConstant.MAP_ROWS && gridRow + 2 < MapConstant.MAP_ROWS)
@@ -91,22 +100,22 @@ public class MapUI extends Map {
                     }
                 } 
                 else {
-                    if ((gridRow < MapConstant.MAP_ROWS)
-                            && (gridCol < MapConstant.MAP_COLS)) {
+                    if (Map.isValidTile(gridRow, gridCol)) {
                         if (bControlDown) {
-                        	setObstacleTile(gridRow, gridCol, false);
+                        	setObstacleTile(gridRow, gridCol, false); //clear obstacle if Ctrl is pressed
                         } 
                         else {
-                            setObstacleTile(gridRow, gridCol, true);
+                            setObstacleTile(gridRow, gridCol, true);  //else, set as obstacle
                         }
                     }
+                    //
+                    repaint();
                     System.out.println(generateMapString());
                 }
             }
         });
     	
     }   
-    
     
 
 
@@ -127,7 +136,7 @@ public class MapUI extends Map {
     public int getMidIndex(){
         return (midRow * 15) + midCol;
     }
-
+    /* MARK FOR DELETION
     private void addObstacle(int row, int col) {
         if (mapTiles[row][col].isObstacle()) {
             //remove obstacle
@@ -153,6 +162,7 @@ public class MapUI extends Map {
             }
         }
     }
+    */
 
     public void paintComponent(Graphics g) {
  
@@ -194,7 +204,7 @@ public class MapUI extends Map {
                     gridColor = GraphicConstant.C_GOAL;
                 } else if (isMidZone(mapRow,mapCol, midRow, midCol)){
                     gridColor = GraphicConstant.C_MID;
-                } else if (mapTiles[mapRow][mapCol].isObstacle()) {
+                } else if (super.isObstacleTile(mapRow, mapCol)) {
                     gridColor = GraphicConstant.C_OBSTACLE;
                 } else {
                     gridColor = GraphicConstant.C_FREE;
@@ -218,7 +228,7 @@ public class MapUI extends Map {
             {
                 for (int col = 0; col < MapConstant.MAP_COLS; col++) {
                 // Obstacle - Border walls
-                if (!mapTiles[row][col].isObstacle()) {
+                if (!super.getTile(row, col).isObstacle()) {
                     mapString += "0";
                 } else {
                     mapString += "1";
@@ -233,19 +243,20 @@ public class MapUI extends Map {
      * Loads the map from a map descriptor string<br>
      * Not including the virtual border surrounding the area!
      */
+    
     public void loadFromMapString(String mapString) {
 
         for (int row = 0; row < MapConstant.MAP_ROWS ; row++) 
         {
             for (int col = 0; col < (MapConstant.MAP_COLS); col++) {
-                int charIndex = (row * MapConstant.MAP_COLS )
-                        + col;
+            	//position of char on string
+                int charIndex = (row * MapConstant.MAP_COLS) + col;
 
                 // Obstacle - Border walls
                 if (mapString.charAt(charIndex) == '1') {
-                    mapTiles[row][col].setObstacle(true);
+                    super.setObstacleTile(row, col, true);
                 } else {
-                    mapTiles[row][col].setObstacle(false);
+                    super.setObstacleTile(row, col, false);
                 }
             }
         }
@@ -254,9 +265,10 @@ public class MapUI extends Map {
     public void clearMap() {
         for (int row = 0; row < (MapConstant.MAP_ROWS); row++) {
             for (int col = 0; col < (MapConstant.MAP_COLS); col++) {
-                mapTiles[row][col].setObstacle(false);;
+                super.getTile(row, col).setObstacle(false);
             }
         }
+        this.repaint();
     }
 
     private class ColorTile {
