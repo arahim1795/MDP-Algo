@@ -44,7 +44,15 @@ public class Tile {
 	 * @param obstacle If set to true, tile is set as obstacle
 	 */
 	public void setObstacle(boolean obstacle) {
+<<<<<<< HEAD
 		this.obstacle = true;
+=======
+		this.obstacle = obstacle;
+	}
+	
+	public void removeObstacle() {
+		this.obstacle=false;
+>>>>>>> origin/b0.41.sharon
 	}
 
 	public boolean isExplored() {
@@ -67,6 +75,13 @@ public class Tile {
 		return this.virtualWall;
 	}
 
+<<<<<<< HEAD
+=======
+	public void setPersistent(){
+		this.persistent = true;
+	}
+	
+>>>>>>> origin/b0.41.sharon
   
   /**
 	 * Set Tile as a virtual wall (i.e. Tile must not be traversed by robot)

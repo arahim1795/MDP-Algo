@@ -1,7 +1,9 @@
 package map;
 
 import java.util.ArrayList;
+import javax.swing.*;
 import java.util.List;
+import javax.swing.*;
 
 import javax.swing.JPanel;
 
@@ -12,7 +14,6 @@ import javax.swing.*;
  * @author 18/19 S1 G3
  */
 public class Map extends JPanel{
-	
 	/**
 	 * 
 	 */
