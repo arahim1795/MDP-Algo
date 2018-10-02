@@ -38,10 +38,19 @@ public class Sensor {
 	 * @param row
 	 * @param dir
 	 */
-	public void setSensor(int col, int row, DIRECTION dir) {
-		sensorRow = row;
-		sensorCol = col;
-		sensorDir = dir;
+	public void setSensor(int robotRow, int robotCol, DIRECTION dir) {
+		switch (dir) {
+			case UP:
+				
+				break;
+			case DOWN:
+				break;
+			case LEFT:
+				break;
+			default:
+				break;
+		}
+		
 	}
 	
 	// Simulator Function(s)

@@ -129,7 +129,7 @@ public class Map extends JPanel{
 	 * respectively, false otherwise
 	 */
 	public static boolean isValidTile(int checkRow, int checkCol){
-		return checkRow > 0 && checkRow < row && checkCol > 0 && checkCol < col;
+		return checkRow >= 0 && checkRow < row && checkCol >= 0 && checkCol < col;
 	}
 	
 	/**
