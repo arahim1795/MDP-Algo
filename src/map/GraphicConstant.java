@@ -8,9 +8,10 @@ import java.awt.*;
  * @author 
  */
 
-class GraphicsConstants {
+class GraphicConstant {
     public static final int CELL_LINE_WEIGHT = 2;
 
+    public static final Color C_GRID_LINE = Color.GRAY;
     public static final Color C_START = Color.BLUE;
     public static final Color C_MID = Color.YELLOW;
     public static final Color C_GOAL = Color.GREEN;
