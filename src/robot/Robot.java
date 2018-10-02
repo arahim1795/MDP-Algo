@@ -305,5 +305,10 @@ public class Robot {
         }
 
     }
+    private void sendMovement(MOVEMENT m, boolean sendMovetoAndroid){
+    	Comms.sendMsg(MOVEMENT.print(m)+"",Comms.INSTRUCTIONS);
+    	
+    	
+    }
     
 }

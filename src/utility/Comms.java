@@ -11,6 +11,15 @@ import java.util.Arrays;
  */
 public class Comms {
 	
+	//headers for message
+    public static final String EX_START = "EX_START";       // Android --> PC
+    public static final String FP_START = "FP_START";       // Android --> PC
+    public static final String MAP_STRINGS = "MAP";         // PC --> Android
+    public static final String BOT_POS = "BOT_POS";         // PC --> Android
+    public static final String BOT_START = "BOT_START";     // PC --> Arduino
+    public static final String INSTRUCTIONS = "INSTR";      // PC --> Arduino
+    public static final String SENSOR_DATA = "SDATA";       // Arduino --> PC
+    
 	private static String robotName = "192.168.3.1";
 	private static int portNum = 1224;
 	

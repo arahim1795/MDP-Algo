@@ -8,8 +8,8 @@ import java.awt.*;
  * @author 
  */
 
-class GraphicsConstants {
-    public static final int CELL_LINE_WEIGHT = 2;
+class GraphicConstant {
+    public static final int TILE_LINE_WEIGHT = 2;
 
     public static final Color C_START = Color.BLUE;
     public static final Color C_MID = Color.YELLOW;
@@ -34,4 +34,7 @@ class GraphicsConstants {
 
     public static final int MAP_H = 600;
     public static final int MAP_X_OFFSET = 120;
+    
+    // Prevent Instantiation
+ 	private GraphicConstant() {}
 }
