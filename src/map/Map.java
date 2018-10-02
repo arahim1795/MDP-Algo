@@ -49,7 +49,7 @@ public class Map extends JPanel{
 	 * @param row
 	 * @return
 	 */
-	public Tile getTile(int col, int row){
+	public Tile getTile(int row, int col){
 		return field[row][col];
 	}
 	
@@ -61,11 +61,13 @@ public class Map extends JPanel{
 	 * @param col
 	 * @param obstacle
 	 */
-	public void setObstacleTile(int col, int row,boolean obstacle) {
+	public void setObstacleTile(int row, int col,boolean obstacle) {
 		this.field[row][col].setObstacle(obstacle);
+		/*
 		for(int i = -1; i < 2; i++)
 			for(int j = -1; j < 2; j++)
-				if(i != 0 || j != 0) field[row+i][col+j].setVirtualWall(true);
+				if((i != 0 || j != 0) && isValidTile(row+i, col+j)) field[row+i][col+j].setVirtualWall(true);
+	*/
 	}
 
 	/**
@@ -123,7 +125,7 @@ public class Map extends JPanel{
 	 * @return true if x and y-coordinates are valid, false otherwise
 	 */
 	public static boolean isValidTile(int row, int col){
-		return row > 0 && row < MapConstant.MAP_ROWS && col > 0 && col < MapConstant.MAP_COLS;
+		return row >= 0 && row <= MapConstant.MAP_ROWS && col >= 0 && col <= MapConstant.MAP_COLS;
 	}
 	
 	/**
@@ -131,10 +133,12 @@ public class Map extends JPanel{
 	 * @param coor
 	 * @return
 	 */
-	public static boolean isBoundaryTile(int col, int row) {
+	public static boolean isBoundaryTile(int row, int col) {
 		return col == 0 || col == MapConstant.MAP_COLS || row == 0 || row == MapConstant.MAP_ROWS;
 	}
-	
+	public boolean isObstacleTile(int row, int col) {
+		return this.field[row][col].isObstacle();
+	}
 	/**
 	 * Convert from map read by Reader in List of Strings form to Tile[][] map
 	 * @param mapcomp List of strings that represent the map

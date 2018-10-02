@@ -7,9 +7,14 @@ public class Tile {
 
 	private boolean explored = false;
 
+	private boolean virtualWall;
+	private boolean obstacle ;
+	private boolean persistent;
+	/*
 	private boolean virtualWall= false;
 	private boolean obstacle = false;
 	private boolean persistent = false;
+	*/
 	private int x;
 	private int y;
 	
@@ -21,6 +26,10 @@ public class Tile {
 	public Tile(int row, int col) {
 		this.x = col;
 		this.y = row;
+		
+		this.virtualWall = false;
+		this.obstacle = false;
+		this.persistent = false;
 	}
 	
 	public int getRow(){
