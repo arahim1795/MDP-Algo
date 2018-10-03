@@ -56,6 +56,7 @@ public class Simulator {
 
 	public static void main(String[] args) {
 		
+		
 		roboCop = new Robot(RobotConstant.DEFAULT_START_ROW, RobotConstant.DEFAULT_START_COL , startDir, false);
 
 		

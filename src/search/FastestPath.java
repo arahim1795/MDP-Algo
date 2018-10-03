@@ -1,7 +1,7 @@
 package search;
 
+import java.io.FileWriter;
 import java.util.ArrayList;
-
 import robot.Robot;
 import robot.RobotConstant;
 import robot.RobotConstant.DIRECTION;
@@ -33,6 +33,8 @@ public class FastestPath {
 	private int loopCount;
 	private boolean exploreMode = false;
 	
+	private StringBuilder log;
+	
 	/**
 	 * 
 	 * @param exploredMap
@@ -56,6 +58,8 @@ public class FastestPath {
 	 * @param bot
 	 */
     public void init(Map map, Robot bot){
+    	//init log file
+    	this.log = new StringBuilder();
 		//initialize variables
 		this.bot = bot;
 		this.exploredMap = map;
@@ -86,6 +90,9 @@ public class FastestPath {
 		//initialize starting point
 		gCosts[bot.getRobotRow()][bot.getRobotCol()] = 0;
 		this.loopCount = 0;
+		//TODO
+		//System.out.println(bot.getRobotRow() + "." +bot.getRobotCol());
+		//printGCosts();
 	}	
 	
 	/*Private methods*/
@@ -218,7 +225,10 @@ public class FastestPath {
 			
 			current = 	minimumCostTile(goalRow,goalCol);
 			//TODO dummy text
-			System.out.println("visiting" + "(" + current.getRow() + "," + current.getCol()+")");
+			String visitlog = new String("visiting" + "(" + current.getRow() + "," + current.getCol()+")");
+			System.out.println(visitlog);
+			log.append(visitlog);
+			log.append(System.lineSeparator());
 			
 			//point robot 
 			if(parents.containsKey(current)){
@@ -236,6 +246,7 @@ public class FastestPath {
 				//TODO dummy debug
 				System.out.println(loopCount);
 				printPath(path);
+				writeGCosts(log);
 				return executeFastestPath(path, goalRow,goalCol);
 			}
 			
@@ -288,6 +299,10 @@ public class FastestPath {
             		}
             	}
             }
+            
+            //TODO dummy debug
+            printGCosts();
+            //System.out.println();
 			
 		}while(!toVisit.isEmpty());
 		return null;
@@ -325,6 +340,7 @@ public class FastestPath {
 			
 			//if robot not facing correct direction, orientate robot
 			if(tempBot.getRobotDir() != targetDir){
+				System.out.println("Target Direction: "+targetDir+", Bot DirectionL "+tempBot.getRobotDir());
 				m = getTargetMove(tempBot.getRobotDir(),targetDir);
 			}else{
 				m = MOVEMENT.FORWARD;
@@ -499,6 +515,61 @@ public class FastestPath {
 
         System.out.println("\n");
     }
-	//print gCosts array	
-	//
+	private void printGCosts() {
+		String header = new String("   ");
+		for(int k=0;k<MapConstant.MAP_COLS;k++){
+			header += k;
+			if(k<10){header += " ";}
+			header+="|";
+		}
+		log.append(header);
+		log.append(System.lineSeparator());
+		log.append(System.lineSeparator());
+        for (int i = 0; i < MapConstant.MAP_ROWS; i++) {
+        	String line = new String(i + " ");
+        	if(i<10){ line+=" ";}
+            for (int j = 0; j < MapConstant.MAP_COLS; j++) {
+            	int n = (int) gCosts[i][j];
+            	if(n == 9999){ n = -1;}
+            	if(n < 10 && n>=0){           		
+            		line+=" ";
+            	}
+            	
+            	line+=n+"|";
+            }
+            line+= "\n";
+            System.out.println(line);
+            log.append(line);
+            log.append(System.lineSeparator());
+
+        }
+        log.append(System.lineSeparator());
+    }
+	
+	private static void writeGCosts(StringBuilder s){
+		String fileName = "FPlog";
+		String outStr = s.toString();
+        // Allows overriding of existing text files
+        if (!fileName.endsWith(".txt")) {
+            fileName += ".txt";
+        }
+        try{
+        // Change file writing part to a better implementation
+        FileWriter fw = new FileWriter(fileName);
+        //TODO debug dummy
+        fw.write(outStr);
+        fw.flush();
+        fw.close();
+        }
+        catch(Exception e){
+        	e.printStackTrace();
+        }
+	}
+	
+	public void printDecisionlog(Tile g){
+		for(Tile t : toVisit){
+			System.out.println("toVisit: "+t.getRow()+","+t.getCol()+" : "+getGCost(t, g, bot.getRobotDir()));
+		}
+		
+	}
 }

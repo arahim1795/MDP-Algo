@@ -251,7 +251,7 @@ public class Robot {
 	 * @return
 	 */
 	private DIRECTION updateTurnDirection(MOVEMENT m){
-		if (m == MOVEMENT.TURNLEFT) return DIRECTION.getRight(robotDir);
+		if (m == MOVEMENT.TURNLEFT) return DIRECTION.getLeft(robotDir);
 		else return DIRECTION.getRight(robotDir);
 	}
 	
