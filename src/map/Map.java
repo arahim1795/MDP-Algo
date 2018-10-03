@@ -381,7 +381,7 @@ public class Map extends JPanel{
         int c = bot.getRobotCol();
         
         //TODO dummy
-        System.out.println(r + "," + c);
+        //System.out.println(r + "," + c);
         //g.fillOval((c - 1) * GraphicConstant.TILE_SIZE + GraphicConstant.ROBOT_X_OFFSET + GraphicConstant.MAP_X_OFFSET, GraphicConstant.MAP_H - (r * GraphicConstant.TILE_SIZE + GraphicConstant.ROBOT_Y_OFFSET), GraphicConstant.ROBOT_W, GraphicConstant.ROBOT_H);
         g.fillOval(
         		(c-1) * (GraphicConstant.TILE_SIZE)+ GraphicConstant.ROBOT_X_OFFSET, 

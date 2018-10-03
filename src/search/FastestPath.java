@@ -472,9 +472,9 @@ public class FastestPath {
             case LEFT:
                 rowMIN=-1;rowMAX=1;colMIN=-2;colMAX=-2;
         }
-        for(int x=row+rowMIN;x<=row+rowMAX;x++){
-        	for(int y=col+colMIN;y<=col+colMAX;y++){
-        		if(this.exploredMap.getTile(x, y).isObstacle()){return false;}        		
+        for(int x=rowMIN;x<=rowMAX;x++){
+        	for(int y=colMIN;y<=colMAX;y++){
+        		if(Map.isValidTile(row+x, col+y)&&this.exploredMap.getTile(row+x, col+y).isObstacle()){return false;}        		
         	}
         }
         //if no obstacles found

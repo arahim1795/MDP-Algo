@@ -141,6 +141,10 @@ public class Robot {
 	
 	
 	// Setter
+	public void setBotPos(int row, int col){
+		robotRow = row;
+		robotCol = col;
+	}
 	/**
 	 * 
 	 * @param robotRow

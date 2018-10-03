@@ -19,7 +19,7 @@ import robot.Robot;
 
 import search.FastestPath;
 import search.Explore;
-
+import utility.Comms;
 
 public class Simulator {
 	
@@ -41,7 +41,7 @@ public class Simulator {
     
     // The robot
     private static robot.Robot roboCop = null;
-    private static final boolean realRun = true;
+    private static final boolean realRun = false;
 
     // Map width & length used to render real & robot map
     private static int mapWidth;
@@ -52,7 +52,7 @@ public class Simulator {
 
 	public static void main(String[] args) {
 		
-		roboCop = new Robot(RobotConstant.DEFAULT_START_ROW, RobotConstant.DEFAULT_START_COL , startDir, true);
+		roboCop = new Robot(RobotConstant.DEFAULT_START_ROW, RobotConstant.DEFAULT_START_COL , startDir, false);
 
 		
 		/*if (!realRun) {
@@ -110,7 +110,39 @@ public class Simulator {
         }
     }
 	
+	
+    
+	
 	private static void addButtons() {
+		
+		//init classes
+		class FastestPathThread extends SwingWorker<Integer, String> {
+	        protected Integer doInBackground() throws Exception {
+	            roboCop.setBotPos(RobotConstant.DEFAULT_START_ROW, RobotConstant.DEFAULT_START_COL);
+	            exploredMap.repaint();
+
+	            if (realRun) {
+	                while (true) {
+	                    System.out.println("Waiting for FP_START...");
+	                    String msg = Comms.recvMsg();
+	                    if (msg.equals(CommMgr.FP_START)) break;
+	                }
+	            }
+
+	            FastestPath fastestPathAlgo;
+	            fastestPathAlgo = new FastestPath(exploredMap, roboCop);
+
+	            fastestPathAlgo.searchFastestPath(RobotConstant.DEFAULT_GOAL_ROW, RobotConstant.DEFAULT_GOAL_COL);
+
+	            return 222;
+	        	}
+		}
+	        
+	        /*
+	         * 
+	         * 
+	         * 
+	         */
 		mainButtons = new JPanel();
 		
 		//load map from string
@@ -259,8 +291,7 @@ public class Simulator {
 //                roboCop.setRobotRow(RobotConstant.DEFAULT_START_ROW); 
   //              roboCop.setRobotCol(RobotConstant.DEFAULT_START_COL);
                 exploredMap.repaint();
-                FastestPath _FPAlgo = new FastestPath(exploredMap,roboCop);
-                _FPAlgo.searchFastestPath(MapConstant.GOAL_GRID_ROW, MapConstant.GOAL_GRID_COL);
+                new FastestPathThread().execute();
                
                 
             }
@@ -268,5 +299,6 @@ public class Simulator {
         mainButtons.add(btn_FastestPath);
 
 	}
+	
 	
 }
