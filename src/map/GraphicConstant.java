@@ -9,7 +9,7 @@ import java.awt.*;
  */
 
 class GraphicConstant {
-    public static final int TILE_LINE_WEIGHT = 2;
+    public static final int TILE_LINE_WEIGHT = 1;
 
 
     public static final Color C_GRID_LINE = Color.GRAY;
@@ -27,7 +27,7 @@ class GraphicConstant {
     public static final int ROBOT_H = 70;
 
     public static final int ROBOT_X_OFFSET = 10;
-    public static final int ROBOT_Y_OFFSET = 20;
+    public static final int ROBOT_Y_OFFSET = 10;
 
     public static final int ROBOT_DIR_W = 10;
     public static final int ROBOT_DIR_H = 10;
