@@ -19,8 +19,8 @@ import javax.swing.*;
  * 
  */
 public class Map extends JPanel{
-	private Tile[][] field;
-	private static int row = MapConstant.MAP_ROWS, col = MapConstant.MAP_COLS ;
+	private Tile[][] field = null;
+	public static int row = MapConstant.MAP_ROWS, col = MapConstant.MAP_COLS ;
 	
 	// Constructor
 	/**
@@ -52,53 +52,43 @@ public class Map extends JPanel{
 		return field[row][col];
 	}
 	
-	// Setters
-	// TODO setObstacle & setBoundary to merge, remove redundancies
+	
+	// Getter(s)
+	/**
+	 * 
+	 * @param row
+	 * @param col
+	 * @return
+	 */
+	public boolean isObstacleTile(int row, int col) {
+		return field[row][col].isObstacle();
+	}
+	
+	
+	// Setter(s)
 	/**
 	 * Sets Tile as an obstacles, adjacent Tile(s) are set as virtualWalls 
 	 * @param row
 	 * @param col
-	 * @param obstacle
+	 * @param bool
 	 */
-	public void setObstacleTile(int row, int col,boolean obstacle) {
-		field[row][col].setObstacle(obstacle);
-		for (int i = -1; i < 2; i++)
-			for (int j = -1; j < 2; j++)
-				if (!((i == 0) && (j == 0))) field[row+i][col+j].setVirtualWall(true);
+	public void setObstacleTile(int row, int col, boolean bool) {
+		Tile tile = field[row][col];
+		List<int[]> adjCoor = getAdjCoor(row,col);
+		
+		if (!adjCoor.isEmpty())
+			for (int[] coor : adjCoor)
+				field[coor[0]][coor[1]].setVirtualWall(bool);
+		else System.out.println("No valid adjacent Tile");		
 	}
-
-	// TODO account for format difference in getAdjCoor (i.e. [row,col] instead of [col,row])
-	/*
-	public void setBoundary() {
-		for (Tile[] row : field) 
-			for (Tile tile : row) {
-				// reset virtualWall settings
-				tile.setVirtualWall(false); 
-				
-				// get coordinates
-				int x = tile.getRow(), y = tile.getCol();
-				
-				// find adjacent coordinate and set them as virtualWall if
-				// current Tile is either an obstacle or located at map boundary
-				List<int[]> adjCoors = getAdjCoor(x, y);
-				if (tile.isObstacle() || isBoundaryTile(x, y))
-					if (!adjCoors.isEmpty()) {
-						for (int[] adj : adjCoors) {
-							x = adj[0]; y = adj[1];
-							Tile tmp = field[y][x];
-							if (!tmp.isObstacle()) tmp.setVirtualWall(true);
-						}
-					}
-				
-			}
-	}*/
 
 	// Validity Functions
 	/**
 	 * 
 	 * @param row 
 	 * @param col 
-	 * @return list of integer arrays in [row,col] format (valid adjacent coordinates to passed row & col)
+	 * @return list of integer arrays in [row(y),col(x)] format (valid adjacent coordinates to
+	 * passed row(x) & col(y))
 	 */
 	public static List<int[]> getAdjCoor(int row, int col) {
 		List<int[]> listCoor = new ArrayList<int[]>();
@@ -111,7 +101,7 @@ public class Map extends JPanel{
 				r = row + y;
 				c = col + x;
 				
-				if (!((y == 0) || (x == 0))) {
+				if (!((y == 0) || (x == 0)) && isValidTile(r,c)) {
 					coor[0] = r;
 					coor[1] = c;
 					listCoor.add(coor);
@@ -143,35 +133,23 @@ public class Map extends JPanel{
 		return checkRow == 0 || checkRow == (row - 1) || checkCol == 0 || checkCol == (col - 1);
 	}
 	
-	/**
-	 * 
-	 * @param row
-	 * @param col
-	 * @return
-	 */
-	public boolean isObstacleTile(int row, int col) {
-		return this.field[row][col].isObstacle();
-	}
-	
-	/* TODO convert into row,col format
+	// Other Function(s)
 	/**
 	 * Convert from map read by Reader in List of Strings form to Tile[][] map
-	 * @param mapcomp List of strings that represent the map
-	 
-	public void parseMap(List<String> mapcomp) {
-		for (int i = 0; i < this.col; i++) {
-			for (int j = 0; j < this.row; j++) {
-				switch (mapcomp.get(i).charAt(j)) {
+	 * @param mapStr Map represented by a series of String
+	 */
+	public void parseMap(List<String> mapStr) {
+		for (int r = 0; r < row; r++) {
+			for (int c = 0; c < col; c++) {
+				switch (mapStr.get(r).charAt(c)) {
 					case '1':
-						this.field[i][j].setObstacle(true);
-						break;
+						field[r][c].setObstacle(true);
 					default:
 						break;
 				}
 			}
 		}
-		setBoundary();
-	} */
+	}
 	
 	/**
 	 * Prints map to console for debugging purposes

@@ -14,10 +14,9 @@ import java.util.Stack;
 import java.util.ArrayList;
 
 /**
- * @author ARAHIM-WPC
+ * @author 
  */
 public class FastestPath {
-
 	
 	private ArrayList<Tile> toVisit;
 	private ArrayList<Tile> visited;
@@ -26,7 +25,7 @@ public class FastestPath {
 	private Tile current;
 	private Tile[] neighbours;
 	private Map exploredMap;
-	private final Map realMap; //real physical map
+	private Map realMap; //real physical map
 	private DIRECTION curDir;
 	private double[][] gCosts;
 	private Robot bot; //KIV
@@ -35,12 +34,11 @@ public class FastestPath {
 	
 	/**
 	 * 
-	 * @param exploredMap
+	 * @param mapExplore
 	 * @param bot
 	 */
-    public void FastestPathAlgo(Map exploredMap, Robot bot) {
-        //this.realMap = null;
-        init(exploredMap, bot);
+    public FastestPath(Map mapExplore, Robot bot) {
+        init(mapExplore, bot);
     }
 
     public FastestPath(Map exploredMap, Robot bot, Map realMap) {
@@ -344,7 +342,7 @@ public class FastestPath {
                 this.exploredMap.repaint();
                 
                 if (this.exploreMode) {
-                    bot.setSensors();
+                    bot.moveSensor();
                     // TODO correct sensing to do correct stuff
                     // bot.sense(this.exploredMap, this.realMap);
                     this.exploredMap.repaint();

@@ -2,11 +2,14 @@ package search;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import map.*;
 import robot.*;
 import robot.RobotConstant.DIRECTION;
 import robot.RobotConstant.MOVEMENT;
+
+import search.FastestPath;
 
 public class Explore {
 	
@@ -15,7 +18,10 @@ public class Explore {
 	
 	// Map Exploration Tracker
 	private int coverage;
-	private Map map;
+	private int explored; // explore counter
+	private long timeStart, timeEnd;
+	private long duration;
+	private Map mapExplore;
 	
 	// Obstacles Tracker
 	private ArrayList<ExploreTile> obstacles = new ArrayList<ExploreTile>();
@@ -24,10 +30,11 @@ public class Explore {
 	private Map mapActual;
 	
 	// Constructor
-	public Explore(Robot bot, Map actual) {
+	public Explore(Robot bot, Map actual, long minutes) {
 		robot = bot;
-		map = new Map();
+		mapExplore = new Map();
 		mapActual = actual;
+		duration = TimeUnit.MINUTES.toMillis(minutes);
 	}
 	
 	// Getter(s)
@@ -36,23 +43,52 @@ public class Explore {
 	 * @return
 	 */
 	public Map getMap() {
-		return map;
+		return mapExplore;
 	}
 	
-	// Other Function(s)
-	/**
-	 * 
-	 * @param map
-	 */
-	public void explore(Map map, Robot bot) {
-		mapActual = map;
-		robot = bot;
+	// Main Functions
+	public void setupExplore() {
+		if (robot.isRealBot()) {
+			// TODO: incorporate real robot setup if any in future
+			System.out.println("Physical Robot Functions are unsupported as of now");
+		}
 		
+		System.out.println("Setting up...");
+		
+		timeStart = System.currentTimeMillis();
+		timeEnd = timeStart + duration;
+		
+		senseEnv();
+		updateExplore();
+		
+		// kickstart exploration function
+		explore();
+		
+	}
+	
+	public void explore() {
+		// TODO make termination dependent on another variable
+		// explore set to terminate after 3 minutes (only)
 		do {
 			move();
-		} while (!RobotConstant.isAtStart(bot.getRobotRow(), bot.getRobotCol()));
+			updateExplore();
+		} while (System.currentTimeMillis() <= timeEnd);
+		goToStart();
 	}
 	
+	private void goToStart() {
+		
+		int row = RobotConstant.DEFAULT_START_ROW;
+		int col = RobotConstant.DEFAULT_START_COL;
+		
+		if (robot.getRobotRow() != row && robot.getRobotCol() != col) {
+			FastestPath fp = new FastestPath(mapExplore, robot);
+			fp.searchFastestPath(row, col);
+		}
+
+	}
+	
+	// Support Function
 	/**
 	 * 
 	 */
@@ -194,8 +230,19 @@ public class Explore {
 	/**
 	 * 
 	 */
-	private void updateRobotMap() {
+	private void senseEnv() {
+		robot.moveSensor();
+		robot.sense(mapExplore, mapActual);
+	}
+	
+	private void updateExplore() {
+		int count = 0;
+		for (int r = 0; r < Map.row; r++) 
+			for (int c = 0; c < Map.col; c++)
+				if (mapExplore.getTile(r, c).isExplored()) count++;
 		
+		explored = count; 
+		System.out.println("Explored: " + count);
 	}
 
 }
