@@ -14,7 +14,7 @@ import map.GraphicConstant;
 import robot.Robot;
 import robot.RobotConstant;
 
-public class MapUI extends Map {
+/*public class MapUI extends Map {
 	
 	private Tile[][] mapTiles;
 	private Robot bot;
@@ -170,7 +170,7 @@ public class MapUI extends Map {
     }
     */
 
-    public void paintComponent(Graphics g) {
+ /*   public void paintComponent(Graphics g) {
  
         if (!_bMeasured) {
             System.out.println("Map width: " + _mapWidth + ", Map height: " + _mapWidth);
@@ -268,14 +268,14 @@ public class MapUI extends Map {
         }
 
         return mapString;
-    }
+    } */
 
     /**
      * Loads the map from a map descriptor string<br>
      * Not including the virtual border surrounding the area!
      */
     
-    public void loadFromMapString(String mapString) {
+ /*   public void loadFromMapString(String mapString) {
 
         for (int row = 0; row < MapConstant.MAP_ROWS ; row++) 
         {
@@ -300,7 +300,7 @@ public class MapUI extends Map {
             }
         }
         this.repaint();
-    }
+    } 
 
     private class ColorTile {
 
@@ -322,4 +322,4 @@ public class MapUI extends Map {
             this.gridSize = borderSize - (GraphicConstant.TILE_LINE_WEIGHT * 2);
         }
     }
-}
+} */
