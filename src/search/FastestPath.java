@@ -215,7 +215,10 @@ public class FastestPath {
 		do{
 			loopCount++;
 			//get next Tile (with minimum cost) to expand 
+			
 			current = 	minimumCostTile(goalRow,goalCol);
+			//TODO dummy text
+			System.out.println("visiting" + "(" + current.getRow() + "," + current.getCol()+")");
 			
 			//point robot 
 			if(parents.containsKey(current)){
@@ -307,6 +310,7 @@ public class FastestPath {
 		
 		ArrayList<MOVEMENT> movementList = new ArrayList<>();
 		Robot tempBot = new Robot(bot.getRobotRow(),bot.getRobotCol(), false);
+		tempBot.setRobotDir(bot.getRobotDir());
 		//tempBot.setSpeed(0);
 		//while robot position not on goal tile
 		while((tempBot.getRobotRow()!= goalRow) || (tempBot.getRobotCol()!= goalCol)){

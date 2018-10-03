@@ -20,6 +20,8 @@ import robot.Robot;
 import search.FastestPath;
 import search.Explore;
 import utility.Comms;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 public class Simulator {
 	
@@ -37,11 +39,13 @@ public class Simulator {
 	private static int robotSize = RobotConstant.ROBOT_SIZE;
     private static int startPosRow = RobotConstant.DEFAULT_START_ROW;
     private static int startPosCol = RobotConstant.DEFAULT_START_COL;
-    private static DIRECTION startDir = RobotConstant.DEFAULT_START_DIR;
+    //private static DIRECTION startDir = RobotConstant.DEFAULT_START_DIR;
+    private static DIRECTION startDir = DIRECTION.RIGHT;
     
     // The robot
     private static robot.Robot roboCop = null;
     private static final boolean realRun = false;
+    private static boolean ready = false;
 
     // Map width & length used to render real & robot map
     private static int mapWidth;
@@ -111,31 +115,83 @@ public class Simulator {
     }
 	
 	
-    
+    private static void formatButton(JButton btn) {
+        btn.setFont(new Font("Arial", Font.BOLD, 18));
+        btn.setMargin(new Insets(10, 15, 10, 15));
+        btn.setFocusPainted(false);
+    }
 	
 	private static void addButtons() {
 		
 		//init classes
-		class FastestPathThread extends SwingWorker<Integer, String> {
+		
+		 class testThread extends SwingWorker<Void, Void> {
+		    
+		    //private Simulator simulator = null;
+		    private final String prReallyDone = "ReallyDone";
+		    
+		    private void whenReallyDone() {
+		        //simulator.afterWorkerFinishes();
+		        System.out.println("done");
+		    }
+		    
+		    public testThread() {
+		        //this.simulator = sim;
+		        
+		        getPropertyChangeSupport().addPropertyChangeListener(prReallyDone,
+		            new PropertyChangeListener() {
+		            public void propertyChange(PropertyChangeEvent e) {
+		                if (e.getNewValue().equals(true)) {
+		                    whenReallyDone();
+		                }
+		            }
+		        });
+		    }
+		    
+		    protected Void doInBackground() throws Exception {
+		        String k = "this is a test";
+		        String j = k;
+		        
+		        while (true) {
+		            
+		            System.out.println("waiting");
+		            if(ready){		            	
+	    	            break;
+		            }
+		        }
+            	System.out.println("running FP");
+		        FastestPath fastestPathAlgo;
+	            fastestPathAlgo = new FastestPath(exploredMap, roboCop);
+	            fastestPathAlgo.searchFastestPath(MapConstant.GOAL_GRID_ROW, MapConstant.GOAL_GRID_COL);
+		        
+		        firePropertyChange(prReallyDone, false, true);
+		        return null;
+		    }
+		}
+		
+		 //TODO debug
+		class FastestPathThread extends SwingWorker<Integer, Void> {
+            
+			@Override
 	        protected Integer doInBackground() throws Exception {
 	            roboCop.setBotPos(RobotConstant.DEFAULT_START_ROW, RobotConstant.DEFAULT_START_COL);
 	            exploredMap.repaint();
-
-	            if (realRun) {
-	                while (true) {
-	                    System.out.println("Waiting for FP_START...");
-	                    String msg = Comms.recvMsg();
-	                    if (msg.equals(CommMgr.FP_START)) break;
-	                }
+	            while(true){
+	            	if(ready){
+	            		FastestPath fastestPathAlgo;
+	    	            fastestPathAlgo = new FastestPath(exploredMap, roboCop);
+	    	            fastestPathAlgo.searchFastestPath(RobotConstant.DEFAULT_GOAL_ROW, RobotConstant.DEFAULT_GOAL_COL);
+	    	            break;
+	            	}
 	            }
+	            
+				return 24;
 
-	            FastestPath fastestPathAlgo;
-	            fastestPathAlgo = new FastestPath(exploredMap, roboCop);
-
-	            fastestPathAlgo.searchFastestPath(RobotConstant.DEFAULT_GOAL_ROW, RobotConstant.DEFAULT_GOAL_COL);
-
-	            return 222;
 	        	}
+			protected void done(){
+				System.out.println("FPAlgo Complete");
+				return;
+			}
 		}
 	        
 	        /*
@@ -144,12 +200,21 @@ public class Simulator {
 	         * 
 	         */
 		mainButtons = new JPanel();
-		
+		//TODO ready button
+				JButton btn_ready = new JButton("READY");
+		        formatButton(btn_ready);
+
+		        btn_ready.addMouseListener(new MouseAdapter() {
+		            public void mousePressed(MouseEvent e) {
+
+		                ready = true;
+		            }
+		        });
+		        mainButtons.add(btn_ready);
 		//load map from string
 		JButton btn_loadMap = new JButton("Load Map");
-        btn_loadMap.setFont(new Font("Arial", Font.BOLD, 18));
-        btn_loadMap.setMargin(new Insets(10, 15, 10, 15));
-        btn_loadMap.setFocusPainted(false);
+		
+        formatButton(btn_loadMap);
 
         btn_loadMap.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
@@ -291,7 +356,10 @@ public class Simulator {
 //                roboCop.setRobotRow(RobotConstant.DEFAULT_START_ROW); 
   //              roboCop.setRobotCol(RobotConstant.DEFAULT_START_COL);
                 exploredMap.repaint();
-                new FastestPathThread().execute();
+                //TODO dummy debug
+                System.out.println("FP");
+                new testThread().execute();
+                //new FastestPathThread().execute();
                
                 
             }

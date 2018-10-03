@@ -323,7 +323,7 @@ public class Map extends JPanel{
         	//TODO dummy debug
             System.out.println("Map width: " + _mapWidth + ", Map height: " + _mapWidth);
             System.out.println(bot.getRobotRow()+","+bot.getRobotCol());
-
+            System.out.println((bot.getRobotCol()+2) * GraphicConstant.TILE_SIZE - GraphicConstant.ROBOT_X_OFFSET - 5);
             // Calculate the map grids for rendering
             
             mapColorTiles = new ColorTile [MapConstant.MAP_ROWS][MapConstant.MAP_COLS];
@@ -400,7 +400,7 @@ public class Map extends JPanel{
                 		GraphicConstant.ROBOT_DIR_H);
                 break;
             case RIGHT:
-                g.fillOval((c) * GraphicConstant.TILE_SIZE - GraphicConstant.ROBOT_X_OFFSET - 5, 
+                g.fillOval((c+1) * GraphicConstant.TILE_SIZE + GraphicConstant.ROBOT_X_OFFSET - 5, 
                 		(r-1) * GraphicConstant.TILE_SIZE + GraphicConstant.ROBOT_Y_OFFSET + 30,
                 		GraphicConstant.ROBOT_DIR_W,
                 		GraphicConstant.ROBOT_DIR_H);
