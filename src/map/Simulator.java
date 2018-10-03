@@ -50,7 +50,7 @@ public class Simulator {
 
 	public static void main(String[] args) {
 		
-		roboCop = new Robot(1,1 , startDir, true);
+		roboCop = new Robot(2,2 , startDir, true);
 		
 		if (!realRun) {
 			realMap = new MapUI (roboCop);

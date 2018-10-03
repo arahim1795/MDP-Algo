@@ -17,7 +17,7 @@ import robot.RobotConstant;
 public class MapUI extends Map {
 	
 	private Tile[][] mapTiles;
-	private final Robot bot;
+	private Robot bot;
 	
 	// For measuring size of the canvas
     private boolean _bMeasured = false;
@@ -49,6 +49,8 @@ public class MapUI extends Map {
         return (row >= midRow-1 && row <= midRow + 1 
         		&& col >= midCol-1 && col <= midCol + 1);
     }
+    
+	
     
     
     public MapUI(Robot bot) {
