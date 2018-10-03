@@ -27,7 +27,7 @@ class GraphicConstant {
     public static final int ROBOT_H = 70;
 
     public static final int ROBOT_X_OFFSET = 10;
-    public static final int ROBOT_Y_OFFSET = 20;
+    public static final int ROBOT_Y_OFFSET = 10;
 
     public static final int ROBOT_DIR_W = 10;
     public static final int ROBOT_DIR_H = 10;

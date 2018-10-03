@@ -26,7 +26,7 @@ public class FastestPath {
 	private Tile current;
 	private Tile[] neighbours;
 	private Map exploredMap;
-	private final Map realMap; //real physical map
+	private Map realMap; //real physical map
 	private DIRECTION curDir;
 	private double[][] gCosts;
 	private Robot bot; //KIV
@@ -38,16 +38,16 @@ public class FastestPath {
 	 * @param exploredMap
 	 * @param bot
 	 */
-    public void FastestPathAlgo(Map exploredMap, Robot bot) {
+    public FastestPath(Map exploredMap, Robot bot) {
         //this.realMap = null;
         init(exploredMap, bot);
     }
 
-    public FastestPath(Map exploredMap, Robot bot, Map realMap) {
+    /*public FastestPath(Map exploredMap, Robot bot, Map realMap) {
         this.realMap = realMap;
         this.exploreMode = true;
         init(exploredMap, bot);
-    }
+    }*/
 	
 	//constructor for object/algo initialization
 	/**
@@ -69,8 +69,8 @@ public class FastestPath {
 		
 		//initialize gCost array
 		this.gCosts = new double[MapConstant.MAP_ROWS][MapConstant.MAP_COLS];
-		for(int i=0;i<MapConstant.MAP_COLS;i++){
-			for(int j=0;j<MapConstant.MAP_ROWS;j++){
+		for(int i=0;i<MapConstant.MAP_ROWS;i++){
+			for(int j=0;j<MapConstant.MAP_COLS;j++){
 				if(!canBeVisited(this.exploredMap.getTile(i, j))){
 					gCosts[i][j] = RobotConstant.INFINITE_COST;
 			}
@@ -109,7 +109,7 @@ public class FastestPath {
 		int size = toVisit.size();
 		int minCost = RobotConstant.INFINITE_COST;	
 		Tile output = null;
-		for (int i=size-1;i>=0;i++){
+		for (int i=size-1;i>=0;i--){
 			int gCost = (int) gCosts[(toVisit.get(i).getRow())][toVisit.get(i).getCol()];
 			if(minCost > gCost){
 				minCost = gCost;

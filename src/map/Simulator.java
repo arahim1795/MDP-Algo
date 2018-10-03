@@ -28,8 +28,8 @@ public class Simulator {
 	
 	private static Map mapUI = null;
 //	private static Map map = null;
-	private static MapUI realMap = null;
-	private static MapUI exploredMap = null;
+	private static Map realMap = null;
+	private static Map exploredMap = null;
 	
 	// Robot's starting position and direction
 	private static int robotSize = RobotConstant.ROBOT_SIZE;
@@ -58,7 +58,7 @@ public class Simulator {
 			//realMap.reset();
 		}*/
 		
-		//exploredMap = new MapUI (roboCop);
+		exploredMap = new Map (roboCop);
 		//TODO debug
 		//exploredMap.reset();
 		
@@ -275,9 +275,9 @@ public class Simulator {
 //                roboCop.setRobotRow(RobotConstant.DEFAULT_START_ROW); 
   //              roboCop.setRobotCol(RobotConstant.DEFAULT_START_COL);
                 exploredMap.repaint();
-                FastestPath fastestPath;
-                fastestPath = new FastestPath (exploredMap, roboCop, realMap);
-   //             fastestPath.executeFastestPath(RobotConstant.DEFAULT_GOAL_ROW, RobotConstant.DEFAULT_GOAL_COL);
+                FastestPath _FPAlgo = new FastestPath(exploredMap,roboCop);
+                _FPAlgo.searchFastestPath(MapConstant.GOAL_GRID_ROW, MapConstant.GOAL_GRID_COL);
+               
                 
             }
         });

@@ -326,7 +326,9 @@ public class Map extends JPanel{
 	public void paintComponent(Graphics g) {
 		 
         if (!_bMeasured) {
+        	//TODO dummy debug
             System.out.println("Map width: " + _mapWidth + ", Map height: " + _mapWidth);
+            System.out.println(bot.getRobotRow()+","+bot.getRobotCol());
 
             // Calculate the map grids for rendering
             
@@ -379,27 +381,45 @@ public class Map extends JPanel{
             }
         } // End outer for loop	
         
-     // Paint the robot on-screen.
+        // Paint the robot on-screen.
+        
         g.setColor(GraphicConstant.C_ROBOT);
         int r = bot.getRobotRow();
         int c = bot.getRobotCol();
-        g.fillOval((c - 1) * GraphicConstant.TILE_SIZE + GraphicConstant.ROBOT_X_OFFSET + GraphicConstant.MAP_X_OFFSET, GraphicConstant.MAP_H - (r * GraphicConstant.TILE_SIZE + GraphicConstant.ROBOT_Y_OFFSET), GraphicConstant.ROBOT_W, GraphicConstant.ROBOT_H);
-
+        //g.fillOval((c - 1) * GraphicConstant.TILE_SIZE + GraphicConstant.ROBOT_X_OFFSET + GraphicConstant.MAP_X_OFFSET, GraphicConstant.MAP_H - (r * GraphicConstant.TILE_SIZE + GraphicConstant.ROBOT_Y_OFFSET), GraphicConstant.ROBOT_W, GraphicConstant.ROBOT_H);
+        g.fillOval(
+        		(c-1) * (GraphicConstant.TILE_SIZE)+ GraphicConstant.ROBOT_X_OFFSET, 
+        		(r-1) * (GraphicConstant.TILE_SIZE) + GraphicConstant.ROBOT_Y_OFFSET, 
+        		GraphicConstant.ROBOT_W, 
+        		GraphicConstant.ROBOT_H);
+        
         // Paint the robot's direction indicator on-screen.
         g.setColor(GraphicConstant.C_ROBOT_DIR);
         RobotConstant.DIRECTION d = bot.getRobotDir();
         switch (d) {
             case UP:
-                g.fillOval(c * GraphicConstant.TILE_SIZE + 10 + GraphicConstant.MAP_X_OFFSET, GraphicConstant.MAP_H - r * GraphicConstant.TILE_SIZE - 15, GraphicConstant.ROBOT_DIR_W, GraphicConstant.ROBOT_DIR_H);
+                g.fillOval((c) * GraphicConstant.TILE_SIZE + GraphicConstant.ROBOT_X_OFFSET, 
+                		(r-1) * GraphicConstant.TILE_SIZE + GraphicConstant.ROBOT_Y_OFFSET + 5, 
+                		GraphicConstant.ROBOT_DIR_W, 
+                		GraphicConstant.ROBOT_DIR_H);
                 break;
             case RIGHT:
-                g.fillOval(c * GraphicConstant.TILE_SIZE + 35 + GraphicConstant.MAP_X_OFFSET, GraphicConstant.MAP_H - r * GraphicConstant.TILE_SIZE + 10, GraphicConstant.ROBOT_DIR_W, GraphicConstant.ROBOT_DIR_H);
+                g.fillOval((c) * GraphicConstant.TILE_SIZE - GraphicConstant.ROBOT_X_OFFSET - 5, 
+                		(r-1) * GraphicConstant.TILE_SIZE + GraphicConstant.ROBOT_Y_OFFSET + 30,
+                		GraphicConstant.ROBOT_DIR_W,
+                		GraphicConstant.ROBOT_DIR_H);
                 break;
             case DOWN:
-                g.fillOval(c * GraphicConstant.TILE_SIZE + 10 + GraphicConstant.MAP_X_OFFSET, GraphicConstant.MAP_H - r * GraphicConstant.TILE_SIZE + 35, GraphicConstant.ROBOT_DIR_W, GraphicConstant.ROBOT_DIR_H);
+                g.fillOval((c) * GraphicConstant.TILE_SIZE + GraphicConstant.ROBOT_X_OFFSET, 
+                		(r-1) * GraphicConstant.TILE_SIZE + GraphicConstant.ROBOT_Y_OFFSET + 55,
+                		GraphicConstant.ROBOT_DIR_W, 
+                		GraphicConstant.ROBOT_DIR_H);
                 break;
             case LEFT:
-                g.fillOval(c * GraphicConstant.TILE_SIZE - 15 + GraphicConstant.MAP_X_OFFSET, GraphicConstant.MAP_H - r * GraphicConstant.TILE_SIZE + 10, GraphicConstant.ROBOT_DIR_W, GraphicConstant.ROBOT_DIR_H);
+                g.fillOval((c-1) * GraphicConstant.TILE_SIZE + GraphicConstant.ROBOT_X_OFFSET + 5, 
+                		(r-1) * GraphicConstant.TILE_SIZE + GraphicConstant.ROBOT_Y_OFFSET + 30, 
+                		GraphicConstant.ROBOT_DIR_W, 
+                		GraphicConstant.ROBOT_DIR_H);
                 break;
         }
     }
