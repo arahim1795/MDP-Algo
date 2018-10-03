@@ -65,6 +65,65 @@ public class Map extends JPanel{
 				if (r == 0 || r == (row - 1) || c == 0 || c == (col -1)) 
 					field[r][c].setVirtualWall(true);
 			}
+		//adds mouseListener for graphical rendering
+		
+		this.addMouseListener(new MouseAdapter() {
+    		public void mousePressed(MouseEvent e) {
+
+                boolean bControlDown = e.isControlDown(); //if Control key is pressed
+
+                int mouseClickX = e.getX();
+                int mouseClickY = e.getY();
+
+                int gridRow = mouseClickY / GraphicConstant.TILE_SIZE;
+                int gridCol = mouseClickX / GraphicConstant.TILE_SIZE;
+                System.out.println("(" + gridRow + "," + gridCol + ")");
+                
+                if (_bSetMid) {
+                    if ((gridRow < MapConstant.MAP_ROWS && gridRow + 1 < MapConstant.MAP_ROWS && gridRow + 2 < MapConstant.MAP_ROWS)
+                            && (gridCol < MapConstant.MAP_COLS && gridCol + 1 < MapConstant.MAP_COLS && gridCol + 2 < MapConstant.MAP_COLS)) {
+                        if (bControlDown) {
+                        } 
+                        else {
+                            boolean midPointAllowed = false;
+                            //TODO change for values
+                            for(int i = 0; i < 3; i++){
+                                for(int j = 0; j < 3; j++){
+                                    if (isObstacleTile(gridRow+i, gridCol+j)){
+                                        System.out.println("You cannot set the mid point on an obstacle");
+                                        midPointAllowed = false;
+                                        return;
+                                    } 
+                                    else if(isStartZone(gridRow+i,gridCol+j) || isGoalZone(gridRow+i,gridCol+j)){
+                                        System.out.println("You cannot set the mid point on start/goal zone");
+                                        midPointAllowed = false;
+                                        return;
+                                    } 
+                                    else {
+                                        midPointAllowed = true;
+                                    }
+                                }
+                            }
+                            if(midPointAllowed)
+                                addMidPoint(gridRow, gridCol);
+                        }
+                    }
+                } 
+                else {
+                    if (Map.isValidTile(gridRow, gridCol)) {
+                        if (bControlDown) {
+                        	setObstacleTile(gridRow, gridCol, false); //clear obstacle if Ctrl is pressed
+                        } 
+                        else {
+                            setObstacleTile(gridRow, gridCol, true);  //else, set as obstacle
+                        }
+                    }
+                    //
+                    repaint();
+                }
+            }
+        });
+		
 	}
 	
 	// Getters
@@ -90,7 +149,7 @@ public class Map extends JPanel{
 		field[row][col].setObstacle(obstacle);
 		for (int i = -1; i < 2; i++)
 			for (int j = -1; j < 2; j++)
-				if (!((i == 0) && (j == 0))) field[row+i][col+j].setVirtualWall(true);
+				if (!((i == 0) && (j == 0)) && isValidTile(row+i,col+j)) field[row+i][col+j].setVirtualWall(true);
 	}
 
 	// TODO account for format difference in getAdjCoor (i.e. [row,col] instead of [col,row])

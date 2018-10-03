@@ -26,7 +26,7 @@ public class Simulator {
 	private static JPanel mapCards = null; //for viewing the different maps
 	private static JPanel mainButtons = null;
 	
-	private static MapUI mapUI = null;
+	private static Map mapUI = null;
 //	private static Map map = null;
 	private static MapUI realMap = null;
 	private static MapUI exploredMap = null;
@@ -52,13 +52,13 @@ public class Simulator {
 		
 		roboCop = new Robot(2,2 , startDir, true);
 		
-		if (!realRun) {
+		/*if (!realRun) {
 			realMap = new MapUI (roboCop);
 			//TODO debug
 			//realMap.reset();
-		}
+		}*/
 		
-		exploredMap = new MapUI (roboCop);
+		//exploredMap = new MapUI (roboCop);
 		//TODO debug
 		//exploredMap.reset();
 		
@@ -77,7 +77,7 @@ public class Simulator {
 	     //init map mainPanel
 //	     mainPanel = new JPanel(new CardLayout());
 	     
-	     mapUI = new MapUI(roboCop);
+	     mapUI = new Map(roboCop);
 //	     mainPanel.add(mapUI, "Main");
 	     
 	     //JPanel for map views
@@ -110,7 +110,7 @@ public class Simulator {
         if (!realRun) {
             mapCards.add(realMap, "REAL_MAP");
         }
-        mapCards.add(exploredMap, "EXPLORATION");
+        //mapCards.add(exploredMap, "EXPLORATION");
 
         CardLayout cl = ((CardLayout) mapCards.getLayout());
         if (!realRun) {
@@ -141,6 +141,7 @@ public class Simulator {
 
                     try (BufferedReader br = new BufferedReader(new FileReader(
                             file))) {
+                    	mapUI.clearMap();
                     	utility.MapDescriptor.loadMapfromFile(mapUI.getMap(), br.readLine());
                     } catch (IOException e1) {
                         e1.printStackTrace();
@@ -183,7 +184,10 @@ public class Simulator {
 
                         // Change file writing part to a better implementation
                         FileWriter fw = new FileWriter(fileName);
-                        fw.write(utility.MapDescriptor.generateMapString(mapUI.getMap()));
+                        //TODO debug dummy
+                        String outStr = utility.MapDescriptor.generateMapString(mapUI.getMap());
+                        System.out.println(outStr);
+                        fw.write(outStr);
                         fw.flush();
                         fw.close();
 
