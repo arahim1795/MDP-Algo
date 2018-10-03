@@ -8,9 +8,12 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.Border;
+
+
 import java.util.List;
 import robot.Robot;
 import robot.RobotConstant;
+
 import utility.Utility;
 import utility.MapDescriptor;
 
@@ -425,6 +428,10 @@ public class Map extends JPanel{
         }
         this.repaint();
     }
+	
+	public Map getMap (Map map) {
+		return map;
+	}
 
     private class ColorTile {
 
