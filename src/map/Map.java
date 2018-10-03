@@ -8,17 +8,13 @@ import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.Border;
 
-//import map.MapUI.ColorTile;
-
-//import map.MapUI.ColorTile;
-
 import java.util.List;
 import javax.swing.*;
 
 import robot.Robot;
 import robot.RobotConstant;
+
 import utility.Utility;
-import javax.swing.*;
 import utility.MapDescriptor;
 /**
  * @author 18/19 S1 G3
@@ -432,6 +428,10 @@ public class Map extends JPanel{
         }
         this.repaint();
     }
+	
+	public Map getMap (Map map) {
+		return map;
+	}
 
     private class ColorTile {
 

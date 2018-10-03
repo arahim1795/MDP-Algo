@@ -8,10 +8,11 @@ import java.io.*;
 import java.util.Stack;
 
 import map.MapConstant;
-import map.MapUI;
+
 import robot.RobotConstant;
 import robot.RobotConstant.DIRECTION;
 import robot.Robot;
+
 import search.FastestPath;
 import search.Explore;
 
@@ -22,12 +23,9 @@ public class Simulator {
 	public static JFrame mainFrame = null;
 	
 	//mainPanel for laying out different views
-//	private static JPanel mainPanel = null;
 	private static JPanel mapCards = null; //for viewing the different maps
 	private static JPanel mainButtons = null;
 	
-	private static Map mapUI = null;
-//	private static Map map = null;
 	private static Map realMap = null;
 	private static Map exploredMap = null;
 	
@@ -50,7 +48,7 @@ public class Simulator {
 
 	public static void main(String[] args) {
 		
-		roboCop = new Robot(2,2 , startDir, true);
+		roboCop = new Robot(RobotConstant.DEFAULT_START_ROW, RobotConstant.DEFAULT_START_COL , startDir, true);
 		
 		/*if (!realRun) {
 			realMap = new MapUI (roboCop);
@@ -58,6 +56,7 @@ public class Simulator {
 			//realMap.reset();
 		}*/
 		
+		realMap = new Map(roboCop);
 		exploredMap = new Map (roboCop);
 		//TODO debug
 		//exploredMap.reset();
@@ -72,33 +71,19 @@ public class Simulator {
 	     mainFrame.setSize(new Dimension(960, 657));
 	     mainFrame.setLayout(new GridLayout(1,2,3,3));
 	     
-	     
-	    
-	     //init map mainPanel
-//	     mainPanel = new JPanel(new CardLayout());
-	     
-	     mapUI = new Map(roboCop);
-//	     mainPanel.add(mapUI, "Main");
-	     
 	     //JPanel for map views
 	     mapCards = new JPanel(new CardLayout());
-	     mapCards.add(mapUI, "Main");
-	     
-	     // Show the real map (main menu) by default
-//	     CardLayout cl = ((CardLayout) mainPanel.getLayout());
-//	     cl.show(mainPanel, "MAIN");
+	     mapCards.add(realMap, "Main");
 	     
 	    addButtons();
-	    
-//	    mainFrame.add(mainPanel);
+
 	    mainFrame.add(mapCards);
 	    mainFrame.add(mainButtons);
 	    
 	    initMainLayout();
 	     
-	     //add cardLayouts to main frame
+	     //add map panel and button panel to main frame
 	     Container contentPane = mainFrame.getContentPane();
-//	     contentPane.add(mainPanel, BorderLayout.WEST);
 	     contentPane.add(mapCards, BorderLayout.CENTER); //add mapCards to main frame's content pane
 	     contentPane.add(mainButtons, BorderLayout.EAST);
 	     
@@ -141,8 +126,8 @@ public class Simulator {
 
                     try (BufferedReader br = new BufferedReader(new FileReader(
                             file))) {
-                    	mapUI.clearMap();
-                    	utility.MapDescriptor.loadMapfromFile(mapUI.getMap(), br.readLine());
+                    	realMap.clearMap();
+                    	utility.MapDescriptor.loadMapfromFile(realMap, br.readLine());
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     } catch (Exception e2) {
@@ -185,7 +170,7 @@ public class Simulator {
                         // Change file writing part to a better implementation
                         FileWriter fw = new FileWriter(fileName);
                         //TODO debug dummy
-                        String outStr = utility.MapDescriptor.generateMapString(mapUI.getMap());
+                        String outStr = utility.MapDescriptor.generateMapString(realMap);
                         System.out.println(outStr);
                         fw.write(outStr);
                         fw.flush();
@@ -215,8 +200,7 @@ public class Simulator {
             public void mousePressed(MouseEvent e) {
                 // Clear the current map
                 System.out.println("Clearing Obstacles..");
-                mapUI.clearMap();
-//                realMap.clearMap();
+                realMap.clearMap();
                 exploredMap.clearMap();
             }
         });
@@ -232,8 +216,7 @@ public class Simulator {
             public void mousePressed(MouseEvent e) {
                 // Clear the current map
                 System.out.println("Clearing Obstacles..");
-                mapUI.clearMap();
-//                realMap.clearMap();
+                realMap.clearMap();
                 exploredMap.clearMap();
             }
         });
@@ -251,10 +234,8 @@ public class Simulator {
         
         btn_Explore.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
-//                CardLayout cl = ((CardLayout) mapCards.getLayout());
-//                cl.show(mapCards, "EXPLORATION");
 //                roboCop.setRobotRow(RobotConstant.DEFAULT_START_ROW); 
-  //              roboCop.setRobotCol(RobotConstant.DEFAULT_START_COL);
+//            	  roboCop.setRobotCol(RobotConstant.DEFAULT_START_COL);
                 exploredMap.repaint();
                 Explore exploration;
                 exploration = new Explore (roboCop, realMap);
@@ -270,8 +251,6 @@ public class Simulator {
         
         btn_FastestPath.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
-//                CardLayout cl = ((CardLayout) mapCards.getLayout());
-//                cl.show(mapCards, "EXPLORATION");
 //                roboCop.setRobotRow(RobotConstant.DEFAULT_START_ROW); 
   //              roboCop.setRobotCol(RobotConstant.DEFAULT_START_COL);
                 exploredMap.repaint();
@@ -282,10 +261,7 @@ public class Simulator {
             }
         });
         mainButtons.add(btn_FastestPath);
-		
-		/* buttonPanel.add(mainButtons, "BUTTONS");
-        CardLayout cl = ((CardLayout) buttonPanel.getLayout());
-        cl.show(buttonPanel, "BUTTONS"); */
+
 	}
 	
 }
