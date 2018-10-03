@@ -186,10 +186,10 @@ public class Robot {
 			case FORWARD:
 				switch (robotDir) {
 					case UP:
-						robotRow++;
+						robotRow--;
 						break;
 					case DOWN:
-						robotRow--;
+						robotRow++;
 						break;
 					case LEFT:
 						robotCol--;
@@ -202,10 +202,10 @@ public class Robot {
 			case BACKWARD:
 				switch (robotDir) {
 					case UP:
-						robotRow--;
+						robotRow++;
 						break;
 					case DOWN:
-						robotRow++;
+						robotRow--;
 						break;
 					case LEFT:
 						robotCol++;
@@ -238,7 +238,7 @@ public class Robot {
 	 * @param m
 	 */
 	public void move(MOVEMENT m){
-		move(m,true);
+		move(m,realBot);
 	}
 	
 	/**

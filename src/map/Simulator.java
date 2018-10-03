@@ -7,8 +7,8 @@ import javax.swing.*;
 import java.io.*;
 import java.util.Stack;
 
+
 import map.MapConstant;
-import map.MapUI;
 import robot.RobotConstant;
 import robot.RobotConstant.DIRECTION;
 import robot.Robot;
@@ -50,7 +50,7 @@ public class Simulator {
 
 	public static void main(String[] args) {
 		
-		roboCop = new Robot(2,2 , startDir, true);
+		roboCop = new Robot(2,2 , startDir, false);
 		
 		/*if (!realRun) {
 			realMap = new MapUI (roboCop);

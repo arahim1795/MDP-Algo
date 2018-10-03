@@ -1,5 +1,6 @@
 package map;
 
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
@@ -7,19 +8,12 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.Border;
-
-//import map.MapUI.ColorTile;
-
-//import map.MapUI.ColorTile;
-
 import java.util.List;
-import javax.swing.*;
-
 import robot.Robot;
 import robot.RobotConstant;
 import utility.Utility;
-import javax.swing.*;
 import utility.MapDescriptor;
+
 /**
  * @author 18/19 S1 G3
  * getTile
@@ -30,7 +24,6 @@ import utility.MapDescriptor;
  */
 public class Map extends JPanel{
 	private Tile[][] field;
-	//private Tile[][] mapTiles;
 	private ColorTile[][] mapColorTiles = null;
 	private static int row = MapConstant.MAP_ROWS, col = MapConstant.MAP_COLS ;
 	private Robot bot;
@@ -42,11 +35,9 @@ public class Map extends JPanel{
     // Size of the tile
     private int _mapLength = 0;
     private int _mapWidth = 0;
+
     
- // Mid Point TODO set mid point must be dynamic
-    public int midRow = -5;
-    public int midCol = -5;
-	
+    
 	// Constructor
 	/**
 	 * Create map of Tiles with col = 15 and row = 15
@@ -364,8 +355,6 @@ public class Map extends JPanel{
                     gridColor = GraphicConstant.C_START;
                 } else if (isGoalZone(mapRow, mapCol)) {
                     gridColor = GraphicConstant.C_GOAL;
-                } else if (isMidZone(mapRow,mapCol, midRow, midCol)){
-                    gridColor = GraphicConstant.C_MID;
                 } else if (isObstacleTile(mapRow, mapCol)) {
                     gridColor = GraphicConstant.C_OBSTACLE;
                 } else {
@@ -383,9 +372,13 @@ public class Map extends JPanel{
         
         // Paint the robot on-screen.
         
+        
         g.setColor(GraphicConstant.C_ROBOT);
         int r = bot.getRobotRow();
         int c = bot.getRobotCol();
+        
+        //TODO dummy
+        System.out.println(r + "," + c);
         //g.fillOval((c - 1) * GraphicConstant.TILE_SIZE + GraphicConstant.ROBOT_X_OFFSET + GraphicConstant.MAP_X_OFFSET, GraphicConstant.MAP_H - (r * GraphicConstant.TILE_SIZE + GraphicConstant.ROBOT_Y_OFFSET), GraphicConstant.ROBOT_W, GraphicConstant.ROBOT_H);
         g.fillOval(
         		(c-1) * (GraphicConstant.TILE_SIZE)+ GraphicConstant.ROBOT_X_OFFSET, 

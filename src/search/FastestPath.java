@@ -31,7 +31,7 @@ public class FastestPath {
 	private double[][] gCosts;
 	private Robot bot; //KIV
 	private int loopCount;
-	private boolean exploreMode;
+	private boolean exploreMode = false;
 	
 	/**
 	 * 
@@ -105,14 +105,16 @@ public class FastestPath {
 	 * @param col
 	 * @return
 	 */
-	private Tile minimumCostTile(int goalRow,int col){
+	private Tile minimumCostTile(int goalRow,int goalCol){
 		int size = toVisit.size();
 		int minCost = RobotConstant.INFINITE_COST;	
 		Tile output = null;
 		for (int i=size-1;i>=0;i--){
 			int gCost = (int) gCosts[(toVisit.get(i).getRow())][toVisit.get(i).getCol()];
-			if(minCost > gCost){
-				minCost = gCost;
+			int hCost = (int)getHCost(toVisit.get(i),goalRow,goalCol);
+			int tCost = gCost + hCost;
+			if(minCost > tCost){
+				minCost = tCost;
 				output = toVisit.get(i);
 			}
 		}
@@ -127,7 +129,7 @@ public class FastestPath {
 	 * @param goalCol
 	 * @return
 	 */
-	private double getHcost(Tile T, int goalRow, int goalCol){
+	private double getHCost(Tile T, int goalRow, int goalCol){
 		//no of rows and column moves needed to get to goal
 		int movementCost = (T.getRow()-goalRow)+(T.getCol()-goalCol);
 		//factor 1 turn if not on same row or col as goal
@@ -150,7 +152,7 @@ public class FastestPath {
 		//robot column > cell column
 		if (botCol - target.getCol() >0){return DIRECTION.LEFT;}
 		//robot column < cell column
-		else if (botCol - target.getCol() <0){return DIRECTION.LEFT;}
+		else if (botCol - target.getCol() <0){return DIRECTION.RIGHT;}
 		else{if(botRow-target.getRow()>0){return DIRECTION.UP;}
 		else{return DIRECTION.DOWN;}}
 		}
@@ -228,6 +230,8 @@ public class FastestPath {
 			if(visited.contains(exploredMap.getTile(goalRow, goalCol))){
 				//message : path found
 				path = getPath(goalRow,goalCol);
+				//TODO dummy debug
+				System.out.println(loopCount);
 				printPath(path);
 				return executeFastestPath(path, goalRow,goalCol);
 			}
@@ -302,7 +306,7 @@ public class FastestPath {
 		DIRECTION targetDir;
 		
 		ArrayList<MOVEMENT> movementList = new ArrayList<>();
-		Robot tempBot = new Robot(1,1, false);
+		Robot tempBot = new Robot(bot.getRobotRow(),bot.getRobotCol(), false);
 		//tempBot.setSpeed(0);
 		//while robot position not on goal tile
 		while((tempBot.getRobotRow()!= goalRow) || (tempBot.getRobotCol()!= goalCol)){
@@ -341,7 +345,7 @@ public class FastestPath {
 				}
 				
 				bot.move(n);
-                this.exploredMap.repaint();
+				exploredMap.repaint();
                 
                 if (this.exploreMode) {
                     bot.setSensors();
@@ -355,7 +359,6 @@ public class FastestPath {
 		}else{
 			for(MOVEMENT x : movementList){
 				bot.move(x);
-				this.exploredMap.repaint();
 			}
 			
 			//FUTURE IMPLEMENTATION
