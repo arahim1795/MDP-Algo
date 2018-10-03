@@ -1,12 +1,13 @@
-package simulator;
+package map;
 
 import algorithms.ExplorationAlgo;
-import algorithms.FastestPathAlgo;
+import search.FastestPath;
 import map.Map;
-import map.MapConstants;
+import map.MapConstant;
 import robot.Robot;
-import robot.RobotConstants;
-import utils.CommMgr;
+import robot.RobotConstant;
+import utility.Comms;
+import robot.RobotConstant.DIRECTION;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,38 +23,53 @@ import static utils.MapDescriptor.loadMapFromDisk;
  * @author Suyash Lakhotia
  */
 
-public class Simulator {
+public class Simulatortest {
+	//mainFrame for the application
+	public static JFrame mainFrame = null;
+	
+	//mainPanel for laying out different views
+	private static JPanel mapCards = null; //for viewing the different maps
+	private static JPanel mainButtons = null;
+	
+	private static Map realMap = null;
+	private static Map exploredMap = null;
+	
+	// Robot's starting position and direction
+	private static int robotSize = RobotConstant.ROBOT_SIZE;
+    private static int startPosRow = RobotConstant.DEFAULT_START_ROW;
+    private static int startPosCol = RobotConstant.DEFAULT_START_COL;
+    private static DIRECTION startDir = RobotConstant.DEFAULT_START_DIR;
+    
     private static JFrame _appFrame = null;         // application JFrame
-
     private static JPanel _mapCards = null;         // JPanel for map views
     private static JPanel _buttons = null;          // JPanel for buttons
+    
+    // The robot
+    private static robot.Robot bot = null;
+    private static final boolean realRun = false;
 
-    private static Robot bot;
+    // Map width & length used to render real & robot map
+    private static int mapWidth;
+    private static int mapLength;
 
-    private static Map realMap = null;              // real map
-    private static Map exploredMap = null;          // exploration map
-
-    private static int timeLimit = 3600;            // time limit
-    private static int coverageLimit = 300;         // coverage limit
-
-    private static final CommMgr comm = CommMgr.getCommMgr();
-    private static final boolean realRun = true;
+    // File name of the loaded map
+    private static String _loadedMapFilename = null;
 
     /**
      * Initialises the different maps and displays the application.
      */
     public static void main(String[] args) {
-        if (realRun) comm.openConnection();
+        if (realRun) Comms.openConnection();
 
-        bot = new Robot(RobotConstants.START_ROW, RobotConstants.START_COL, realRun);
+        bot = new Robot(RobotConstant.DEFAULT_START_ROW, RobotConstant.DEFAULT_START_COL, realRun);
 
         if (!realRun) {
             realMap = new Map(bot);
-            realMap.setAllUnexplored();
+            //realMap.setAllUnexplored();
         }
 
         exploredMap = new Map(bot);
-        exploredMap.setAllUnexplored();
+        //exploredMap.setAllUnexplored();
 
         displayEverything();
     }
@@ -149,7 +165,7 @@ public class Simulator {
                     loadMapButton.addMouseListener(new MouseAdapter() {
                         public void mousePressed(MouseEvent e) {
                             loadMapDialog.setVisible(false);
-                            loadMapFromDisk(realMap, loadTF.getText());
+                            utility.MapDescriptor.loadMapfromFile(realMap, loadTF.getText());
                             CardLayout cl = ((CardLayout) _mapCards.getLayout());
                             cl.show(_mapCards, "REAL_MAP");
                             realMap.repaint();
@@ -166,23 +182,23 @@ public class Simulator {
         }
 
         // FastestPath Class for Multithreading
-        class FastestPath extends SwingWorker<Integer, String> {
+        class FastestPathThread extends SwingWorker<Integer, String> {
             protected Integer doInBackground() throws Exception {
-                bot.setRobotPos(RobotConstants.START_ROW, RobotConstants.START_COL);
+                bot.setBotPos(RobotConstant.DEFAULT_START_ROW, RobotConstant.DEFAULT_START_COL);
                 exploredMap.repaint();
 
                 if (realRun) {
                     while (true) {
                         System.out.println("Waiting for FP_START...");
-                        String msg = comm.recvMsg();
-                        if (msg.equals(CommMgr.FP_START)) break;
+                        String msg = Comms.receiveMsg();
+                        if (msg.equals(Comms.FP_START)) break;
                     }
-                }
+               
 
-                FastestPathAlgo fastestPath;
-                fastestPath = new FastestPathAlgo(exploredMap, bot);
+                FastestPath fastestPathAlgo;
+                fastestPathAlgo = new FastestPath(exploredMap, bot);
 
-                fastestPath.runFastestPath(RobotConstants.GOAL_ROW, RobotConstants.GOAL_COL);
+                fastestPathAlgo.searchFastestPath(RobotConstant.DEFAULT_GOAL_ROW, RobotConstant.DEFAULT_GOAL_COL);
 
                 return 222;
             }
@@ -193,8 +209,8 @@ public class Simulator {
             protected Integer doInBackground() throws Exception {
                 int row, col;
 
-                row = RobotConstants.START_ROW;
-                col = RobotConstants.START_COL;
+                row = RobotConstant.START_ROW;
+                col = RobotConstant.START_COL;
 
                 bot.setRobotPos(row, col);
                 exploredMap.repaint();
@@ -245,7 +261,7 @@ public class Simulator {
         // TimeExploration Class for Multithreading
         class TimeExploration extends SwingWorker<Integer, String> {
             protected Integer doInBackground() throws Exception {
-                bot.setRobotPos(RobotConstants.START_ROW, RobotConstants.START_COL);
+                bot.setRobotPos(RobotConstant.START_ROW, RobotConstant.START_COL);
                 exploredMap.repaint();
 
                 ExplorationAlgo timeExplo = new ExplorationAlgo(exploredMap, realMap, bot, coverageLimit, timeLimit);
@@ -292,7 +308,7 @@ public class Simulator {
         // CoverageExploration Class for Multithreading
         class CoverageExploration extends SwingWorker<Integer, String> {
             protected Integer doInBackground() throws Exception {
-                bot.setRobotPos(RobotConstants.START_ROW, RobotConstants.START_COL);
+                bot.setRobotPos(RobotConstant.START_ROW, RobotConstant.START_COL);
                 exploredMap.repaint();
 
                 ExplorationAlgo coverageExplo = new ExplorationAlgo(exploredMap, realMap, bot, coverageLimit, timeLimit);
