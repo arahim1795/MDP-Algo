@@ -54,9 +54,10 @@ public class Map extends JPanel{
 	 * Down-Right Coordinates: 14,19
 	 * @see Tile
 	 */
-	public Map() {
+	public Map(Robot bot) {
 
 		field = new Tile[row][col];
+		this.bot = bot;
 		
 		for (int r = 0; r < row; r++)
 			for (int c = 0; c < col; c++) {
@@ -262,66 +263,6 @@ public class Map extends JPanel{
 				tile.setExplored(true);
 	}
 	
-	public void MapUI() {
-
-    	this.addMouseListener(new MouseAdapter() {
-    		public void mousePressed(MouseEvent e) {
-
-                boolean bControlDown = e.isControlDown(); //if Control key is pressed
-
-                int mouseClickX = e.getX();
-                int mouseClickY = e.getY();
-
-                int gridRow = mouseClickY / GraphicConstant.TILE_SIZE;
-                int gridCol = mouseClickX / GraphicConstant.TILE_SIZE;
-                System.out.println("(" + gridRow + "," + gridCol + ")");
-                
-                if (_bSetMid) {
-                    if ((gridRow < MapConstant.MAP_ROWS && gridRow + 1 < MapConstant.MAP_ROWS && gridRow + 2 < MapConstant.MAP_ROWS)
-                            && (gridCol < MapConstant.MAP_COLS && gridCol + 1 < MapConstant.MAP_COLS && gridCol + 2 < MapConstant.MAP_COLS)) {
-                        if (bControlDown) {
-                        } 
-                        else {
-                            boolean midPointAllowed = false;
-                            for(int i = 0; i < 3; i++){
-                                for(int j = 0; j < 3; j++){
-                                    if (field[gridRow+i][gridCol+j].isObstacle()){
-                                        System.out.println("You cannot set the mid point on an obstacle");
-                                        midPointAllowed = false;
-                                        return;
-                                    } 
-                                    else if(isStartZone(gridRow+i,gridCol+j) || isGoalZone(gridRow+i,gridCol+j)){
-                                        System.out.println("You cannot set the mid point on start/goal zone");
-                                        midPointAllowed = false;
-                                        return;
-                                    } 
-                                    else {
-                                        midPointAllowed = true;
-                                    }
-                                }
-                            }
-                            if(midPointAllowed)
-                                addMidPoint(gridRow, gridCol);
-                        }
-                    }
-                } 
-                else {
-                    if (Map.isValidTile(gridRow, gridCol)) {
-                        if (bControlDown) {
-                        	setObstacleTile(gridRow, gridCol, false); //clear obstacle if Ctrl is pressed
-                        } 
-                        else {
-                            setObstacleTile(gridRow, gridCol, true);  //else, set as obstacle
-                        }
-                    }
-                    //
-                    repaint();
-                    System.out.println(MapDescriptor.generateMapString());
-                }
-            }
-        });
-    	
-    }
 	
 	public void paintComponent(Graphics g) {
 		 

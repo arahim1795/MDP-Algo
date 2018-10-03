@@ -7,7 +7,7 @@ import java.io.*;
 public class MapDescriptor {
 	public static void 	loadMapfromFile (Map map, String filename){
 		try {
-            InputStream inputStream = new FileInputStream("map/" + filename + ".txt");
+            InputStream inputStream = new FileInputStream(filename + ".txt");
             BufferedReader buf = new BufferedReader(new InputStreamReader(inputStream));
 
             String line = buf.readLine();
@@ -32,7 +32,7 @@ public class MapDescriptor {
         }
 	}
 	
-	 public String generateMapString(Map map) {
+	 public static String generateMapString(Map map) {
 
 	        String mapString = "";
 

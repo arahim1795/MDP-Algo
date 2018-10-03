@@ -54,11 +54,13 @@ public class Simulator {
 		
 		if (!realRun) {
 			realMap = new MapUI (roboCop);
-			realMap.reset();
+			//TODO debug
+			//realMap.reset();
 		}
 		
 		exploredMap = new MapUI (roboCop);
-		exploredMap.reset();
+		//TODO debug
+		//exploredMap.reset();
 		
 		// Calculate map width & length based on grid size
         mapWidth = MapConstant.MAP_COLS * GraphicConstant.TILE_SIZE;
@@ -139,7 +141,7 @@ public class Simulator {
 
                     try (BufferedReader br = new BufferedReader(new FileReader(
                             file))) {
-                        mapUI.loadFromMapString(br.readLine());
+                    	utility.MapDescriptor.loadMapfromFile(mapUI.getMap(), br.readLine());
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     } catch (Exception e2) {
@@ -181,7 +183,7 @@ public class Simulator {
 
                         // Change file writing part to a better implementation
                         FileWriter fw = new FileWriter(fileName);
-                        fw.write(mapUI.generateMapString());
+                        fw.write(utility.MapDescriptor.generateMapString(mapUI.getMap()));
                         fw.flush();
                         fw.close();
 

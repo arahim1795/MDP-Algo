@@ -14,9 +14,9 @@ import map.GraphicConstant;
 import robot.Robot;
 import robot.RobotConstant;
 
-/*public class MapUI extends Map {
+public class MapUI extends JPanel{
 	
-	private Tile[][] mapTiles;
+	private Map map;
 	private Robot bot;
 	
 	// For measuring size of the canvas
@@ -31,39 +31,12 @@ import robot.RobotConstant;
     public int midRow = -5;
     public int midCol = -5;
     
-    private ColorTile[][] mapColorTiles = null;
     
-    // check if given tile is in start zone
-    public boolean isStartZone(int row, int col) {
-    	return ((row >= (MapConstant.START_GRID_ROW-1)) && (row <= (MapConstant.START_GRID_ROW +1)) && 
-    			(col >= (MapConstant.START_GRID_COL-1)) && (col <= (MapConstant.START_GRID_COL +1)));
-	}
-    
-    // check if given tile is in goal zone
-    public boolean isGoalZone(int row, int col) {
-    	return ((row >= (MapConstant.GOAL_GRID_ROW-1)) && (row <= (MapConstant.GOAL_GRID_ROW +1)) 
-    			&& (col >= (MapConstant.GOAL_GRID_COL-1)) && (col <= (MapConstant.GOAL_GRID_COL +1)));
-	}
-    
-    public boolean isMidZone(int row, int col, int midRow, int midCol) {
-        return (row >= midRow-1 && row <= midRow + 1 
-        		&& col >= midCol-1 && col <= midCol + 1);
-    }
-    
-	
-    
-    
+    	       
     public MapUI(Robot bot) {
-    	super();
-    	
+
     	this.bot=bot;
-    	
-    	this.mapTiles = new Tile [MapConstant.MAP_ROWS][MapConstant.MAP_COLS];
-    	for(int i = 0;i<MapConstant.MAP_ROWS;i++) {
-    		for(int j = 0;j<MapConstant.MAP_COLS;j++) {
-    			mapTiles[i][j] = new Tile(i,j);
-    		}
-    	}
+    	this.map = new Map(bot);
     	this.addMouseListener(new MouseAdapter() {
     		public void mousePressed(MouseEvent e) {
 
@@ -83,9 +56,10 @@ import robot.RobotConstant;
                         } 
                         else {
                             boolean midPointAllowed = false;
+                            //TODO change for values
                             for(int i = 0; i < 3; i++){
                                 for(int j = 0; j < 3; j++){
-                                    if (mapTiles[gridRow+i][gridCol+j].isObstacle()){
+                                    if (map.isObstacleTile(gridRow+i, gridCol+j)){
                                         System.out.println("You cannot set the mid point on an obstacle");
                                         midPointAllowed = false;
                                         return;
@@ -108,20 +82,59 @@ import robot.RobotConstant;
                 else {
                     if (Map.isValidTile(gridRow, gridCol)) {
                         if (bControlDown) {
-                        	setObstacleTile(gridRow, gridCol, false); //clear obstacle if Ctrl is pressed
+                        	map.setObstacleTile(gridRow, gridCol, false); //clear obstacle if Ctrl is pressed
                         } 
                         else {
-                            setObstacleTile(gridRow, gridCol, true);  //else, set as obstacle
+                            map.setObstacleTile(gridRow, gridCol, true);  //else, set as obstacle
                         }
                     }
                     //
                     repaint();
-                    System.out.println(generateMapString());
+                    System.out.println(utility.MapDescriptor.generateMapString(map));
                 }
             }
         });
     	
     }   
+    
+    /*
+     * 
+     * 
+     * 
+     */
+    
+    public Map getMap(){
+    	return this.map;
+    }
+    /*
+     * 
+     * 
+     */
+    
+    private ColorTile[][] mapColorTiles = null;
+    
+    // check if given tile is in start zone
+    public boolean isStartZone(int row, int col) {
+    	return ((row >= (MapConstant.START_GRID_ROW-1)) && (row <= (MapConstant.START_GRID_ROW +1)) && 
+    			(col >= (MapConstant.START_GRID_COL-1)) && (col <= (MapConstant.START_GRID_COL +1)));
+	}
+    
+    // check if given tile is in goal zone
+    public boolean isGoalZone(int row, int col) {
+    	return ((row >= (MapConstant.GOAL_GRID_ROW-1)) && (row <= (MapConstant.GOAL_GRID_ROW +1)) 
+    			&& (col >= (MapConstant.GOAL_GRID_COL-1)) && (col <= (MapConstant.GOAL_GRID_COL +1)));
+	}
+    
+    public boolean isMidZone(int row, int col, int midRow, int midCol) {
+        return (row >= midRow-1 && row <= midRow + 1 
+        		&& col >= midCol-1 && col <= midCol + 1);
+    }
+    
+    /*
+     * 
+     * 
+     * 
+     */
     
 
 
@@ -142,35 +155,18 @@ import robot.RobotConstant;
     public int getMidIndex(){
         return (midRow * 15) + midCol;
     }
-    /* MARK FOR DELETION
-    private void addObstacle(int row, int col) {
-        if (mapTiles[row][col].isObstacle()) {
-            //remove obstacle
-            mapTiles[row][col].setObstacle(false);
-        } else if (isStartZone(row, col) || isGoalZone(row, col)) {
-            JOptionPane.showMessageDialog(null, "Grid clicked is the start/goal zone. Please select another tile.", "Warning",
-                    JOptionPane.WARNING_MESSAGE);
-        } else {
-            mapTiles[row][col].setObstacle(true);
-        }
-    }
     
-    private void removeObstacle(int row, int col) {
-        if (mapTiles[row][col].isObstacle()) {
-            if (mapTiles[row][col].isVirtualWall()) {
-                JOptionPane.showMessageDialog(null,
-                        "Removing the border walls will cause the robot to"
-                        + " fall off the edge of the arena. Please do not"
-                        + " attempt to kill the robot!", "Warning",
-                        JOptionPane.WARNING_MESSAGE);
-            } else {
-                mapTiles[row][col].setObstacle(false);
-            }
-        }
-    }
+    
+    
+   /*
+    * 
+    * 
+    * 
+    * (non-Javadoc)
+    * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
     */
 
- /*   public void paintComponent(Graphics g) {
+    public void paintComponent(Graphics g) {
  
         if (!_bMeasured) {
             System.out.println("Map width: " + _mapWidth + ", Map height: " + _mapWidth);
@@ -210,7 +206,7 @@ import robot.RobotConstant;
                     gridColor = GraphicConstant.C_GOAL;
                 } else if (isMidZone(mapRow,mapCol, midRow, midCol)){
                     gridColor = GraphicConstant.C_MID;
-                } else if (super.isObstacleTile(mapRow, mapCol)) {
+                } else if (map.isObstacleTile(mapRow, mapCol)) {
                     gridColor = GraphicConstant.C_OBSTACLE;
                 } else {
                     gridColor = GraphicConstant.C_FREE;
@@ -249,54 +245,12 @@ import robot.RobotConstant;
                 break;
         }
     }
-    
-    
-    public String generateMapString() {
-
-        String mapString = "";
-
-        for (int row = 0; row < MapConstant.MAP_ROWS ; row++) 
-            {
-                for (int col = 0; col < MapConstant.MAP_COLS; col++) {
-                // Obstacle - Border walls
-                if (!super.getTile(row, col).isObstacle()) {
-                    mapString += "0";
-                } else {
-                    mapString += "1";
-                }
-            }
-        }
-
-        return mapString;
-    } */
-
-    /**
-     * Loads the map from a map descriptor string<br>
-     * Not including the virtual border surrounding the area!
-     */
-    
- /*   public void loadFromMapString(String mapString) {
-
-        for (int row = 0; row < MapConstant.MAP_ROWS ; row++) 
-        {
-            for (int col = 0; col < (MapConstant.MAP_COLS); col++) {
-            	//position of char on string
-                int charIndex = (row * MapConstant.MAP_COLS) + col;
-
-                // Obstacle - Border walls
-                if (mapString.charAt(charIndex) == '1') {
-                    super.setObstacleTile(row, col, true);
-                } else {
-                    super.setObstacleTile(row, col, false);
-                }
-            }
-        }
-    }
+   
 
     public void clearMap() {
         for (int row = 0; row < (MapConstant.MAP_ROWS); row++) {
             for (int col = 0; col < (MapConstant.MAP_COLS); col++) {
-                super.getTile(row, col).setObstacle(false);
+                map.setObstacleTile(row, col, false);;
             }
         }
         this.repaint();
@@ -322,4 +276,4 @@ import robot.RobotConstant;
             this.gridSize = borderSize - (GraphicConstant.TILE_LINE_WEIGHT * 2);
         }
     }
-} */
+} 
