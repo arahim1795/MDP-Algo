@@ -118,8 +118,10 @@ public class Explore {
 		  else if (peekRight()){
 			moveRobot(MOVEMENT.TURNRIGHT);
 			if (peekUp()) moveRobot(MOVEMENT.FORWARD);
-		} else if (peekDown())
-			moveRobot(MOVEMENT.BACKWARD);
+		} else if (peekDown()) {
+			moveRobot(MOVEMENT.TURNLEFT);
+			moveRobot(MOVEMENT.TURNLEFT);
+		}
 	}
 	
 	/**
