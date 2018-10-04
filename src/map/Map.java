@@ -126,13 +126,9 @@ public class Map extends JPanel{
 		if (isObstacleTile(row,col) == bool) return;
 		field[row][col].setObstacle(bool);
 		
-		List<int[]> adjCoor = getAdjCoor(row,col);
-		if (!adjCoor.isEmpty())
-			for (int[] coor : adjCoor) {
-				Tile tile = field[coor[0]][coor[1]];
-				if (!bool && !tile.isPersistent()) tile.setVirtualWall(bool);
-			}
-		else System.out.println("No valid adjacent Tile");	
+		for (int i = -1; i < 2; i++)
+			for (int j = -1; j < 2; j++)
+				if (!((i == 0) && (j == 0)) && isValidTile(row+i,col+j)) field[row+i][col+j].setVirtualWall(bool);
 
 	}
 
