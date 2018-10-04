@@ -1,7 +1,15 @@
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.*;
 
+import map.Map;
+
+import robot.Robot;
+
+import search.Explore;
+
+import utility.Utility;
 import utility.Comms;
 
 /**
@@ -11,6 +19,25 @@ public class Main {
 	
 	public static void main(String[] args) throws IOException, InterruptedException {
 		
+		
+		
+		String filename = "./map/test_1.txt";
+		List<String> mapArray = Utility.getmap(filename);
+		
+		Robot bot = new Robot(18, 1, false);
+		
+		Map map = new Map(bot);
+		map.parseMap(mapArray);
+		map.printMap();
+		
+		if (map.getTile(0, 0).isObstacle()) System.out.println("Obstacle at 0,0");
+		
+		Explore ex = new Explore(bot, map, 50);
+		
+		ex.setupExplore();
+		
+		
+		/*
 		// Messages Tracker
 		ArrayList<String> msgList = new ArrayList<String>();
 		int msgCount = 0;
@@ -38,7 +65,7 @@ public class Main {
 			} while (tmp == null);
 			msgList.add(tmp); msgCount++;
 		}
-		
+		*/
 		
 	}
 

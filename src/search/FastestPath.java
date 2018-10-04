@@ -15,10 +15,9 @@ import java.util.ArrayList;
 import java.lang.Math;
 
 /**
- * @author ARAHIM-WPC
+ * @author 
  */
 public class FastestPath {
-
 	
 	private ArrayList<Tile> toVisit;
 	private ArrayList<Tile> visited;
@@ -39,7 +38,7 @@ public class FastestPath {
 	
 	/**
 	 * 
-	 * @param exploredMap
+	 * @param mapExplore
 	 * @param bot
 	 */
     public FastestPath(Map exploredMap, Robot bot) {
@@ -397,7 +396,7 @@ public class FastestPath {
 				exploredMap.repaint();
                 
                 if (this.exploreMode) {
-                    bot.setSensors();
+                    bot.moveSensor();
                     // TODO correct sensing to do correct stuff
                     // bot.sense(this.exploredMap, this.realMap);
                     this.exploredMap.repaint();

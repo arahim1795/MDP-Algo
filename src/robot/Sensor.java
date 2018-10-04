@@ -4,7 +4,6 @@ import map.Map;
 import robot.RobotConstant.DIRECTION;
 
 /**
- * DO NOT USE YET
  * TODO update simulated sensors
  * @author 18/19 S1 G3
  */
@@ -38,19 +37,10 @@ public class Sensor {
 	 * @param row
 	 * @param dir
 	 */
-	public void setSensor(int robotRow, int robotCol, DIRECTION dir) {
-		switch (dir) {
-			case UP:
-				
-				break;
-			case DOWN:
-				break;
-			case LEFT:
-				break;
-			default:
-				break;
-		}
-		
+	public void setSensor(int row, int col, DIRECTION dir) {
+		sensorRow = row;
+		sensorCol = col;
+		sensorDir = dir;
 	}
 	
 	// Simulator Function(s)
@@ -64,16 +54,16 @@ public class Sensor {
 	public void senseSim(Map mapExplore, Map mapActual) {
 		switch (sensorDir) {
 			case UP:
-				sensorInfoSim(mapExplore, mapActual, 0, -1);
-				return;
-			case DOWN:
-				sensorInfoSim(mapExplore, mapActual, 0, 1);
-				return;
-			case LEFT:
 				sensorInfoSim(mapExplore, mapActual, -1, 0);
 				return;
-			default:
+			case DOWN:
 				sensorInfoSim(mapExplore, mapActual, 1, 0);
+				return;
+			case LEFT:
+				sensorInfoSim(mapExplore, mapActual, 0, -1);
+				return;
+			default:
+				sensorInfoSim(mapExplore, mapActual, 0, 1);
 				return;
 		}		
 	}
@@ -84,46 +74,39 @@ public class Sensor {
 	 * @param mapActual Simulated map
 	 * @param rowMul Numerically adjust where the sense would occur, on the row(x)-axis
 	 * @param colMul Numerically adjust where the sense would occur, on the col(y)-axis
-	 * @return number of cells 'seen' by the sensor, -1 returned is no obstacle/invalid map 
-	 * coordinates is between sensor and its upper limit
 	 */
-	private void sensorInfoSim(Map mapExplore, Map mapActual, int colMul, int rowMul) {
+	private void sensorInfoSim(Map mapExplore, Map mapActual, int rowMul, int colMul) {
+		int sensedRow, sensedCol;
 		/*
-		 * Checks whether there is an obstacle/invalid map coordinates between the sensor and
-		 * its sensor's lower limit, applicable to sensors which lower limit beyond 1 unit/10 cm
+		 * checks whether there is an obstacle/invalid map coordinates within the sensor's
+		 * blindspot (i.e. between 1 unit/10cm and lower limit)
+		 * applicable only to sensors which lower limit beyond 1 unit/10 cm
 		 */
-		int row, col;
 		if (sensorLowerLimit > 1) {
 			for (int i = 1; i < sensorLowerLimit; i++) {
-				row = sensorRow + (rowMul * i);
-				col = sensorCol + (colMul * i);
+				sensedRow = sensorRow + (rowMul * i);
+				sensedCol = sensorCol + (colMul * i);
 				
-				// Invalid map coordinates between sensor and lower limit, to immediately return
-				if (!Map.isValidTile(row, col)) return;
-				// Obstacle is between sensor and lower limit, to immediately return
-				if (mapActual.getTile(row, col).isObstacle()) return;
+				// if 'sensed' tile within blindspot is invalid/does not exist/an obstacle, terminate immediately
+				if (!Map.isValidTile(sensedRow, sensedCol) ||
+					mapActual.getTile(sensedRow, sensedCol).isObstacle()) return;
 			}
 		}
 		
-		/*
-		 * Check whether there is an obstacle/invalid map coordinates between the sensor's lower
-		 * limit and its upper limit
-		 */
+		// Update mapExplore from mapActual from range sensor can see
 		for (int i = sensorLowerLimit; i <= sensorUpperLimit; i++) {
-			row = sensorRow + (rowMul * i);
-			col = sensorCol + (colMul * i);
+			sensedRow = sensorRow + (rowMul * i);
+			sensedCol = sensorCol + (colMul * i);
 			
-			// Check for invalid map coordinates
-			if (!Map.isValidTile(row, col)) return;
+			// if 'sensed' tile is invalid/does not exist, terminate immediately
+			if (!Map.isValidTile(sensedRow, sensedCol)) return;
 			
-			mapExplore.getTile(row, col).setExplored(true);
+			// if 'sensed' tile is valid/does exist, set Tile to explored
+			mapExplore.getTile(sensedRow, sensedCol).setExplored(true);
 			
-			/*
-			 * Check for any obstacles in the actual map, update Tiles with correct boolean
-			 * (obstacle, virtualWall)
-			 */
-			if (mapActual.getTile(row, col).isObstacle()) {
-				mapExplore.setObstacleTile(row, col, true);
+			// if 'sensed tile is an obstacle, set Tile to obstacle and terminate immediately
+			if (mapActual.getTile(sensedRow, sensedCol).isObstacle()) {
+				mapExplore.setObstacleTile(sensedRow, sensedCol, true);
 				return;
 			}
 		}
@@ -132,12 +115,14 @@ public class Sensor {
 		return;
 	}
 
+	/*
 	// Physical Function(s)
+	// TODO incorporate physical function when is ready
 	/**
 	 * 
 	 * @param mapExplore Map used to track exploration
 	 * @param sensorVal Sensor values
-	 */
+	 
 	public void sensePhys(Map mapExplore, int sensorVal) {
 		switch (sensorDir) {
 			case UP:
@@ -161,13 +146,13 @@ public class Sensor {
 	 * @param sensorVal Sensor values
 	 * @param rowMul Numerically adjust where the sense would occur, on the row(x)-axis
 	 * @param colMul Numerically adjust where the sense would occur, on the col(y)-axis
-	 */
+	 
     private void sensorInfoPhys(Map exploredMap, int sensorVal, int colMul, int rowMul) {
        
     	/*
     	 * Check if obstacle exist between sensor and lower limit
     	 * (used only by sensor with lower limit above 1)
-    	 */
+    	 
     	if (sensorVal == 0) return;  // return value for LR sensor if obstacle before lowerRange
         
         int row, col;
@@ -206,6 +191,7 @@ public class Sensor {
             }
         }
     }
+    */
     
     
 }

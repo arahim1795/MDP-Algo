@@ -23,7 +23,7 @@ public class Utility {
 	 * @throws IOException - If an I/O error occurs
 	 */ 
 	public static List<String> getmap(String name) throws IOException {
-		// Construct BufferedReader from FileReader
+		
 		BufferedReader reader = new BufferedReader(new FileReader(name));
 		List<String> mapcomp = new ArrayList<String>();
 		String line = null;

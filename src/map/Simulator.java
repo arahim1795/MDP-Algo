@@ -57,7 +57,7 @@ public class Simulator {
 	public static void main(String[] args) {
 		
 		
-		roboCop = new Robot(RobotConstant.DEFAULT_START_ROW, RobotConstant.DEFAULT_START_COL , startDir, false);
+		roboCop = new Robot(RobotConstant.DEFAULT_START_ROW, RobotConstant.DEFAULT_START_COL, false);
 
 		
 		/*if (!realRun) {
@@ -329,8 +329,8 @@ public class Simulator {
 //            	  roboCop.setRobotCol(RobotConstant.DEFAULT_START_COL);
                 exploredMap.repaint();
                 Explore exploration;
-                exploration = new Explore (roboCop, realMap);
-                exploration.explore(realMap, roboCop);
+                exploration = new Explore (roboCop, realMap, 3);
+                exploration.explore();
             }
         });
         mainButtons.add(btn_Explore);
