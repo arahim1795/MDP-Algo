@@ -39,6 +39,9 @@ public class Map extends JPanel{
     private int _mapLength = 0;
     private int _mapWidth = 0;
 
+    //midPoint data
+    private int midPointRow = -1;
+    private int midPointCol = -1;
     
     
 	// Constructor
@@ -67,6 +70,7 @@ public class Map extends JPanel{
     		public void mousePressed(MouseEvent e) {
 
                 boolean bControlDown = e.isControlDown(); //if Control key is pressed
+                boolean bShiftDown = e.isShiftDown(); //if Shift key is pressed
 
                 int mouseClickX = e.getX();
                 int mouseClickY = e.getY();
@@ -79,7 +83,11 @@ public class Map extends JPanel{
                     if (Map.isValidTile(gridRow, gridCol)) {
                         if (bControlDown) {
                         	setObstacleTile(gridRow, gridCol, false); //clear obstacle if Ctrl is pressed
-                        } 
+                        }
+                        
+                        else if(bShiftDown){
+                        	setMidPoint(gridRow, gridCol);
+                        }
                         else {
                             setObstacleTile(gridRow, gridCol, true);  //else, set as obstacle
                         }
@@ -101,7 +109,36 @@ public class Map extends JPanel{
 		return field[row][col];
 	}
 	
+	public Tile getMidPoint(){
+		if(_bSetMid)
+			return field[midPointRow][midPointCol];
+		return null;
+	}
+	public int getMidPointRow(){
+		return midPointRow;
+	}
+	public int getMidPointCol(){
+		return midPointCol;
+	}
+	public boolean hasMidPoint(){
+		return _bSetMid;
+	}
+	
 	// Setters
+	public void setMidPoint(int row, int col){
+		if(_bSetMid){
+			_bSetMid = false;
+			field[row][col].setMidPoint(false);
+			midPointRow = row;
+			midPointCol = col;
+		}
+		else{
+			_bSetMid = true;
+			field[row][col].setMidPoint(true);
+			midPointRow = row;
+			midPointCol = col;
+		}
+	}
 	// TODO setObstacle & setBoundary to merge, remove redundancies
 	/**
 	 * Sets Tile as an obstacles, adjacent Tile(s) are set as virtualWalls 
@@ -238,6 +275,9 @@ public class Map extends JPanel{
     public boolean isVirtualWall(int row, int col){
     	return(this.field[row][col].isVirtualWall());
     }
+    public boolean isMidPoint(int row, int col){
+    	return(this.field[row][col].isMidPoint());
+    }
 	
 	/**
 	 * Prints map to console for debugging purposes
@@ -313,7 +353,9 @@ public class Map extends JPanel{
                     gridColor = GraphicConstant.C_GOAL;
                 } else if (isObstacleTile(mapRow, mapCol)) {
                     gridColor = GraphicConstant.C_OBSTACLE;
-                } else if(isVirtualWall(mapRow,mapCol)){
+                } else if(isMidPoint(mapRow,mapCol)){
+                	gridColor = GraphicConstant.C_MID;
+                }else if(isVirtualWall(mapRow,mapCol)){
                 	gridColor = GraphicConstant.C_VIRTUAL_WALL;
                 } else {
                     gridColor = GraphicConstant.C_FREE;

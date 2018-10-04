@@ -161,9 +161,21 @@ public class Simulator {
 		        //
             	System.out.println("running FP");
             	//
-		        FastestPath fastestPathAlgo;
-	            fastestPathAlgo = new FastestPath(realMap, roboCop);
-	            fastestPathAlgo.searchFastestPath(MapConstant.GOAL_GRID_ROW, MapConstant.GOAL_GRID_COL);	
+            	Robot tempBot = new Robot(robot.RobotConstant.DEFAULT_START_ROW,robot.RobotConstant.DEFAULT_START_COL,startDir,false);
+		        FastestPath fastestPathAlgoA = new FastestPath(realMap, roboCop);
+		        FastestPath fastestPathAlgoB;
+		        String outStr;
+		        if(realMap.hasMidPoint()){	        	
+		        	outStr = fastestPathAlgoA.searchFastestPath(realMap.getMidPointRow(),realMap.getMidPointCol());
+		        	outStr +=fastestPathAlgoA.searchFastestPath(realMap.getMidPointRow(),realMap.getMidPointCol(),MapConstant.GOAL_GRID_ROW, MapConstant.GOAL_GRID_COL);
+		        } 
+		        else{
+		        	outStr = fastestPathAlgoA.searchFastestPath(MapConstant.GOAL_GRID_ROW, MapConstant.GOAL_GRID_COL);
+		        }
+		        	fastestPathAlgoA.moveBotfromString(outStr);
+	            
+	            //fastestPathAlgoB = new FastestPath(realMap, roboCop);
+	            //fastestPathAlgoA.searchFastestPath(realMap.getMidPointRow(),realMap.getMidPointCol(),MapConstant.GOAL_GRID_ROW, MapConstant.GOAL_GRID_COL);
 	            //
 		        firePropertyChange(prReallyDone, false, true);
 		        return null;

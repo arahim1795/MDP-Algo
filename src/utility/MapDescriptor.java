@@ -38,22 +38,22 @@ public class MapDescriptor {
 		return;
 	}
 	 public static String generateMapStringAligned(Map map){
-		 String mapString = "";
+		 StringBuilder mapString = new StringBuilder();
 
 	        for (int row = 0; row < MapConstant.MAP_ROWS ; row++) 
 	            {
 	                for (int col = 0; col < MapConstant.MAP_COLS; col++) {
 	                // Obstacle - Border walls
 	                if (!map.getTile(row, col).isObstacle()) {
-	                    mapString += "0";
+	                    mapString.append("0");
 	                } else {
-	                    mapString += "1";
+	                	mapString.append("1");
 	                }
 	            }
-	                mapString+="\n";
+	                mapString.append(System.lineSeparator());
 	        }
 
-	        return mapString;
+	        return mapString.toString();
 	 }
 	 public static String generateMapString(Map map) {
 

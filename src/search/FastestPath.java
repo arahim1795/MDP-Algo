@@ -26,16 +26,15 @@ public class FastestPath {
 	
 	private Tile current;
 	private Tile[] neighbours;
-	private Stack<Tile> path;
 	private Map exploredMap;
 	private Map realMap; //real physical map
 	private DIRECTION curDir;
+	private Robot dummyBot;
 	private double[][] gCosts;
 	private Robot bot; //KIV
 	private int loopCount;
 	private boolean exploreMode = false;
-	private boolean waypoint = false;
-	private static boolean firstRun = false;
+
 	
 	private StringBuilder log;
 	private StringBuilder Hlog;
@@ -65,38 +64,26 @@ public class FastestPath {
     public void init(Map map, Robot bot){
     	//TODO dummy debug
     	System.out.println("FP init");
+    	
     	//init log file
     	this.log = new StringBuilder();
     	this.Hlog = new StringBuilder();
-		//initialize variables
+		//initialize realtime variables
 		this.bot = bot;
 		this.exploredMap = map;
-		this.toVisit = new ArrayList<>();
-		this.visited = new ArrayList<>();
-		this.parents = new HashMap<>();
-		this.neighbours = new Tile[4];
+		
+		//init dummy
+    	this.dummyBot = new Robot(bot.getRobotRow(),bot.getRobotCol(),bot.getRobotDir(),false);
+    	
+		//init arrays
+		initArrays();
+		
 		//initialize robot orientation
-		this.current = map.getTile(bot.getRobotRow(), bot.getRobotCol());
-		this.curDir = bot.getRobotDir();
+		initCurrent(bot.getRobotRow(),bot.getRobotCol(),bot.getRobotDir());
 		
-		//initialize gCost array
-		this.gCosts = new double[MapConstant.MAP_ROWS][MapConstant.MAP_COLS];
-		for(int i=0;i<MapConstant.MAP_ROWS;i++){
-			for(int j=0;j<MapConstant.MAP_COLS;j++){
-				if(!canBeVisited(this.exploredMap.getTile(i, j))){
-					gCosts[i][j] = RobotConstant.INFINITE_COST;
-			}
-				else{
-					gCosts[i][j] = 1;
-				}
-		}
-		}
+		initGCosts(this.current);
 		
-		//
-		toVisit.add(current);
 		
-		//initialize starting point
-		gCosts[bot.getRobotRow()][bot.getRobotCol()] = 0;
 		this.loopCount = 0;
 		//TODO
 		//System.out.println(bot.getRobotRow() + "." +bot.getRobotCol());
@@ -104,9 +91,37 @@ public class FastestPath {
 	}	
 	
 	/*Private methods*/
-    private void initPath(){
-    	this.path = new Stack<Tile>();
+    private void initArrays(){
+    	this.toVisit = new ArrayList<>();
+		this.visited = new ArrayList<>();
+		this.parents = new HashMap<>();		this.neighbours = new Tile[4];
+    	
     }
+    private void initCurrent(int row, int col, DIRECTION dir){
+    	this.current = exploredMap.getTile(row, col);
+    	this.curDir = dir;
+    }
+    private void initGCosts(Tile curPos){
+    	//initialize gCost array
+    			this.gCosts = new double[MapConstant.MAP_ROWS][MapConstant.MAP_COLS];
+    			for(int i=0;i<MapConstant.MAP_ROWS;i++){
+    				for(int j=0;j<MapConstant.MAP_COLS;j++){
+    					if(!canBeVisited(this.exploredMap.getTile(i, j))){
+    						gCosts[i][j] = RobotConstant.INFINITE_COST;
+    				}
+    					else{
+    						gCosts[i][j] = 1;
+    					}
+    			}
+    		}
+    			
+    			//
+    			toVisit.add(current);
+    			//initialize starting point
+    			gCosts[bot.getRobotRow()][bot.getRobotCol()] = 0;
+    	
+    }
+
 	//checks if tile can be visited
 	/**
 	 * 
@@ -228,20 +243,44 @@ public class FastestPath {
     	
     	return actualPath;
     }
-	
-    //run Search algo depending on parameters
-    public String runFPAlgo_(int goalRow, int goalCol){
-    	if()
+    //
+    public void moveBotfromString(String movementString){
+    	ArrayList<MOVEMENT> movementList = new ArrayList<>();
+    	char c;
+    	for(int i=0;i<movementString.length();i++){
+    		c = movementString.charAt(i);
+    		//System.out.print(c+"\n");
+    		movementList.add(MOVEMENT.get(c));
+    		//System.out.print(MOVEMENT.get(c)+"\n");
+    	}
+    	
+    	for(MOVEMENT m : movementList){
+    		System.out.println("Move: " + MOVEMENT.print(m));
+    		bot.move(m);
+    	}
     	
     }
+	
+    public String searchFastestPath(int startRow, int startCol, int goalRow, int goalCol){
+    	System.out.println("secondary alfo");
+    	initArrays();
+    	initCurrent(startRow,startCol,dummyBot.getRobotDir());
+    	initGCosts(exploredMap.getTile(startRow, startCol));
+    	dummyBot.setBotPos(startRow, startCol);
+    	
+    	return searchFastestPath(goalRow,goalCol);
+    }
+
 	//aStarSearch
 	/**
 	 * 
-	 * @param goalRow
-	 * @param goalCol
+	 * @param targetRow
+	 * @param targetCol
 	 * @return
 	 */
     public String searchFastestPath(int goalRow, int goalCol){
+    	Stack<Tile> path;
+
     	printHCosts(goalRow,goalCol);
     	log.append(utility.MapDescriptor.generateMapStringAligned(exploredMap));
     	log.append(System.lineSeparator());
@@ -253,7 +292,8 @@ public class FastestPath {
 			
 			//TODO dummy text
 			String visitlog = new String("visiting" + "(" + current.getRow() + "," + current.getCol()+")");
-			System.out.println(visitlog);
+			//System.out.println(visitlog);
+			
 			log.append(visitlog);
 			log.append(System.lineSeparator());
 			log.append(System.lineSeparator());
@@ -271,11 +311,9 @@ public class FastestPath {
 			if(visited.contains(exploredMap.getTile(goalRow, goalCol))){
 				//message : path found
 				path = getPath(goalRow,goalCol);
-				//TODO dummy debug
-				System.out.println(loopCount);
 				printPath(path);
 				writeGCosts(log);
-				return executeFastestPath(path, goalRow,goalCol);
+				return executeFastestPath(path, goalRow,goalCol, false);
 			}
 			
 			//get list of neighbours (4 cardinal directions)
@@ -363,22 +401,24 @@ public class FastestPath {
 	 * @param goalCol
 	 * @return
 	 */
-	private String executeFastestPath(Stack<Tile> path, int goalRow, int goalCol){
+	private String executeFastestPath(Stack<Tile> path, int goalRow, int goalCol, boolean moveBot){
+		//TODO
+		System.out.println("executing" +path.size());
+
 		StringBuilder outputString = new StringBuilder();
 		
 		Tile temp = path.pop();
 		DIRECTION targetDir;
 		
 		ArrayList<MOVEMENT> movementList = new ArrayList<>();
-		Robot tempBot = new Robot(bot.getRobotRow(),bot.getRobotCol(), false);
-		tempBot.setRobotDir(bot.getRobotDir());
+		Robot tempBot = new Robot(dummyBot.getRobotRow(),dummyBot.getRobotCol(),dummyBot.getRobotDir(), false);
+		System.out.println(dummyBot.getRobotRow()+","+dummyBot.getRobotCol());
 		//tempBot.setSpeed(0);
 		//while robot position not on goal tile
 		while((tempBot.getRobotRow()!= goalRow) || (tempBot.getRobotCol()!= goalCol)){
 			//if robot on path tile
 			if(tempBot.getRobotRow()==temp.getRow() && tempBot.getRobotCol()==temp.getCol()){
 				temp = path.pop();
-				
 			}
 			targetDir = getTargetDirection(tempBot.getRobotRow(),tempBot.getRobotCol(),tempBot.getRobotDir(),temp);
 			
@@ -400,6 +440,9 @@ public class FastestPath {
             outputString.append(MOVEMENT.print(m));
            
 		}
+		//store current direction
+		System.out.println(tempBot.getRobotDir());
+		dummyBot.setRobotDir(tempBot.getRobotDir());
 		
 		if(!bot.isRealBot()||this.exploreMode){
 			for (MOVEMENT n : movementList){
@@ -409,9 +452,10 @@ public class FastestPath {
                         return "T";
 					}
 				}
-				
+				if(moveBot){
 				bot.move(n);
 				exploredMap.repaint();
+				}
                 
                 if (this.exploreMode) {
                     bot.setSensors();
@@ -422,7 +466,7 @@ public class FastestPath {
                 
                 
 			}
-		}else{
+		}else if(moveBot){
 			for(MOVEMENT x : movementList){
 				bot.move(x);
 			}
@@ -618,7 +662,7 @@ public class FastestPath {
             	line+=n+"|";
             }
             line+= "\n";
-            System.out.println(line);
+            //System.out.println(line);
             log.append(line);
             log.append(System.lineSeparator());
 

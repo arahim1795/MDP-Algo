@@ -39,6 +39,23 @@ public final class RobotConstant {
                     return 'E';
             }
         }
+        
+        public static MOVEMENT get(char c){
+        	switch(c){
+        	case 'F':
+        		return FORWARD;
+        	case 'B':
+        		return BACKWARD;
+        	case 'R':
+        		return TURNRIGHT;
+        	case 'L':
+        		return TURNLEFT;
+        	case 'C':
+        		return CALIBRATE;
+        	default:
+        		return ERROR;
+        	}
+        }
     }
 	
 	public enum DIRECTION {
