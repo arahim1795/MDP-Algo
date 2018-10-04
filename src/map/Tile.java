@@ -98,7 +98,7 @@ public class Tile {
 	 * @param bool If set to true, Tile is a virtual wall
 	 */
 	public void setVirtualWall(boolean bool) {
-		if (!bool && this.persistent) {return;}
+		if (this.persistent) {return;}
 		virtualWall = bool;
 	}
 
@@ -116,9 +116,9 @@ public class Tile {
 	 * 
 	 */
 	public void reset() {
+		if(!persistent)virtualWall = false;
 		explored = false;
 		obstacle = false;
-		virtualWall = false;
 		persistent = false;
 	}
 

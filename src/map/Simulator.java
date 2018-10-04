@@ -153,7 +153,7 @@ public class Simulator {
 		        
 		        while (true) {
 		            
-		            //System.out.println("waiting");
+		            System.out.println("waiting");
 		            if(ready){		            	
 	    	            break;
 		            }
@@ -291,7 +291,7 @@ public class Simulator {
             public void mousePressed(MouseEvent e) {
                 // Clear the current map
                 System.out.println("Clearing Obstacles..");
-                realMap.clearMap();
+                realMap.reset();
                 exploredMap.clearMap();
             }
         });

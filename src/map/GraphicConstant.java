@@ -11,7 +11,7 @@ import java.awt.*;
 class GraphicConstant {
     public static final int TILE_LINE_WEIGHT = 2;
 
-
+    public static final Color C_VIRTUAL_WALL = Color.MAGENTA;
     public static final Color C_GRID_LINE = Color.GRAY;
     public static final Color C_START = Color.BLUE;
     public static final Color C_MID = Color.YELLOW;
