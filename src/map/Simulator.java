@@ -85,7 +85,7 @@ public class Simulator {
 	     mapCards = new JPanel(new CardLayout());
 	     mapCards.add(realMap, "Main");
 	     
-	    addButtons();
+	     addButtons();
 
 	    mainFrame.add(mapCards);
 	    mainFrame.add(mainButtons);
@@ -169,6 +169,93 @@ public class Simulator {
 		        return null;
 		    }
 		}
+		 
+		 class explorationThread extends SwingWorker<Void, Void> {
+			    
+			    //private Simulator simulator = null;
+			    private final String prReallyDone = "ReallyDone";
+			    
+			    private void whenReallyDone() {
+			        //simulator.afterWorkerFinishes();
+			        System.out.println("FP done");
+			    }
+			    
+			    public explorationThread() {
+			        //this.simulator = sim;
+			        
+			        getPropertyChangeSupport().addPropertyChangeListener(prReallyDone,
+			            new PropertyChangeListener() {
+			            public void propertyChange(PropertyChangeEvent e) {
+			                if (e.getNewValue().equals(true)) {
+			                    whenReallyDone();
+			                }
+			            }
+			        });
+			    }
+			    
+			    protected Void doInBackground() throws Exception {
+			        
+			        while (true) {
+			            
+			            System.out.println("waiting");
+			            if(ready){		            	
+		    	            break;
+			            }
+			        }
+			        //
+	            	System.out.println("running Exploration");
+	            	//
+			        Explore explore;
+			        explore = new Explore (roboCop, realMap, 3);
+			        //explore.setupExplore();
+		            //
+			        firePropertyChange(prReallyDone, false, true);
+			        return null;
+			    }
+			}
+		 
+		 class coverageExplorationThread extends SwingWorker<Void, Void> {
+			    
+			    //private Simulator simulator = null;
+			    private final String prReallyDone = "ReallyDone";
+			    
+			    private void whenReallyDone() {
+			        //simulator.afterWorkerFinishes();
+			        System.out.println("FP done");
+			    }
+			    
+			    public coverageExplorationThread() {
+			        //this.simulator = sim;
+			        
+			        getPropertyChangeSupport().addPropertyChangeListener(prReallyDone,
+			            new PropertyChangeListener() {
+			            public void propertyChange(PropertyChangeEvent e) {
+			                if (e.getNewValue().equals(true)) {
+			                    whenReallyDone();
+			                }
+			            }
+			        });
+			    }
+			    
+			    protected Void doInBackground() throws Exception {
+			        
+			        while (true) {
+			            System.out.println("waiting");
+			            if(ready){		            	
+		    	            break;
+			            }
+			        }
+			      
+			        //
+	            	System.out.println("running Exploration");
+	            	//
+	            	
+		            //
+			        firePropertyChange(prReallyDone, false, true);
+			        return null;
+			        //
+			    }
+			}
 		
 	        
 	        /*
@@ -177,6 +264,8 @@ public class Simulator {
 	         * 
 	         */
 		mainButtons = new JPanel();
+		//GridLayout expr = new GridLayout(0,3);
+		//mainButtons.setLayout(expr);
 		//print map descriptor
 		JButton btn_printMapDesc = new JButton("Print MapDesc");
 		formatButton(btn_printMapDesc);
@@ -200,9 +289,9 @@ public class Simulator {
 		            }
 		        });
 		        mainButtons.add(btn_ready);
+		
 		//load map from string
 		JButton btn_loadMap = new JButton("Load Map");
-		
         formatButton(btn_loadMap);
 
         btn_loadMap.addMouseListener(new MouseAdapter() {
@@ -237,9 +326,7 @@ public class Simulator {
 		
 		//save map to string
         JButton btn_saveMap = new JButton("Save Map");
-        btn_saveMap.setFont(new Font("Arial", Font.BOLD, 18));
-        btn_saveMap.setMargin(new Insets(10, 15, 10, 15));
-        btn_saveMap.setFocusPainted(false);
+        formatButton(btn_saveMap);
 
         btn_saveMap.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
@@ -283,9 +370,7 @@ public class Simulator {
 		
 		//reset map
 		JButton btn_ClearMap = new JButton ("Clear Map");
-		btn_ClearMap.setFont(new Font("Arial", Font.BOLD, 18));
-        btn_ClearMap.setMargin(new Insets(10, 15, 10, 15));
-        btn_ClearMap.setFocusPainted(false);
+		formatButton(btn_ClearMap);
         
 		btn_ClearMap.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
@@ -299,9 +384,7 @@ public class Simulator {
 		
 		//clear obstacles
 		JButton btn_clearObs = new JButton("Clear Obstacles");
-        btn_clearObs.setFont(new Font("Arial", Font.BOLD, 18));
-        btn_clearObs.setMargin(new Insets(10, 15, 10, 15));
-        btn_clearObs.setFocusPainted(false);
+		formatButton(btn_clearObs);
 
         btn_clearObs.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
@@ -313,32 +396,30 @@ public class Simulator {
         });
         mainButtons.add(btn_clearObs);
         
-        JButton btn_SetMid = new JButton("Set Mid Point");
+       /* JButton btn_SetMid = new JButton("Set Mid Point");
         btn_SetMid.setFont(new Font("Arial", Font.BOLD, 18));
         btn_SetMid.setMargin(new Insets(10, 15, 10, 15));
-        btn_SetMid.setFocusPainted(false);
+        btn_SetMid.setFocusPainted(false); */
         
         JButton btn_Explore = new JButton("Explore");
-        btn_Explore.setFont(new Font("Arial", Font.BOLD, 18));
-        btn_Explore.setMargin(new Insets(10, 15, 10, 15));
-        btn_Explore.setFocusPainted(false);
+        formatButton(btn_Explore);
         
         btn_Explore.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
 //                roboCop.setRobotRow(RobotConstant.DEFAULT_START_ROW); 
 //            	  roboCop.setRobotCol(RobotConstant.DEFAULT_START_COL);
-                exploredMap.repaint();
+
                 Explore exploration;
                 exploration = new Explore (roboCop, realMap, 3);
                 exploration.explore();
+
+                new explorationThread().execute();
             }
         });
         mainButtons.add(btn_Explore);
 
         JButton btn_FastestPath = new JButton("Fastest Path");
-        btn_FastestPath.setFont(new Font("Arial", Font.BOLD, 18));
-        btn_FastestPath.setMargin(new Insets(10, 15, 10, 15));
-        btn_FastestPath.setFocusPainted(false);
+        formatButton(btn_FastestPath);
         
         btn_FastestPath.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
@@ -351,6 +432,30 @@ public class Simulator {
             }
         });
         mainButtons.add(btn_FastestPath);
+        
+        JButton btn_CoverageExploration = new JButton("Coverage Exploration");
+        formatButton(btn_CoverageExploration);
+        btn_CoverageExploration.addMouseListener(new MouseAdapter() {
+        	public void mousePressed (MouseEvent e) {
+        		//
+        		realMap.repaint();
+        		new coverageExplorationThread().execute();
+        		//
+        	}
+        });
+        mainButtons.add(btn_CoverageExploration);
+        
+        JButton btn_TimeExploration = new JButton("Time Coverage");
+        formatButton(btn_TimeExploration);
+        btn_TimeExploration.addMouseListener(new MouseAdapter() {
+        	public void mousePressed (MouseEvent e) {
+        		//
+        		realMap.repaint();
+        		
+        		//
+        	}
+        });
+        mainButtons.add(btn_TimeExploration);
 
 	}
 	
