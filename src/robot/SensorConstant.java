@@ -7,8 +7,8 @@ public class SensorConstant {
 	public static final int SR_LOWER_SIM = 1;
 	public static final int SR_UPPER_SIM = 3;
 	// -> Long Range
-	public static final int LR_LOWER_SIM = 3;
-	public static final int LR_UPPER_SIM = 5;
+	public static final int LR_LOWER_SIM = 2;
+	public static final int LR_UPPER_SIM = 9;
 	
 	// Sensor Sense Range (Physical/Actual)
 	// -> Short Range

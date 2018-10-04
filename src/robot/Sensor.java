@@ -4,7 +4,6 @@ import map.Map;
 import robot.RobotConstant.DIRECTION;
 
 /**
- * DO NOT USE YET
  * TODO update simulated sensors
  * @author 18/19 S1 G3
  */
@@ -55,16 +54,16 @@ public class Sensor {
 	public void senseSim(Map mapExplore, Map mapActual) {
 		switch (sensorDir) {
 			case UP:
-				sensorInfoSim(mapExplore, mapActual, 0, -1);
-				return;
-			case DOWN:
-				sensorInfoSim(mapExplore, mapActual, 0, 1);
-				return;
-			case LEFT:
 				sensorInfoSim(mapExplore, mapActual, -1, 0);
 				return;
-			default:
+			case DOWN:
 				sensorInfoSim(mapExplore, mapActual, 1, 0);
+				return;
+			case LEFT:
+				sensorInfoSim(mapExplore, mapActual, 0, -1);
+				return;
+			default:
+				sensorInfoSim(mapExplore, mapActual, 0, 1);
 				return;
 		}		
 	}
@@ -76,7 +75,7 @@ public class Sensor {
 	 * @param rowMul Numerically adjust where the sense would occur, on the row(x)-axis
 	 * @param colMul Numerically adjust where the sense would occur, on the col(y)-axis
 	 */
-	private void sensorInfoSim(Map mapExplore, Map mapActual, int colMul, int rowMul) {
+	private void sensorInfoSim(Map mapExplore, Map mapActual, int rowMul, int colMul) {
 		int sensedRow, sensedCol;
 		/*
 		 * checks whether there is an obstacle/invalid map coordinates within the sensor's

@@ -58,6 +58,14 @@ public class Explore {
 		timeStart = System.currentTimeMillis();
 		timeEnd = timeStart + duration;
 		
+		int robotRow = robot.getRobotRow();
+		int robotCol = robot.getRobotCol();
+		int[] startVal = {robotRow,robotCol};
+		List<int[]> initialReveal = Map.getAdjCoor(robotRow, robotCol);
+		initialReveal.add(startVal);
+		for (int[] coor : initialReveal) 
+			mapExplore.getTile(coor[0], coor[1]).setExplored(true);
+		
 		senseEnv();
 		updateExplore();
 		
@@ -69,8 +77,17 @@ public class Explore {
 	public void explore() {
 		// TODO make termination dependent on another variable
 		// explore set to terminate after 3 minutes (only)
+		int col, row;
+		DIRECTION dir;
 		do {
 			move();
+			
+			//Debug Scripts
+			row = robot.getRobotRow();
+			col = robot.getRobotCol();
+			dir = robot.getRobotDir();
+			System.out.println("R: " + row + " C: " + col + " D: " + dir);
+			
 			updateExplore();
 		} while (System.currentTimeMillis() <= timeEnd);
 		goToStart();
@@ -95,13 +112,14 @@ public class Explore {
 	private void move() {
 		if (peekLeft()) {
 			moveRobot(MOVEMENT.TURNLEFT);
-		} else if (peekRight()) {
-			moveRobot(MOVEMENT.TURNRIGHT);
-		} else if (peekUp()) {
+			if (peekUp()) moveRobot(MOVEMENT.FORWARD);
+		} else if (peekUp()) 
 			moveRobot(MOVEMENT.FORWARD);
-		} else {
+		  else if (peekRight()){
+			moveRobot(MOVEMENT.TURNRIGHT);
+			if (peekUp()) moveRobot(MOVEMENT.FORWARD);
+		} else if (peekDown())
 			moveRobot(MOVEMENT.BACKWARD);
-		}
 	}
 	
 	/**
@@ -135,6 +153,23 @@ public class Explore {
 				return isUpFree();
 			default:
 				return isDownFree();
+		}
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	private boolean peekDown() {
+		switch(robot.getRobotDir()) {
+			case UP:
+				return isDownFree();
+			case DOWN:
+				return isUpFree();
+			case LEFT:
+				return isRightFree();
+			default:
+				return isDownFree();
 		}	
 	}
 	
@@ -160,8 +195,8 @@ public class Explore {
 	 * @return
 	 */
 	private boolean isUpFree() {
-		int x = robot.getRobotRow(), y = robot.getRobotCol();
-		return notObs(x-1, y-1) && notObs(x+1, y-1) && notVir(x, y-1);
+		int y = robot.getRobotRow(), x = robot.getRobotCol();
+		return notObs(y-2, x-1) && notObs(y-2, x+1) && notVir(y-1, x);
 	}
 	
 	/**
@@ -169,8 +204,8 @@ public class Explore {
 	 * @return
 	 */
 	private boolean isDownFree() {
-		int x = robot.getRobotRow(), y = robot.getRobotCol();
-		return notObs(x-1, y+1) && notObs(x+1, y+1) && notVir(x, y+1);
+		int y = robot.getRobotRow(), x = robot.getRobotCol();
+		return notObs(y+2, x-1) && notObs(y+2, x+1) && notVir(y+1, x);
 	}
 	
 	/**
@@ -178,8 +213,8 @@ public class Explore {
 	 * @return
 	 */
 	private boolean isLeftFree() {
-		int x = robot.getRobotRow(), y = robot.getRobotCol();
-		return notObs(x-1, y+1) && notObs(x-1, y-1) && notVir(x-1, y);
+		int y = robot.getRobotRow(), x = robot.getRobotCol();
+		return notObs(y+1, x-2) && notObs(y-1, x-2) && notVir(y, x-1);
 	}
 	
 	/**
@@ -187,8 +222,8 @@ public class Explore {
 	 * @return
 	 */
 	private boolean isRightFree() {
-		int x = robot.getRobotRow(), y = robot.getRobotCol();
-		return notObs(x+1, y+1) && notObs(x+1, y-1) && notVir(x+1, y);
+		int y = robot.getRobotRow(), x = robot.getRobotCol();
+		return notObs(y+1, x+2) && notObs(y-1, x+2) && notVir(y, x+1);
 	}
 	
 	/**
@@ -198,8 +233,8 @@ public class Explore {
 	 * @return
 	 */
 	private boolean notObs(int row, int col) {
-		if (Map.isValidTile(col, row)) {
-			Tile tile = mapActual.getTile(col, row);
+		if (Map.isValidTile(row, col)) {
+			Tile tile = mapExplore.getTile(row, col);
 			return tile.isExplored() && !tile.isObstacle();
 		}
 		return false;
@@ -212,8 +247,8 @@ public class Explore {
 	 * @return
 	 */
 	private boolean notVir(int row, int col) {
-		if (Map.isValidTile(col, row)) {
-			Tile tile = mapActual.getTile(col, row);
+		if (Map.isValidTile(row, col)) {
+			Tile tile = mapExplore.getTile(row, col);
 			return tile.isExplored() && !tile.isObstacle() && !tile.isVirtualWall();
 		}
 		return false;
@@ -224,7 +259,9 @@ public class Explore {
 	 * @param move
 	 */
 	private void moveRobot(MOVEMENT move) {
+		// TODO physical robot movement
 		robot.move(move, true); // sendToAndroid);
+		senseEnv();
 	}
 	
 	/**

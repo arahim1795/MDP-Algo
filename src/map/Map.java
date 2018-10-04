@@ -36,9 +36,14 @@ public class Map extends JPanel{
 		for (int r = 0; r < row; r++)
 			for (int c = 0; c < col; c++) {
 				field[r][c] = new Tile(r,c);
-				if (r == 0 || r == (row - 1) || c == 0 || c == (col -1)) 
+				// Set Tiles at Map boundaries as persistent virtual wall
+				if (r == 0 || r == (row - 1) || c == 0 || c == (col -1)) {
 					field[r][c].setVirtualWall(true);
+					field[r][c].setPersistent(true);
+				}
 			}
+		
+		
 	}
 	
 	// Getters
@@ -67,18 +72,21 @@ public class Map extends JPanel{
 	
 	// Setter(s)
 	/**
-	 * Sets Tile as an obstacles, adjacent Tile(s) are set as virtualWalls 
+	 * Sets Tile as an obstacles, adjacent Tile(s) are set as virtual walls, except for
+	 * persistent Tile(s)
 	 * @param row
 	 * @param col
 	 * @param bool
 	 */
 	public void setObstacleTile(int row, int col, boolean bool) {
-		Tile tile = field[row][col];
 		List<int[]> adjCoor = getAdjCoor(row,col);
 		
+		field[row][col].setObstacle(bool);
 		if (!adjCoor.isEmpty())
-			for (int[] coor : adjCoor)
-				field[coor[0]][coor[1]].setVirtualWall(bool);
+			for (int[] coor : adjCoor) {
+				Tile tile = field[coor[0]][coor[1]];
+				if (!bool && !tile.isPersistent()) tile.setVirtualWall(bool);
+			}
 		else System.out.println("No valid adjacent Tile");		
 	}
 
@@ -94,14 +102,15 @@ public class Map extends JPanel{
 		List<int[]> listCoor = new ArrayList<int[]>();
 		
 		int r, c;
-		int[] coor = new int[2];
+		
 		
 		for (int y = -1; y <= 1; y++) {
 			for (int x = -1; x <= 1; x++) {
 				r = row + y;
 				c = col + x;
 				
-				if (!((y == 0) || (x == 0)) && isValidTile(r,c)) {
+				if (!((y == 0) && (x == 0)) && isValidTile(r,c)) {
+					int[] coor = new int[2];
 					coor[0] = r;
 					coor[1] = c;
 					listCoor.add(coor);
@@ -119,7 +128,7 @@ public class Map extends JPanel{
 	 * respectively, false otherwise
 	 */
 	public static boolean isValidTile(int checkRow, int checkCol){
-		return checkRow > 0 && checkRow < row && checkCol > 0 && checkCol < col;
+		return checkRow >= 0 && checkRow < row && checkCol >= 0 && checkCol < col;
 	}
 	
 	/**
@@ -138,17 +147,20 @@ public class Map extends JPanel{
 	 * Convert from map read by Reader in List of Strings form to Tile[][] map
 	 * @param mapStr Map represented by a series of String
 	 */
-	public void parseMap(List<String> mapStr) {
-		for (int r = 0; r < row; r++) {
+	public static Map parseMap(List<String> mapStr) {
+		Map map = new Map();
+		for (int r = 0; r < row; r++) 
 			for (int c = 0; c < col; c++) {
+				Tile tile = map.getTile(r, c);
 				switch (mapStr.get(r).charAt(c)) {
 					case '1':
-						field[r][c].setObstacle(true);
+						tile.setObstacle(true);
 					default:
 						break;
 				}
 			}
-		}
+		
+		return map;
 	}
 	
 	/**
