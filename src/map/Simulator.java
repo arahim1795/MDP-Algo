@@ -162,7 +162,7 @@ public class Simulator {
             	System.out.println("running FP");
             	//
 		        FastestPath fastestPathAlgo;
-	            fastestPathAlgo = new FastestPath(exploredMap, roboCop);
+	            fastestPathAlgo = new FastestPath(realMap, roboCop);
 	            fastestPathAlgo.searchFastestPath(MapConstant.GOAL_GRID_ROW, MapConstant.GOAL_GRID_COL);	
 	            //
 		        firePropertyChange(prReallyDone, false, true);

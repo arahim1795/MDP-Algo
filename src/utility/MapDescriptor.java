@@ -37,7 +37,24 @@ public class MapDescriptor {
         }
 		return;
 	}
-	
+	 public static String generateMapStringAligned(Map map){
+		 String mapString = "";
+
+	        for (int row = 0; row < MapConstant.MAP_ROWS ; row++) 
+	            {
+	                for (int col = 0; col < MapConstant.MAP_COLS; col++) {
+	                // Obstacle - Border walls
+	                if (!map.getTile(row, col).isObstacle()) {
+	                    mapString += "0";
+	                } else {
+	                    mapString += "1";
+	                }
+	            }
+	                mapString+="\n";
+	        }
+
+	        return mapString;
+	 }
 	 public static String generateMapString(Map map) {
 
 	        String mapString = "";

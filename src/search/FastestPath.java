@@ -26,6 +26,7 @@ public class FastestPath {
 	
 	private Tile current;
 	private Tile[] neighbours;
+	private Stack<Tile> path;
 	private Map exploredMap;
 	private Map realMap; //real physical map
 	private DIRECTION curDir;
@@ -33,6 +34,8 @@ public class FastestPath {
 	private Robot bot; //KIV
 	private int loopCount;
 	private boolean exploreMode = false;
+	private boolean waypoint = false;
+	private static boolean firstRun = false;
 	
 	private StringBuilder log;
 	private StringBuilder Hlog;
@@ -101,6 +104,9 @@ public class FastestPath {
 	}	
 	
 	/*Private methods*/
+    private void initPath(){
+    	this.path = new Stack<Tile>();
+    }
 	//checks if tile can be visited
 	/**
 	 * 
@@ -223,6 +229,11 @@ public class FastestPath {
     	return actualPath;
     }
 	
+    //run Search algo depending on parameters
+    public String runFPAlgo_(int goalRow, int goalCol){
+    	if()
+    	
+    }
 	//aStarSearch
 	/**
 	 * 
@@ -232,7 +243,8 @@ public class FastestPath {
 	 */
     public String searchFastestPath(int goalRow, int goalCol){
     	printHCosts(goalRow,goalCol);
-		Stack<Tile> path;
+    	log.append(utility.MapDescriptor.generateMapStringAligned(exploredMap));
+    	log.append(System.lineSeparator());
 		do{
 			loopCount++;
 			//get next Tile (with minimum cost) to expand 
@@ -296,13 +308,18 @@ public class FastestPath {
                 }
             }
             
-            log.append(neighbours);
             
             //iterate and update G values for each neighbour
             for(int i=0;i<4;i++){
             	if(neighbours[i] != null){
             		//check if node is already visited
             		if(visited.contains(neighbours[i])){continue;}
+            		else{
+            			//TODO dummy debug
+            			log.append("canVisit: ");
+            			log.append("("+neighbours[i].getRow()+","+neighbours[i].getCol()+")");
+            			log.append(System.lineSeparator());}
+            		
             		//if node is not already in toVisit list
             		if(!toVisit.contains(neighbours[i])){
             			parents.put(neighbours[i], current);
@@ -513,13 +530,13 @@ public class FastestPath {
         switch (bot.getRobotDir()) {
         
             case UP:
-                rowMIN=2;rowMAX=2;colMIN=-1;colMAX=1;                
+                rowMIN=-2;rowMAX=-2;colMIN=-1;colMAX=1;break;          
             case RIGHT:
-            	rowMIN=-1;rowMAX=1;colMIN=2;colMAX=2;
+            	rowMIN=-1;rowMAX=1;colMIN=2;colMAX=2;break;
             case DOWN:
-                rowMIN=-2;rowMAX=-2;colMIN=0;colMAX=0;
+                rowMIN=2;rowMAX=2;colMIN=0;colMAX=0;break;
             case LEFT:
-                rowMIN=-1;rowMAX=1;colMIN=-2;colMAX=-2;
+                rowMIN=-1;rowMAX=1;colMIN=-2;colMAX=-2;break;
         }
         for(int x=rowMIN;x<=rowMAX;x++){
         	for(int y=colMIN;y<=colMAX;y++){
