@@ -60,6 +60,8 @@ public class FastestPath {
 	 * @param bot
 	 */
     public void init(Map map, Robot bot){
+    	//TODO dummy debug
+    	System.out.println("FP init");
     	//init log file
     	this.log = new StringBuilder();
     	this.Hlog = new StringBuilder();
@@ -106,7 +108,15 @@ public class FastestPath {
 	 * @return
 	 */
     private boolean canBeVisited(Tile t) {
-        return  !t.isObstacle() && !t.isVirtualWall();
+    	if(t.isObstacle()||t.isVirtualWall())
+    		return false;
+    	for(int i =-1;i<=1;i++){
+    		for(int j=-1;j<=1;j++){
+    			if(exploredMap.isObstacleTile(t.getRow()+i,t.getCol()+ j))
+    				return false;
+    		}
+    	}
+        return  true;
     }
 	
 	/**
@@ -285,6 +295,8 @@ public class FastestPath {
                     neighbours[3] = null;
                 }
             }
+            
+            log.append(neighbours);
             
             //iterate and update G values for each neighbour
             for(int i=0;i<4;i++){
