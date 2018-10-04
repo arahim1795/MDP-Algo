@@ -241,13 +241,8 @@ public class Robot {
 	 * 
 	 * @param m
 	 */
-<<<<<<< HEAD
 	public void move(MOVEMENT m){
 		move(m,realBot);
-=======
-	public void move(MOVEMENT m) {
-		move(m,true);
->>>>>>> origin/b0.53.rahim
 	}
 	
 	/**
@@ -255,11 +250,7 @@ public class Robot {
 	 * @param m
 	 * @return
 	 */
-<<<<<<< HEAD
 	private DIRECTION updateTurnDirection(MOVEMENT m){
-=======
-	private DIRECTION updateTurnDirection(MOVEMENT m) {
->>>>>>> origin/b0.53.rahim
 		if (m == MOVEMENT.TURNLEFT) return DIRECTION.getLeft(robotDir);
 		else return DIRECTION.getRight(robotDir);
 	}
