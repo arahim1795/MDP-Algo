@@ -30,11 +30,11 @@ public class Explore {
 	private Map mapActual;
 	
 	// Constructor
-	public Explore(Robot bot, Map actual, long minutes) {
+	public Explore(Robot bot, Map explore, Map actual, long seconds) {
 		robot = bot;
-		mapExplore = new Map(bot);
+		mapExplore = explore;
 		mapActual = actual;
-		duration = TimeUnit.MINUTES.toMillis(minutes);
+		duration = TimeUnit.SECONDS.toMillis(seconds);
 	}
 	
 	// Getter(s)
@@ -272,13 +272,18 @@ public class Explore {
 	private void senseEnv() {
 		robot.moveSensor();
 		robot.sense(mapExplore, mapActual);
+		mapActual.repaint();
+		mapExplore.repaint();
 	}
 	
 	private void updateExplore() {
 		int count = 0;
 		for (int r = 0; r < Map.row; r++) 
 			for (int c = 0; c < Map.col; c++)
-				if (mapExplore.getTile(r, c).isExplored()) count++;
+				if (mapExplore.getTile(r, c).isExplored()) {
+					count++;
+					mapExplore.repaint();
+				}
 		
 		explored = count; 
 		System.out.println("Explored: " + count);

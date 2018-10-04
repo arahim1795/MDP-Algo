@@ -87,7 +87,8 @@ public class Map extends JPanel{
                         }
                     }
                     //
-                    repaint();}
+                    repaint();
+                    }
         });
 		
 	}
@@ -101,6 +102,11 @@ public class Map extends JPanel{
 	 */
 	public Tile getTile(int row, int col){
 		return field[row][col];
+	}
+	
+	
+	public boolean isExploredTile(int row, int col) {
+		return field[row][col].isExplored();
 	}
 	
 	/**
@@ -252,6 +258,15 @@ public class Map extends JPanel{
 				tile.setExplored(true);
 	}
 	
+	/**
+	 * 
+	 */
+	public void setAllUnExplored() {
+		for(Tile[] row : field)
+			for (Tile tile : row)
+				tile.setExplored(false);
+	}
+	
 	
 	public void paintComponent(Graphics g) {
 		 
@@ -290,17 +305,23 @@ public class Map extends JPanel{
 
                 Color gridColor = null;
                 
-                if (isStartZone(mapRow, mapCol)) {
-                    gridColor = GraphicConstant.C_START;
-                } else if (isGoalZone(mapRow, mapCol)) {
-                    gridColor = GraphicConstant.C_GOAL;
-                } else if (isObstacleTile(mapRow, mapCol)) {
-                    gridColor = GraphicConstant.C_OBSTACLE;
-                } else if(isVirtualWall(mapRow,mapCol)){
-                	gridColor = GraphicConstant.C_VIRTUAL_WALL;
-                } else {
-                    gridColor = GraphicConstant.C_FREE;
+                if (!isExploredTile(mapRow, mapCol)) {
+                	gridColor = GraphicConstant.C_UNEXPLORED;
                 }
+                else {
+                	if (isStartZone(mapRow, mapCol)) {
+                        gridColor = GraphicConstant.C_START;
+                    } else if (isGoalZone(mapRow, mapCol)) {
+                        gridColor = GraphicConstant.C_GOAL;
+                    } else if (isObstacleTile(mapRow, mapCol)) {
+                        gridColor = GraphicConstant.C_OBSTACLE;
+                    } else if(isVirtualWall(mapRow,mapCol)){
+                    	gridColor = GraphicConstant.C_VIRTUAL_WALL;
+                    } else {
+                        gridColor = GraphicConstant.C_FREE;
+                    }
+                }
+                
 
                 g.setColor(gridColor);
                 g.fillRect(mapColorTiles[mapRow][mapCol].gridX,
