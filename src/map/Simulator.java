@@ -126,17 +126,17 @@ public class Simulator {
 		
 		//init classes
 		
-		 class testThread extends SwingWorker<Void, Void> {
+		 class fastestPathThread extends SwingWorker<Void, Void> {
 		    
 		    //private Simulator simulator = null;
 		    private final String prReallyDone = "ReallyDone";
 		    
 		    private void whenReallyDone() {
 		        //simulator.afterWorkerFinishes();
-		        System.out.println("done");
+		        System.out.println("FP done");
 		    }
 		    
-		    public testThread() {
+		    public fastestPathThread() {
 		        //this.simulator = sim;
 		        
 		        getPropertyChangeSupport().addPropertyChangeListener(prReallyDone,
@@ -150,50 +150,26 @@ public class Simulator {
 		    }
 		    
 		    protected Void doInBackground() throws Exception {
-		        String k = "this is a test";
-		        String j = k;
 		        
 		        while (true) {
 		            
-		            System.out.println("waiting");
+		            //System.out.println("waiting");
 		            if(ready){		            	
 	    	            break;
 		            }
 		        }
+		        //
             	System.out.println("running FP");
+            	//
 		        FastestPath fastestPathAlgo;
 	            fastestPathAlgo = new FastestPath(exploredMap, roboCop);
-	            fastestPathAlgo.searchFastestPath(MapConstant.GOAL_GRID_ROW, MapConstant.GOAL_GRID_COL);
-		        
+	            fastestPathAlgo.searchFastestPath(MapConstant.GOAL_GRID_ROW, MapConstant.GOAL_GRID_COL);	
+	            //
 		        firePropertyChange(prReallyDone, false, true);
 		        return null;
 		    }
 		}
 		
-		 //TODO debug
-		class FastestPathThread extends SwingWorker<Integer, Void> {
-            
-			@Override
-	        protected Integer doInBackground() throws Exception {
-	            roboCop.setBotPos(RobotConstant.DEFAULT_START_ROW, RobotConstant.DEFAULT_START_COL);
-	            exploredMap.repaint();
-	            while(true){
-	            	if(ready){
-	            		FastestPath fastestPathAlgo;
-	    	            fastestPathAlgo = new FastestPath(exploredMap, roboCop);
-	    	            fastestPathAlgo.searchFastestPath(RobotConstant.DEFAULT_GOAL_ROW, RobotConstant.DEFAULT_GOAL_COL);
-	    	            break;
-	            	}
-	            }
-	            
-				return 24;
-
-	        	}
-			protected void done(){
-				System.out.println("FPAlgo Complete");
-				return;
-			}
-		}
 	        
 	        /*
 	         * 
@@ -201,6 +177,18 @@ public class Simulator {
 	         * 
 	         */
 		mainButtons = new JPanel();
+		//print map descriptor
+		JButton btn_printMapDesc = new JButton("Print MapDesc");
+		formatButton(btn_printMapDesc);
+		btn_printMapDesc.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                // print descriptor string on console
+                System.out.println("Print MapDesc");
+                System.out.println(utility.MapDescriptor.generateMapString(realMap));
+            }
+        });		
+		
+		mainButtons.add(btn_printMapDesc);
 		//TODO ready button
 				JButton btn_ready = new JButton("READY");
 		        formatButton(btn_ready);
@@ -356,11 +344,8 @@ public class Simulator {
             public void mousePressed(MouseEvent e) {
 //                roboCop.setRobotRow(RobotConstant.DEFAULT_START_ROW); 
   //              roboCop.setRobotCol(RobotConstant.DEFAULT_START_COL);
-                exploredMap.repaint();
-                //TODO dummy debug
-                System.out.println("FP");
-                new testThread().execute();
-                //new FastestPathThread().execute();
+                realMap.repaint();
+                new fastestPathThread().execute();
                
                 
             }
