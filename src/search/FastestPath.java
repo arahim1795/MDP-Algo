@@ -12,6 +12,7 @@ import map.MapConstant;
 import java.util.HashMap;
 import java.util.Stack;
 import java.util.ArrayList;
+import java.lang.Math;
 
 /**
  * @author ARAHIM-WPC
@@ -34,6 +35,7 @@ public class FastestPath {
 	private boolean exploreMode = false;
 	
 	private StringBuilder log;
+	private StringBuilder Hlog;
 	
 	/**
 	 * 
@@ -60,6 +62,7 @@ public class FastestPath {
     public void init(Map map, Robot bot){
     	//init log file
     	this.log = new StringBuilder();
+    	this.Hlog = new StringBuilder();
 		//initialize variables
 		this.bot = bot;
 		this.exploredMap = map;
@@ -138,7 +141,7 @@ public class FastestPath {
 	 */
 	private double getHCost(Tile T, int goalRow, int goalCol){
 		//no of rows and column moves needed to get to goal
-		int movementCost = (T.getRow()-goalRow)+(T.getCol()-goalCol);
+		int movementCost = Math.abs(T.getRow()-goalRow)+Math.abs(T.getCol()-goalCol);
 		//factor 1 turn if not on same row or col as goal
 		int turnCost = 0;
 		if(T.getRow() != goalRow || T.getCol() != goalCol){turnCost += RobotConstant.TURN_COST;}
@@ -218,16 +221,19 @@ public class FastestPath {
 	 * @return
 	 */
     public String searchFastestPath(int goalRow, int goalCol){
+    	printHCosts(goalRow,goalCol);
 		Stack<Tile> path;
 		do{
 			loopCount++;
 			//get next Tile (with minimum cost) to expand 
 			
 			current = 	minimumCostTile(goalRow,goalCol);
+			
 			//TODO dummy text
 			String visitlog = new String("visiting" + "(" + current.getRow() + "," + current.getCol()+")");
 			System.out.println(visitlog);
 			log.append(visitlog);
+			log.append(System.lineSeparator());
 			log.append(System.lineSeparator());
 			
 			//point robot 
@@ -254,6 +260,9 @@ public class FastestPath {
 			//down
 			if(Map.isValidTile(current.getRow()+1, current.getCol())){
 				neighbours[0] = exploredMap.getTile(current.getRow()+1, current.getCol());
+				if (!canBeVisited(neighbours[0])) {
+                    neighbours[0] = null;
+                }
 			}			
 			//up
 			if (Map.isValidTile(current.getRow() - 1, current.getCol())) {
@@ -301,6 +310,14 @@ public class FastestPath {
             }
             
             //TODO dummy debug
+            log.append("toVisit : ");
+            for(Tile t : toVisit){
+            	log.append("("+t.getRow()+","+t.getCol()+") ["+(int)gCosts[t.getRow()][t.getCol()]+"]");
+            	log.append(" ; ");
+            }
+
+        	log.append(System.lineSeparator());
+        	log.append(System.lineSeparator());
             printGCosts();
             //System.out.println();
 			
@@ -515,6 +532,40 @@ public class FastestPath {
 
         System.out.println("\n");
     }
+	
+	private void printHCosts(int goalRow, int goalCol){
+		int n;
+		String line;
+		String header = new String("   ");
+		for(int k=0;k<MapConstant.MAP_COLS;k++){
+			header += k;
+			if(k<10){header += " ";}
+			header+="|";
+		}
+		Hlog.append(header);
+		Hlog.append(System.lineSeparator());
+		Hlog.append(System.lineSeparator());
+        for (int i = 0; i < MapConstant.MAP_ROWS; i++) {
+        	line = new String(i + " ");
+        	if(i<10){ line+=" ";}
+            for (int j = 0; j < MapConstant.MAP_COLS; j++) {
+            	n = (int)this.getHCost(this.exploredMap.getTile(i, j), goalRow, goalCol);
+            	if(n<10){
+            		line+=" ";
+            	}
+            	
+            	line+= n+"|";
+            }
+        
+            line+= "\n";
+
+            Hlog.append(line);
+            Hlog.append(System.lineSeparator());
+
+        }
+        Hlog.append(System.lineSeparator());
+        writeHCosts(Hlog);
+    }
 	private void printGCosts() {
 		String header = new String("   ");
 		for(int k=0;k<MapConstant.MAP_COLS;k++){
@@ -548,6 +599,26 @@ public class FastestPath {
 	
 	private static void writeGCosts(StringBuilder s){
 		String fileName = "FPlog";
+		String outStr = s.toString();
+        // Allows overriding of existing text files
+        if (!fileName.endsWith(".txt")) {
+            fileName += ".txt";
+        }
+        try{
+        // Change file writing part to a better implementation
+        FileWriter fw = new FileWriter(fileName);
+        //TODO debug dummy
+        fw.write(outStr);
+        fw.flush();
+        fw.close();
+        }
+        catch(Exception e){
+        	e.printStackTrace();
+        }
+	}
+	
+	private static void writeHCosts(StringBuilder s){
+		String fileName = "HCostlog";
 		String outStr = s.toString();
         // Allows overriding of existing text files
         if (!fileName.endsWith(".txt")) {
