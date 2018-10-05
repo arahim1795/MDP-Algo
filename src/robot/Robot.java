@@ -106,6 +106,9 @@ public class Robot {
 	
 	
 	// Getter(s)
+	public boolean isAtPos(int row, int col){
+		return (this.robotRow == row && this.robotCol == col);
+	}
 	/**
 	 * 
 	 * @return

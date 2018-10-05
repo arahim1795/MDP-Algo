@@ -101,13 +101,10 @@ public class Sensor {
 			// if 'sensed' tile is invalid/does not exist, terminate immediately
 			if (!Map.isValidTile(sensedRow, sensedCol)) break;
 			
-			System.out.println("Current: " + sensedRow + "-" + sensedCol + " " + mapActual.getTile(sensedRow, sensedCol).isObstacle() );
-			
 			// if 'sensed tile is an obstacle, set Tile to obstacle and terminate immediately
 			if (mapActual.getTile(sensedRow, sensedCol).isObstacle()) {
 				mapExplore.getTile(sensedRow, sensedCol).setExplored(true);
 				mapExplore.setObstacleTile(sensedRow, sensedCol, true);
-				System.out.println("Current: " + sensedRow + "-" + sensedCol + " " + mapActual.getTile(sensedRow, sensedCol).isObstacle() );
 				break;
 			}
 			
