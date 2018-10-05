@@ -73,7 +73,6 @@ public class FastestPath {
 		
 		//init dummy
     	this.dummyBot = new Robot(bot.getRobotRow(),bot.getRobotCol(),bot.getRobotDir(),false);
-    	
 		//init arrays
 		initArrays();
 		
@@ -82,23 +81,43 @@ public class FastestPath {
 		
 		initGCosts(this.current);
 		
-		
 		this.loopCount = 0;
 		//TODO
 		//System.out.println(bot.getRobotRow() + "." +bot.getRobotCol());
 		//printGCosts();
 	}	
 	
+    //diagnostic
+    public void fpDiag_Init(){
+    	System.out.println("==========FP DIAG==============");
+    	System.out.println("Robot");
+    	System.out.println(bot.getRobotRow()+","+bot.getRobotCol()+","+bot.getRobotDir());
+    	System.out.println("Current");
+    	System.out.println(current.getRow()+","+current.getCol());
+    	System.out.println(curDir);
+    	System.out.println("==========FP DIAG END===========");
+    }
+    public void fpDiag_Search(int goalRow,int goalCol){
+    	System.out.println("==========FPsearch DIAG========");
+    	System.out.println("Goal");
+    	System.out.println(goalRow + "," +goalCol);
+    	System.out.println("Current");
+    	System.out.println(current.getRow()+","+current.getCol());
+    	System.out.println(curDir);
+    	System.out.println("=======FPsearch DIAG END========");
+    }
 	/*Private methods*/
-    private void initArrays(){
+    public void initArrays(){
     	this.toVisit = new ArrayList<>();
 		this.visited = new ArrayList<>();
-		this.parents = new HashMap<>();		this.neighbours = new Tile[4];
+		this.parents = new HashMap<>();		
+		this.neighbours = new Tile[4];
     	
     }
     private void initCurrent(int row, int col, DIRECTION dir){
     	this.current = exploredMap.getTile(row, col);
     	this.curDir = dir;
+    	System.out.println(current.getRow()+"," + current.getCol());
     }
     private void initGCosts(Tile curPos){
     	//initialize gCost array
@@ -132,7 +151,7 @@ public class FastestPath {
     		return false;
     	for(int i =-1;i<=1;i++){
     		for(int j=-1;j<=1;j++){
-    			if(exploredMap.isObstacleTile(t.getRow()+i,t.getCol()+ j)||exploredMap.isExploredTile(t.getRow()+i,t.getCol()+ j))
+    			if(exploredMap.isObstacleTile(t.getRow()+i,t.getCol()+ j)||!exploredMap.isExploredTile(t.getRow()+i,t.getCol()+ j))
     				return false;
     		}
     	}
@@ -279,7 +298,8 @@ public class FastestPath {
 	 */
     public String searchFastestPath(int goalRow, int goalCol){
     	Stack<Tile> path;
-
+    	fpDiag_Search(goalRow,goalCol);
+    	fpDiag_Init();
     	printHCosts(goalRow,goalCol);
     	log.append(utility.MapDescriptor.generateMapStringAligned(exploredMap));
     	log.append(System.lineSeparator());
@@ -291,7 +311,7 @@ public class FastestPath {
 			
 			//TODO dummy text
 			String visitlog = new String("visiting" + "(" + current.getRow() + "," + current.getCol()+")");
-			//System.out.println(visitlog);
+			System.out.println(visitlog);
 			
 			log.append(visitlog);
 			log.append(System.lineSeparator());

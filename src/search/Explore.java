@@ -126,17 +126,16 @@ public class Explore {
 		String str;
 		
 		if (!visitedGoal) {
-			System.out.println("goal");
 			str = fp.searchFastestPath(goalRow, goalCol);
 			fp.moveBotfromString(str);
 		}
 		
 		int startRow = MapConstant.START_GRID_ROW;
 		int startCol = MapConstant.START_GRID_COL;
+		fp.initArrays();
 		System.out.println(robot.getRobotRow() + " " + robot.getRobotCol());
-		
-		if (robot.getRobotRow() != startRow && robot.getRobotCol() != startCol) {
-			System.out.println("start");
+		fp.fpDiag_Init();
+		if (!robot.isAtPos(startRow, startCol)) {
 			str = fp.searchFastestPath(startRow, startCol);
 			System.out.println(str);
 			fp.moveBotfromString(str);

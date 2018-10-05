@@ -230,7 +230,7 @@ public class Simulator {
 				exploredMap.repaint();
 				
 				ready = false;
-				new fastestPathThread().execute();
+				//new fastestPathThread().execute();
 				//
 				firePropertyChange(exploreComplete, false, true);
 				return null;
