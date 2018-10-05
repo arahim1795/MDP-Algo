@@ -112,6 +112,7 @@ public class Map extends JPanel{
 	public Tile getMidPoint(){
 		if(_bSetMid)
 			return field[midPointRow][midPointCol];
+		System.out.println("No mid point set");
 		return null;
 	}
 	public int getMidPointRow(){
@@ -298,6 +299,11 @@ public class Map extends JPanel{
 		for (Tile[] row : field)
 			for (Tile tile : row)
 				tile.reset();
+		if(_bSetMid){
+			this.midPointRow = -1;
+			this.midPointCol = -1;
+			_bSetMid = false;
+		}
 	}
 	
 	/**

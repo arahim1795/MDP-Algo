@@ -229,7 +229,7 @@ public class Simulator {
 
                     try (BufferedReader br = new BufferedReader(new FileReader(
                             file))) {
-                    	realMap.clearMap();
+                    	realMap.reset();
                     	utility.MapDescriptor.loadMapfromFile(realMap, br.readLine());
                     } catch (IOException e1) {
                         e1.printStackTrace();

@@ -136,7 +136,7 @@ public class Tile {
 		if(!persistent)virtualWall = false;
 		explored = false;
 		obstacle = false;
-		persistent = false;
+		midPoint = false;
 	}
 
 	
