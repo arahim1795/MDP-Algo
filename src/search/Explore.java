@@ -87,12 +87,14 @@ public class Explore {
 		}
 		else {
 			// Debug Scripts
-			int col, row;
-			DIRECTION dir;
+			
+			
 			
 			move();
 			
 			//Debug Scripts
+			int col, row;
+			DIRECTION dir;
 			row = robot.getRobotRow();
 			col = robot.getRobotCol();
 			dir = robot.getRobotDir();
