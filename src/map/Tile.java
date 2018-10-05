@@ -119,7 +119,7 @@ public class Tile {
 	 * Set Tile as a persistent Tile
 	 * @param bool If set to true, Tile is persistent
 	 */
-	public void setPersistent(boolean bool) {
+	void setPersistent(boolean bool) {
 		persistent = bool;
 	}
 	

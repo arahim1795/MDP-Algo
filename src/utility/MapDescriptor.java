@@ -30,8 +30,6 @@ public class MapDescriptor {
                     binPtr++;
                 }
             }
-
-            map.setAllExplored();
         } catch (Exception e) {
             e.printStackTrace();
         }
