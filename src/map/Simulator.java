@@ -207,9 +207,12 @@ public class Simulator {
 				System.out.println("Exploration Running");
 				
 				Explore explore;
-				explore = new Explore(roboCop, exploredMap, realMap, 30);
+				explore = new Explore(roboCop, exploredMap, realMap, 20, 100);
 				explore.setupExplore();	
 				exploredMap.repaint();
+				
+				ready = false;
+				new fastestPathThread().execute();
 				//
 				firePropertyChange(exploreComplete, false, true);
 				return null;

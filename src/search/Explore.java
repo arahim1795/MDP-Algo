@@ -17,11 +17,13 @@ public class Explore {
 	private Robot robot;
 	
 	// Map Exploration Tracker
-	private int coverage;
-	private int explored; // explore counter
+	private int explored = 0; // explore counter
+	private double coveragePercent;
+	private int maxCoverage;
 	private long timeStart, timeEnd;
 	private long duration;
 	private Map mapExplore;
+	private boolean visitedGoal = false;
 	
 	// Obstacles Tracker
 	private ArrayList<ExploreTile> obstacles = new ArrayList<ExploreTile>();
@@ -30,11 +32,12 @@ public class Explore {
 	private Map mapActual;
 	
 	// Constructor
-	public Explore(Robot bot, Map explore, Map actual, long seconds) {
+	public Explore(Robot bot, Map explore, Map actual, long seconds, double coveragePercent) {
 		robot = bot;
 		mapExplore = explore;
 		mapActual = actual;
 		duration = TimeUnit.SECONDS.toMillis(seconds);
+		this.coveragePercent = coveragePercent;
 	}
 	
 	// Getter(s)
@@ -66,6 +69,8 @@ public class Explore {
 		for (int[] coor : initialReveal) 
 			mapExplore.getTile(coor[0], coor[1]).setExplored(true);
 		
+		maxCoverage = (int) (coveragePercent / 100 * 300);
+		
 		senseEnv();
 		updateExplore();
 		
@@ -81,26 +86,30 @@ public class Explore {
 		DIRECTION dir;
 		do {
 			move();
-			
-			//Debug Scripts
-			row = robot.getRobotRow();
-			col = robot.getRobotCol();
-			dir = robot.getRobotDir();
-			System.out.println("R: " + row + " C: " + col + " D: " + dir);
-			
 			updateExplore();
-		} while (System.currentTimeMillis() <= timeEnd);
+		} while (System.currentTimeMillis() <= timeEnd && explored < maxCoverage);
+		
 		goToStart();
 	}
 	
 	private void goToStart() {
 		
-		int row = RobotConstant.DEFAULT_START_ROW;
-		int col = RobotConstant.DEFAULT_START_COL;
+		int goalRow = MapConstant.GOAL_GRID_ROW;
+		int goalCol = MapConstant.GOAL_GRID_COL;
 		
-		if (robot.getRobotRow() != row && robot.getRobotCol() != col) {
-			FastestPath fp = new FastestPath(mapExplore, robot);
-			String str = fp.searchFastestPath(row, col);
+		FastestPath fp = new FastestPath(mapExplore, robot);;
+		String str;
+		
+		if (!visitedGoal) {
+			str = fp.searchFastestPath(goalRow, goalCol);
+			fp.moveBotfromString(str);
+		}
+		
+		int startRow = MapConstant.START_GRID_ROW;
+		int startCol = MapConstant.START_GRID_COL;
+		
+		if (robot.getRobotRow() != startRow && robot.getRobotCol() != startCol) {
+			str = fp.searchFastestPath(startRow, startCol);
 			fp.moveBotfromString(str);
 		}
 
@@ -265,6 +274,8 @@ public class Explore {
 		// TODO physical robot movement
 		robot.move(move, true); // sendToAndroid);
 		senseEnv();
+		if (robot.getRobotRow() == MapConstant.GOAL_GRID_ROW && robot.getRobotCol() == MapConstant.GOAL_GRID_COL)
+			visitedGoal = true;
 	}
 	
 	/**
