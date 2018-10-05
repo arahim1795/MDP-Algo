@@ -53,6 +53,7 @@ public class Simulator {
 
     // File name of the loaded map
     private static String _loadedMapFilename = null;
+    private static int timeLimit;
 
 	public static void main(String[] args) {
 		
@@ -79,6 +80,7 @@ public class Simulator {
 		 mainFrame = new JFrame("Map Simulator");
 	     mainFrame.setLocation(120,80);
 	     mainFrame.setSize(new Dimension(960, 657));
+	    // mainFrame.setSize(new Dimension(960, 700));
 	     mainFrame.setLayout(new GridLayout(1,2,3,3));
 	     
 	     //JPanel for map views
@@ -118,7 +120,7 @@ public class Simulator {
 	
     private static void formatButton(JButton btn) {
         btn.setFont(new Font("Arial", Font.BOLD, 18));
-        btn.setMargin(new Insets(10, 15, 10, 15));
+        btn.setMargin(new Insets(15, 15, 15, 15));
         btn.setFocusPainted(false);
     }
 	
@@ -177,7 +179,7 @@ public class Simulator {
 			    
 			    private void whenReallyDone() {
 			        //simulator.afterWorkerFinishes();
-			        System.out.println("FP done");
+			        System.out.println("Explore done");
 			    }
 			    
 			    public explorationThread() {
@@ -214,17 +216,17 @@ public class Simulator {
 			    }
 			}
 		 
-		 class coverageExplorationThread extends SwingWorker<Void, Void> {
+		 class exploreCoverageThread extends SwingWorker<Void, Void> {
 			    
 			    //private Simulator simulator = null;
 			    private final String prReallyDone = "ReallyDone";
 			    
 			    private void whenReallyDone() {
 			        //simulator.afterWorkerFinishes();
-			        System.out.println("FP done");
+			        System.out.println("Explore coverage done");
 			    }
 			    
-			    public coverageExplorationThread() {
+			    public exploreCoverageThread() {
 			        //this.simulator = sim;
 			        
 			        getPropertyChangeSupport().addPropertyChangeListener(prReallyDone,
@@ -264,8 +266,7 @@ public class Simulator {
 	         * 
 	         */
 		mainButtons = new JPanel();
-		//GridLayout expr = new GridLayout(0,3);
-		//mainButtons.setLayout(expr);
+		
 		//print map descriptor
 		JButton btn_printMapDesc = new JButton("Print MapDesc");
 		formatButton(btn_printMapDesc);
@@ -275,20 +276,18 @@ public class Simulator {
                 System.out.println("Print MapDesc");
                 System.out.println(utility.MapDescriptor.generateMapString(realMap));
             }
-        });		
-		
+        });
 		mainButtons.add(btn_printMapDesc);
+		
 		//TODO ready button
-				JButton btn_ready = new JButton("READY");
-		        formatButton(btn_ready);
-
-		        btn_ready.addMouseListener(new MouseAdapter() {
-		            public void mousePressed(MouseEvent e) {
-
-		                ready = true;
-		            }
-		        });
-		        mainButtons.add(btn_ready);
+		JButton btn_ready = new JButton("READY");
+		formatButton(btn_ready);
+		btn_ready.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				ready = true;
+				}
+			});
+		mainButtons.add(btn_ready);
 		
 		//load map from string
 		JButton btn_loadMap = new JButton("Load Map");
@@ -433,30 +432,70 @@ public class Simulator {
         });
         mainButtons.add(btn_FastestPath);
         
-        JButton btn_CoverageExploration = new JButton("Coverage Exploration");
-        formatButton(btn_CoverageExploration);
-        btn_CoverageExploration.addMouseListener(new MouseAdapter() {
+        JButton btn_ExploreCoverage = new JButton("Explore Coverage");
+        formatButton(btn_ExploreCoverage);
+        btn_ExploreCoverage.addMouseListener(new MouseAdapter() {
         	public void mousePressed (MouseEvent e) {
-        		//
-        		realMap.repaint();
-        		new coverageExplorationThread().execute();
-        		//
+        		String coverage;
+        		coverage=JOptionPane.showInputDialog("Input coverage value between 0 - 100");
+        		try {
+        			int coverageValue = Integer.parseInt(coverage);
+        			if (coverageValue>0 && coverageValue<=100) {
+            			JOptionPane.showMessageDialog(null, "entered coverage value:" + coverage);
+            			//
+                		realMap.repaint();
+                		new exploreCoverageThread().execute();
+                		//
+            		}
+            		else {
+            			JOptionPane.showMessageDialog(null, "Invalid integer.\n Pls enter a value between  0- 100");
+            		}
+        		}
+        		catch (Exception e1) {
+        			JOptionPane.showMessageDialog(null, "Pls enter an integer value only.");
+        		}
         	}
         });
-        mainButtons.add(btn_CoverageExploration);
+        mainButtons.add(btn_ExploreCoverage);
         
-        JButton btn_TimeExploration = new JButton("Time Coverage");
-        formatButton(btn_TimeExploration);
-        btn_TimeExploration.addMouseListener(new MouseAdapter() {
+        JButton btn_ExploreTime = new JButton("Explore Time");
+        formatButton(btn_ExploreTime);
+        btn_ExploreTime.addMouseListener(new MouseAdapter() {
         	public void mousePressed (MouseEvent e) {
-        		//
-        		realMap.repaint();
-        		
-        		//
+        		String timeInput;
+        		timeInput = JOptionPane.showInputDialog("Input time in MM:SS format \n max : 99:59");
+        		if (timeInput.matches("[0-9]{1,2}:[0-9]{1,2}")) {
+        			String[] timeInputArr = timeInput.split(":");
+                    timeLimit = (Integer.parseInt(timeInputArr[0]) * 60) + Integer.parseInt(timeInputArr[1]);
+                    JOptionPane.showMessageDialog(null, "entered time limit: \n" + timeLimit + " seconds \n click ok to continue");
+            		//
+            		realMap.repaint();
+            		//explore time algo
+            		//
+        		}
+        		else {
+        			JOptionPane.showMessageDialog(null, "Wrong format. Try again.");
+        		}
         	}
         });
-        mainButtons.add(btn_TimeExploration);
-
+        mainButtons.add(btn_ExploreTime);
+        
+        JButton btn_EnterSpeed = new JButton ("Enter Speed");
+        formatButton(btn_EnterSpeed);
+        btn_EnterSpeed.addMouseListener(new MouseAdapter() {
+        	public void mousePressed (MouseEvent e) {
+        		String speedInput;
+        		speedInput = JOptionPane.showInputDialog("Input speed (steps per second)");
+        		try {
+        			int speedValue = Integer.parseInt(speedInput);
+        			roboCop.setRobotSpeed(speedValue);
+        		}
+        		catch (Exception e2) {
+        			JOptionPane.showMessageDialog(null, "Pls enter an integer value only.");
+        		}
+        	}
+        });
+        mainButtons.add(btn_EnterSpeed);
 	}
 	
 	

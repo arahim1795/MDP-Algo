@@ -171,6 +171,10 @@ public class Robot {
 		robotDir = newDir;
 	}
 	
+	public void setRobotSpeed (int robotSpeed) {
+		speed = robotSpeed;
+	}
+	
 	
 	// Other Function(s)
 	/**
