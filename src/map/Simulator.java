@@ -107,10 +107,10 @@ public class Simulator {
 
 	private static void initMainLayout() {
 		if (!realRun) {
-			mapCards.add(exploredMap, "REAL_MAP");
+			mapCards.add(realMap, "REAL_MAP");
 		}
-		mapCards.add(realMap, "REAL MAP");
-		mapCards.add(exploredMap, "EXPLORATION");
+		mapCards.add(exploredMap, "REAL MAP");
+		mapCards.add(realMap, "EXPLORATION");
 
 
 		CardLayout cl = ((CardLayout) mapCards.getLayout());
@@ -207,7 +207,7 @@ public class Simulator {
 				System.out.println("Exploration Running");
 				
 				Explore explore;
-				explore = new Explore(roboCop, realMap, exploredMap, 30);
+				explore = new Explore(roboCop, exploredMap, realMap, 30);
 				explore.setupExplore();	
 				exploredMap.repaint();
 				//
