@@ -14,13 +14,6 @@ public final class RobotConstant {
 	public static final int TURN_COST = 20;
 	public static final int INFINITE_COST = 9999;
 	
-	// Sensors default range (In grids)
-	public static final int SHORT_IR_MIN = 1;	//short range sensor(cells)
-	public static final int SHORT_IR_MAX = 2;
-	
-	public static final int LONG_IR_MIN = 1;	//long range sensor(cells)
-	public static final int LONG_IR_MAX = 4;
-	
 	public enum MOVEMENT {
         FORWARD, BACKWARD, TURNLEFT, TURNRIGHT, CALIBRATE, ERROR;
         public static char print(MOVEMENT m) {
@@ -38,6 +31,23 @@ public final class RobotConstant {
                 default:
                     return 'E';
             }
+        }
+        
+        public static MOVEMENT get(char c){
+        	switch(c){
+        	case 'F':
+        		return FORWARD;
+        	case 'B':
+        		return BACKWARD;
+        	case 'R':
+        		return TURNRIGHT;
+        	case 'L':
+        		return TURNLEFT;
+        	case 'C':
+        		return CALIBRATE;
+        	default:
+        		return ERROR;
+        	}
         }
     }
 	

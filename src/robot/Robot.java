@@ -27,9 +27,9 @@ public class Robot {
 	/*
 	 * 		  ^       ^      ^
 	 * 		  S2      S3     S4
-	 * 	< S1  X   |   X  |   X
+	 * 	< S1  X   |   X  |   X  S5 >
 	 * 		  -   +   -  +   -
-	 * 	< L1  X   |   X  |   X  L2 > 
+	 *		  X   |   X  |   X  L1 > 
 	 * 		  -   +   -  +   -
 	 * 		  X   |   X  |   X 
 	 * 
@@ -43,8 +43,8 @@ public class Robot {
 	private final Sensor SRFrontCenter;		// S3
 	private final Sensor SRFrontRight;		// S4
 	private final Sensor SRLeft;			// S1
-	private final Sensor LRLeft;			// L1
-	private final Sensor LRRight;			// L2
+	private final Sensor SRRight;			// S5
+	private final Sensor LRRight;			// L1
 	
 	// Constructor(s)
 	/**
@@ -61,18 +61,19 @@ public class Robot {
 		speed = RobotConstant.SPEED;
 		realBot = isReal;
 		
-		int srLowerLimit = RobotConstant.SHORT_IR_MIN;
-		int srUpperLimit = RobotConstant.SHORT_IR_MAX;
-		int lrLowerLimit = RobotConstant.LONG_IR_MIN;
-		int lrUpperLimit = RobotConstant.LONG_IR_MAX;
+		int srLowerLimit = SensorConstant.SR_LOWER_SIM;
+		int srUpperLimit = SensorConstant.SR_UPPER_SIM;
+		int lrLowerLimit = SensorConstant.LR_LOWER_SIM;
+		int lrUpperLimit = SensorConstant.LR_UPPER_SIM;
 		
-		SRFrontLeft = new Sensor(srLowerLimit, srUpperLimit, robotRow - 1, robotCol - 1, robotDir, "S2");
-		SRFrontCenter = new Sensor(srLowerLimit, srUpperLimit, robotRow - 1, robotCol, robotDir, "S3");
-		SRFrontRight = new Sensor(srLowerLimit, srUpperLimit, robotRow - 1, robotCol + 1, robotDir, "S4");
-		SRLeft = new Sensor(srLowerLimit, srUpperLimit, robotRow - 1, robotCol - 1, findNewDirection(MOVEMENT.TURNLEFT), "S1");
-		LRLeft = new Sensor(lrLowerLimit, lrUpperLimit, robotRow, robotCol - 1, findNewDirection(MOVEMENT.TURNLEFT), "L1");
-		LRRight = new Sensor(lrLowerLimit, lrUpperLimit, robotRow, robotCol + 1, findNewDirection(MOVEMENT.TURNRIGHT), "L2");
+		SRFrontLeft = new Sensor(srLowerLimit, srUpperLimit, robotRow-1, robotCol-1, robotDir, "S2");
+		SRFrontCenter = new Sensor(srLowerLimit, srUpperLimit, robotRow-1, robotCol, robotDir, "S3");
+		SRFrontRight = new Sensor(srLowerLimit, srUpperLimit, robotRow-1, robotCol+1, robotDir, "S4");
+		SRLeft = new Sensor(srLowerLimit, srUpperLimit, robotRow-1, robotCol-1, DIRECTION.LEFT, "S1");
+		SRRight = new Sensor(srLowerLimit, srUpperLimit, robotRow-1, robotCol+1, DIRECTION.RIGHT, "S5");
+		LRRight = new Sensor(lrLowerLimit, lrUpperLimit, robotRow, robotCol+1, DIRECTION.RIGHT, "L1");
 	}
+	
 	
 	/**
 	 * Instantiate a robot 'placed' at coordinate [row(y),col(x)]
@@ -82,6 +83,7 @@ public class Robot {
 	 * @param isReal
 	 * @param direction Direction Robot's facing
 	 */
+	 
 	public Robot(int startRow, int startCol, DIRECTION startDir, boolean isReal) {
 		robotRow = startRow;
 		robotCol = startCol;
@@ -89,20 +91,24 @@ public class Robot {
 		speed = RobotConstant.SPEED;
 		realBot = isReal;
 
-		int srLowerLimit = RobotConstant.SHORT_IR_MIN;
-		int srUpperLimit = RobotConstant.SHORT_IR_MAX;
-		int lrLowerLimit = RobotConstant.LONG_IR_MIN;
-		int lrUpperLimit = RobotConstant.LONG_IR_MAX;
+		int srLowerLimit = SensorConstant.SR_LOWER_SIM;
+		int srUpperLimit = SensorConstant.SR_UPPER_SIM;
+		int lrLowerLimit = SensorConstant.LR_LOWER_SIM;
+		int lrUpperLimit = SensorConstant.LR_UPPER_SIM;
 		
-		SRFrontLeft = new Sensor(srLowerLimit, srUpperLimit, robotRow - 1, robotCol - 1, robotDir, "S2");
-		SRFrontCenter = new Sensor(srLowerLimit, srUpperLimit, robotRow - 1, robotCol, robotDir, "S3");
-		SRFrontRight = new Sensor(srLowerLimit, srUpperLimit, robotRow - 1, robotCol + 1, robotDir, "S4");
-		SRLeft = new Sensor(srLowerLimit, srUpperLimit, robotRow - 1, robotCol - 1, findNewDirection(MOVEMENT.TURNLEFT), "S1");
-		LRLeft = new Sensor(lrLowerLimit, lrUpperLimit, robotRow, robotCol - 1, findNewDirection(MOVEMENT.TURNLEFT), "L1");
-		LRRight = new Sensor(lrLowerLimit, lrUpperLimit, robotRow, robotCol + 1, findNewDirection(MOVEMENT.TURNRIGHT), "L2");
-	}
+		SRFrontLeft = new Sensor(srLowerLimit, srUpperLimit, robotRow-1, robotCol-1, robotDir, "S2");
+		SRFrontCenter = new Sensor(srLowerLimit, srUpperLimit, robotRow-1, robotCol, robotDir, "S3");
+		SRFrontRight = new Sensor(srLowerLimit, srUpperLimit, robotRow-1, robotCol+1, robotDir, "S4");
+		SRLeft = new Sensor(srLowerLimit, srUpperLimit, robotRow-1, robotCol-1, findNewDirection(MOVEMENT.TURNLEFT), "S1");
+		SRRight = new Sensor(srLowerLimit, srUpperLimit, robotRow-1, robotCol+1, findNewDirection(MOVEMENT.TURNRIGHT), "S5");
+		LRRight = new Sensor(lrLowerLimit, lrUpperLimit, robotRow, robotCol+1, findNewDirection(MOVEMENT.TURNRIGHT), "L1");
+	} 
+	
 	
 	// Getter(s)
+	public boolean isAtPos(int row, int col){
+		return (this.robotRow == row && this.robotCol == col);
+	}
 	/**
 	 * 
 	 * @return
@@ -141,6 +147,10 @@ public class Robot {
 	
 	
 	// Setter
+	public void setBotPos(int row, int col){
+		robotRow = row;
+		robotCol = col;
+	}
 	/**
 	 * 
 	 * @param robotRow
@@ -173,23 +183,20 @@ public class Robot {
 	 * @param sendToAndroid
 	 */
 	public void move(MOVEMENT m, boolean sendToAndroid) {
-		if (!realBot) {
-			// Emulate real movement by pausing execution.
-			try {
-				TimeUnit.MILLISECONDS.sleep(speed);
-			} catch (InterruptedException e) {
-					System.out.println("Something went wrong in Robot.move()!");
-			}
-		}
+		
+		// Simulate Real-Time Movement
+		if (!realBot) 
+			try { TimeUnit.MILLISECONDS.sleep(speed); } 
+			catch ( InterruptedException e) { System.out.println("Something went wrong in Robot.move()!"); }
 		
 		switch (m) {
 			case FORWARD:
 				switch (robotDir) {
 					case UP:
-						robotRow++;
+						robotRow--;
 						break;
 					case DOWN:
-						robotRow--;
+						robotRow++;
 						break;
 					case LEFT:
 						robotCol--;
@@ -202,10 +209,10 @@ public class Robot {
 			case BACKWARD:
 				switch (robotDir) {
 					case UP:
-						robotRow--;
+						robotRow++;
 						break;
 					case DOWN:
-						robotRow++;
+						robotRow--;
 						break;
 					case LEFT:
 						robotCol++;
@@ -226,10 +233,11 @@ public class Robot {
 				break;
 		}
 		
-		if (realBot) sendMovement(m, sendToAndroid);
+		// TODO incorporate physical robot function
+		if (realBot) ;// sendMovement(m, sendToAndroid);
 		else System.out.println("Move: " + MOVEMENT.print(m));
 		
-		// TODO need to track whether the Robot is a goal zone
+		// TODO: whether we need this for explore, don't see need
 		// updateTouchedGoal();
 	}
 
@@ -238,7 +246,7 @@ public class Robot {
 	 * @param m
 	 */
 	public void move(MOVEMENT m){
-		move(m,true);
+		move(m,realBot);
 	}
 	
 	/**
@@ -247,7 +255,7 @@ public class Robot {
 	 * @return
 	 */
 	private DIRECTION updateTurnDirection(MOVEMENT m){
-		if (m == MOVEMENT.TURNLEFT) return DIRECTION.getRight(robotDir);
+		if (m == MOVEMENT.TURNLEFT) return DIRECTION.getLeft(robotDir);
 		else return DIRECTION.getRight(robotDir);
 	}
 	
@@ -261,23 +269,24 @@ public class Robot {
 		else return DIRECTION.getLeft(robotDir);
 	}
 
-    /* TODO Sensor senseSim changes not accounted for
     /**
      * Calls the .sense() method of all the attached sensors and stores the received values in an integer array.
      *
      * @return [SRFrontLeft, SRFrontCenter, SRFrontRight, SRLeft, SRRight, LRLeft]
-
-    public int[] sense(Map explorationMap, Map realMap) {
-        int[] result = new int[6];
-
+	 */
+    public void sense(Map explorationMap, Map realMap) {
         if (!realBot) {
-            result[0] = SRFrontLeft.senseSim(explorationMap, realMap);
-            result[1] = SRFrontCenter.senseSim(explorationMap, realMap);
-            result[2] = SRFrontRight.senseSim(explorationMap, realMap);
-            result[3] = SRLeft.senseSim(explorationMap, realMap);
-            result[4] = LRLeft.senseSim(explorationMap, realMap);
-            result[5] = LRRight.senseSim(explorationMap, realMap);
+        	// simulated robot 'sense' function
+            SRFrontLeft.senseSim(explorationMap, realMap);
+            SRFrontCenter.senseSim(explorationMap, realMap);
+            SRFrontRight.senseSim(explorationMap, realMap);
+            SRLeft.senseSim(explorationMap, realMap);
+            SRRight.senseSim(explorationMap, realMap);
+            LRRight.senseSim(explorationMap, realMap);
         } else {
+        	// TODO: incorporate physical robot function of sense
+        	System.out.println("Physical Robot Function unsupported as of this moment");
+        	/*
             Comms robotComm = robotComm.getCommMgr();
             String msg = robotComm.recvMsg();
             String[] msgArr = msg.split(";");
@@ -300,48 +309,46 @@ public class Robot {
 
             String[] mapStrings = MapDescriptor.generateMapDescriptor(explorationMap);
             robotComm.sendMsg(mapStrings[0] + " " + mapStrings[1], robotComm.MAP_STRINGS);
+            */
         }
+    }
 
-        return result;
-    } */
-
-	// TODO: update done in Sensor itself?
 	/**
 	 * 
 	 */
-	public void setSensors() {
+	public void moveSensor() {
 		switch (robotDir) {
 			case UP:
-				SRFrontLeft.setSensor(robotRow - 1, robotCol - 1, robotDir);
-				SRFrontCenter.setSensor(robotRow - 1, robotCol, robotDir);
-				SRFrontRight.setSensor(robotRow - 1, robotCol + 1, robotDir);
-				SRLeft.setSensor(robotRow - 1, robotCol - 1, findNewDirection(MOVEMENT.TURNLEFT));
-				LRLeft.setSensor(robotRow, robotCol - 1, findNewDirection(MOVEMENT.TURNLEFT));
-				LRRight.setSensor(robotRow, robotCol + 1, findNewDirection(MOVEMENT.TURNRIGHT));
+				SRFrontLeft.setSensor(robotRow-1, robotCol-1, robotDir);
+				SRFrontCenter.setSensor(robotRow-1, robotCol, robotDir);
+				SRFrontRight.setSensor(robotRow-1, robotCol+1, robotDir);
+				SRLeft.setSensor(robotRow-1, robotCol-1, DIRECTION.LEFT);
+				SRRight.setSensor(robotRow-1, robotCol+1, DIRECTION.RIGHT);
+				LRRight.setSensor(robotRow, robotCol+1, DIRECTION.RIGHT);
 				break;
 			case DOWN:
-				SRFrontLeft.setSensor(robotRow + 1, robotCol + 1, robotDir);
-				SRFrontCenter.setSensor(robotRow + 1, robotCol, robotDir);
-				SRFrontRight.setSensor(robotRow + 1, robotCol - 1, robotDir);
-				SRLeft.setSensor(robotRow + 1, robotCol + 1, findNewDirection(MOVEMENT.TURNLEFT));
-				LRLeft.setSensor(robotRow, robotCol + 1, findNewDirection(MOVEMENT.TURNLEFT));
-				LRRight.setSensor(robotRow, robotCol - 1, findNewDirection(MOVEMENT.TURNRIGHT));
+				SRFrontLeft.setSensor(robotRow+1, robotCol+1, robotDir);
+				SRFrontCenter.setSensor(robotRow+1, robotCol, robotDir);
+				SRFrontRight.setSensor(robotRow+1, robotCol-1, robotDir);
+				SRLeft.setSensor(robotRow+1, robotCol+1, DIRECTION.RIGHT);
+				SRRight.setSensor(robotRow+1, robotCol-1, DIRECTION.LEFT);
+				LRRight.setSensor(robotRow, robotCol-1, DIRECTION.LEFT);
 				break;
 			case LEFT:
-				SRFrontLeft.setSensor(robotRow + 1, robotCol - 1, robotDir);
-				SRFrontCenter.setSensor(robotRow, robotCol - 1, robotDir);
-				SRFrontRight.setSensor(robotRow - 1, robotCol - 1, robotDir);
-				SRLeft.setSensor(robotRow + 1, robotCol - 1, findNewDirection(MOVEMENT.TURNLEFT));
-				LRLeft.setSensor(robotRow + 1, robotCol, findNewDirection(MOVEMENT.TURNLEFT));
-				LRRight.setSensor(robotRow - 1, robotCol, findNewDirection(MOVEMENT.TURNRIGHT));
+				SRFrontLeft.setSensor(robotRow+1, robotCol-1, robotDir);
+				SRFrontCenter.setSensor(robotRow, robotCol-1, robotDir);
+				SRFrontRight.setSensor(robotRow-1, robotCol-1, robotDir);
+				SRLeft.setSensor(robotRow+1, robotCol-1, DIRECTION.DOWN);
+				SRRight.setSensor(robotRow-1, robotCol-1, DIRECTION.UP);
+				LRRight.setSensor(robotRow-1, robotCol, DIRECTION.UP);
 				break;
 			default:
-				SRFrontLeft.setSensor(robotRow - 1, robotCol + 1, robotDir);
-				SRFrontCenter.setSensor(robotRow, robotCol + 1, robotDir);
-				SRFrontRight.setSensor(robotRow + 1, robotCol + 1, robotDir);
-				SRLeft.setSensor(robotRow - 1, robotCol + 1, findNewDirection(MOVEMENT.TURNLEFT));
-				LRLeft.setSensor(robotRow - 1, robotCol, findNewDirection(MOVEMENT.TURNLEFT));
-				LRRight.setSensor(robotRow + 1, robotCol, findNewDirection(MOVEMENT.TURNRIGHT));
+				SRFrontLeft.setSensor(robotRow-1, robotCol+1, robotDir);
+				SRFrontCenter.setSensor(robotRow, robotCol+1, robotDir);
+				SRFrontRight.setSensor(robotRow+1, robotCol+1, robotDir);
+				SRLeft.setSensor(robotRow-1, robotCol+1, DIRECTION.UP);
+				SRRight.setSensor(robotRow+1, robotCol+1, DIRECTION.DOWN);
+				LRRight.setSensor(robotRow+1, robotCol, DIRECTION.DOWN);
 				break;
 		}
 	}

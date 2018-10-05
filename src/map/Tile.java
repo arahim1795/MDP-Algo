@@ -7,11 +7,13 @@ public class Tile {
 
 	private int col;
 	private int row;
+	private int obStacles = 0;
 	
 	private boolean explored = false;
 	private boolean obstacle = false;
 	private boolean virtualWall = false;
 	private boolean persistent = false;
+	private boolean midPoint = false;
 	
 	// Constructor
 	/**
@@ -73,6 +75,9 @@ public class Tile {
 		return persistent;
 	}
 	
+	public boolean isMidPoint(){
+		return midPoint;
+	}
 	
 	// Setter(s)
 	
@@ -98,16 +103,28 @@ public class Tile {
 	 * @param bool If set to true, Tile is a virtual wall
 	 */
 	public void setVirtualWall(boolean bool) {
-		if (!bool && this.persistent) {return;}
-		virtualWall = bool;
+		if (this.persistent) {return;}
+		else if(bool){
+			obStacles++;
+			virtualWall = bool;
+		}
+		else{
+			obStacles--;
+			if(obStacles==0)
+				virtualWall = bool;
+		}
 	}
 
 	/**
 	 * Set Tile as a persistent Tile
 	 * @param bool If set to true, Tile is persistent
 	 */
-	public void setPersistent(boolean bool) {
+	void setPersistent(boolean bool) {
 		persistent = bool;
+	}
+	
+	public void setMidPoint(boolean bool){
+		midPoint = bool;
 	}
 	
 	
@@ -116,10 +133,10 @@ public class Tile {
 	 * 
 	 */
 	public void reset() {
+		if(!persistent)virtualWall = false;
 		explored = false;
 		obstacle = false;
-		virtualWall = false;
-		persistent = false;
+		midPoint = false;
 	}
 
 	
