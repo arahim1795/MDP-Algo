@@ -47,6 +47,8 @@ public class Simulator {
 	private static robot.Robot roboCop = null;
 	private static final boolean realRun = false;
 	private static boolean ready = false;
+	private static boolean exploredDone = false;
+	private static boolean noInterrupt = true;
 
 	// Map width & length used to render real & robot map
 	private static int mapWidth;
@@ -109,8 +111,7 @@ public class Simulator {
 		if (!realRun) {
 			mapCards.add(realMap, "REAL_MAP");
 		}
-		mapCards.add(exploredMap, "REAL MAP");
-		mapCards.add(realMap, "EXPLORATION");
+		mapCards.add(exploredMap, "EXPLORATION");
 
 
 		CardLayout cl = ((CardLayout) mapCards.getLayout());
@@ -119,6 +120,11 @@ public class Simulator {
 		} else {
 			cl.show(mapCards, "EXPLORATION");
 		}
+	}
+	
+	private static void switchMap(){
+		CardLayout cl = ((CardLayout) mapCards.getLayout());
+		cl.show(mapCards, "EXPLORATION");
 	}
 
 
@@ -166,12 +172,18 @@ public class Simulator {
 		        }
 		        //
             	System.out.println("running FP");
+            	Map FPMap;
+            	if(exploredDone || realRun){
+            		FPMap = exploredMap;            		
+            	}
+            	else
+            		FPMap = realMap;
             	//
-		        FastestPath fastestPathAlgo = new FastestPath(realMap, roboCop);
+		        FastestPath fastestPathAlgo = new FastestPath(FPMap, roboCop);
 		        String outStr;
-		        if(realMap.hasMidPoint()){	        	
-		        	outStr = fastestPathAlgo.searchFastestPath(realMap.getMidPointRow(),realMap.getMidPointCol());
-		        	outStr +=fastestPathAlgo.searchFastestPath(realMap.getMidPointRow(),realMap.getMidPointCol(),MapConstant.GOAL_GRID_ROW, MapConstant.GOAL_GRID_COL);
+		        if(FPMap.hasMidPoint()){	        	
+		        	outStr = fastestPathAlgo.searchFastestPath(FPMap.getMidPointRow(),FPMap.getMidPointCol());
+		        	outStr +=fastestPathAlgo.searchFastestPath(FPMap.getMidPointRow(),FPMap.getMidPointCol(),MapConstant.GOAL_GRID_ROW, MapConstant.GOAL_GRID_COL);
 		        } 
 		        else{
 		        	outStr = fastestPathAlgo.searchFastestPath(MapConstant.GOAL_GRID_ROW, MapConstant.GOAL_GRID_COL);
@@ -200,6 +212,7 @@ public class Simulator {
 
 			protected Void doInBackground() throws Exception {
 				while (true) {
+					switchMap();
 					System.out.println("Can Run!");
 					if (ready) break;
 				}
@@ -209,6 +222,11 @@ public class Simulator {
 				Explore explore;
 				explore = new Explore(roboCop, exploredMap, realMap, 20, 100);
 				explore.setupExplore();	
+				while(noInterrupt && !explore.runFinished()){
+					explore.explore();
+				} 
+				explore.goToStart();
+				
 				exploredMap.repaint();
 				
 				ready = false;
@@ -272,7 +290,16 @@ public class Simulator {
 		//GridLayout expr = new GridLayout(0,3);
 		//mainButtons.setLayout(expr);
 		//print map descriptor
-		
+		JButton btn_interrupt = new JButton("TERMINATE");
+		formatButton(btn_interrupt);
+
+		btn_interrupt.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+
+				noInterrupt = false;
+			}
+		});
+		mainButtons.add(btn_interrupt);
 
 		
 		//TODO ready button
@@ -311,8 +338,8 @@ public class Simulator {
 			public void mousePressed(MouseEvent e) {
 				// Clear the current map
 				System.out.println("Clearing Obstacles..");
-				realMap.clearMap();
-				exploredMap.clearMap();
+				realMap.reset();
+				exploredMap.reset();
 			}
 		});
 		mainButtons.add(btn_clearObs);
@@ -388,6 +415,30 @@ public class Simulator {
 		
 		mapButtons.add(btn_printMapDesc);
 		
+		JButton btn_setFog = new JButton("Set Fog");
+		formatButton(btn_setFog);
+		btn_setFog.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				// print descriptor string on console
+				realMap.setAllUnExplored();
+				realMap.repaint();
+			}
+		});		
+		
+		mapButtons.add(btn_setFog);
+		
+		JButton btn_clearFog = new JButton("Clear Fog");
+		formatButton(btn_clearFog);
+		btn_clearFog.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				// print descriptor string on console
+				realMap.setAllExplored();
+				realMap.repaint();
+			}
+		});		
+		
+		mapButtons.add(btn_clearFog);
+		
 		//load map from string
 		JButton btn_loadMap = new JButton("Load Map");
 		
@@ -407,6 +458,7 @@ public class Simulator {
                             file))) {
                     	realMap.reset();
                     	utility.MapDescriptor.loadMapfromFile(realMap, br.readLine());
+                    	realMap.setAllExplored();
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     } catch (Exception e2) {
