@@ -56,6 +56,8 @@ public class Simulator {
 
 	// File name of the loaded map
 	private static String _loadedMapFilename = null;
+	private static int timeLimit;
+	private static int coverageValue;
 
 	public static void main(String[] args) {
 
@@ -121,7 +123,7 @@ public class Simulator {
 			cl.show(mapCards, "EXPLORATION");
 		}
 	}
-	
+
 	private static void switchMap(){
 		CardLayout cl = ((CardLayout) mapCards.getLayout());
 		cl.show(mapCards, "EXPLORATION");
@@ -137,65 +139,65 @@ public class Simulator {
 	private static void addButtons() {
 
 		//init classes
-		
-		 class fastestPathThread extends SwingWorker<Void, Void> {
-		    
-		    //private Simulator simulator = null;
-		    private final String prReallyDone = "ReallyDone";
-		    
-		    private void whenReallyDone() {
-		        //simulator.afterWorkerFinishes();
-		        System.out.println("FP done");
-		    }
-		    
-		    public fastestPathThread() {
-		        //this.simulator = sim;
-		        
-		        getPropertyChangeSupport().addPropertyChangeListener(prReallyDone,
-		            new PropertyChangeListener() {
-		            public void propertyChange(PropertyChangeEvent e) {
-		                if (e.getNewValue().equals(true)) {
-		                    whenReallyDone();
-		                }
-		            }
-		        });
-		    }
-		    
-		    protected Void doInBackground() throws Exception {
-		        
-		        while (true) {
-		            
-		            System.out.println("waiting");
-		            if(ready){		            	
-	    	            break;
-		            }
-		        }
-		        //
-            	System.out.println("running FP");
-            	Map FPMap;
-            	if(exploredDone || realRun){
-            		FPMap = exploredMap;            		
-            	}
-            	else
-            		FPMap = realMap;
-            	//
-		        FastestPath fastestPathAlgo = new FastestPath(FPMap, roboCop);
-		        String outStr;
-		        if(FPMap.hasMidPoint()){	        	
-		        	outStr = fastestPathAlgo.searchFastestPath(FPMap.getMidPointRow(),FPMap.getMidPointCol());
-		        	outStr +=fastestPathAlgo.searchFastestPath(FPMap.getMidPointRow(),FPMap.getMidPointCol(),MapConstant.GOAL_GRID_ROW, MapConstant.GOAL_GRID_COL);
-		        } 
-		        else{
-		        	outStr = fastestPathAlgo.searchFastestPath(MapConstant.GOAL_GRID_ROW, MapConstant.GOAL_GRID_COL);
-		        }
-		        	fastestPathAlgo.moveBotfromString(outStr);
-	            
-		        firePropertyChange(prReallyDone, false, true);
-		        return null;
-		    }
+
+		class fastestPathThread extends SwingWorker<Void, Void> {
+
+			//private Simulator simulator = null;
+			private final String prReallyDone = "ReallyDone";
+
+			private void whenReallyDone() {
+				//simulator.afterWorkerFinishes();
+				System.out.println("FP done");
+			}
+
+			public fastestPathThread() {
+				//this.simulator = sim;
+
+				getPropertyChangeSupport().addPropertyChangeListener(prReallyDone,
+						new PropertyChangeListener() {
+					public void propertyChange(PropertyChangeEvent e) {
+						if (e.getNewValue().equals(true)) {
+							whenReallyDone();
+						}
+					}
+				});
+			}
+
+			protected Void doInBackground() throws Exception {
+
+				while (true) {
+
+					System.out.println("waiting");
+					if(ready){		            	
+						break;
+					}
+				}
+				//
+				System.out.println("running FP");
+				Map FPMap;
+				if(exploredDone || realRun){
+					FPMap = exploredMap;            		
+				}
+				else
+					FPMap = realMap;
+				//
+				FastestPath fastestPathAlgo = new FastestPath(FPMap, roboCop);
+				String outStr;
+				if(FPMap.hasMidPoint()){	        	
+					outStr = fastestPathAlgo.searchFastestPath(FPMap.getMidPointRow(),FPMap.getMidPointCol());
+					outStr +=fastestPathAlgo.searchFastestPath(FPMap.getMidPointRow(),FPMap.getMidPointCol(),MapConstant.GOAL_GRID_ROW, MapConstant.GOAL_GRID_COL);
+				} 
+				else{
+					outStr = fastestPathAlgo.searchFastestPath(MapConstant.GOAL_GRID_ROW, MapConstant.GOAL_GRID_COL);
+				}
+				fastestPathAlgo.moveBotfromString(outStr);
+
+				firePropertyChange(prReallyDone, false, true);
+				return null;
+			}
 
 		}
-		
+
 		class explorationThread extends SwingWorker<Void, Void> {
 			private final String exploreComplete = "Complete";
 			private void whenReallyDone() {
@@ -216,9 +218,9 @@ public class Simulator {
 					System.out.println("Can Run!");
 					if (ready) break;
 				}
-				
+
 				System.out.println("Exploration Running");
-				
+
 				Explore explore;
 				explore = new Explore(roboCop, exploredMap, realMap, 20, 100);
 				explore.setupExplore();	
@@ -226,9 +228,9 @@ public class Simulator {
 					explore.explore();
 				} 
 				explore.goToStart();
-				
+
 				exploredMap.repaint();
-				
+
 				ready = false;
 				//new fastestPathThread().execute();
 				//
@@ -236,47 +238,86 @@ public class Simulator {
 				return null;
 			}
 		}
-
-		class coverageExplorationThread extends SwingWorker<Void, Void> {
-
-			//private Simulator simulator = null;
-			private final String prReallyDone = "ReallyDone";
-
+		
+		class explorationCoverageThread extends SwingWorker<Void, Void> {
+			private final String exploreComplete = "Complete";
 			private void whenReallyDone() {
-				//simulator.afterWorkerFinishes();
-				System.out.println("FP done");
+				System.out.println("Exploration Complete");
 			}
 
-			public coverageExplorationThread() {
-				//this.simulator = sim;
-
-				getPropertyChangeSupport().addPropertyChangeListener(prReallyDone,
-						new PropertyChangeListener() {
-					public void propertyChange(PropertyChangeEvent e) {
-						if (e.getNewValue().equals(true)) {
-							whenReallyDone();
-						}
+			public explorationCoverageThread() {
+				getPropertyChangeSupport().addPropertyChangeListener(exploreComplete, new PropertyChangeListener() {
+					public void propertyChange(PropertyChangeEvent e) { 
+						if (e.getNewValue().equals(true)) whenReallyDone();
 					}
 				});
 			}
 
 			protected Void doInBackground() throws Exception {
-
 				while (true) {
-					System.out.println("waiting");
-					if(ready){		            	
-						break;
-					}
+					switchMap();
+					System.out.println("Can Run!");
+					if (ready) break;
 				}
 
-				//
-				System.out.println("running Exploration");
-				//
+				System.out.println("Exploration Running");
 
+				Explore explore;
+				explore = new Explore(roboCop, exploredMap, realMap, 20, coverageValue);
+				explore.setupExplore();	
+				while(noInterrupt && !explore.runFinished()){
+					explore.explore();
+				} 
+				explore.goToStart();
+
+				exploredMap.repaint();
+
+				ready = false;
+				//new fastestPathThread().execute();
 				//
-				firePropertyChange(prReallyDone, false, true);
+				firePropertyChange(exploreComplete, false, true);
 				return null;
+			}
+		}
+		
+		class explorationTimeThread extends SwingWorker<Void, Void> {
+			private final String exploreComplete = "Complete";
+			private void whenReallyDone() {
+				System.out.println("Exploration Complete");
+			}
+
+			public explorationTimeThread() {
+				getPropertyChangeSupport().addPropertyChangeListener(exploreComplete, new PropertyChangeListener() {
+					public void propertyChange(PropertyChangeEvent e) { 
+						if (e.getNewValue().equals(true)) whenReallyDone();
+					}
+				});
+			}
+
+			protected Void doInBackground() throws Exception {
+				while (true) {
+					switchMap();
+					System.out.println("Can Run!");
+					if (ready) break;
+				}
+
+				System.out.println("Exploration Running");
+
+				Explore explore;
+				explore = new Explore(roboCop, exploredMap, realMap, timeLimit, 100);
+				explore.setupExplore();	
+				while(noInterrupt && !explore.runFinished()){
+					explore.explore();
+				} 
+				explore.goToStart();
+
+				exploredMap.repaint();
+
+				ready = false;
+				//new fastestPathThread().execute();
 				//
+				firePropertyChange(exploreComplete, false, true);
+				return null;
 			}
 		}
 
@@ -287,9 +328,9 @@ public class Simulator {
 		 * 
 		 */
 		mainButtons = new JPanel();
-		//GridLayout expr = new GridLayout(0,3);
-		//mainButtons.setLayout(expr);
+
 		//print map descriptor
+
 		JButton btn_interrupt = new JButton("TERMINATE");
 		formatButton(btn_interrupt);
 
@@ -301,7 +342,18 @@ public class Simulator {
 		});
 		mainButtons.add(btn_interrupt);
 
-		
+		JButton btn_printMapDesc = new JButton("Print MapDesc");
+		formatButton(btn_printMapDesc);
+		btn_printMapDesc.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				// print descriptor string on console
+				System.out.println("Print MapDesc");
+				System.out.println(utility.MapDescriptor.generateMapString(realMap));
+			}
+		});
+		mainButtons.add(btn_printMapDesc);
+
+
 		//TODO ready button
 		JButton btn_ready = new JButton("READY");
 		formatButton(btn_ready);
@@ -368,41 +420,59 @@ public class Simulator {
 				// roboCop.setRobotCol(RobotConstant.DEFAULT_START_COL);
 				exploredMap.repaint();
 				new fastestPathThread().execute();
-
-
 			}
 		});
 		mainButtons.add(btn_FastestPath);
-
-		JButton btn_CoverageExploration = new JButton("Coverage Exploration");
-		formatButton(btn_CoverageExploration);
-		btn_CoverageExploration.addMouseListener(new MouseAdapter() {
+		
+		JButton btn_ExploreCoverage = new JButton("Explore Coverage");
+		formatButton(btn_ExploreCoverage);
+		btn_ExploreCoverage.addMouseListener(new MouseAdapter() {
 			public void mousePressed (MouseEvent e) {
-				//
-				exploredMap.repaint();
-				new coverageExplorationThread().execute();
-				//
+				String coverage;
+				coverage=JOptionPane.showInputDialog("Input coverage value between 0 - 100");
+				try {
+					coverageValue = Integer.parseInt(coverage);
+					if (coverageValue>0 && coverageValue<=100) {
+						JOptionPane.showMessageDialog(null, "entered coverage value:" + coverage);
+						new explorationCoverageThread().execute();
+					}
+					else {
+						JOptionPane.showMessageDialog(null, "Invalid integer.\n Pls enter a value between  0- 100");
+					}
+				}
+				catch (Exception e1) {
+					JOptionPane.showMessageDialog(null, "Pls enter an integer value only.");
+				}
 			}
 		});
-		mainButtons.add(btn_CoverageExploration);
+		mainButtons.add(btn_ExploreCoverage);
 
-		JButton btn_TimeExploration = new JButton("Time Coverage");
-		formatButton(btn_TimeExploration);
-		btn_TimeExploration.addMouseListener(new MouseAdapter() {
+		JButton btn_ExploreTime = new JButton("Explore Time");
+		formatButton(btn_ExploreTime);
+		btn_ExploreTime.addMouseListener(new MouseAdapter() {
 			public void mousePressed (MouseEvent e) {
-				//
-				exploredMap.repaint();
-
-				//
+				String timeInput;
+				timeInput = JOptionPane.showInputDialog("Input time in MM:SS format \n max : 99:59");
+				if (timeInput.matches("[0-9]{1,2}:[0-9]{1,2}")) {
+					String[] timeInputArr = timeInput.split(":");
+					timeLimit = (Integer.parseInt(timeInputArr[0]) * 60) + Integer.parseInt(timeInputArr[1]);
+					JOptionPane.showMessageDialog(null, "entered time limit: \n" + timeLimit + " seconds \n click ok to continue");
+					new explorationTimeThread().execute();
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "Wrong format. Try again.");
+				}
 			}
 		});
-		mainButtons.add(btn_TimeExploration);
-
+		mainButtons.add(btn_ExploreTime);
+		
 	}
 	
+	
+
 	private static void addMapButtons(){
 		mapButtons = new JPanel();
-		
+
 		JButton btn_printMapDesc = new JButton("Print MapDesc");
 		formatButton(btn_printMapDesc);
 		btn_printMapDesc.addMouseListener(new MouseAdapter() {
@@ -412,9 +482,9 @@ public class Simulator {
 				System.out.println(utility.MapDescriptor.generateMapString(realMap));
 			}
 		});		
-		
+
 		mapButtons.add(btn_printMapDesc);
-		
+
 		JButton btn_setFog = new JButton("Set Fog");
 		formatButton(btn_setFog);
 		btn_setFog.addMouseListener(new MouseAdapter() {
@@ -424,9 +494,9 @@ public class Simulator {
 				realMap.repaint();
 			}
 		});		
-		
+
 		mapButtons.add(btn_setFog);
-		
+
 		JButton btn_clearFog = new JButton("Clear Fog");
 		formatButton(btn_clearFog);
 		btn_clearFog.addMouseListener(new MouseAdapter() {
@@ -436,45 +506,45 @@ public class Simulator {
 				realMap.repaint();
 			}
 		});		
-		
+
 		mapButtons.add(btn_clearFog);
-		
+
 		//load map from string
 		JButton btn_loadMap = new JButton("Load Map");
-		
-        formatButton(btn_loadMap);
 
-        btn_loadMap.addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent e) {
+		formatButton(btn_loadMap);
 
-                // Load map from a map description string
-                final JFileChooser fileDialog = new JFileChooser(System
-                        .getProperty("user.dir"));
-                int returnVal = fileDialog.showOpenDialog(mainFrame);
-                if (returnVal == JFileChooser.APPROVE_OPTION) {
-                    File file = fileDialog.getSelectedFile();
+		btn_loadMap.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
 
-                    try (BufferedReader br = new BufferedReader(new FileReader(
-                            file))) {
-                    	realMap.reset();
-                    	utility.MapDescriptor.loadMapfromFile(realMap, br.readLine());
-                    	realMap.setAllExplored();
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    } catch (Exception e2) {
-                        e2.printStackTrace();
-                    }
+				// Load map from a map description string
+				final JFileChooser fileDialog = new JFileChooser(System
+						.getProperty("user.dir"));
+				int returnVal = fileDialog.showOpenDialog(mainFrame);
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					File file = fileDialog.getSelectedFile();
 
-                    _loadedMapFilename = file.getName();
-                    JOptionPane.showMessageDialog(mainFrame, "Loaded map information from " + file.getName(),
-                    		"Loaded Map Information", JOptionPane.PLAIN_MESSAGE);
-                } else {
-                    System.out.println("Open command cancelled by user.");
-                }
-            }
-        });
-        mapButtons.add(btn_loadMap);
-		
+					try (BufferedReader br = new BufferedReader(new FileReader(
+							file))) {
+						realMap.reset();
+						utility.MapDescriptor.loadMapfromFile(realMap, br.readLine());
+						realMap.setAllExplored();
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					} catch (Exception e2) {
+						e2.printStackTrace();
+					}
+
+					_loadedMapFilename = file.getName();
+					JOptionPane.showMessageDialog(mainFrame, "Loaded map information from " + file.getName(),
+							"Loaded Map Information", JOptionPane.PLAIN_MESSAGE);
+				} else {
+					System.out.println("Open command cancelled by user.");
+				}
+			}
+		});
+		mapButtons.add(btn_loadMap);
+
 		//save map to string
 		JButton btn_saveMap = new JButton("Save Map");
 		formatButton(btn_saveMap);
@@ -518,10 +588,23 @@ public class Simulator {
 			}
 		});
 		mapButtons.add(btn_saveMap);
-		
-		
-		
-	}
 
+		JButton btn_EnterSpeed = new JButton ("Enter Speed");
+		formatButton(btn_EnterSpeed);
+		btn_EnterSpeed.addMouseListener(new MouseAdapter() {
+			public void mousePressed (MouseEvent e) {
+				String speedInput;
+				speedInput = JOptionPane.showInputDialog("Input speed (steps per second)");
+				try {
+					int speedValue = Integer.parseInt(speedInput);
+					roboCop.setRobotSpeed(speedValue);
+				}
+				catch (Exception e2) {
+					JOptionPane.showMessageDialog(null, "Pls enter an integer value only.");
+				}
+			}
+		});
+		mainButtons.add(btn_EnterSpeed);
+	}
 
 }

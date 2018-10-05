@@ -80,12 +80,13 @@ public class Explore {
 		explore();
 		
 	}
-	public void explore(){
-		if(System.currentTimeMillis() >= timeEnd || explored == maxCoverage) {
+	public void explore() {
+		if (System.currentTimeMillis() >= timeEnd || explored == maxCoverage) {
 			endRun = true;
 			return;
 		}
-		else{
+		else {
+			// Debug Scripts
 			int col, row;
 			DIRECTION dir;
 			
