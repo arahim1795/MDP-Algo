@@ -47,6 +47,8 @@ public class Simulator {
 	private static robot.Robot roboCop = null;
 	private static final boolean realRun = false;
 	private static boolean ready = false;
+	private static boolean exploredDone = false;
+	private static boolean noInterrupt = true;
 
 	// Map width & length used to render real & robot map
 	private static int mapWidth;
@@ -170,12 +172,18 @@ public class Simulator {
 		        }
 		        //
             	System.out.println("running FP");
+            	Map FPMap;
+            	if(exploredDone || realRun){
+            		FPMap = exploredMap;            		
+            	}
+            	else
+            		FPMap = realMap;
             	//
-		        FastestPath fastestPathAlgo = new FastestPath(realMap, roboCop);
+		        FastestPath fastestPathAlgo = new FastestPath(FPMap, roboCop);
 		        String outStr;
-		        if(realMap.hasMidPoint()){	        	
-		        	outStr = fastestPathAlgo.searchFastestPath(realMap.getMidPointRow(),realMap.getMidPointCol());
-		        	outStr +=fastestPathAlgo.searchFastestPath(realMap.getMidPointRow(),realMap.getMidPointCol(),MapConstant.GOAL_GRID_ROW, MapConstant.GOAL_GRID_COL);
+		        if(FPMap.hasMidPoint()){	        	
+		        	outStr = fastestPathAlgo.searchFastestPath(FPMap.getMidPointRow(),FPMap.getMidPointCol());
+		        	outStr +=fastestPathAlgo.searchFastestPath(FPMap.getMidPointRow(),FPMap.getMidPointCol(),MapConstant.GOAL_GRID_ROW, MapConstant.GOAL_GRID_COL);
 		        } 
 		        else{
 		        	outStr = fastestPathAlgo.searchFastestPath(MapConstant.GOAL_GRID_ROW, MapConstant.GOAL_GRID_COL);
@@ -214,6 +222,11 @@ public class Simulator {
 				Explore explore;
 				explore = new Explore(roboCop, exploredMap, realMap, 30);
 				explore.setupExplore();	
+				while(noInterrupt || explore.runFinished()){
+					explore.explore();
+				} 
+				explore.goToStart();
+				
 				exploredMap.repaint();
 				//
 				firePropertyChange(exploreComplete, false, true);
@@ -274,7 +287,16 @@ public class Simulator {
 		//GridLayout expr = new GridLayout(0,3);
 		//mainButtons.setLayout(expr);
 		//print map descriptor
-		
+		JButton btn_interrupt = new JButton("TERMINATE");
+		formatButton(btn_interrupt);
+
+		btn_interrupt.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+
+				noInterrupt = false;
+			}
+		});
+		mainButtons.add(btn_interrupt);
 
 		
 		//TODO ready button

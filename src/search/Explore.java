@@ -22,6 +22,7 @@ public class Explore {
 	private long timeStart, timeEnd;
 	private long duration;
 	private Map mapExplore;
+	private boolean endRun = false;
 	
 	// Obstacles Tracker
 	private ArrayList<ExploreTile> obstacles = new ArrayList<ExploreTile>();
@@ -73,8 +74,31 @@ public class Explore {
 		explore();
 		
 	}
+	public void explore(){
+		if(System.currentTimeMillis() <= timeEnd){
+			endRun = true;
+			return;
+		}
+		else{
+			int col, row;
+			DIRECTION dir;
+			
+			move();
+			
+			//Debug Scripts
+			row = robot.getRobotRow();
+			col = robot.getRobotCol();
+			dir = robot.getRobotDir();
+			System.out.println("R: " + row + " C: " + col + " D: " + dir);
+			
+			updateExplore();
+			
+		}
+		
+	}
 	
-	public void explore() {
+	@Deprecated
+	public void explore2() {
 		// TODO make termination dependent on another variable
 		// explore set to terminate after 3 minutes (only)
 		int col, row;
@@ -93,7 +117,7 @@ public class Explore {
 		goToStart();
 	}
 	
-	private void goToStart() {
+	public void goToStart() {
 		
 		int row = RobotConstant.DEFAULT_START_ROW;
 		int col = RobotConstant.DEFAULT_START_COL;
@@ -288,6 +312,10 @@ public class Explore {
 		
 		explored = count; 
 		System.out.println("Explored: " + count);
+	}
+
+	public boolean runFinished() {
+		return endRun;
 	}
 
 }
