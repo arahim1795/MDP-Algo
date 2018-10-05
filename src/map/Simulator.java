@@ -31,6 +31,7 @@ public class Simulator {
 	//mainPanel for laying out different views
 	private static JPanel mapCards = null; //for viewing the different maps
 	private static JPanel mainButtons = null;
+	private static JPanel mapButtons = null;
 
 	private static Map realMap = null;
 	private static Map exploredMap = null;
@@ -78,7 +79,7 @@ public class Simulator {
 		//init main display mainFrame
 		mainFrame = new JFrame("Map Simulator");
 		mainFrame.setLocation(120,80);
-		mainFrame.setSize(new Dimension(960, 657));
+		mainFrame.setSize(new Dimension(1382, 648));
 		mainFrame.setLayout(new GridLayout(1,2,3,3));
 
 		//JPanel for map views
@@ -86,9 +87,11 @@ public class Simulator {
 		mapCards.add(exploredMap, "Main");
 
 		addButtons();
+		addMapButtons();
 
 		mainFrame.add(mapCards);
 		mainFrame.add(mainButtons);
+		mainFrame.add(mapButtons);
 
 		initMainLayout();
 
@@ -96,6 +99,7 @@ public class Simulator {
 		Container contentPane = mainFrame.getContentPane();
 		contentPane.add(mapCards, BorderLayout.CENTER); //add mapCards to main frame's content pane
 		contentPane.add(mainButtons, BorderLayout.EAST);
+		contentPane.add(mapButtons, BorderLayout.SOUTH);
 
 		mainFrame.setVisible(true);
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
@@ -105,7 +109,9 @@ public class Simulator {
 		if (!realRun) {
 			mapCards.add(exploredMap, "REAL_MAP");
 		}
-		//mapCards.add(exploredMap, "EXPLORATION");
+		mapCards.add(realMap, "REAL MAP");
+		mapCards.add(exploredMap, "EXPLORATION");
+
 
 		CardLayout cl = ((CardLayout) mapCards.getLayout());
 		if (!realRun) {
@@ -172,9 +178,6 @@ public class Simulator {
 		        }
 		        	fastestPathAlgo.moveBotfromString(outStr);
 	            
-	            //fastestPathAlgoB = new FastestPath(realMap, roboCop);
-	            //fastestPathAlgoA.searchFastestPath(realMap.getMidPointRow(),realMap.getMidPointCol(),MapConstant.GOAL_GRID_ROW, MapConstant.GOAL_GRID_COL);
-	            //
 		        firePropertyChange(prReallyDone, false, true);
 		        return null;
 		    }
@@ -266,17 +269,9 @@ public class Simulator {
 		//GridLayout expr = new GridLayout(0,3);
 		//mainButtons.setLayout(expr);
 		//print map descriptor
-		JButton btn_printMapDesc = new JButton("Print MapDesc");
-		formatButton(btn_printMapDesc);
-		btn_printMapDesc.addMouseListener(new MouseAdapter() {
-			public void mousePressed(MouseEvent e) {
-				// print descriptor string on console
-				System.out.println("Print MapDesc");
-				System.out.println(utility.MapDescriptor.generateMapString(realMap));
-			}
-		});		
+		
 
-		mainButtons.add(btn_printMapDesc);
+		
 		//TODO ready button
 		JButton btn_ready = new JButton("READY");
 		formatButton(btn_ready);
@@ -289,84 +284,7 @@ public class Simulator {
 		});
 		mainButtons.add(btn_ready);
 
-		//load map from string
-		JButton btn_loadMap = new JButton("Load Map");
-		
-        formatButton(btn_loadMap);
 
-        btn_loadMap.addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent e) {
-
-                // Load map from a map description string
-                final JFileChooser fileDialog = new JFileChooser(System
-                        .getProperty("user.dir"));
-                int returnVal = fileDialog.showOpenDialog(mainFrame);
-                if (returnVal == JFileChooser.APPROVE_OPTION) {
-                    File file = fileDialog.getSelectedFile();
-
-                    try (BufferedReader br = new BufferedReader(new FileReader(
-                            file))) {
-                    	realMap.reset();
-                    	utility.MapDescriptor.loadMapfromFile(realMap, br.readLine());
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    } catch (Exception e2) {
-                        e2.printStackTrace();
-                    }
-
-                    _loadedMapFilename = file.getName();
-                    JOptionPane.showMessageDialog(mainFrame, "Loaded map information from " + file.getName(),
-                    		"Loaded Map Information", JOptionPane.PLAIN_MESSAGE);
-                } else {
-                    System.out.println("Open command cancelled by user.");
-                }
-            }
-        });
-        mainButtons.add(btn_loadMap);
-		
-		//save map to string
-		JButton btn_saveMap = new JButton("Save Map");
-		formatButton(btn_saveMap);
-
-		btn_saveMap.addMouseListener(new MouseAdapter() {
-			public void mousePressed(MouseEvent e) {
-
-				// Save current map layout to a map descriptor file
-				final JFileChooser fileDialog = new JFileChooser(System
-						.getProperty("user.dir"));
-
-				int returnVal = fileDialog.showSaveDialog(mainFrame);
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					try {
-						String fileName = fileDialog.getSelectedFile() + "";
-
-						// Allows overriding of existing text files
-						if (!fileName.endsWith(".txt")) {
-							fileName += ".txt";
-						}
-
-						// Change file writing part to a better implementation
-						FileWriter fw = new FileWriter(fileName);
-						//TODO debug dummy
-						String outStr = utility.MapDescriptor.generateMapString(realMap);
-						System.out.println(outStr);
-						fw.write(outStr);
-						fw.flush();
-						fw.close();
-
-						JOptionPane.showMessageDialog(mainFrame,
-								"Map information saved to " + fileName,
-								"Saved Map Information",
-								JOptionPane.PLAIN_MESSAGE);
-					} catch (Exception ex) {
-						ex.printStackTrace();
-					}
-				} else {
-					System.out.println("Save command cancelled by user.");
-				}
-			}
-		});
-		mainButtons.add(btn_saveMap);
 
 		//reset map
 		JButton btn_ClearMap = new JButton ("Clear Map");
@@ -377,7 +295,7 @@ public class Simulator {
 				// Clear the current map
 				System.out.println("Clearing Obstacles..");
 				realMap.reset();
-				exploredMap.clearMap();
+				exploredMap.reset();
 			}
 		});
 		mainButtons.add(btn_ClearMap);
@@ -450,6 +368,104 @@ public class Simulator {
 		});
 		mainButtons.add(btn_TimeExploration);
 
+	}
+	
+	private static void addMapButtons(){
+		mapButtons = new JPanel();
+		
+		JButton btn_printMapDesc = new JButton("Print MapDesc");
+		formatButton(btn_printMapDesc);
+		btn_printMapDesc.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				// print descriptor string on console
+				System.out.println("Print MapDesc");
+				System.out.println(utility.MapDescriptor.generateMapString(realMap));
+			}
+		});		
+		
+		mapButtons.add(btn_printMapDesc);
+		
+		//load map from string
+		JButton btn_loadMap = new JButton("Load Map");
+		
+        formatButton(btn_loadMap);
+
+        btn_loadMap.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+
+                // Load map from a map description string
+                final JFileChooser fileDialog = new JFileChooser(System
+                        .getProperty("user.dir"));
+                int returnVal = fileDialog.showOpenDialog(mainFrame);
+                if (returnVal == JFileChooser.APPROVE_OPTION) {
+                    File file = fileDialog.getSelectedFile();
+
+                    try (BufferedReader br = new BufferedReader(new FileReader(
+                            file))) {
+                    	realMap.reset();
+                    	utility.MapDescriptor.loadMapfromFile(realMap, br.readLine());
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    } catch (Exception e2) {
+                        e2.printStackTrace();
+                    }
+
+                    _loadedMapFilename = file.getName();
+                    JOptionPane.showMessageDialog(mainFrame, "Loaded map information from " + file.getName(),
+                    		"Loaded Map Information", JOptionPane.PLAIN_MESSAGE);
+                } else {
+                    System.out.println("Open command cancelled by user.");
+                }
+            }
+        });
+        mapButtons.add(btn_loadMap);
+		
+		//save map to string
+		JButton btn_saveMap = new JButton("Save Map");
+		formatButton(btn_saveMap);
+
+		btn_saveMap.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+
+				// Save current map layout to a map descriptor file
+				final JFileChooser fileDialog = new JFileChooser(System
+						.getProperty("user.dir"));
+
+				int returnVal = fileDialog.showSaveDialog(mainFrame);
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					try {
+						String fileName = fileDialog.getSelectedFile() + "";
+
+						// Allows overriding of existing text files
+						if (!fileName.endsWith(".txt")) {
+							fileName += ".txt";
+						}
+
+						// Change file writing part to a better implementation
+						FileWriter fw = new FileWriter(fileName);
+						//TODO debug dummy
+						String outStr = utility.MapDescriptor.generateMapString(realMap);
+						System.out.println(outStr);
+						fw.write(outStr);
+						fw.flush();
+						fw.close();
+
+						JOptionPane.showMessageDialog(mainFrame,
+								"Map information saved to " + fileName,
+								"Saved Map Information",
+								JOptionPane.PLAIN_MESSAGE);
+					} catch (Exception ex) {
+						ex.printStackTrace();
+					}
+				} else {
+					System.out.println("Save command cancelled by user.");
+				}
+			}
+		});
+		mapButtons.add(btn_saveMap);
+		
+		
+		
 	}
 
 

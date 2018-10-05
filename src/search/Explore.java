@@ -100,7 +100,8 @@ public class Explore {
 		
 		if (robot.getRobotRow() != row && robot.getRobotCol() != col) {
 			FastestPath fp = new FastestPath(mapExplore, robot);
-			fp.searchFastestPath(row, col);
+			String str = fp.searchFastestPath(row, col);
+			fp.moveBotfromString(str);
 		}
 
 	}

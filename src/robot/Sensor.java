@@ -101,14 +101,17 @@ public class Sensor {
 			// if 'sensed' tile is invalid/does not exist, terminate immediately
 			if (!Map.isValidTile(sensedRow, sensedCol)) return;
 			
-			// if 'sensed' tile is valid/does exist, set Tile to explored
-			mapExplore.getTile(sensedRow, sensedCol).setExplored(true);
-			
 			// if 'sensed tile is an obstacle, set Tile to obstacle and terminate immediately
 			if (mapActual.getTile(sensedRow, sensedCol).isObstacle()) {
+				mapExplore.getTile(sensedRow, sensedCol).setExplored(true);
 				mapExplore.setObstacleTile(sensedRow, sensedCol, true);
 				return;
 			}
+			
+			// if 'sensed' tile is valid/does exist, set Tile to explored
+			mapExplore.getTile(sensedRow, sensedCol).setExplored(true);
+			
+			
 		}
 		
 		// If no obstacles detected between sensor's lower and upper limit, return -1
