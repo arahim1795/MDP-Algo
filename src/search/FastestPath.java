@@ -107,6 +107,12 @@ public class FastestPath {
     	System.out.println("=======FPsearch DIAG END========");
     }
 	/*Private methods*/
+    public void reInit(int row, int col){
+    	initArrays();
+    	initCurrent(row,col,dummyBot.getRobotDir());
+    	initGCosts(exploredMap.getTile(row, col));
+    	
+    }
     public void initArrays(){
     	this.toVisit = new ArrayList<>();
 		this.visited = new ArrayList<>();
@@ -280,12 +286,8 @@ public class FastestPath {
     }
 	
     public String searchFastestPath(int startRow, int startCol, int goalRow, int goalCol){
-    	System.out.println("secondary alfo");
-    	initArrays();
-    	initCurrent(startRow,startCol,dummyBot.getRobotDir());
-    	initGCosts(exploredMap.getTile(startRow, startCol));
-    	dummyBot.setBotPos(startRow, startCol);
-    	
+    	reInit(startRow,startCol);
+    	dummyBot.setBotPos(startRow, startCol);   	
     	return searchFastestPath(goalRow,goalCol);
     }
 
@@ -300,6 +302,7 @@ public class FastestPath {
     	Stack<Tile> path;
     	fpDiag_Search(goalRow,goalCol);
     	fpDiag_Init();
+    	
     	printHCosts(goalRow,goalCol);
     	log.append(utility.MapDescriptor.generateMapStringAligned(exploredMap));
     	log.append(System.lineSeparator());
@@ -422,7 +425,7 @@ public class FastestPath {
 	 */
 	private String executeFastestPath(Stack<Tile> path, int goalRow, int goalCol, boolean moveBot){
 		//TODO
-		System.out.println("executing" +path.size());
+		System.out.println("executing");
 
 		StringBuilder outputString = new StringBuilder();
 		
@@ -445,7 +448,7 @@ public class FastestPath {
 			
 			//if robot not facing correct direction, orientate robot
 			if(tempBot.getRobotDir() != targetDir){
-				System.out.println("Target Direction: "+targetDir+", Bot DirectionL "+tempBot.getRobotDir());
+				System.out.println("Target Direction: "+targetDir+", Bot Direction"+tempBot.getRobotDir());
 				m = getTargetMove(tempBot.getRobotDir(),targetDir);
 			}else{
 				m = MOVEMENT.FORWARD;

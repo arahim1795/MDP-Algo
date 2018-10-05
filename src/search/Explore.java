@@ -121,24 +121,24 @@ public class Explore {
 		
 		int goalRow = MapConstant.GOAL_GRID_ROW;
 		int goalCol = MapConstant.GOAL_GRID_COL;
+		int startRow = MapConstant.START_GRID_ROW;
+		int startCol = MapConstant.START_GRID_COL;
 		
 		FastestPath fp = new FastestPath(mapExplore, robot);;
 		String str;
 		
 		if (!visitedGoal) {
-			str = fp.searchFastestPath(goalRow, goalCol);
+			str = fp.searchFastestPath(robot.getRobotRow(),robot.getRobotCol(),goalRow, goalCol);
+			str += fp.searchFastestPath(goalRow,goalCol,startRow, startCol);
 			fp.moveBotfromString(str);
 		}
-		
-		int startRow = MapConstant.START_GRID_ROW;
-		int startCol = MapConstant.START_GRID_COL;
-		fp.initArrays();
-		System.out.println(robot.getRobotRow() + " " + robot.getRobotCol());
-		fp.fpDiag_Init();
-		if (!robot.isAtPos(startRow, startCol)) {
-			str = fp.searchFastestPath(startRow, startCol);
-			System.out.println(str);
-			fp.moveBotfromString(str);
+		else{
+			
+			if (!robot.isAtPos(startRow, startCol)) {
+				str = fp.searchFastestPath(startRow, startCol);
+				System.out.println(str);
+				fp.moveBotfromString(str);
+			}
 		}
 
 	}
