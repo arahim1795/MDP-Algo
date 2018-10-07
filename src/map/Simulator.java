@@ -342,16 +342,6 @@ public class Simulator {
 		});
 		mainButtons.add(btn_interrupt);
 
-		JButton btn_printMapDesc = new JButton("Print MapDesc");
-		formatButton(btn_printMapDesc);
-		btn_printMapDesc.addMouseListener(new MouseAdapter() {
-			public void mousePressed(MouseEvent e) {
-				// print descriptor string on console
-				System.out.println("Print MapDesc");
-				System.out.println(utility.MapDescriptor.generateMapString(realMap));
-			}
-		});
-		mainButtons.add(btn_printMapDesc);
 
 
 		//TODO ready button
@@ -367,34 +357,6 @@ public class Simulator {
 		mainButtons.add(btn_ready);
 
 
-
-		//reset map
-		JButton btn_ClearMap = new JButton ("Clear Map");
-		formatButton(btn_ClearMap);
-
-		btn_ClearMap.addMouseListener(new MouseAdapter() {
-			public void mousePressed(MouseEvent e) {
-				// Clear the current map
-				System.out.println("Clearing Obstacles..");
-				realMap.reset();
-				exploredMap.reset();
-			}
-		});
-		mainButtons.add(btn_ClearMap);
-
-		//clear obstacles
-		JButton btn_clearObs = new JButton("Clear Obstacles");
-		formatButton(btn_clearObs);
-
-		btn_clearObs.addMouseListener(new MouseAdapter() {
-			public void mousePressed(MouseEvent e) {
-				// Clear the current map
-				System.out.println("Clearing Obstacles..");
-				realMap.reset();
-				exploredMap.reset();
-			}
-		});
-		mainButtons.add(btn_clearObs);
 
 		/* JButton btn_SetMid = new JButton("Set Mid Point");
         btn_SetMid.setFont(new Font("Arial", Font.BOLD, 18));
@@ -465,6 +427,24 @@ public class Simulator {
 			}
 		});
 		mainButtons.add(btn_ExploreTime);
+		
+		JButton btn_EnterSpeed = new JButton ("Enter Speed");
+		formatButton(btn_EnterSpeed);
+		btn_EnterSpeed.addMouseListener(new MouseAdapter() {
+			public void mousePressed (MouseEvent e) {
+				String speedInput;
+				speedInput = JOptionPane.showInputDialog("Input speed (steps per second)");
+				try {
+					int speedValue = Integer.parseInt(speedInput);
+					roboCop.setRobotSpeed(speedValue);
+				}
+				catch (Exception e2) {
+					JOptionPane.showMessageDialog(null, "Pls enter an integer value only.");
+				}
+			}
+		});
+		mainButtons.add(btn_EnterSpeed);
+		
 		
 	}
 	
@@ -589,22 +569,41 @@ public class Simulator {
 		});
 		mapButtons.add(btn_saveMap);
 
-		JButton btn_EnterSpeed = new JButton ("Enter Speed");
-		formatButton(btn_EnterSpeed);
-		btn_EnterSpeed.addMouseListener(new MouseAdapter() {
-			public void mousePressed (MouseEvent e) {
-				String speedInput;
-				speedInput = JOptionPane.showInputDialog("Input speed (steps per second)");
-				try {
-					int speedValue = Integer.parseInt(speedInput);
-					roboCop.setRobotSpeed(speedValue);
-				}
-				catch (Exception e2) {
-					JOptionPane.showMessageDialog(null, "Pls enter an integer value only.");
-				}
-			}
-		});
-		mainButtons.add(btn_EnterSpeed);
+		
+
+		
+		//reset map
+				JButton btn_ClearMap = new JButton ("Clear Map");
+				formatButton(btn_ClearMap);
+
+				btn_ClearMap.addMouseListener(new MouseAdapter() {
+					public void mousePressed(MouseEvent e) {
+						// Clear the current map
+						System.out.println("Clearing Obstacles..");
+						realMap.reset();
+						exploredMap.reset();
+					}
+				});
+				mapButtons.add(btn_ClearMap);
+				
+
+				//clear obstacles
+				JButton btn_clearObs = new JButton("Clear Obstacles");
+				formatButton(btn_clearObs);
+
+				btn_clearObs.addMouseListener(new MouseAdapter() {
+					public void mousePressed(MouseEvent e) {
+						// Clear the current map
+						System.out.println("Clearing Obstacles..");
+						realMap.reset();
+						exploredMap.reset();
+					}
+				});
+				mapButtons.add(btn_clearObs);
 	}
+	
+	
+	
+	
 
 }
