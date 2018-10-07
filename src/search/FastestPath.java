@@ -107,7 +107,7 @@ public class FastestPath {
     	System.out.println("=======FPsearch DIAG END========");
     }
 	/*Private methods*/
-    public void initArrays(){
+    private void initArrays(){
     	this.toVisit = new ArrayList<>();
 		this.visited = new ArrayList<>();
 		this.parents = new HashMap<>();		
@@ -278,9 +278,9 @@ public class FastestPath {
     	}
     	
     }
-	
+    
+	//overloaded method 
     public String searchFastestPath(int startRow, int startCol, int goalRow, int goalCol){
-    	System.out.println("secondary alfo");
     	initArrays();
     	initCurrent(startRow,startCol,dummyBot.getRobotDir());
     	initGCosts(exploredMap.getTile(startRow, startCol));
