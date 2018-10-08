@@ -7,11 +7,7 @@ import javax.swing.*;
 import java.io.*;
 import java.util.Stack;
 
-
 import map.MapConstant;
-
-
-
 
 import robot.RobotConstant;
 import robot.RobotConstant.DIRECTION;

@@ -2,21 +2,13 @@ package robot;
 
 public class SensorConstant {
 	
-	// Sensor Sense Range (Simulated)
+	// Sensor Sense Range
 	// -> Short Range
-	public static final int SR_LOWER_SIM = 1;
-	public static final int SR_UPPER_SIM = 3;
+	public static final int SR_LOWER = 1;
+	public static final int SR_UPPER = 4;
 	// -> Long Range
-	public static final int LR_LOWER_SIM = 2;
-	public static final int LR_UPPER_SIM = 9;
-	
-	// Sensor Sense Range (Physical/Actual)
-	// -> Short Range
-	public static final int SR_LOWER_PHY = 1;
-	public static final int SR_UPPER_PHY = 3;
-	// -> Long Range
-	public static final int LR_LOWER_PHY = 3;
-	public static final int LR_UPPER_PHY = 5;
+	public static final int LR_LOWER = 2;
+	public static final int LR_UPPER = 6;
 	
 	// private constructor (prevent accidental instantiation)
 	private SensorConstant() {}

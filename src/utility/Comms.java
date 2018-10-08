@@ -11,14 +11,28 @@ import java.util.Arrays;
  */
 public class Comms {
 	
-	//headers for message
-    public static final String EX_START = "EX_START";       // Android --> PC	//start exploration
-    public static final String FP_START = "FP_START";       // Android --> PC	//start fastest path
-    public static final String MAP_STRINGS = "MAP";         // PC --> Android	//map descriptor string
-    public static final String BOT_POS = "BOT_POS";         // PC --> Android	//bot position
-    public static final String BOT_START = "BOT_START";     // PC --> Arduino	//start bot
-    public static final String INSTRUCTIONS = "INSTR";      // PC --> Arduino	//move instrucions
-    public static final String SENSOR_DATA = "SDATA";       // Arduino --> PC	//sensor data
+	// Major Headers
+	public static final String ARDUINO = "A";
+	public static final String ANDROID = "B";
+	public static final String ARDnAND = "C";
+	public static final String RPI = "R";
+	
+	// Android Headers
+	// - to
+	public static final String MAP = "#mdf";		// send map descriptor
+	public static final String POS = "#setrobot";	// send current bot position
+	// - from
+    public static final String EX_S = "ex";	// Android>PC - Start Exploration
+    public static final String FP_S = "fp";	// Android>PC - Start Fastest Path
+    public static final String START = "r1";
+    public static final String STOP = "r0";
+	
+	// Arduino Headers
+    // - to
+    public static final String SET = "SETBT";     // PC>Arduino - Set-Up Bot
+    public static final String INS = "INSTR";      // PC>Arduino - Give Instruction
+    // - from
+    public static final String SENSOR_DATA = "SDATA";       // Arduino>PC - Sensor Data
     
 	private static String robotName = "192.168.3.1";
 	private static int portNum = 1224;
@@ -66,10 +80,28 @@ public class Comms {
 	 * @param msg Message to send
 	 * @return true if message is successfully sent, false otherwise
 	 */
-	public static boolean sendMsg(String msg) {
+	public static boolean sendMsg(String major, String sub, String content) {
+		
+		StringBuilder sb = new StringBuilder();
+		
+		if (major == null || sub == null) 
+		
+		if (!major.equals("A") || !major.equals("B") || !major.equals("C") || !major.equals("R")) {
+			System.out.println("Invalid Destination");
+			return false;
+		}
+		
+		if (major == null || major.equals("") || sub == null || sub.equals("")) {
+			System.out.println("Cannot send without Destination and Purpose");
+			return false; 
+		}
+		
+		sb.append(major);
+		sb.append(sub); 
+		
 		boolean sent;
 		try {
-			os.writeBytes(msg);
+			os.writeBytes(sb.toString());
 			sent = true;
 		} catch (IOException e) {
 			System.err.println(e);

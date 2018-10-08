@@ -68,6 +68,7 @@ public class Sensor {
 		}		
 	}
 	
+	// Simulated
 	/**
 	 * 
 	 * @param mapExplore Map used to track exploration
@@ -75,7 +76,7 @@ public class Sensor {
 	 * @param rowMul Numerically adjust where the sense would occur, on the row(x)-axis
 	 * @param colMul Numerically adjust where the sense would occur, on the col(y)-axis
 	 */
-	private void sensorInfoSim(Map mapExplore, Map mapActual, int rowMul, int colMul) {
+	private void sensorInfoSim(Map mapExplore, Map mapActual, int rowMul, int colMul) {		
 		int sensedRow, sensedCol;
 		/*
 		 * checks whether there is an obstacle/invalid map coordinates within the sensor's
@@ -99,46 +100,41 @@ public class Sensor {
 			sensedCol = sensorCol + (colMul * i);
 			
 			// if 'sensed' tile is invalid/does not exist, terminate immediately
-			if (!Map.isValidTile(sensedRow, sensedCol)) break;
+			if (!Map.isValidTile(sensedRow, sensedCol)) return;
 			
 			// if 'sensed tile is an obstacle, set Tile to obstacle and terminate immediately
 			if (mapActual.getTile(sensedRow, sensedCol).isObstacle()) {
 				mapExplore.getTile(sensedRow, sensedCol).setExplored(true);
 				mapExplore.setObstacleTile(sensedRow, sensedCol, true);
-				break;
+				return;
 			}
-			
 			// if 'sensed' tile is valid/does exist, set Tile to explored
 			mapExplore.getTile(sensedRow, sensedCol).setExplored(true);
-			
-			
 		}
-		
 		// If no obstacles detected between sensor's lower and upper limit, return -1
 		return;
 	}
 
-	/*
-	// Physical Function(s)
-	// TODO incorporate physical function when is ready
+	
+	// Physical	
 	/**
 	 * 
 	 * @param mapExplore Map used to track exploration
 	 * @param sensorVal Sensor values
-	 
+	 */
 	public void sensePhys(Map mapExplore, int sensorVal) {
 		switch (sensorDir) {
 			case UP:
-				sensorInfoPhys(mapExplore, sensorVal, 1, 0);
+				sensorInfoPhys(mapExplore, sensorVal, -1, 0);
 				return;
 			case DOWN:
-				sensorInfoPhys(mapExplore, sensorVal, 0, 1);
+				sensorInfoPhys(mapExplore, sensorVal, 1, 0);
 				break;
 			case LEFT:
-				sensorInfoPhys(mapExplore, sensorVal, -1, 0);
+				sensorInfoPhys(mapExplore, sensorVal, 0, -1);
 				break;
 			default:
-				sensorInfoPhys(mapExplore, sensorVal, 0, -1);
+				sensorInfoPhys(mapExplore, sensorVal, 0, 1);
 				break;
 		}
 	}
@@ -149,31 +145,30 @@ public class Sensor {
 	 * @param sensorVal Sensor values
 	 * @param rowMul Numerically adjust where the sense would occur, on the row(x)-axis
 	 * @param colMul Numerically adjust where the sense would occur, on the col(y)-axis
-	 
-    private void sensorInfoPhys(Map exploredMap, int sensorVal, int colMul, int rowMul) {
+	 */
+    private void sensorInfoPhys(Map exploredMap, int sensorVal, int rowMul, int colMul) {
        
     	/*
     	 * Check if obstacle exist between sensor and lower limit
     	 * (used only by sensor with lower limit above 1)
-    	 
+    	 */
     	if (sensorVal == 0) return;  // return value for LR sensor if obstacle before lowerRange
         
         int row, col;
         // If above fails, check if starting point is valid for sensors with lowerRange > 1.
         for (int i = 1; i < sensorLowerLimit; i++) {
-        	col = sensorCol + (colMul * i);
         	row = sensorRow + (rowMul * i);
-            
+        	col = sensorCol + (colMul * i);
 
-            if (!Map.isValidTile(row, col)) return;
-            if (exploredMap.getTile(row, col).isObstacle()) return;
+        	// if 'sensed' tile within blindspot is invalid/does not exist/an obstacle, terminate immediately
+			if (!Map.isValidTile(row, col) ||
+				exploredMap.getTile(row, col).isObstacle()) return;
         }
 
         // Update map according to sensor's value.
-        for (int i = this.sensorLowerLimit; i <= this.sensorUpperLimit; i++) {
-            
+        for (int i = sensorLowerLimit; i <= sensorUpperLimit; i++) {
+        	row = this.sensorRow + (rowMul * i);
             col = this.sensorCol + (colMul * i);
-            row = this.sensorRow + (rowMul * i);
             
             if (!Map.isValidTile(row, col)) continue;
 
@@ -184,17 +179,11 @@ public class Sensor {
                 break;
             }
 
-            // Override previous obstacle value if front sensors detect no obstacle.
-            if (exploredMap.getTile(row, col).isObstacle()) {
-                if (sensorID.equals("SRFL") || sensorID.equals("SRFC") || sensorID.equals("SRFR")) {
-                    exploredMap.setObstacleTile(row, col, false);
-                } else {
-                    break;
-                }
-            }
+            // Override values set by Long Range sensor when front Short Range sensor detects discrepancies
+            boolean frontSensor = sensorID.equals("S2") || sensorID.equals("S3") || sensorID.equals("S4"); 
+            if (exploredMap.getTile(row, col).isObstacle() && frontSensor) exploredMap.setObstacleTile(row, col, false);
+            else break;
         }
     }
-    */
-    
     
 }

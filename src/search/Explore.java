@@ -34,6 +34,14 @@ public class Explore {
 	private Map mapActual;
 
 	// Constructor
+	/**
+	 * 
+	 * @param bot
+	 * @param explore
+	 * @param actual
+	 * @param seconds
+	 * @param coveragePercent
+	 */
 	public Explore(Robot bot, Map explore, Map actual, long seconds, double coveragePercent) {
 		robot = bot;
 		mapExplore = explore;
@@ -52,6 +60,9 @@ public class Explore {
 	}
 
 	// Main Functions
+	/**
+	 * 
+	 */
 	public void setupExplore() {
 		if (robot.isRealBot()) {
 			// TODO: incorporate real robot setup if any in future
@@ -78,35 +89,41 @@ public class Explore {
 
 		// kickstart exploration function
 		explore();
-
 	}
+	
+	/**
+	 * 
+	 */
 	public void explore() {
 		if (System.currentTimeMillis() >= timeEnd || explored >= maxCoverage) {
 			endRun = true;
 			return;
-		}
-		else {
-			// Debug Scripts
+		} else {
 			move();
-			//Debug Scripts
+			
+			// Debug Scripts
+			/*
 			int col, row;
 			DIRECTION dir;
 			row = robot.getRobotRow();
 			col = robot.getRobotCol();
 			dir = robot.getRobotDir();
 			System.out.println("R: " + row + " C: " + col + " D: " + dir);
-			
+			*/
+
 			updateExplore();
 		}
 	}
 
-
+	/**
+	 * 
+	 */
 	public void goToStart() {
-
-		int goalRow = MapConstant.GOAL_GRID_ROW;
-		int goalCol = MapConstant.GOAL_GRID_COL;
-		int startRow = MapConstant.START_GRID_ROW;
-		int startCol = MapConstant.START_GRID_COL;
+		int startRow, startCol, goalRow, goalCol;
+		goalRow = MapConstant.GOAL_GRID_ROW;
+		goalCol = MapConstant.GOAL_GRID_COL;
+		startRow = MapConstant.START_GRID_ROW;
+		startCol = MapConstant.START_GRID_COL;
 
 		FastestPath fp = new FastestPath(mapExplore, robot);;
 		String str;
@@ -115,8 +132,7 @@ public class Explore {
 			str = fp.searchFastestPath(robot.getRobotRow(),robot.getRobotCol(),goalRow, goalCol);
 			str += fp.searchFastestPath(goalRow,goalCol,startRow, startCol);
 			fp.moveBotfromString(str);
-		}
-		else {
+		} else {
 			if (!robot.isAtPos(startRow, startCol)) {
 				str = fp.searchFastestPath(startRow, startCol);
 				System.out.println(str);
@@ -124,6 +140,8 @@ public class Explore {
 			}
 		}
 	}
+	
+	
 
 
 	// Support Function
@@ -299,6 +317,9 @@ public class Explore {
 		mapExplore.repaint();
 	}
 
+	/**
+	 * 
+	 */
 	private void updateExplore() {
 		int count = 0;
 		for (int r = 0; r < Map.row; r++) 
@@ -312,6 +333,10 @@ public class Explore {
 		System.out.println("Explored: " + count);
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public boolean runFinished() {
 		return endRun;
 	}
