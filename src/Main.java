@@ -20,7 +20,7 @@ public class Main {
 	public static void main(String[] args) throws IOException, InterruptedException {
 		
 		
-		
+		/*
 		String filename = "./map/test_1.txt";
 		List<String> mapArray = Utility.getmap(filename);
 		
@@ -36,10 +36,12 @@ public class Main {
 		
 		ex.setupExplore();
 		
+		*/
 		
-		/*
 		// Messages Tracker
 		ArrayList<String> msgList = new ArrayList<String>();
+		boolean msgSent = false;
+		String msg = "BFF";
 		int msgCount = 0;
 		String tmp;
 		
@@ -60,12 +62,14 @@ public class Main {
 		
 		while (true) {
 			do {
+				Comms.sendMsg(msg);
+				msgSent = true;
 				tmp = Comms.receiveMsg();
 				System.out.println(tmp);
 			} while (tmp == null);
 			msgList.add(tmp); msgCount++;
 		}
-		*/
+		
 		
 	}
 

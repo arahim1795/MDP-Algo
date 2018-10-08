@@ -1,2 +1,4 @@
 /.metadata/
-/bin/
+bin/
+FPlog.txt
+HCostlog.txt

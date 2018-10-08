@@ -596,8 +596,8 @@ public class Simulator {
 				String speedInput;
 				speedInput = JOptionPane.showInputDialog("Input speed (steps per second)");
 				try {
-					int speedValue = Integer.parseInt(speedInput);
-					roboCop.setRobotSpeed(speedValue);
+					double speedValue = RobotConstant.SPEED/Double.parseDouble(speedInput);
+					roboCop.setRobotSpeed((int) speedValue);
 				}
 				catch (Exception e2) {
 					JOptionPane.showMessageDialog(null, "Pls enter an integer value only.");
