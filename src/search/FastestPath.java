@@ -2,6 +2,9 @@ package search;
 
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Stack;
+import java.lang.Math;
 import robot.Robot;
 import robot.RobotConstant;
 import robot.RobotConstant.DIRECTION;
@@ -9,10 +12,7 @@ import robot.RobotConstant.MOVEMENT;
 import map.Map;
 import map.Tile;
 import map.MapConstant;
-import java.util.HashMap;
-import java.util.Stack;
-import java.util.ArrayList;
-import java.lang.Math;
+
 
 /**
  * @author 
@@ -26,7 +26,6 @@ public class FastestPath {
 	private Tile current;
 	private Tile[] neighbours;
 	private Map exploredMap;
-	private Map realMap; //real physical map
 	private DIRECTION curDir;
 	private Robot dummyBot;
 	private double[][] gCosts;
@@ -44,17 +43,9 @@ public class FastestPath {
 	 * @param bot
 	 */
 	public FastestPath(Map exploredMap, Robot bot) {
-		//this.realMap = null;
 		init(exploredMap, bot);
 	}
 
-	/*public FastestPath(Map exploredMap, Robot bot, Map realMap) {
-        this.realMap = realMap;
-        this.exploreMode = true;
-        init(exploredMap, bot);
-    }*/
-
-	//constructor for object/algo initialization
 	/**
 	 * 
 	 * @param map
@@ -107,13 +98,7 @@ public class FastestPath {
 		System.out.println("=======FPsearch DIAG END========");
 	}
 	/*Private methods*/
-	public void reInit(int row, int col){
-		initArrays();
-		initCurrent(row,col,dummyBot.getRobotDir());
-		initGCosts(exploredMap.getTile(row, col));
-
-	}
-	public void initArrays() {
+	private void initArrays() {
 		this.toVisit = new ArrayList<>();
 		this.visited = new ArrayList<>();
 		this.parents = new HashMap<>();		

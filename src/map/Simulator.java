@@ -36,13 +36,6 @@ public class Simulator {
 	private static Map realMap = null;
 	private static Map exploredMap = null;
 
-	// Robot's starting position and direction
-	private static int robotSize = RobotConstant.ROBOT_SIZE;
-	private static int startPosRow = RobotConstant.DEFAULT_START_ROW;
-	private static int startPosCol = RobotConstant.DEFAULT_START_COL;
-	//private static DIRECTION startDir = RobotConstant.DEFAULT_START_DIR;
-	private static DIRECTION startDir = DIRECTION.RIGHT;
-
 	// The robot
 	private static robot.Robot roboCop = null;
 	private static final boolean realRun = false;
@@ -50,12 +43,7 @@ public class Simulator {
 	private static boolean exploredDone = false;
 	private static boolean noInterrupt = true;
 
-	// Map width & length used to render real & robot map
-	private static int mapWidth;
-	private static int mapLength;
-
 	// File name of the loaded map
-	private static String _loadedMapFilename = null;
 	private static int timeLimit;
 	private static int coverageValue;
 
@@ -90,7 +78,7 @@ public class Simulator {
 		mapCards = new JPanel(new CardLayout());
 		mapCards.add(exploredMap, "Main");
 
-		addButtons();
+		addMainButtons();
 		addMapButtons();
 
 		mainFrame.add(mapCards);
@@ -136,7 +124,7 @@ public class Simulator {
 		btn.setFocusPainted(false);
 	}
 
-	private static void addButtons() {
+	private static void addMainButtons() {
 
 		//init classes
 
@@ -569,22 +557,7 @@ public class Simulator {
 		});
 		mapButtons.add(btn_saveMap);
 
-		JButton btn_EnterSpeed = new JButton ("Enter Speed");
-		formatButton(btn_EnterSpeed);
-		btn_EnterSpeed.addMouseListener(new MouseAdapter() {
-			public void mousePressed (MouseEvent e) {
-				String speedInput;
-				speedInput = JOptionPane.showInputDialog("Input speed (steps per second)");
-				try {
-					double speedValue = RobotConstant.SPEED/Double.parseDouble(speedInput);
-					roboCop.setRobotSpeed((int) speedValue);
-				}
-				catch (Exception e2) {
-					JOptionPane.showMessageDialog(null, "Pls enter an integer value only.");
-				}
-			}
-		});
-		mainButtons.add(btn_EnterSpeed);
+
 
 
 
