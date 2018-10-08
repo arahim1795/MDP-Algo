@@ -87,11 +87,7 @@ public class Explore {
 		}
 		else {
 			// Debug Scripts
-
-
-
 			move();
-
 			//Debug Scripts
 			int col, row;
 			DIRECTION dir;
@@ -99,25 +95,9 @@ public class Explore {
 			col = robot.getRobotCol();
 			dir = robot.getRobotDir();
 			System.out.println("R: " + row + " C: " + col + " D: " + dir);
-
+			
 			updateExplore();
-
 		}
-
-	}
-
-	@Deprecated
-	public void explore2() {
-		// TODO make termination dependent on another variable
-		// explore set to terminate after 3 minutes (only)
-		int col, row;
-		DIRECTION dir;
-		do {
-			move();
-			updateExplore();
-		} while (System.currentTimeMillis() <= timeEnd && explored < maxCoverage);
-
-		goToStart();
 	}
 
 
