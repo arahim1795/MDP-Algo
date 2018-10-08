@@ -12,10 +12,10 @@ import robot.RobotConstant.MOVEMENT;
 import search.FastestPath;
 
 public class Explore {
-	
+
 	// Robot Tracker
 	private Robot robot;
-	
+
 	// Map Exploration Tracker
 	private int explored = 0; // explore counter
 	private double coveragePercent;
@@ -26,13 +26,13 @@ public class Explore {
 	private boolean visitedGoal = false;
 	private boolean endRun = false;
 
-	
+
 	// Obstacles Tracker
 	private ArrayList<ExploreTile> obstacles = new ArrayList<ExploreTile>();
-	
+
 	// Simulation Tracker
 	private Map mapActual;
-	
+
 	// Constructor
 	public Explore(Robot bot, Map explore, Map actual, long seconds, double coveragePercent) {
 		robot = bot;
@@ -41,7 +41,7 @@ public class Explore {
 		duration = TimeUnit.SECONDS.toMillis(seconds);
 		this.coveragePercent = coveragePercent;
 	}
-	
+
 	// Getter(s)
 	/**
 	 * 
@@ -50,19 +50,19 @@ public class Explore {
 	public Map getMap() {
 		return mapExplore;
 	}
-	
+
 	// Main Functions
 	public void setupExplore() {
 		if (robot.isRealBot()) {
 			// TODO: incorporate real robot setup if any in future
 			System.out.println("Physical Robot Functions are unsupported as of now");
 		}
-		
+
 		System.out.println("Setting up...");
-		
+
 		timeStart = System.currentTimeMillis();
 		timeEnd = timeStart + duration;
-		
+
 		int robotRow = robot.getRobotRow();
 		int robotCol = robot.getRobotCol();
 		int[] startVal = {robotRow,robotCol};
@@ -70,15 +70,15 @@ public class Explore {
 		initialReveal.add(startVal);
 		for (int[] coor : initialReveal) 
 			mapExplore.getTile(coor[0], coor[1]).setExplored(true);
-		
+
 		maxCoverage = (int) (coveragePercent / 100 * 300);
-		
+
 		senseEnv();
 		updateExplore();
-		
+
 		// kickstart exploration function
 		explore();
-		
+
 	}
 	public void explore() {
 		if (System.currentTimeMillis() >= timeEnd || explored >= maxCoverage) {
@@ -87,11 +87,11 @@ public class Explore {
 		}
 		else {
 			// Debug Scripts
-			
-			
-			
+
+
+
 			move();
-			
+
 			//Debug Scripts
 			int col, row;
 			DIRECTION dir;
@@ -99,13 +99,13 @@ public class Explore {
 			col = robot.getRobotCol();
 			dir = robot.getRobotDir();
 			System.out.println("R: " + row + " C: " + col + " D: " + dir);
-			
+
 			updateExplore();
-			
+
 		}
-		
+
 	}
-	
+
 	@Deprecated
 	public void explore2() {
 		// TODO make termination dependent on another variable
@@ -116,36 +116,36 @@ public class Explore {
 			move();
 			updateExplore();
 		} while (System.currentTimeMillis() <= timeEnd && explored < maxCoverage);
-		
+
 		goToStart();
 	}
-	
+
+
 	public void goToStart() {
-		
+
 		int goalRow = MapConstant.GOAL_GRID_ROW;
 		int goalCol = MapConstant.GOAL_GRID_COL;
 		int startRow = MapConstant.START_GRID_ROW;
 		int startCol = MapConstant.START_GRID_COL;
-		
+
 		FastestPath fp = new FastestPath(mapExplore, robot);;
 		String str;
-		
+
 		if (mapExplore.getTile(goalRow, goalCol).isExplored() && !visitedGoal) {
 			str = fp.searchFastestPath(robot.getRobotRow(),robot.getRobotCol(),goalRow, goalCol);
 			str += fp.searchFastestPath(goalRow,goalCol,startRow, startCol);
 			fp.moveBotfromString(str);
 		}
 		else {
-			
 			if (!robot.isAtPos(startRow, startCol)) {
 				str = fp.searchFastestPath(startRow, startCol);
 				System.out.println(str);
 				fp.moveBotfromString(str);
 			}
 		}
-
 	}
-	
+
+
 	// Support Function
 	/**
 	 * 
@@ -156,7 +156,7 @@ public class Explore {
 			if (peekUp()) moveRobot(MOVEMENT.FORWARD);
 		} else if (peekUp()) 
 			moveRobot(MOVEMENT.FORWARD);
-		  else if (peekRight()){
+		else if (peekRight()){
 			moveRobot(MOVEMENT.TURNRIGHT);
 			if (peekUp()) moveRobot(MOVEMENT.FORWARD);
 		} else if (peekDown()) {
@@ -164,75 +164,75 @@ public class Explore {
 			moveRobot(MOVEMENT.TURNLEFT);
 		}
 	}
-	
+
 	/**
 	 * 
 	 * @return
 	 */
 	private boolean peekLeft() {
 		switch(robot.getRobotDir()) {
-			case UP:
-				return isLeftFree();
-			case DOWN:
-				return isRightFree();
-			case LEFT:
-				return isDownFree();
-			default:
-				return isUpFree();
+		case UP:
+			return isLeftFree();
+		case DOWN:
+			return isRightFree();
+		case LEFT:
+			return isDownFree();
+		default:
+			return isUpFree();
 		}
 	}
-	
+
 	/**
 	 * 
 	 * @return
 	 */
 	private boolean peekRight() {
 		switch(robot.getRobotDir()) {
-			case UP:
-				return isRightFree();
-			case DOWN:
-				return isLeftFree();
-			case LEFT:
-				return isUpFree();
-			default:
-				return isDownFree();
+		case UP:
+			return isRightFree();
+		case DOWN:
+			return isLeftFree();
+		case LEFT:
+			return isUpFree();
+		default:
+			return isDownFree();
 		}
 	}
-	
+
 	/**
 	 * 
 	 * @return
 	 */
 	private boolean peekDown() {
 		switch(robot.getRobotDir()) {
-			case UP:
-				return isDownFree();
-			case DOWN:
-				return isUpFree();
-			case LEFT:
-				return isRightFree();
-			default:
-				return isDownFree();
+		case UP:
+			return isDownFree();
+		case DOWN:
+			return isUpFree();
+		case LEFT:
+			return isRightFree();
+		default:
+			return isDownFree();
 		}	
 	}
-	
+
 	/**
 	 * 
 	 * @return
 	 */
 	private boolean peekUp() {
 		switch(robot.getRobotDir()) {
-			case UP:
-				return isUpFree();
-			case DOWN:
-				return isDownFree();
-			case LEFT:
-				return isLeftFree();
-			default:
-				return isRightFree();
+		case UP:
+			return isUpFree();
+		case DOWN:
+			return isDownFree();
+		case LEFT:
+			return isLeftFree();
+		default:
+			return isRightFree();
 		}
 	}
-	
+
 	/**
 	 * 
 	 * @return
@@ -241,7 +241,7 @@ public class Explore {
 		int y = robot.getRobotRow(), x = robot.getRobotCol();
 		return notObs(y-2, x-1) && notObs(y-2, x+1) && notVir(y-1, x);
 	}
-	
+
 	/**
 	 * 
 	 * @return
@@ -250,7 +250,7 @@ public class Explore {
 		int y = robot.getRobotRow(), x = robot.getRobotCol();
 		return notObs(y+2, x-1) && notObs(y+2, x+1) && notVir(y+1, x);
 	}
-	
+
 	/**
 	 * 
 	 * @return
@@ -259,7 +259,7 @@ public class Explore {
 		int y = robot.getRobotRow(), x = robot.getRobotCol();
 		return notObs(y+1, x-2) && notObs(y-1, x-2) && notVir(y, x-1);
 	}
-	
+
 	/**
 	 * 
 	 * @return
@@ -268,7 +268,7 @@ public class Explore {
 		int y = robot.getRobotRow(), x = robot.getRobotCol();
 		return notObs(y+1, x+2) && notObs(y-1, x+2) && notVir(y, x+1);
 	}
-	
+
 	/**
 	 * 
 	 * @param col
@@ -282,7 +282,7 @@ public class Explore {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * 
 	 * @param col
@@ -296,7 +296,7 @@ public class Explore {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * 
 	 * @param move
@@ -308,7 +308,7 @@ public class Explore {
 		if (robot.getRobotRow() == MapConstant.GOAL_GRID_ROW && robot.getRobotCol() == MapConstant.GOAL_GRID_COL)
 			visitedGoal = true;
 	}
-	
+
 	/**
 	 * 
 	 */
@@ -318,7 +318,7 @@ public class Explore {
 		mapActual.repaint();
 		mapExplore.repaint();
 	}
-	
+
 	private void updateExplore() {
 		int count = 0;
 		for (int r = 0; r < Map.row; r++) 
@@ -327,7 +327,7 @@ public class Explore {
 					count++;
 					mapExplore.repaint();
 				}
-		
+
 		explored = count; 
 		System.out.println("Explored: " + count);
 	}

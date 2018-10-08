@@ -35,7 +35,57 @@ public class MapDescriptor {
         }
 		return;
 	}
-	 public static String generateMapStringAligned(Map map){
+	
+	public static String generateExploredMapString(Map map){
+		 StringBuilder mapString = new StringBuilder();
+		 	mapString.append("11");
+		 	mapString.append(System.lineSeparator());
+		 	
+	        for (int row = 0; row < MapConstant.MAP_ROWS ; row++) 
+	            {
+	                for (int col = 0; col < MapConstant.MAP_COLS; col++) {
+	                // Obstacle - Border walls
+	                if (map.getTile(row, col).isExplored()) {
+	                    mapString.append("1");
+	                } else {
+	                	mapString.append("0");
+	                }
+	            }
+	                mapString.append(System.lineSeparator());
+	        }
+	        
+		 	mapString.append("11");
+		 	mapString.append(System.lineSeparator());
+
+	        return mapString.toString();
+	 }
+	
+	public static String generateObstacleMapString(Map map){
+		 StringBuilder mapString = new StringBuilder();
+		 	
+	        for (int row = 0; row < MapConstant.MAP_ROWS ; row++) 
+	            {
+	                for (int col = 0; col < MapConstant.MAP_COLS; col++) {
+	                // Obstacle - Border walls
+	                if (!map.getTile(row, col).isExplored()){
+	                	mapString.append("");
+	                }
+	                else if (map.getTile(row, col).isObstacle()) {
+	                    mapString.append("1");
+	                } else {
+	                	mapString.append("0");
+	                }
+	            }
+	                mapString.append(System.lineSeparator());
+	        }
+	        
+
+	        return mapString.toString();
+	 }
+	
+	
+	
+	public static String generateMapStringAligned(Map map){
 		 StringBuilder mapString = new StringBuilder();
 
 	        for (int row = 0; row < MapConstant.MAP_ROWS ; row++) 
