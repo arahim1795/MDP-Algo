@@ -7,11 +7,7 @@ import javax.swing.*;
 import java.io.*;
 import java.util.Stack;
 
-
 import map.MapConstant;
-
-
-
 
 import robot.RobotConstant;
 import robot.RobotConstant.DIRECTION;
@@ -65,8 +61,8 @@ public class Simulator {
 		//exploredMap.reset();
 
 		// Calculate map width & length based on grid size
-		mapWidth = MapConstant.MAP_COLS * GraphicConstant.TILE_SIZE;
-		mapLength = MapConstant.MAP_ROWS * GraphicConstant.TILE_SIZE;
+		// mapWidth = MapConstant.MAP_COLS * GraphicConstant.TILE_SIZE;
+		// mapLength = MapConstant.MAP_ROWS * GraphicConstant.TILE_SIZE;
 
 		//init main display mainFrame
 		mainFrame = new JFrame("Map Simulator");
@@ -503,7 +499,7 @@ public class Simulator {
 						e2.printStackTrace();
 					}
 
-					_loadedMapFilename = file.getName();
+					// _loadedMapFilename = file.getName();
 					JOptionPane.showMessageDialog(mainFrame, "Loaded map information from " + file.getName(),
 							"Loaded Map Information", JOptionPane.PLAIN_MESSAGE);
 				} else {
