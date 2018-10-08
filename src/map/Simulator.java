@@ -152,9 +152,11 @@ public class Simulator {
 			}
 
 			protected Void doInBackground() throws Exception {
+				
+				boolean initThread = false;
 
 				while (true) {
-
+					
 					System.out.println("waiting");
 					if(ready){		            	
 						break;
@@ -220,7 +222,7 @@ public class Simulator {
 				exploredMap.repaint();
 
 				ready = false;
-				//new fastestPathThread().execute();
+				new fastestPathThread().execute();
 				//
 				firePropertyChange(exploreComplete, false, true);
 				return null;
@@ -261,7 +263,7 @@ public class Simulator {
 				exploredMap.repaint();
 
 				ready = false;
-				//new fastestPathThread().execute();
+				new fastestPathThread().execute();
 				//
 				firePropertyChange(exploreComplete, false, true);
 				return null;
@@ -302,7 +304,7 @@ public class Simulator {
 				exploredMap.repaint();
 
 				ready = false;
-				//new fastestPathThread().execute();
+				new fastestPathThread().execute();
 				//
 				firePropertyChange(exploreComplete, false, true);
 				return null;
