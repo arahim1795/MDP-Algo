@@ -288,8 +288,8 @@ public class FastestPath {
 	 */
 	public String searchFastestPath(int goalRow, int goalCol){
 		Stack<Tile> path;
-		fpDiag_Search(goalRow,goalCol);
-		fpDiag_Init();
+		//fpDiag_Search(goalRow,goalCol);
+		//fpDiag_Init();
 
 		printHCosts(goalRow,goalCol);
 		log.append(utility.MapDescriptor.generateMapStringAligned(exploredMap));
@@ -358,15 +358,14 @@ public class FastestPath {
 
 
 			//iterate and update G values for each neighbour
+			log.append("canVisit: ");
 			for(int i=0;i<4;i++){
 				if(neighbours[i] != null){
 					//check if node is already visited
 					if(visited.contains(neighbours[i])){continue;}
 					else{
-						//TODO dummy debug
-						log.append("canVisit: ");
 						log.append("("+neighbours[i].getRow()+","+neighbours[i].getCol()+")");
-						log.append(System.lineSeparator());}
+
 
 					//if node is not already in toVisit list
 					if(!toVisit.contains(neighbours[i])){
@@ -385,8 +384,7 @@ public class FastestPath {
 					}
 				}
 			}
-
-			//TODO dummy debug
+			log.append(System.lineSeparator());}
 			log.append("toVisit : ");
 			for(Tile t : toVisit){
 				log.append("("+t.getRow()+","+t.getCol()+") ["+(int)gCosts[t.getRow()][t.getCol()]+"]");
@@ -683,14 +681,13 @@ public class FastestPath {
 	private static void writeGCosts(StringBuilder s){
 		String fileName = "FPlog";
 		String outStr = s.toString();
-		// Allows overriding of existing text files
+
 		if (!fileName.endsWith(".txt")) {
 			fileName += ".txt";
 		}
 		try{
-			// Change file writing part to a better implementation
+
 			FileWriter fw = new FileWriter(fileName);
-			//TODO debug dummy
 			fw.write(outStr);
 			fw.flush();
 			fw.close();

@@ -1,5 +1,4 @@
 package map;
-import java.awt.Color;
 
 /**
  * @author 18/19 S1 G3

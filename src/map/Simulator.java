@@ -64,9 +64,6 @@ public class Simulator {
 		//TODO debug
 		//exploredMap.reset();
 
-		// Calculate map width & length based on grid size
-		mapWidth = MapConstant.MAP_COLS * GraphicConstant.TILE_SIZE;
-		mapLength = MapConstant.MAP_ROWS * GraphicConstant.TILE_SIZE;
 
 		//init main display mainFrame
 		mainFrame = new JFrame("Map Simulator");
@@ -152,9 +149,11 @@ public class Simulator {
 			}
 
 			protected Void doInBackground() throws Exception {
+				
+				boolean initThread = false;
 
 				while (true) {
-
+					
 					System.out.println("waiting");
 					if(ready){		            	
 						break;
@@ -220,7 +219,7 @@ public class Simulator {
 				exploredMap.repaint();
 
 				ready = false;
-				//new fastestPathThread().execute();
+				new fastestPathThread().execute();
 				//
 				firePropertyChange(exploreComplete, false, true);
 				return null;
@@ -261,7 +260,7 @@ public class Simulator {
 				exploredMap.repaint();
 
 				ready = false;
-				//new fastestPathThread().execute();
+				new fastestPathThread().execute();
 				//
 				firePropertyChange(exploreComplete, false, true);
 				return null;
@@ -302,7 +301,7 @@ public class Simulator {
 				exploredMap.repaint();
 
 				ready = false;
-				//new fastestPathThread().execute();
+				new fastestPathThread().execute();
 				//
 				firePropertyChange(exploreComplete, false, true);
 				return null;
@@ -503,7 +502,7 @@ public class Simulator {
 						e2.printStackTrace();
 					}
 
-					_loadedMapFilename = file.getName();
+					//_loadedMapFilename = file.getName();
 					JOptionPane.showMessageDialog(mainFrame, "Loaded map information from " + file.getName(),
 							"Loaded Map Information", JOptionPane.PLAIN_MESSAGE);
 				} else {

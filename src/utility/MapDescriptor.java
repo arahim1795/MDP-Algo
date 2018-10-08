@@ -121,5 +121,37 @@ public class MapDescriptor {
 
 	        return mapString;
 	    }
+	 
+	 public static String generateMDFSTring1(Map map){
+		 StringBuilder mapString = new StringBuilder("");
+		 for(int row = MapConstant.MAP_ROWS -1; row==0;row--){
+			 for(int col = 0;col<MapConstant.MAP_COLS;col--){
+				 if(map.getTile(MapConstant.MAP_ROWS-row, col).isExplored())
+					 mapString.append("1");
+				 else
+					 mapString.append("0");
+			 }
+		 }
+		 return mapString.toString();
+	 }
+	 
+	 public static String generateMDFSTring2(Map map){
+		 StringBuilder mapString = new StringBuilder("");
+		 for(int row = MapConstant.MAP_ROWS -1; row==0;row--){
+			 for(int col = 0;col<MapConstant.MAP_COLS;col--){
+				 if(map.getTile(MapConstant.MAP_ROWS-row, col).isExplored()){
+					 if(map.getTile(MapConstant.MAP_ROWS-row, col).isObstacle())
+						 mapString.append("1");
+					 else
+						 mapString.append("0");
+				 }
+					 
+					 
+				 else
+					 mapString.append("");
+			 }
+		 }
+		 return mapString.toString();
+	 }
 	
 }
