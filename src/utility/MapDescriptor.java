@@ -151,7 +151,29 @@ public class MapDescriptor {
 					 mapString.append("");
 			 }
 		 }
+		 	if(mapString.length()%8 != 0){
+		 		for(int i=0;i<mapString.length();i++)
+		 			mapString.append("1");
+		 	}
 		 return mapString.toString();
+	 }
+	 
+	 //map -> mdf
+	 public static int getMDFrow(int r){
+		 return MapConstant.MAP_ROWS -r;
+	 }
+	 
+	 public static int getMDFcol(int c){
+		 return c;
+	 }
+	 
+	 //mdf -> map
+	 public static int getMapRow(int r){
+		 return getMDFrow(r);
+	 }
+	 
+	 public static int getMapCol(int c){
+		 return getMDFcol(c);
 	 }
 	
 }
