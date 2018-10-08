@@ -110,6 +110,7 @@ public class Explore {
 			dir = robot.getRobotDir();
 			System.out.println("R: " + row + " C: " + col + " D: " + dir);
 			*/
+
 			updateExplore();
 		}
 	}
