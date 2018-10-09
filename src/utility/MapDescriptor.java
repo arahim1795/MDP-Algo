@@ -133,23 +133,26 @@ public class MapDescriptor {
 	 
 	 public static String generateMDFString1(Map map){
 		 StringBuilder mapString = new StringBuilder("");
-		 for(int row = MapConstant.MAP_ROWS -1; row==0;row--){
-			 for(int col = 0;col<MapConstant.MAP_COLS;col--){
-				 if(map.getTile(MapConstant.MAP_ROWS-row, col).isExplored())
+		 mapString.append("11");
+		 for(int row = 0; row<MapConstant.MAP_ROWS;row++){
+			 for(int col = 0;col<MapConstant.MAP_COLS;col++){
+				 System.out.println(getMDFrow(row)+","+col);
+				 if(map.getTile(getMDFrow(row), col).isExplored())
 					 mapString.append("1");
 				 else
 					 mapString.append("0");
 			 }
 		 }
+		 mapString.append("11");
 		 return mapString.toString();
 	 }
 	 
 	 public static String generateMDFString2(Map map){
 		 StringBuilder mapString = new StringBuilder("");
-		 for(int row = MapConstant.MAP_ROWS -1; row==0;row--){
-			 for(int col = 0;col<MapConstant.MAP_COLS;col--){
-				 if(map.getTile(MapConstant.MAP_ROWS-row, col).isExplored()){
-					 if(map.getTile(MapConstant.MAP_ROWS-row, col).isObstacle())
+		 for(int row = 0; row<MapConstant.MAP_ROWS;row++){
+			 for(int col = 0;col<MapConstant.MAP_COLS;col++){
+				 if(map.getTile(getMDFrow(row), col).isExplored()){
+					 if(map.getTile(getMDFrow(row), col).isObstacle())
 						 mapString.append("1");
 					 else
 						 mapString.append("0");
@@ -160,16 +163,17 @@ public class MapDescriptor {
 					 mapString.append("");
 			 }
 		 }
-		 	if(mapString.length()%8 != 0){
-		 		for(int i=0;i<mapString.length();i++)
-		 			mapString.append("1");
+		 if(mapString.length()%8 != 0){
+			int padding = mapString.length()%8;
+		 	for(int i=0;i<padding;i++)
+		 		mapString.append("1");
 		 	}
 		 return mapString.toString();
 	 }
 	 
 	 //map -> mdf
 	 public static int getMDFrow(int r){
-		 return MapConstant.MAP_ROWS -r;
+		 return (MapConstant.MAP_ROWS-1) -r;
 	 }
 	 
 	 public static int getMDFcol(int c){

@@ -122,6 +122,65 @@ public class Simulator {
 	private static void addMainButtons() {
 
 		//init classes
+		
+		class simulatorThread extends SwingWorker<Void, Void> {
+
+			//private Simulator simulator = null;
+			private final String prReallyDone = "ReallyDone";
+
+			private void whenReallyDone() {
+				//simulator.afterWorkerFinishes();
+				System.out.println("FP done");
+			}
+
+			public simulatorThread() {
+				//this.simulator = sim;
+
+				getPropertyChangeSupport().addPropertyChangeListener(prReallyDone,
+						new PropertyChangeListener() {
+					public void propertyChange(PropertyChangeEvent e) {
+						if (e.getNewValue().equals(true)) {
+							whenReallyDone();
+						}
+					}
+				});
+			}
+
+			protected Void doInBackground() throws Exception {
+				
+				System.out.println("Program Start");
+				while (true) {
+					System.out.println("");	
+//					if(Comms.receiveMsg()=="startFP"){
+					if(ready){		            	
+						break;
+					}
+				}
+				//
+				System.out.println("FP Running");
+				Map FPMap;
+				if(exploredDone || realRun){
+					FPMap = exploredMap;            		
+				}
+				else
+					FPMap = realMap;
+				//
+				FastestPath fastestPathAlgo = new FastestPath(FPMap, roboCop);
+				String outStr;
+				if(FPMap.hasMidPoint()){	        	
+					outStr = fastestPathAlgo.searchFastestPath(FPMap.getMidPointRow(),FPMap.getMidPointCol());
+					outStr +=fastestPathAlgo.searchFastestPath(FPMap.getMidPointRow(),FPMap.getMidPointCol(),MapConstant.GOAL_GRID_ROW, MapConstant.GOAL_GRID_COL);
+				} 
+				else{
+					outStr = fastestPathAlgo.searchFastestPath(MapConstant.GOAL_GRID_ROW, MapConstant.GOAL_GRID_COL);
+				}
+				fastestPathAlgo.moveBotfromString(outStr);
+
+				firePropertyChange(prReallyDone, false, true);
+				return null;
+			}
+
+		}
 
 		class fastestPathThread extends SwingWorker<Void, Void> {
 
@@ -150,7 +209,8 @@ public class Simulator {
 				
 				System.out.println("FP Waiting");
 				while (true) {
-					System.out.print("");	
+					System.out.println("");	
+//					if(Comms.receiveMsg()=="startFP"){
 					if(ready){		            	
 						break;
 					}
@@ -199,7 +259,7 @@ public class Simulator {
 				System.out.println("Explore Ready");
 				while (true) {
 					switchMap();
-					System.out.print("");
+					System.out.println("");
 					if (ready) break;
 				}
 
@@ -441,9 +501,10 @@ public class Simulator {
 		formatButton(btn_printMapDesc);
 		btn_printMapDesc.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
+				System.out.println(utility.MapDescriptor.generateMDFString2(realMap));
 				// print descriptor string on console
-				System.out.println("Print MapDesc");
-				System.out.println(utility.MapDescriptor.generateMapString(realMap));
+//				System.out.println("Print MapDesc");
+//				System.out.println(utility.MapDescriptor.generateMapString(realMap));
 			}
 		});		
 
