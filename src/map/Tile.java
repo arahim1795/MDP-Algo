@@ -79,8 +79,8 @@ public class Tile {
 		return midPoint;
 	}
 	
-	// Setter(s)
 	
+	// Setter(s)
 	/**
 	 * Set Tile as explored
 	 * @param bool If set to true, tile is explored
@@ -103,15 +103,14 @@ public class Tile {
 	 * @param bool If set to true, Tile is a virtual wall
 	 */
 	public void setVirtualWall(boolean bool) {
-		if (this.persistent) {return;}
-		else if(bool){
+		if (this.persistent) return;
+		  
+		else if (bool) {
 			obStacles++;
 			virtualWall = bool;
-		}
-		else{
+		} else {
 			obStacles--;
-			if(obStacles==0)
-				virtualWall = bool;
+			if(obStacles == 0) virtualWall = bool;
 		}
 	}
 

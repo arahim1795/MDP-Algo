@@ -39,7 +39,7 @@ public class Map extends JPanel{
     private int _mapLength = 0;
     private int _mapWidth = 0;
 
-    //midPoint data
+    // midPoint data
     private int midPointRow = -1;
     private int midPointCol = -1;
     
@@ -112,23 +112,47 @@ public class Map extends JPanel{
 		return field[row][col];
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public Tile getMidPoint(){
 		if(_bSetMid)
 			return field[midPointRow][midPointCol];
 		System.out.println("No mid point set");
 		return null;
 	}
+	
+	/**
+	 * 
+	 * @return
+	 */
 	public int getMidPointRow(){
 		return midPointRow;
 	}
+	
+	/**
+	 * 
+	 * @return
+	 */
 	public int getMidPointCol(){
 		return midPointCol;
 	}
+	
+	/**
+	 * 
+	 * @return
+	 */
 	public boolean hasMidPoint(){
 		return _bSetMid;
 	}
 	
 	// Setters
+	/**
+	 * 
+	 * @param row
+	 * @param col
+	 */
 	public void setMidPoint(int row, int col){
 		if(_bSetMid){
 			_bSetMid = false;
@@ -143,9 +167,13 @@ public class Map extends JPanel{
 			midPointCol = col;
 		}
 	}
-	// TODO setObstacle & setBoundary to merge, remove redundancies
-
 	
+	/**
+	 * 
+	 * @param row
+	 * @param col
+	 * @return
+	 */
 	public boolean isExploredTile(int row, int col) {
 		return field[row][col].isExplored();
 	}

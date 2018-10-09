@@ -9,6 +9,7 @@ import robot.RobotConstant;
 import robot.RobotConstant.DIRECTION;
 import robot.RobotConstant.MOVEMENT;
 import utility.Comms;
+import utility.MapDescriptor;
 import map.Tile;
 
 /**
@@ -251,7 +252,7 @@ public class Robot {
 			break;
 		}
 
-		// TODO incorporate physical robot function
+		// TODO Incorporate Calibrate
 		if (realBot) ;// sendMovement(m, sendToAndroid);
 		else System.out.println("Move: " + MOVEMENT.print(m));
 	}
@@ -321,12 +322,10 @@ public class Robot {
 			SRRight.sensePhys(explorationMap, result[4]);
 			LRRight.sensePhys(explorationMap, result[5]);
 
-			// TODO Generate MDF String Integration
-			// String[] mapStrings = MapDescriptor.generateMapDescriptor(explorationMap);
 			// Send MDF1
-			// Comms.sendMsg(Comms.MAP_STRINGS, "1:MDF1/");
+			Comms.sendMsg(Comms.ANDROID, Comms.MAP, MapDescriptor.generateMDFString1(explorationMap));
 			// Send MDF2
-			// Comms.sendMsg(Comms.MAP_STRINGS, "2:MDF2/");
+			Comms.sendMsg(Comms.ANDROID, Comms.MAP, MapDescriptor.generateMDFString2(explorationMap));
 		}
 	}
 
@@ -376,7 +375,8 @@ public class Robot {
 	 * @param sendMovetoAndroid
 	 */
 	private void sendInstruction(MOVEMENT m, boolean sendMovetoAndroid) {
-		// Comms.sendMsg(Comms.INSTRUCTIONS, );
+		// TODO incorporate Calibrate and Instruction
+		// Comms.sendMsg();
 	}
 
 }

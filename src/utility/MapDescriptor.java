@@ -122,7 +122,7 @@ public class MapDescriptor {
 	        return mapString;
 	    }
 	 
-	 public static String generateMDFSTring1(Map map){
+	 public static String generateMDFString1(Map map){
 		 StringBuilder mapString = new StringBuilder("");
 		 for(int row = MapConstant.MAP_ROWS -1; row==0;row--){
 			 for(int col = 0;col<MapConstant.MAP_COLS;col--){
@@ -135,7 +135,7 @@ public class MapDescriptor {
 		 return mapString.toString();
 	 }
 	 
-	 public static String generateMDFSTring2(Map map){
+	 public static String generateMDFString2(Map map){
 		 StringBuilder mapString = new StringBuilder("");
 		 for(int row = MapConstant.MAP_ROWS -1; row==0;row--){
 			 for(int col = 0;col<MapConstant.MAP_COLS;col--){
