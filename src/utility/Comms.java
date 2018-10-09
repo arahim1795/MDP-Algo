@@ -75,6 +75,14 @@ public class Comms {
 		}
 	}
 	
+	public static void sendMsg (String msg){
+		try {
+			os.writeUTF(msg);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * Sends messages to Pi
 	 * @param msg Message to send

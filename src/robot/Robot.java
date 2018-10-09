@@ -1,15 +1,12 @@
 package robot;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import map.Map;
-import map.MapConstant;
 import robot.RobotConstant;
 import robot.RobotConstant.DIRECTION;
 import robot.RobotConstant.MOVEMENT;
 import utility.Comms;
-import map.Tile;
 
 /**
  * @author 18/19 S1 G3
