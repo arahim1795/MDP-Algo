@@ -15,6 +15,7 @@ import robot.Robot;
 import search.FastestPath;
 import search.Explore;
 import utility.Comms;
+import utility.MapDescriptor;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -123,7 +124,7 @@ public class Simulator {
 
 		//init classes
 		
-		class simulatorThread extends SwingWorker<Void, Void> {
+		class receiveMidPoint extends SwingWorker<Void, Void> {
 
 			//private Simulator simulator = null;
 			private final String prReallyDone = "ReallyDone";
@@ -133,8 +134,7 @@ public class Simulator {
 				System.out.println("FP done");
 			}
 
-			public simulatorThread() {
-				//this.simulator = sim;
+			public receiveMidPoint() {
 
 				getPropertyChangeSupport().addPropertyChangeListener(prReallyDone,
 						new PropertyChangeListener() {
@@ -148,16 +148,18 @@ public class Simulator {
 
 			protected Void doInBackground() throws Exception {
 				
-				System.out.println("Program Start");
+				String msg;
+
 				while (true) {
-					System.out.println("");	
+					System.out.println("Waiting for Mid Point");
+					msg = Comms.receiveMsg();
 //					if(Comms.receiveMsg()=="startFP"){
-					if(ready){		            	
+					if(Comms.isMidPointCoor(msg)){		            	
 						break;
 					}
 				}
 				//
-				System.out.println("FP Running");
+				System.out.println("Mid Point received!");
 				Map FPMap;
 				if(exploredDone || realRun){
 					FPMap = exploredMap;            		
@@ -501,7 +503,7 @@ public class Simulator {
 		formatButton(btn_printMapDesc);
 		btn_printMapDesc.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
-				System.out.println(utility.MapDescriptor.generateMDFString2(realMap));
+				System.out.println(MapDescriptor.generateMDFString2(realMap));
 				// print descriptor string on console
 //				System.out.println("Print MapDesc");
 //				System.out.println(utility.MapDescriptor.generateMapString(realMap));
@@ -552,7 +554,7 @@ public class Simulator {
 					try (BufferedReader br = new BufferedReader(new FileReader(
 							file))) {
 						realMap.reset();
-						utility.MapDescriptor.loadMapfromFile(realMap, br.readLine());
+						MapDescriptor.loadMapfromFile(realMap, br.readLine());
 						realMap.setAllExplored();
 					} catch (IOException e1) {
 						e1.printStackTrace();
@@ -594,7 +596,7 @@ public class Simulator {
 						// Change file writing part to a better implementation
 						FileWriter fw = new FileWriter(fileName);
 						//TODO debug dummy
-						String outStr = utility.MapDescriptor.generateMapString(realMap);
+						String outStr = MapDescriptor.generateMapString(realMap);
 						System.out.println(outStr);
 						fw.write(outStr);
 						fw.flush();

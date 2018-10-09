@@ -159,4 +159,10 @@ public class Comms {
 		return robotComms == null && is == null && os == null;
 	}
 	
+	
+	//TODO complete method
+	public static boolean isMidPointCoor(String s){
+		return true;
+	}
+	
 }
