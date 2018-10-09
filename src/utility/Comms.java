@@ -75,6 +75,14 @@ public class Comms {
 		}
 	}
 	
+	public static void sendMsg (String msg){
+		try {
+			os.writeUTF(msg);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * Sends messages to Pi
 	 * @param msg Message to send
@@ -149,6 +157,12 @@ public class Comms {
 	 */
 	public static boolean connectionActive() {
 		return robotComms == null && is == null && os == null;
+	}
+	
+	
+	//TODO complete method
+	public static boolean isMidPointCoor(String s){
+		return true;
 	}
 	
 }

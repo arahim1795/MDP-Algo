@@ -1,15 +1,12 @@
 package robot;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import map.Map;
-import map.MapConstant;
 import robot.RobotConstant;
 import robot.RobotConstant.DIRECTION;
 import robot.RobotConstant.MOVEMENT;
 import utility.Comms;
-import map.Tile;
 
 /**
  * @author 18/19 S1 G3
@@ -252,8 +249,8 @@ public class Robot {
 		}
 
 		// TODO incorporate physical robot function
-		if (realBot) ;// sendMovement(m, sendToAndroid);
-		else System.out.println("Move: " + MOVEMENT.print(m));
+		if (realBot) sendMovement(m, sendToAndroid);
+		System.out.println("Move: " + MOVEMENT.print(m));
 	}
 
 	/**
@@ -375,8 +372,9 @@ public class Robot {
 	 * @param m
 	 * @param sendMovetoAndroid
 	 */
-	private void sendInstruction(MOVEMENT m, boolean sendMovetoAndroid) {
-		// Comms.sendMsg(Comms.INSTRUCTIONS, );
+	private void sendMovement(MOVEMENT m, boolean sendMovetoAndroid) {
+		if(sendMovetoAndroid)
+			Comms.sendMsg("A","INSTR",m.toString());
 	}
 
 }

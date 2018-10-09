@@ -14,8 +14,6 @@ import java.util.List;
 import robot.Robot;
 import robot.RobotConstant;
 
-import utility.Utility;
-import utility.MapDescriptor;
 
 /**
  * @author 18/19 S1 G3
