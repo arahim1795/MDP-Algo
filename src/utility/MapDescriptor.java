@@ -121,8 +121,17 @@ public class MapDescriptor {
 
 	        return mapString;
 	    }
+	 public static String generateMDFHex1(Map m){
+		 String s = generateMDFString1(m);
+		 return binaryStringtoHexString(s);
+	 }
 	 
-	 public static String generateMDFSTring1(Map map){
+	 public static String generateMDFHex2(Map m){
+		 String s = generateMDFString2(m);
+		 return binaryStringtoHexString(s);
+	 }
+	 
+	 public static String generateMDFString1(Map map){
 		 StringBuilder mapString = new StringBuilder("");
 		 for(int row = MapConstant.MAP_ROWS -1; row==0;row--){
 			 for(int col = 0;col<MapConstant.MAP_COLS;col--){
@@ -135,7 +144,7 @@ public class MapDescriptor {
 		 return mapString.toString();
 	 }
 	 
-	 public static String generateMDFSTring2(Map map){
+	 public static String generateMDFString2(Map map){
 		 StringBuilder mapString = new StringBuilder("");
 		 for(int row = MapConstant.MAP_ROWS -1; row==0;row--){
 			 for(int col = 0;col<MapConstant.MAP_COLS;col--){
@@ -174,6 +183,55 @@ public class MapDescriptor {
 	 
 	 public static int getMapCol(int c){
 		 return getMDFcol(c);
+	 }
+	 
+	 private static String binaryStringtoHexString(String s){
+		 StringBuilder sb = new StringBuilder("");
+		 StringBuilder hex = new StringBuilder("");
+		 for(int i=0;i<s.length();i+=4){
+			 for(int j=0;j<4;j++){
+				 hex.append(s.charAt(i+j));
+			 }
+			 
+			 switch(hex.toString()){
+			 case "0000":sb.append("0");
+			 break;
+			 case "0001": sb.append("1");
+			 break;
+			 case "0010": sb.append("2");
+			 break;
+			 case "0011": sb.append("3");
+			 break;
+			 case "0100": sb.append("4");
+			 break;
+			 case "0101": sb.append("5");
+			 break;
+			 case "0110": sb.append("6");
+			 break;
+			 case "0111": sb.append("7");
+			 break;
+			 case "1000": sb.append("8");
+			 break;
+			 case "1001": sb.append("9");
+			 break;
+			 case "1010": sb.append("A");
+			 break;
+			 case "1011": sb.append("B");
+			 break;
+			 case "1100": sb.append("C");
+			 break;
+			 case "1101": sb.append("D");
+			 break;
+			 case "1110": sb.append("E");
+			 break;
+			 case "1111": sb.append("F");
+			 break;
+			 default: sb.append("X");
+			 break;
+			 
+			 }
+		 }
+		 return sb.toString();
 	 }
 	
 }
