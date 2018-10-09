@@ -251,7 +251,7 @@ public class Robot {
 		}
     
 		// TODO incorporate physical robot function
-		if (realBot) sendMovement(m, sendToAndroid);
+		if (realBot) sendInstruction(m, sendToAndroid);
 		System.out.println("Move: " + MOVEMENT.print(m));
 
 	}
