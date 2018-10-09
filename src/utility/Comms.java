@@ -33,6 +33,10 @@ public class Comms {
 	public static final String INS = "INSTR";      // PC>Arduino - Give Instruction
 	// - from
 	public static final String SENSOR_DATA = "SDATA";       // Arduino>PC - Sensor Data
+	
+	// RPi Headers
+	// - to
+	public static final String C = "CAM";
 
 	private static String robotName = "192.168.3.1";
 	private static int portNum = 1224;
@@ -86,10 +90,12 @@ public class Comms {
 		switch (major) {
 			case "A":
 				sb.append(major);
+				sb.append("_");
 				switch (sub) {
 					case "SETBT":
 					case "INSTR":
 						sb.append(sub);
+						sb.append("_");
 						break;
 					default:
 						System.out.println("Invalid Purpose");
@@ -108,7 +114,15 @@ public class Comms {
 				}
 				break;
 			case "R":
-				break;
+				// TODO incorporate Image Tracking
+				sb.append(major);
+				sb.append("_");
+				switch (sub) {
+					default:
+						System.err.println("Invalid Purpose");
+						return false;
+				}
+				// break;
 			default:
 				System.err.println("Invalid Destination");
 				return false;
@@ -151,7 +165,7 @@ public class Comms {
 		return robotComms == null && is == null && os == null;
 	}
   
-	//TODO complete method
+	// TODO complete method
 	public static boolean isMidPointCoor(String s){
 		return true;
 	}

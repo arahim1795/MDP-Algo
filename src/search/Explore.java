@@ -10,11 +10,20 @@ import robot.RobotConstant.DIRECTION;
 import robot.RobotConstant.MOVEMENT;
 
 import search.FastestPath;
+import utility.Comms;
 
 public class Explore {
-
+	
+	// Cardinal Reference
+	private MOVEMENT forward = MOVEMENT.FORWARD;
+	private MOVEMENT backward = MOVEMENT.BACKWARD;
+	private MOVEMENT turnLeft = MOVEMENT.TURNLEFT;
+	private MOVEMENT turnRight = MOVEMENT.TURNRIGHT;
+	private MOVEMENT calibrate = MOVEMENT.CALIBRATE;
+	
 	// Robot Tracker
 	private Robot robot;
+	private int calibrateCount = 0;
 
 	// Map Exploration Tracker
 	private int explored = 0; // explore counter
@@ -63,13 +72,31 @@ public class Explore {
 	/**
 	 * 
 	 */
-	public void setupExplore() {
-		if (robot.isRealBot()) {
-			// TODO incorporate Calibrate
-			System.out.println("Physical Robot Functions are unsupported as of now");
-		}
-
+	public void setupExplore() {	
 		System.out.println("Setting up...");
+		
+		// call turn commands, and calibrate
+		List<String> calList = new ArrayList<String>();
+		if (robot.isRealBot()) {
+			System.out.println("Physical Robot Detected, Calibrating...");
+			robot.move(turnLeft, false);
+			calList.add(Comms.receiveMsg());
+			robot.move(calibrate, false);
+			calList.add(Comms.receiveMsg());
+			robot.move(turnLeft, false);
+			calList.add(Comms.receiveMsg());
+			robot.move(calibrate, false);
+			calList.add(Comms.receiveMsg());
+			robot.move(turnRight, false);
+			calList.add(Comms.receiveMsg());
+			robot.move(calibrate, false);
+			calList.add(Comms.receiveMsg());
+			robot.move(turnRight, false);
+			calList.add(Comms.receiveMsg());
+			robot.move(calibrate, false);
+			calList.add(Comms.receiveMsg());
+		}
+		if (calList.size() == 8) System.out.println("Robot Calibrated!");
 
 		timeStart = System.currentTimeMillis();
 		timeEnd = timeStart + duration;
@@ -87,20 +114,34 @@ public class Explore {
 		senseEnv();
 		updateExplore();
 
-		// kickstart exploration function
-		explore();
+		// start exploration
+		if (robot.isRealBot()) explorePhys();
+		else exploreSim();
 	}
-	
+
 	/**
 	 * 
 	 */
-	public void explore() {
+	public void exploreSim() {
 		if (System.currentTimeMillis() >= timeEnd || explored >= maxCoverage) {
 			endRun = true;
 			return;
 		} else {
 			move();
+			updateExplore();
+		}
+	}
+	
+	/**
+	 * 
+	 */
+	public void explorePhys() {
+		do {
+			// TODO test listenTerminate
+			// crude, untested method to receive message
+			if (listenTerminate()) break;
 			
+			move();
 			// Debug Scripts
 			/*
 			int col, row;
@@ -109,10 +150,11 @@ public class Explore {
 			col = robot.getRobotCol();
 			dir = robot.getRobotDir();
 			System.out.println("R: " + row + " C: " + col + " D: " + dir);
-			*/
-
+			 */
 			updateExplore();
-		}
+		} while (System.currentTimeMillis() <= timeEnd && explored <= maxCoverage);
+		
+		goToStart();
 	}
 
 	/**
@@ -130,7 +172,7 @@ public class Explore {
 
 		if (mapExplore.getTile(goalRow, goalCol).isExplored() && !visitedGoal) {
 			str = fp.searchFastestPath(robot.getRobotRow(),robot.getRobotCol(),goalRow, goalCol);
-			str += fp.searchFastestPath(goalRow,goalCol,startRow, startCol);
+			str += fp.searchFastestPath(goalRow,goalCol,startRow,startCol);
 			fp.moveBotfromString(str);
 		} else {
 			if (!robot.isAtPos(startRow, startCol)) {
@@ -139,9 +181,18 @@ public class Explore {
 				fp.moveBotfromString(str);
 			}
 		}
+		
+		System.out.println("Exploration Complete...");
+		updateExplore();
+		
+		if (robot.isRealBot()) {
+			rotateRobot(DIRECTION.LEFT);
+			moveRobot(MOVEMENT.CALIBRATE);
+			rotateRobot(DIRECTION.DOWN);
+			moveRobot(MOVEMENT.CALIBRATE);
+		}
+		rotateRobot(DIRECTION.UP);
 	}
-	
-	
 
 
 	// Support Function
@@ -150,16 +201,16 @@ public class Explore {
 	 */
 	private void move() {
 		if (peekLeft()) {
-			moveRobot(MOVEMENT.TURNLEFT);
-			if (peekUp()) moveRobot(MOVEMENT.FORWARD);
+			moveRobot(turnLeft);
+			if (peekUp()) moveRobot(forward);
 		} else if (peekUp()) 
-			moveRobot(MOVEMENT.FORWARD);
-		else if (peekRight()){
-			moveRobot(MOVEMENT.TURNRIGHT);
-			if (peekUp()) moveRobot(MOVEMENT.FORWARD);
+			moveRobot(forward);
+		else if (peekRight()) {
+			moveRobot(turnRight);
+			if (peekUp()) moveRobot(forward);
 		} else if (peekDown()) {
-			moveRobot(MOVEMENT.TURNLEFT);
-			moveRobot(MOVEMENT.TURNLEFT);
+			moveRobot(turnLeft);
+			moveRobot(turnLeft);
 		}
 	}
 
@@ -186,14 +237,14 @@ public class Explore {
 	 */
 	private boolean peekRight() {
 		switch(robot.getRobotDir()) {
-		case UP:
-			return isRightFree();
-		case DOWN:
-			return isLeftFree();
-		case LEFT:
-			return isUpFree();
-		default:
-			return isDownFree();
+			case UP:
+				return isRightFree();
+			case DOWN:
+				return isLeftFree();
+			case LEFT:
+				return isUpFree();
+			default:
+				return isDownFree();
 		}
 	}
 
@@ -203,14 +254,14 @@ public class Explore {
 	 */
 	private boolean peekDown() {
 		switch(robot.getRobotDir()) {
-		case UP:
-			return isDownFree();
-		case DOWN:
-			return isUpFree();
-		case LEFT:
-			return isRightFree();
-		default:
-			return isDownFree();
+			case UP:
+				return isDownFree();
+			case DOWN:
+				return isUpFree();
+			case LEFT:
+				return isRightFree();
+			default:
+				return isDownFree();
 		}	
 	}
 
@@ -220,14 +271,14 @@ public class Explore {
 	 */
 	private boolean peekUp() {
 		switch(robot.getRobotDir()) {
-		case UP:
-			return isUpFree();
-		case DOWN:
-			return isDownFree();
-		case LEFT:
-			return isLeftFree();
-		default:
-			return isRightFree();
+			case UP:
+				return isUpFree();
+			case DOWN:
+				return isDownFree();
+			case LEFT:
+				return isLeftFree();
+			default:
+				return isRightFree();
 		}
 	}
 
@@ -300,20 +351,41 @@ public class Explore {
 	 * @param move
 	 */
 	private void moveRobot(MOVEMENT move) {
-		// TODO incorporate Calibrate
-		robot.move(move, true); // sendToAndroid);
-		senseEnv();
-		if (robot.getRobotRow() == MapConstant.GOAL_GRID_ROW && robot.getRobotCol() == MapConstant.GOAL_GRID_COL)
-			visitedGoal = true;
+		robot.move(move); // sendToAndroid);
+		if (robot.getRobotRow() == MapConstant.GOAL_GRID_ROW && robot.getRobotCol() == MapConstant.GOAL_GRID_COL) visitedGoal = true;
+		
+		if (move != calibrate) senseEnv();
+		else Comms.receiveMsg();
+		
+		if (robot.isRealBot()) {
+			
+			if (canCalibrate(robot.getRobotDir())) {
+				calibrateCount = 0;
+				moveRobot(calibrate);
+			} else {
+				calibrateCount++;
+				if (calibrateCount >= 5) {
+					DIRECTION dir = counterCal();
+					if (dir != null) {
+						calibrateCount = 0;
+						calibrate(dir);
+					}
+				}
+			}
+			
+		}
 	}
 
 	/**
 	 * 
 	 */
 	private void senseEnv() {
+		// update virtual robot's sensor positions
 		robot.moveSensor();
-		robot.sense(mapExplore, mapActual);
-		mapActual.repaint();
+		
+		if (robot.isRealBot()) robot.multiSense(mapExplore);
+		else robot.multiSense(mapExplore, mapActual);
+		
 		mapExplore.repaint();
 	}
 
@@ -324,21 +396,158 @@ public class Explore {
 		int count = 0;
 		for (int r = 0; r < Map.row; r++) 
 			for (int c = 0; c < Map.col; c++)
-				if (mapExplore.getTile(r, c).isExplored()) {
-					count++;
-					mapExplore.repaint();
-				}
+				if (mapExplore.getTile(r, c).isExplored()) count++;
 
 		explored = count; 
-		System.out.println("Explored: " + count);
+		System.out.println("Explored: " + count + " Cells");
+		System.out.printf("%.2f%% Coverage\n", (count / (double) 300) * 100);
+		System.out.println("Duration: " + TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - timeStart) + " seconds");
 	}
 
+	private void rotateRobot(DIRECTION dir) {
+		DIRECTION robotDir = robot.getRobotDir();
+		if (robotDir == dir) return;
+		switch (robotDir) {
+			case UP:
+				switch (dir) {
+					case DOWN:
+						moveRobot(turnLeft);
+						moveRobot(turnLeft);
+						break;
+					case LEFT:
+						moveRobot(turnLeft);
+						break;
+					default:
+						moveRobot(turnRight);
+						break;
+				}
+				break;
+			case DOWN:
+				switch (dir) {
+					case UP:
+						moveRobot(turnLeft);
+						moveRobot(turnLeft);
+						break;
+					case LEFT:
+						moveRobot(turnRight);
+						break;
+					default:
+						moveRobot(turnLeft);
+						break;
+				}
+			case LEFT:
+				switch (dir) {
+					case UP:
+						moveRobot(turnRight);
+						break;
+					case DOWN:
+						moveRobot(turnLeft);
+						break;
+					default:
+						moveRobot(turnLeft);
+						moveRobot(turnLeft);
+						break;
+				}
+			default:
+				switch (dir) {
+					case UP:
+						moveRobot(turnLeft);
+						break;
+					case DOWN:
+						moveRobot(turnRight);
+						break;
+					default:
+						moveRobot(turnLeft);
+						moveRobot(turnLeft);
+						break;
+				}
+				break;
+		}
+	}
+	
+	/**
+	 * 
+	 * @param dir
+	 * @return
+	 */
+	private boolean canCalibrate(DIRECTION dir) {
+		int row, col;
+		row = robot.getRobotRow();
+		col = robot.getRobotCol();
+		
+		switch (dir) {
+			case UP:
+				return isInvalidOrObs(row-2,col-1) && isInvalidOrObs(row-2,col) && isInvalidOrObs(row-2,col+1);
+			case DOWN:
+				return isInvalidOrObs(row+2,col-1) && isInvalidOrObs(row+2,col) && isInvalidOrObs(row+2,col+1);
+			case LEFT:
+				return isInvalidOrObs(row+1,col-2) && isInvalidOrObs(row,col-2) && isInvalidOrObs(row-1,col-2);
+			default:
+				return isInvalidOrObs(row+1,col+2) && isInvalidOrObs(row,col+2) && isInvalidOrObs(row-1,col+2);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param row
+	 * @param col
+	 * @return
+	 */
+	private boolean isInvalidOrObs(int row, int col) {
+		if (!Map.isValidTile(row, col)) return true;
+		else return mapExplore.getTile(row, col).isObstacle();
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	private DIRECTION counterCal() {
+		DIRECTION currDir, checkedDir;
+		currDir = robot.getRobotDir();
+		
+		// Check Left
+		checkedDir = DIRECTION.getLeft(currDir);
+		if (canCalibrate(checkedDir)) return checkedDir;
+		
+		// Check Right
+		checkedDir = DIRECTION.getRight(currDir);
+		if (canCalibrate(checkedDir)) return checkedDir;
+		
+		// Check Reverse
+		checkedDir = DIRECTION.getRight(checkedDir);
+		if (canCalibrate(checkedDir)) return checkedDir;
+		
+		// if all fail, return null
+		return null;
+	}
+	
+	/**
+	 * 
+	 * @param dir
+	 */
+	private void calibrate(DIRECTION dir) {
+		DIRECTION currDir = robot.getRobotDir();
+		rotateRobot(dir);
+		moveRobot(calibrate);
+		rotateRobot(currDir);
+	}
+	
 	/**
 	 * 
 	 * @return
 	 */
 	public boolean runFinished() {
 		return endRun;
+	}
+	
+	private boolean listenTerminate() {
+		String str = Comms.receiveMsg();
+		if (str != null) {
+			String[] strArr = str.split("_");
+			if (strArr[1].equals(Comms.STOP)) return true;
+		}
+		return false;
 	}
 
 }
