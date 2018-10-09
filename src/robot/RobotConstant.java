@@ -16,20 +16,20 @@ public final class RobotConstant {
 	
 	public enum MOVEMENT {
         FORWARD, BACKWARD, TURNLEFT, TURNRIGHT, CALIBRATE, ERROR;
-        public static char print(MOVEMENT m) {
+        public static String print(MOVEMENT m) {
             switch (m) {
                 case FORWARD:
-                    return 'F';
+                    return "F";
                 case BACKWARD:
-                    return 'B';
+                    return "B";
                 case TURNRIGHT:
-                    return 'R';
+                    return "R";
                 case TURNLEFT:
-                    return 'L';
+                    return "L";
                 case CALIBRATE:
-                    return 'C';
+                    return "C";
                 default:
-                    return 'E';
+                    return "E";
             }
         }
         
@@ -52,15 +52,15 @@ public final class RobotConstant {
     }
 	
 	public enum DIRECTION {
-		UP, RIGHT, DOWN, LEFT;
+		UP, LEFT, DOWN, RIGHT;
 		
 		//clockwise
-		public static DIRECTION getRight(DIRECTION currDirection) {
+		public static DIRECTION getLeft(DIRECTION currDirection) {
 			return values()[(currDirection.ordinal() + 1) % values().length];
 		}
 		
 		//anti-clockwise
-		public static DIRECTION getLeft(DIRECTION currDirection) {
+		public static DIRECTION getRight(DIRECTION currDirection) {
 			return values()[(currDirection.ordinal() + values().length - 1)% values().length];
 		}
 		

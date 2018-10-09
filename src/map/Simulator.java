@@ -271,7 +271,7 @@ public class Simulator {
 				explore = new Explore(roboCop, exploredMap, realMap, 20, 100);
 				explore.setupExplore();	
 				while(noInterrupt && !explore.runFinished()){
-					explore.explore();
+					explore.exploreSim();
 				} 
 				explore.goToStart();
 
@@ -312,7 +312,7 @@ public class Simulator {
 				explore = new Explore(roboCop, exploredMap, realMap, 20, coverageValue);
 				explore.setupExplore();	
 				while(noInterrupt && !explore.runFinished()){
-					explore.explore();
+					explore.exploreSim();
 				} 
 				explore.goToStart();
 
@@ -353,7 +353,7 @@ public class Simulator {
 				explore = new Explore(roboCop, exploredMap, realMap, timeLimit, 100);
 				explore.setupExplore();	
 				while(noInterrupt && !explore.runFinished()){
-					explore.explore();
+					explore.exploreSim();
 				} 
 				explore.goToStart();
 
