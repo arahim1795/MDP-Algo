@@ -324,7 +324,7 @@ public class Robot {
 			// TODO Generate MDF String Integration
 			// String[] mapStrings = MapDescriptor.generateMapDescriptor(explorationMap);
 			// Send MDF1
-			// Comms.sendMsg(Comms.MAP_STRINGS, "1:MDF1/");
+			 Comms.sendMsg(Comms.MAP_STRINGS, "1:MDF1/");
 			// Send MDF2
 			// Comms.sendMsg(Comms.MAP_STRINGS, "2:MDF2/");
 		}
