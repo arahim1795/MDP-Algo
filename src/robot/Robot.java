@@ -1,10 +1,8 @@
 package robot;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import map.Map;
-import map.MapConstant;
 import robot.RobotConstant;
 import robot.RobotConstant.DIRECTION;
 import robot.RobotConstant.MOVEMENT;
@@ -251,10 +249,11 @@ public class Robot {
 			System.out.println("Error in Robot.move()!");
 			break;
 		}
+    
+		// TODO incorporate physical robot function
+		if (realBot) sendMovement(m, sendToAndroid);
+		System.out.println("Move: " + MOVEMENT.print(m));
 
-		// TODO Incorporate Calibrate
-		if (realBot) ;// sendMovement(m, sendToAndroid);
-		else System.out.println("Move: " + MOVEMENT.print(m));
 	}
 
 	/**

@@ -41,7 +41,7 @@ public class Main {
 		// Messages Tracker
 		ArrayList<String> msgList = new ArrayList<String>();
 		boolean msgSent = false;
-		String msg = "BFF";
+		String msg = "B#setrobot:4,5,4/\n";
 		int msgCount = 0;
 		String tmp;
 		
@@ -49,11 +49,12 @@ public class Main {
 		Comms.openSocket();
 		
 		// Receive Start Message
-		do {
+		/*do {
 			tmp = Comms.receiveMsg();
 			System.out.println(tmp);
-		} while (tmp == null);
-		msgList.add(tmp); msgCount++;
+		} while (tmp == null);*/
+		//msgList.add(tmp); 
+		msgCount++;
 		
 		if (msgCount == 1) System.out.println("Initialising Start State");
 		
@@ -62,8 +63,10 @@ public class Main {
 		
 		while (true) {
 			do {
-				Comms.sendMsg(msg);
-				msgSent = true;
+				if(!msgSent){
+					Comms.sendMsg(msg);
+					msgSent = true;
+				}
 				tmp = Comms.receiveMsg();
 				System.out.println(tmp);
 			} while (tmp == null);

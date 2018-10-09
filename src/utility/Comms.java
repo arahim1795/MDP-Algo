@@ -19,14 +19,14 @@ public class Comms {
 
 	// Android Headers
 	// - to
-	public static final String MAP = "#mdf";		// send map descriptor
-	public static final String POS = "#setrobot";	// send current bot position
+	public static final String MAP = "#mdf";		// + "/", send map descriptor 
+	public static final String POS = "#setrobot";	// + "/", send current bot position
 	// - from
-	public static final String EX_S = "ex";	// Android>PC - Start Exploration
-	public static final String FP_S = "fp";	// Android>PC - Start Fastest Path
-	public static final String START = "r1";
-	public static final String STOP = "r0";
-
+    public static final String EX = "ex";	// Android>PC - Start Exploration
+    public static final String FP = "fp";	// Android>PC - Start Fastest Path
+    public static final String START = "r1";
+    public static final String STOP = "r0";
+  
 	// Arduino Headers
 	// - to
 	public static final String SET = "SETBT";     // PC>Arduino - Set-Up Bot
@@ -74,7 +74,6 @@ public class Comms {
 			System.err.println("I/O Connection to " + robotName + " still active");
 		}
 	}
-
 	/**
 	 * 
 	 * @param major
@@ -84,7 +83,6 @@ public class Comms {
 	 */
 	public static boolean sendMsg(String major, String sub, String content) {
 		StringBuilder sb = new StringBuilder();
-
 		switch (major) {
 			case "A":
 				sb.append(major);
@@ -117,7 +115,7 @@ public class Comms {
 		}
 		
 		if (content != null && content.length() != 0) sb.append(content);
-
+    
 		boolean sent;
 		try {
 			os.writeBytes(sb.toString());
@@ -152,5 +150,9 @@ public class Comms {
 	public static boolean connectionActive() {
 		return robotComms == null && is == null && os == null;
 	}
-
+  
+	//TODO complete method
+	public static boolean isMidPointCoor(String s){
+		return true;
+	}
 }

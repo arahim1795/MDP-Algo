@@ -474,39 +474,41 @@ public class FastestPath {
 
 
 			}
-		}else if(moveBot){
-			for(MOVEMENT x : movementList){
-				bot.move(x);
-			}
-
-			//FUTURE IMPLEMENTATION
-			/*int fCount = 0; //forwardCount
-
-            for (MOVEMENT x : movementList) {
-                if (x == MOVEMENT.FORWARD) {
-                    fCount++;
-                    if (fCount == 10) {
-                        bot.moveForwardMultiple(fCount);
-                        fCount = 0;
-                        exploredMap.repaint();
-                    }
-                } else if (x == MOVEMENT.TURNRIGHT || x == MOVEMENT.TURNLEFT) {
-                    if (fCount > 0) {
-                        bot.moveForwardMultiple(fCount);
-                        fCount = 0;
-                        exploredMap.repaint();
-                    }
-
-                    bot.move(x);
-                    exploredMap.repaint();
-                }
-            }
-
-            if (fCount > 0) {
-                bot.moveForwardMultiple(fCount);
-                exploredMap.repaint();
-            }*/
 		}
+		
+//		else if(moveBot){
+//			for(MOVEMENT x : movementList){
+//				bot.move(x);
+//			}
+//
+//			
+//			int fCount = 0; //forwardCount
+//
+//            for (MOVEMENT x : movementList) {
+//                if (x == MOVEMENT.FORWARD) {
+//                    fCount++;
+//                    if (fCount == 10) {
+//                        bot.moveForwardMultiple(fCount);
+//                        fCount = 0;
+//                        exploredMap.repaint();
+//                    }
+//                } else if (x == MOVEMENT.TURNRIGHT || x == MOVEMENT.TURNLEFT) {
+//                    if (fCount > 0) {
+//                        bot.moveForwardMultiple(fCount);
+//                        fCount = 0;
+//                        exploredMap.repaint();
+//                    }
+//
+//                    bot.move(x);
+//                    exploredMap.repaint();
+//                }
+//            }
+//
+//            if (fCount > 0) {
+//                bot.moveForwardMultiple(fCount);
+//                exploredMap.repaint();
+//            }
+//		}
 		//TODO : exploration code?
 
 		System.out.println("\nMovements: " + outputString.toString());
