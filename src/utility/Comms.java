@@ -118,11 +118,15 @@ public class Comms {
 				sb.append(major);
 				sb.append("_");
 				switch (sub) {
+					case "C":
+						sb.append(sub);
+						sb.append("_");
+						break;
 					default:
 						System.err.println("Invalid Purpose");
 						return false;
 				}
-				// break;
+				break;
 			default:
 				System.err.println("Invalid Destination");
 				return false;
