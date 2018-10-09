@@ -65,7 +65,7 @@ public class Explore {
 	 */
 	public void setupExplore() {
 		if (robot.isRealBot()) {
-			// TODO: incorporate real robot setup if any in future
+			// TODO incorporate Calibrate
 			System.out.println("Physical Robot Functions are unsupported as of now");
 		}
 
@@ -300,7 +300,7 @@ public class Explore {
 	 * @param move
 	 */
 	private void moveRobot(MOVEMENT move) {
-		// TODO physical robot movement
+		// TODO incorporate Calibrate
 		robot.move(move, true); // sendToAndroid);
 		senseEnv();
 		if (robot.getRobotRow() == MapConstant.GOAL_GRID_ROW && robot.getRobotCol() == MapConstant.GOAL_GRID_COL)

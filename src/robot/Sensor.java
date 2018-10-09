@@ -4,7 +4,6 @@ import map.Map;
 import robot.RobotConstant.DIRECTION;
 
 /**
- * TODO update simulated sensors
  * @author 18/19 S1 G3
  */
 public class Sensor {
