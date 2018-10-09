@@ -19,11 +19,11 @@ public class Comms {
 	
 	// Android Headers
 	// - to
-	public static final String MAP = "#mdf";		// send map descriptor
-	public static final String POS = "#setrobot";	// send current bot position
+	public static final String MAP = "#mdf";		// + "/", send map descriptor 
+	public static final String POS = "#setrobot";	// + "/", send current bot position
 	// - from
-    public static final String EX_S = "ex";	// Android>PC - Start Exploration
-    public static final String FP_S = "fp";	// Android>PC - Start Fastest Path
+    public static final String EX = "ex";	// Android>PC - Start Exploration
+    public static final String FP = "fp";	// Android>PC - Start Fastest Path
     public static final String START = "r1";
     public static final String STOP = "r0";
 	
@@ -89,23 +89,40 @@ public class Comms {
 	 * @return true if message is successfully sent, false otherwise
 	 */
 	public static boolean sendMsg(String major, String sub, String content) {
-		
 		StringBuilder sb = new StringBuilder();
 		
-		if (major == null || sub == null) 
-		
-		if (!major.equals("A") || !major.equals("B") || !major.equals("C") || !major.equals("R")) {
-			System.out.println("Invalid Destination");
-			return false;
+		switch (major) {
+			case "A":
+				sb.append(major);
+				switch (sub) {
+					case "SETBT":
+					case "INSTR":
+						sb.append(sub);
+						break;
+					default:
+						System.out.println("Invalid Purpose");
+						return false;
+				}
+				break;
+			case "B":
+				switch (sub) {
+					case "#mdf":
+					case "#setrobot":
+						sb.append(sub);
+						break;
+					default:
+						System.out.println("Invalid Purpose");
+						return false;
+				}
+				break;
+			case "R":
+				break;
+			default:
+				System.out.println("Invalid Destination");
+				return false;
 		}
 		
-		if (major == null || major.equals("") || sub == null || sub.equals("")) {
-			System.out.println("Cannot send without Destination and Purpose");
-			return false; 
-		}
-		
-		sb.append(major);
-		sb.append(sub); 
+		if (content == null || !content.equals("")) sb.append(content);
 		
 		boolean sent;
 		try {
