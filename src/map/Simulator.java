@@ -148,17 +148,15 @@ public class Simulator {
 
 			protected Void doInBackground() throws Exception {
 				
-				boolean initThread = false;
-
+				System.out.println("FP Waiting");
 				while (true) {
-					
-					System.out.println("waiting");
+					System.out.print("");	
 					if(ready){		            	
 						break;
 					}
 				}
 				//
-				System.out.println("running FP");
+				System.out.println("FP Running");
 				Map FPMap;
 				if(exploredDone || realRun){
 					FPMap = exploredMap;            		
@@ -198,9 +196,10 @@ public class Simulator {
 			}
 
 			protected Void doInBackground() throws Exception {
+				System.out.println("Explore Ready");
 				while (true) {
 					switchMap();
-					System.out.println("Can Run!");
+					System.out.print("");
 					if (ready) break;
 				}
 
