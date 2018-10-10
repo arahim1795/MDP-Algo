@@ -73,6 +73,9 @@ public final class RobotConstant {
 		public static DIRECTION fromString(String direction) {
 			return valueOf(direction.toUpperCase());
 		}
+		public static int toInt(DIRECTION d){
+			return d.ordinal()+1;
+		}
 	};
 	
 	// Colors for rendering the map

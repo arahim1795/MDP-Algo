@@ -262,8 +262,12 @@ public class Simulator {
 						exReady = true;
 					}
 					
-					else if(msg.startsWith(Comms.MP)){
-						exploredMap.setMidPoint(Comms.readCoor("ROW", msg), Comms.readCoor("COL", msg));
+					else if(msg.startsWith(Comms.MP)||msg.startsWith(Comms.SP)){
+						if(msg.startsWith(Comms.MP))
+							exploredMap.setMidPoint(Comms.readCoor("ROW", msg), Comms.readCoor("COL", msg));
+						else if(msg.startsWith(Comms.SP)){
+							roboCop.setBotPos(Comms.readCoor("ROW", msg), Comms.readCoor("COL", msg));
+						}
 					}
 					System.out.print("");
 					if (exReady) break;
@@ -516,7 +520,8 @@ public class Simulator {
 		formatButton(btn_printMapDesc);
 		btn_printMapDesc.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
-				System.out.println(MapDescriptor.generateMDFString2(realMap));
+//				System.out.println(MapDescriptor.generateMDFString2(realMap));
+				System.out.println(MapDescriptor.generateMDFHex2(realMap));
 				// print descriptor string on console
 //				System.out.println("Print MapDesc");
 //				System.out.println(utility.MapDescriptor.generateMapString(realMap));
@@ -574,7 +579,8 @@ public class Simulator {
 					} catch (Exception e2) {
 						e2.printStackTrace();
 					}
-
+					
+					System.out.println(MapDescriptor.generateMDFString2(realMap));
 					// _loadedMapFilename = file.getName();
 					JOptionPane.showMessageDialog(mainFrame, "Loaded map information from " + file.getName(),
 							"Loaded Map Information", JOptionPane.PLAIN_MESSAGE);
@@ -654,10 +660,12 @@ public class Simulator {
 
 		btn_clearObs.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
+				
+				roboCop.reAlign();
 				// Clear the current map
-				System.out.println("Clearing Obstacles..");
-				realMap.reset();
-				exploredMap.reset();
+//				System.out.println("Clearing Obstacles..");
+//				realMap.reset();
+//				exploredMap.reset();
 			}
 		});
 		mapButtons.add(btn_clearObs);
