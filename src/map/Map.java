@@ -346,7 +346,7 @@ public class Map extends JPanel{
 		 
         if (!_bMeasured) {
         	//TODO dummy debug
-        	System.out.println("Starting Simulator...");
+
 //            System.out.println("Map width: " + _mapWidth + ", Map height: " + _mapWidth);
 //            System.out.println(bot.getRobotRow()+","+bot.getRobotCol());
 //            System.out.println((bot.getRobotCol()+2) * GraphicConstant.TILE_SIZE - GraphicConstant.ROBOT_X_OFFSET - 5);
