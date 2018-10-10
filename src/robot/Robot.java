@@ -318,6 +318,7 @@ public class Robot {
 	public void multiSense(Map mapExplore) {
 		int[] result = new int[6];
 		StringBuilder sb = new StringBuilder();
+
 		
 		// if Comms is not setup properly, attempt to set up
 		while (!Comms.connectionActive()) Comms.openSocket();
@@ -343,11 +344,14 @@ public class Robot {
 
 		
 		// Send MDF1
+		sb.append("1:");
 		sb.append(MapDescriptor.generateMDFHex1(mapExplore));
 		sb.append("/");
 		Comms.sendMsg(Comms.ANDROID, Comms.MAP, sb.toString());
 		sb.setLength(0);
 		// Send MDF2
+
+		sb.append("2:");
 		sb.append(MapDescriptor.generateMDFHex2(mapExplore));
 		sb.append("/");
 		Comms.sendMsg(Comms.ANDROID, Comms.MAP, sb.toString());

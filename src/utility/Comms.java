@@ -23,9 +23,8 @@ public class Comms {
 	// - to
 	public static final String MAP = "#mdf:";		// + "/", send map descriptor 
 	public static final String POS = "#setrobot:";	// + "/", send current bot position
-	// - from
-    public static final String EX = "ex";	// Android>PC - Start Exploration
-    public static final String FP = "fp";	// Android>PC - Start Fastest Path
+    public static final String EX = "#ex:";
+    public static final String FP = "#fp:";
     
     public static final String MP = "mp";	// Android>PC - Setting Mid Point 
     public static final String SP = "sp";	// Android>PC - Setting Mid Point 
@@ -36,6 +35,7 @@ public class Comms {
 	// - to
 	public static final String SET = "SETBT";     // PC>Arduino - Set-Up Bot
 	public static final String INS = "INSTR";      // PC>Arduino - Give Instruction
+	public static final String END = "END";
 	// - from
 	public static final String SENSOR_DATA = "SDATA";       // Arduino>PC - Sensor Data
 	
@@ -99,6 +99,7 @@ public class Comms {
 				switch (sub) {
 					case "SETBT":
 					case "INSTR":
+					case "END":
 						sb.append(sub);
 						sb.append("_");
 						break;
@@ -111,6 +112,8 @@ public class Comms {
 				switch (sub) {
 					case "#mdf:":
 					case "#setrobot:":
+					case "#ex:":
+					case "#fp:":
 						sb.append(sub);
 						break;
 					default:
