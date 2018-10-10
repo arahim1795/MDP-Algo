@@ -358,7 +358,6 @@ public class Explore {
 		else Comms.receiveMsg();
 		
 		if (robot.isRealBot()) {
-			
 			if (canCalibrate(robot.getRobotDir())) {
 				calibrateCount = 0;
 				moveRobot(calibrate);
@@ -372,7 +371,6 @@ public class Explore {
 					}
 				}
 			}
-			
 		}
 	}
 
