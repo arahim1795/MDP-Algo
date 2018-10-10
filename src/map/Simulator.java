@@ -49,18 +49,10 @@ public class Simulator {
     	System.out.println("Starting Simulator...");
 		roboCop = new Robot(RobotConstant.DEFAULT_START_ROW, RobotConstant.DEFAULT_START_COL, realRun);
 
-
-		/*if (!realRun) {
-			realMap = new MapUI (roboCop);
-			//TODO debug
-			//realMap.reset();
-		}*/
-
 		realMap = new Map(roboCop);
 		realMap.setAllExplored();
 		exploredMap = new Map (roboCop);
-		//TODO debug
-		//exploredMap.reset();
+
 
 		// Calculate map width & length based on grid size
 		// mapWidth = MapConstant.MAP_COLS * GraphicConstant.TILE_SIZE;
@@ -239,7 +231,7 @@ public class Simulator {
 				else{
 					outStr = fastestPathAlgo.searchFastestPath(MapConstant.GOAL_GRID_ROW, MapConstant.GOAL_GRID_COL);
 				}
-				fastestPathAlgo.moveBotfromString(outStr);
+				fastestPathAlgo.moveBotfromString(outStr,realRun);
 
 				firePropertyChange(prReallyDone, false, true);
 				return null;
@@ -260,7 +252,7 @@ public class Simulator {
 					}
 				});
 			}
-
+			//TODO main code 
 			protected Void doInBackground() throws Exception {
 				long idleTime = System.currentTimeMillis();
 				boolean exReady = false;
@@ -694,6 +686,10 @@ public class Simulator {
 			}
 		});
 		mapButtons.add(btn_clearObs);
+	}
+	
+	public static boolean returnRealRun(){
+		return realRun;
 	}
 
 }

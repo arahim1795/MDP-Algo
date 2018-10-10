@@ -173,12 +173,12 @@ public class Explore {
 		if (mapExplore.getTile(goalRow, goalCol).isExplored() && !visitedGoal) {
 			str = fp.searchFastestPath(robot.getRobotRow(),robot.getRobotCol(),goalRow, goalCol);
 			str += fp.searchFastestPath(goalRow,goalCol,startRow,startCol);
-			fp.moveBotfromString(str);
+			fp.moveBotfromString(str,Simulator.returnRealRun());
 		} else {
 			if (!robot.isAtPos(startRow, startCol)) {
 				str = fp.searchFastestPath(startRow, startCol);
 				System.out.println(str);
-				fp.moveBotfromString(str);
+				fp.moveBotfromString(str,Simulator.returnRealRun());
 			}
 		}
 		

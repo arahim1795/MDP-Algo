@@ -278,6 +278,7 @@ public class FastestPath {
 	}
 
 	public void moveBotfromString(String s){
+		MOVEMENT m;
 		try{
 		System.out.println("Attempting moveBotfromString");
 		System.out.println(s);
@@ -286,13 +287,27 @@ public class FastestPath {
 		System.out.println("Message sent to Android");
 		Comms.sendMsg(Comms.ARDUINO, Comms.INS, s);
 		System.out.println("Message sent to Arduino");
-		System.out.println("moveBotfromString successful!");
+		
 		
 
 		}catch(Exception e){
 			System.out.println("moveBotfromString did not send");
 			e.printStackTrace();
 		}
+		
+		for(int i=0;i<s.length();i++){
+			while(true){
+				if(Comms.receiveMsg().equals(Comms.ACK))
+					break;
+				
+			}
+			m=MOVEMENT.get(s.charAt(i));
+			bot.move(m, false);
+			System.out.println("Move: " + MOVEMENT.print(m));
+		}
+		
+		System.out.println("moveBotfromString successful!");
+		
 	}
 
 	//overloaded method 
