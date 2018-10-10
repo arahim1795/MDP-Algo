@@ -323,9 +323,9 @@ public class Robot {
 		while (!Comms.connectionActive()) Comms.openSocket();
 		
 		String msg = Comms.receiveMsg();
-		String[] msgArr = msg.split(";");
+		String[] msgArr = msg.split(";"); // P;SDATA;<>_<>_<>
 
-		if (msgArr[0].equals(Comms.SENSOR_DATA)) {
+		if (msgArr[2].equals(Comms.SENSOR_DATA)) {
 			result[0] = Integer.parseInt(msgArr[1].split("_")[1]);
 			result[1] = Integer.parseInt(msgArr[2].split("_")[1]);
 			result[2] = Integer.parseInt(msgArr[3].split("_")[1]);
@@ -403,14 +403,10 @@ public class Robot {
 		Comms.sendMsg(Comms.ARDUINO, Comms.INS, MOVEMENT.print(m));
 		
 		if (m != MOVEMENT.CALIBRATE && sendAndroidBool) {
-			StringBuilder sb = new StringBuilder();
-			sb.append(robotRow);
-			sb.append(",");
-			sb.append(robotCol);
-			sb.append("/");
-			Comms.sendMsg(Comms.ANDROID, Comms.POS, sb.toString());
-			sb.setLength(0);
+			Comms.sendMsg(Comms.ANDROID, Comms.POS, Comms.encodeCoor(robotRow, robotCol));
+			return;
 		}
+		System.out.println("Error sending instruction to Android");
 	}
 
 }

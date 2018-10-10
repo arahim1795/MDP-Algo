@@ -252,8 +252,11 @@ public class Simulator {
 				boolean exReady = false;
 				String msg;
 				System.out.println("Explore Ready");
+				if(realRun)
+					Comms.sendMsg(Comms.ARDUINO, Comms.SET, null);
 				switchMap();
 				while (true) {
+					msg = Comms.receiveMsg();
 					if(!realRun){
 						exReady = ready;
 					}
@@ -282,6 +285,7 @@ public class Simulator {
 					explore.exploreSim();
 				} 
 				explore.goToStart();
+				Comms.sendMsg(Comms.ARDUINO, "END", null);
 
 				exploredMap.repaint();
 

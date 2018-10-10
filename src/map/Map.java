@@ -242,7 +242,6 @@ public class Map extends JPanel{
 		
 		int r, c;
 		
-		
 		for (int y = -1; y <= 1; y++) {
 			for (int x = -1; x <= 1; x++) {
 				r = row + y;
