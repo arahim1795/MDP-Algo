@@ -251,7 +251,10 @@ public class Robot {
 			break;
 		}
 		
-		if (realBot) sendInstruction(m, sendToAndroid);
+		if (realBot) {
+			System.out.println("Sending:"+m.toString());
+			sendInstruction(m, sendToAndroid);
+		}
 		System.out.println("Move: " + MOVEMENT.print(m));
 
 	}

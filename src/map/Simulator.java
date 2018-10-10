@@ -203,7 +203,7 @@ public class Simulator {
 				long idleTime = System.currentTimeMillis();
 				boolean fpReady = false;
 				
-				System.out.println("FP Waiting");
+				System.out.println("FP Ready");
 				while (true) {
 					if(!realRun){
 						fpReady = ready;
@@ -213,7 +213,7 @@ public class Simulator {
 					}
 					if(System.currentTimeMillis()-idleTime >7000){
 						idleTime = System.currentTimeMillis();
-						System.out.println("FP Ready");
+						System.out.println("FP Waiting...");
 					}
 					else
 						System.out.print("");	
@@ -290,7 +290,7 @@ public class Simulator {
 					}
 					if(System.currentTimeMillis()-idleTime >7000){
 						idleTime = System.currentTimeMillis();
-						System.out.println("Explore Ready");
+						System.out.println("Explore Waiting");
 					}
 					else
 						System.out.print("");

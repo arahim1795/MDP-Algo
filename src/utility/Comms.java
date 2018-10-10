@@ -33,9 +33,9 @@ public class Comms {
   
 	// Arduino Headers
 	// - to
-	public static final String SET = "SETBT";     // PC>Arduino - Set-Up Bot
-	public static final String INS = "INSTR";      // PC>Arduino - Give Instruction
-	public static final String END = "END";
+	public static final String SET = "0ATBT";     // PC>Arduino - Set-Up Bot
+	public static final String INS = "0ASTR";      // PC>Arduino - Give Instruction
+	public static final String END = "0AEND";
 	// - from
 	public static final String SENSOR_DATA = "SDATA";       // Arduino>PC - Sensor Data
 	
@@ -97,9 +97,9 @@ public class Comms {
 				sb.append(major);
 				sb.append("_");
 				switch (sub) {
-					case "SETBT":
-					case "INSTR":
-					case "END":
+					case "0ATBT":
+					case "0ASTR":
+					case "0END":
 						sb.append(sub);
 						sb.append("_");
 						break;
