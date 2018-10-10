@@ -160,23 +160,8 @@ public class Simulator {
 				}
 				//
 				System.out.println("Mid Point received!");
-				Map FPMap;
-				if(exploredDone || realRun){
-					FPMap = exploredMap;            		
-				}
-				else
-					FPMap = realMap;
-				//
-				FastestPath fastestPathAlgo = new FastestPath(FPMap, roboCop);
-				String outStr;
-				if(FPMap.hasMidPoint()){	        	
-					outStr = fastestPathAlgo.searchFastestPath(FPMap.getMidPointRow(),FPMap.getMidPointCol());
-					outStr +=fastestPathAlgo.searchFastestPath(FPMap.getMidPointRow(),FPMap.getMidPointCol(),MapConstant.GOAL_GRID_ROW, MapConstant.GOAL_GRID_COL);
-				} 
-				else{
-					outStr = fastestPathAlgo.searchFastestPath(MapConstant.GOAL_GRID_ROW, MapConstant.GOAL_GRID_COL);
-				}
-				fastestPathAlgo.moveBotfromString(outStr);
+				
+
 
 				firePropertyChange(prReallyDone, false, true);
 				return null;
@@ -490,6 +475,15 @@ public class Simulator {
 			}
 		});
 		mainButtons.add(btn_EnterSpeed);
+		
+		JButton btn_setMid = new JButton ("recv Mid Point");
+		formatButton(btn_setMid);
+		btn_setMid.addMouseListener(new MouseAdapter() {
+			public void mousePressed (MouseEvent e) {
+				new receiveMidPoint().execute();
+			}
+		});
+		mainButtons.add(btn_setMid);
 
 
 	}
