@@ -3,6 +3,7 @@ package robot;
 import java.util.concurrent.TimeUnit;
 
 import map.Map;
+import map.MapConstant;
 import robot.RobotConstant;
 import robot.RobotConstant.DIRECTION;
 import robot.RobotConstant.MOVEMENT;
@@ -281,6 +282,19 @@ public class Robot {
 	private DIRECTION findNewDirection(MOVEMENT m) {
 		if (m == MOVEMENT.TURNRIGHT) return DIRECTION.getRight(robotDir);
 		else return DIRECTION.getLeft(robotDir);
+	}
+	
+	public void reAlign(){
+		if(robotRow==MapConstant.START_GRID_ROW && robotCol==MapConstant.START_GRID_COL){
+			//send start pos to android
+			int dirInt = DIRECTION.toInt(robotDir);
+			System.out.println(Comms.encodeCoor(robotRow, robotCol,dirInt));
+//				Comms.sendMsg(Comms.ANDROID, Comms.POS, Comms.encodeCoor(robotRow, robotCol,dirInt));
+			}
+		else{
+			System.out.println("alignment error");
+		}
+		return;
 	}
 
 	/**

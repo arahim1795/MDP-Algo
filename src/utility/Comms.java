@@ -5,6 +5,8 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 
+import robot.RobotConstant.DIRECTION;
+
 /**
  * @author 18/19 S1 G3
  * Tutorial: https://www.javaworld.com/article/2077322/core-java/core-java-sockets-programming-in-java-a-tutorial.html
@@ -19,11 +21,14 @@ public class Comms {
 
 	// Android Headers
 	// - to
-	public static final String MAP = "#mdf";		// + "/", send map descriptor 
-	public static final String POS = "#setrobot";	// + "/", send current bot position
+	public static final String MAP = "#mdf:";		// + "/", send map descriptor 
+	public static final String POS = "#setrobot:";	// + "/", send current bot position
 	// - from
     public static final String EX = "ex";	// Android>PC - Start Exploration
     public static final String FP = "fp";	// Android>PC - Start Fastest Path
+    
+    public static final String MP = "mp";	// Android>PC - Setting Mid Point 
+    public static final String SP = "sp";	// Android>PC - Setting Mid Point 
     public static final String START = "r1";
     public static final String STOP = "r0";
   
@@ -104,8 +109,8 @@ public class Comms {
 				break;
 			case "B":
 				switch (sub) {
-					case "#mdf":
-					case "#setrobot":
+					case "#mdf:":
+					case "#setrobot:":
 						sb.append(sub);
 						break;
 					default:
@@ -170,7 +175,35 @@ public class Comms {
 	}
   
 	// TODO complete method
-	public static boolean isMidPointCoor(String s){
-		return true;
+	public static int readCoor(String pos, String s){
+		switch(pos.toLowerCase()){
+		case "row":
+			return MapDescriptor.getMapRow(Integer.parseInt(s.substring(4,4)));
+		case"col":
+			return MapDescriptor.getMapCol(Integer.parseInt(s.substring(2,2)));
+		default:
+			System.out.println("Could not read coordinates");
+			return -1;
+		}
+	}
+	
+	public static String encodeCoor(int row, int col){
+		StringBuilder sb = new StringBuilder();
+		sb.append(row);
+		sb.append(",");
+		sb.append(col);
+		sb.append("/");
+		return sb.toString();
+	}
+	
+	public static String encodeCoor(int row, int col, int dir){
+		StringBuilder sb = new StringBuilder();
+		sb.append(row);
+		sb.append(",");
+		sb.append(col);
+		sb.append(",");
+		sb.append(dir);
+		sb.append("/");
+		return sb.toString();
 	}
 }

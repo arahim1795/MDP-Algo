@@ -6,7 +6,8 @@ import java.io.*;
 
 public class MapDescriptor {
 	public static void 	loadMapfromFile (Map map, String bin){
-		System.out.println(bin);
+//		System.out.println(bin);
+		
 		try {
 			/*
 			System.out.println(filename);
@@ -196,7 +197,7 @@ public class MapDescriptor {
 			 for(int j=0;j<4;j++){
 				 hex.append(s.charAt(i+j));
 			 }
-			 
+//			 System.out.println(hex.toString());
 			 switch(hex.toString()){
 			 case "0000":sb.append("0");
 			 break;
@@ -234,6 +235,7 @@ public class MapDescriptor {
 			 break;
 			 
 			 }
+			 hex = new StringBuilder("");
 		 }
 		 return sb.toString();
 	 }
