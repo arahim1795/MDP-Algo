@@ -279,6 +279,7 @@ public class FastestPath {
 
 	public void moveBotfromString(String s){
 		MOVEMENT m;
+		String msg;
 		try{
 		System.out.println("Attempting moveBotfromString");
 		System.out.println(s);
@@ -297,7 +298,8 @@ public class FastestPath {
 		
 		for(int i=0;i<s.length();i++){
 			while(true){
-				if(Comms.receiveMsg().equals(Comms.ACK))
+				msg = Comms.receiveMsg();
+				if(msg.equals(Comms.ACK))
 					break;
 				
 			}
