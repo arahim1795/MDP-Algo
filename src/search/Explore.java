@@ -541,6 +541,24 @@ public class Explore {
 		return endRun;
 	}
 	
+	public boolean isCamPosValid() {
+		Tile robotTile = mapExplore.getTile(robot.getRobotRow(), robot.getRobotCol());
+		boolean robCenterValid = !robotTile.isObstacle() && !robotTile.isVirtualWall();
+		List<int[]> initialReveal = Map.getAdjCoor(robot.getRobotRow(), robot.getRobotCol());
+		boolean[] adjTileArray = new boolean[8];
+		int count=0;
+		for (int[] coor : initialReveal) {
+			if (!mapExplore.getTile(coor[0], coor[1]).isObstacle()) {
+				adjTileArray[count] = true;
+				count++;
+			}
+		}
+		for (boolean b : adjTileArray) {
+			if (!b) return false;
+			else {
+				if (robCenterValid) return true;
+			}
+
 	private boolean listenTerminate() {
 		String str = Comms.receiveMsg();
 		if (str != null) {
