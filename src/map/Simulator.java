@@ -18,6 +18,7 @@ import utility.Comms;
 import utility.MapDescriptor;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.concurrent.TimeUnit;
 
 public class Simulator {
 
@@ -45,7 +46,7 @@ public class Simulator {
 
 	public static void main(String[] args) {
 
-
+    	System.out.println("Starting Simulator...");
 		roboCop = new Robot(RobotConstant.DEFAULT_START_ROW, RobotConstant.DEFAULT_START_COL, realRun);
 
 
@@ -56,6 +57,7 @@ public class Simulator {
 		}*/
 
 		realMap = new Map(roboCop);
+		realMap.setAllExplored();
 		exploredMap = new Map (roboCop);
 		//TODO debug
 		//exploredMap.reset();
@@ -88,6 +90,11 @@ public class Simulator {
 		contentPane.add(mapCards, BorderLayout.CENTER); //add mapCards to main frame's content pane
 		contentPane.add(mainButtons, BorderLayout.EAST);
 		contentPane.add(mapButtons, BorderLayout.SOUTH);
+		
+		if(realRun){
+		Comms.openSocket();
+		System.out.println("Comms Open");
+		}
 
 		mainFrame.setVisible(true);
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
@@ -193,6 +200,7 @@ public class Simulator {
 			}
 
 			protected Void doInBackground() throws Exception {
+				long idleTime = System.currentTimeMillis();
 				boolean fpReady = false;
 				
 				System.out.println("FP Waiting");
@@ -203,7 +211,12 @@ public class Simulator {
 					else if(Comms.receiveMsg()=="fp"){
 						fpReady = true;
 					}
-					System.out.print("");	
+					if(System.currentTimeMillis()-idleTime >7000){
+						idleTime = System.currentTimeMillis();
+						System.out.println("FP Ready");
+					}
+					else
+						System.out.print("");	
 					if(fpReady){		            	
 						break;
 					}
@@ -249,27 +262,38 @@ public class Simulator {
 			}
 
 			protected Void doInBackground() throws Exception {
+				long idleTime = System.currentTimeMillis();
 				boolean exReady = false;
 				String msg;
 				System.out.println("Explore Ready");
+				if(realRun)
+					Comms.sendMsg(Comms.ARDUINO, Comms.SET, null);
 				switchMap();
 				while (true) {
+					
 					if(!realRun){
 						exReady = ready;
 					}
 					
-					else if(msg.equals(Comms.EX)){
-						exReady = true;
-					}
-					
-					else if(msg.startsWith(Comms.MP)||msg.startsWith(Comms.SP)){
-						if(msg.startsWith(Comms.MP))
-							exploredMap.setMidPoint(Comms.readCoor("ROW", msg), Comms.readCoor("COL", msg));
-						else if(msg.startsWith(Comms.SP)){
-							roboCop.setBotPos(Comms.readCoor("ROW", msg), Comms.readCoor("COL", msg));
+					else{
+						msg = Comms.receiveMsg();
+						if(msg.equals(Comms.EX)){
+							exReady = true;
+						}
+						else if(msg.startsWith(Comms.MP)||msg.startsWith(Comms.SP)){
+							if(msg.startsWith(Comms.MP))
+								exploredMap.setMidPoint(Comms.readCoor("ROW", msg), Comms.readCoor("COL", msg));
+							else if(msg.startsWith(Comms.SP)){
+								roboCop.setBotPos(Comms.readCoor("ROW", msg), Comms.readCoor("COL", msg));
+							}
 						}
 					}
-					System.out.print("");
+					if(System.currentTimeMillis()-idleTime >7000){
+						idleTime = System.currentTimeMillis();
+						System.out.println("Explore Ready");
+					}
+					else
+						System.out.print("");
 					if (exReady) break;
 				}
 
@@ -282,6 +306,7 @@ public class Simulator {
 					explore.exploreSim();
 				} 
 				explore.goToStart();
+				Comms.sendMsg(Comms.ARDUINO, "END", null);
 
 				exploredMap.repaint();
 

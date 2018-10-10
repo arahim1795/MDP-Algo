@@ -242,7 +242,6 @@ public class Map extends JPanel{
 		
 		int r, c;
 		
-		
 		for (int y = -1; y <= 1; y++) {
 			for (int x = -1; x <= 1; x++) {
 				r = row + y;
@@ -347,7 +346,7 @@ public class Map extends JPanel{
 		 
         if (!_bMeasured) {
         	//TODO dummy debug
-        	System.out.println("Starting Simulator...");
+
 //            System.out.println("Map width: " + _mapWidth + ", Map height: " + _mapWidth);
 //            System.out.println(bot.getRobotRow()+","+bot.getRobotCol());
 //            System.out.println((bot.getRobotCol()+2) * GraphicConstant.TILE_SIZE - GraphicConstant.ROBOT_X_OFFSET - 5);
