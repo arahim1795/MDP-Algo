@@ -345,13 +345,14 @@ public class Robot {
 		
 		// Send MDF1
 		sb.append("1:");
-		sb.append(MapDescriptor.generateMDFString1(mapExplore));
+		sb.append(MapDescriptor.generateMDFHex1(mapExplore));
 		sb.append("/");
 		Comms.sendMsg(Comms.ANDROID, Comms.MAP, sb.toString());
 		sb.setLength(0);
 		// Send MDF2
+
 		sb.append("2:");
-		sb.append(MapDescriptor.generateMDFString2(mapExplore));
+		sb.append(MapDescriptor.generateMDFHex2(mapExplore));
 		sb.append("/");
 		Comms.sendMsg(Comms.ANDROID, Comms.MAP, sb.toString());
 		sb.setLength(0);
