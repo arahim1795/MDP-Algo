@@ -46,7 +46,7 @@ public class Simulator {
 	public static void main(String[] args) {
 
 
-		roboCop = new Robot(RobotConstant.DEFAULT_START_ROW, RobotConstant.DEFAULT_START_COL, false);
+		roboCop = new Robot(RobotConstant.DEFAULT_START_ROW, RobotConstant.DEFAULT_START_COL, realRun);
 
 
 		/*if (!realRun) {
@@ -124,50 +124,50 @@ public class Simulator {
 
 		//init classes
 		
-		class receiveMidPoint extends SwingWorker<Void, Void> {
-
-			//private Simulator simulator = null;
-			private final String prReallyDone = "ReallyDone";
-
-			private void whenReallyDone() {
-				//simulator.afterWorkerFinishes();
-				System.out.println("FP done");
-			}
-
-			public receiveMidPoint() {
-
-				getPropertyChangeSupport().addPropertyChangeListener(prReallyDone,
-						new PropertyChangeListener() {
-					public void propertyChange(PropertyChangeEvent e) {
-						if (e.getNewValue().equals(true)) {
-							whenReallyDone();
-						}
-					}
-				});
-			}
-
-			protected Void doInBackground() throws Exception {
-				
-				String msg;
-
-				while (true) {
-					System.out.println("Waiting for Mid Point");
-					msg = Comms.receiveMsg();
-//					if(Comms.receiveMsg()=="startFP"){
-					if(Comms.isMidPointCoor(msg)){		            	
-						break;
-					}
-				}
-				//
-				System.out.println("Mid Point received!");
-				
-
-
-				firePropertyChange(prReallyDone, false, true);
-				return null;
-			}
-
-		}
+//		class receiveMidPoint extends SwingWorker<Void, Void> {
+//
+//			//private Simulator simulator = null;
+//			private final String prReallyDone = "ReallyDone";
+//
+//			private void whenReallyDone() {
+//				//simulator.afterWorkerFinishes();
+//				System.out.println("FP done");
+//			}
+//
+//			public receiveMidPoint() {
+//
+//				getPropertyChangeSupport().addPropertyChangeListener(prReallyDone,
+//						new PropertyChangeListener() {
+//					public void propertyChange(PropertyChangeEvent e) {
+//						if (e.getNewValue().equals(true)) {
+//							whenReallyDone();
+//						}
+//					}
+//				});
+//			}
+//
+//			protected Void doInBackground() throws Exception {
+//				
+//				String msg;
+//
+//				while (true) {
+//					System.out.println("Waiting for Mid Point");
+//					msg = Comms.receiveMsg();
+////					if(Comms.receiveMsg()=="startFP"){
+//					if(Comms.isMidPointCoor(msg)){		            	
+//						break;
+//					}
+//				}
+//				//
+//				System.out.println("Mid Point received!");
+//				
+//
+//
+//				firePropertyChange(prReallyDone, false, true);
+//				return null;
+//			}
+//
+//		}
 
 		class fastestPathThread extends SwingWorker<Void, Void> {
 
@@ -193,12 +193,18 @@ public class Simulator {
 			}
 
 			protected Void doInBackground() throws Exception {
+				boolean fpReady = false;
 				
 				System.out.println("FP Waiting");
 				while (true) {
-					System.out.println("");	
-//					if(Comms.receiveMsg()=="startFP"){
-					if(ready){		            	
+					if(!realRun){
+						fpReady = ready;
+					}
+					else if(Comms.receiveMsg()=="fp"){
+						fpReady = true;
+					}
+					System.out.print("");	
+					if(fpReady){		            	
 						break;
 					}
 				}
@@ -243,11 +249,24 @@ public class Simulator {
 			}
 
 			protected Void doInBackground() throws Exception {
+				boolean exReady = false;
+				String msg;
 				System.out.println("Explore Ready");
+				switchMap();
 				while (true) {
-					switchMap();
-					System.out.println("");
-					if (ready) break;
+					if(!realRun){
+						exReady = ready;
+					}
+					
+					else if(msg.equals(Comms.EX)){
+						exReady = true;
+					}
+					
+					else if(msg.startsWith(Comms.MP)){
+						exploredMap.setMidPoint(Comms.readCoor("ROW", msg), Comms.readCoor("COL", msg));
+					}
+					System.out.print("");
+					if (exReady) break;
 				}
 
 				System.out.println("Exploration Running");
@@ -381,8 +400,8 @@ public class Simulator {
 
 		btn_ready.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
-
-				ready = true;
+				if(!realRun)
+					ready = true;
 			}
 		});
 		mainButtons.add(btn_ready);
@@ -476,14 +495,14 @@ public class Simulator {
 		});
 		mainButtons.add(btn_EnterSpeed);
 		
-		JButton btn_setMid = new JButton ("recv Mid Point");
-		formatButton(btn_setMid);
-		btn_setMid.addMouseListener(new MouseAdapter() {
-			public void mousePressed (MouseEvent e) {
-				new receiveMidPoint().execute();
-			}
-		});
-		mainButtons.add(btn_setMid);
+//		JButton btn_setMid = new JButton ("recv Mid Point");
+//		formatButton(btn_setMid);
+//		btn_setMid.addMouseListener(new MouseAdapter() {
+//			public void mousePressed (MouseEvent e) {
+//				new receiveMidPoint().execute();
+//			}
+//		});
+//		mainButtons.add(btn_setMid);
 
 
 	}

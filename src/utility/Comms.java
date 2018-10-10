@@ -24,6 +24,7 @@ public class Comms {
 	// - from
     public static final String EX = "ex";	// Android>PC - Start Exploration
     public static final String FP = "fp";	// Android>PC - Start Fastest Path
+    public static final String MP = "mp";	// Android>PC - Setting Mid Point 
     public static final String START = "r1";
     public static final String STOP = "r0";
   
@@ -170,7 +171,15 @@ public class Comms {
 	}
   
 	// TODO complete method
-	public static boolean isMidPointCoor(String s){
-		return true;
+	public static int readCoor(String pos, String s){
+		switch(pos.toLowerCase()){
+		case "row":
+			return MapDescriptor.getMapRow(Integer.parseInt(s.substring(4,4)));
+		case"col":
+			return MapDescriptor.getMapCol(Integer.parseInt(s.substring(2,2)));
+		default:
+			System.out.println("Could not read coordinates");
+			return -1;
+		}
 	}
 }
