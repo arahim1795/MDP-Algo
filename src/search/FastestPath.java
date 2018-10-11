@@ -297,12 +297,12 @@ public class FastestPath {
 		}
 		
 		for(int i=0;i<s.length();i++){
-			while(true){
+			/*while(true){
 				msg = Comms.receiveMsg();
 				if(msg.equals(Comms.ACK))
 					break;
 				
-			}
+			}*/
 			m=MOVEMENT.get(s.charAt(i));
 			bot.move(m, false);
 			System.out.println("Move: " + MOVEMENT.print(m));

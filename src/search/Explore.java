@@ -75,28 +75,26 @@ public class Explore {
 	public void setupExplore() {	
 		System.out.println("Setting up...");
 		
+		/*
 		// call turn commands, and calibrate
 		List<String> calList = new ArrayList<String>();
 		if (robot.isRealBot()) {
 			System.out.println("Physical Robot Detected, Calibrating...");
+			
 			robot.move(turnLeft, false);
-			calList.add(Comms.receiveMsg());
 			robot.move(calibrate, false);
-			calList.add(Comms.receiveMsg());
+
 			robot.move(turnLeft, false);
-			calList.add(Comms.receiveMsg());
 			robot.move(calibrate, false);
-			calList.add(Comms.receiveMsg());
+
 			robot.move(turnRight, false);
-			calList.add(Comms.receiveMsg());
 			robot.move(calibrate, false);
-			calList.add(Comms.receiveMsg());
+
 			robot.move(turnRight, false);
-			calList.add(Comms.receiveMsg());
 			robot.move(calibrate, false);
-			calList.add(Comms.receiveMsg());
 		}
 		if (calList.size() == 8) System.out.println("Robot Calibrated!");
+		*/
 
 		timeStart = System.currentTimeMillis();
 		timeEnd = timeStart + duration;
@@ -115,14 +113,13 @@ public class Explore {
 		updateExplore();
 
 		// start exploration
-		if (robot.isRealBot()) explorePhys();
-		else exploreSim();
+		explore();
 	}
 
 	/**
 	 * 
 	 */
-	public void exploreSim() {
+	public void explore() {
 		if (System.currentTimeMillis() >= timeEnd || explored >= maxCoverage) {
 			endRun = true;
 			return;
@@ -130,31 +127,6 @@ public class Explore {
 			move();
 			updateExplore();
 		}
-	}
-	
-	/**
-	 * 
-	 */
-	public void explorePhys() {
-		do {
-			// TODO test listenTerminate
-			// crude, untested method to receive message
-			if (listenTerminate()) break;
-			
-			move();
-			// Debug Scripts
-			/*
-			int col, row;
-			DIRECTION dir;
-			row = robot.getRobotRow();
-			col = robot.getRobotCol();
-			dir = robot.getRobotDir();
-			System.out.println("R: " + row + " C: " + col + " D: " + dir);
-			 */
-			updateExplore();
-		} while (System.currentTimeMillis() <= timeEnd && explored <= maxCoverage);
-		
-		goToStart();
 	}
 
 	/**
@@ -357,6 +329,7 @@ public class Explore {
 		if (move != calibrate) senseEnv();
 		else Comms.receiveMsg();
 		
+		/*
 		if (robot.isRealBot()) {
 			if (canCalibrate(robot.getRobotDir())) {
 				calibrateCount = 0;
@@ -372,6 +345,7 @@ public class Explore {
 				}
 			}
 		}
+		*/
 	}
 
 	/**
@@ -465,11 +439,12 @@ public class Explore {
 		}
 	}
 	
+	/*
 	/**
 	 * 
 	 * @param dir
 	 * @return
-	 */
+	 *
 	private boolean canCalibrate(DIRECTION dir) {
 		int row, col;
 		row = robot.getRobotRow();
@@ -486,22 +461,26 @@ public class Explore {
 				return isInvalidOrObs(row+1,col+2) && isInvalidOrObs(row,col+2) && isInvalidOrObs(row-1,col+2);
 		}
 	}
+	*/
 	
+	/*
 	/**
 	 * 
 	 * @param row
 	 * @param col
 	 * @return
-	 */
+	 *
 	private boolean isInvalidOrObs(int row, int col) {
 		if (!Map.isValidTile(row, col)) return true;
 		else return mapExplore.getTile(row, col).isObstacle();
 	}
+	*/
 	
+	/*
 	/**
 	 * 
 	 * @return
-	 */
+	 *
 	private DIRECTION counterCal() {
 		DIRECTION currDir, checkedDir;
 		currDir = robot.getRobotDir();
@@ -521,17 +500,20 @@ public class Explore {
 		// if all fail, return null
 		return null;
 	}
+	*/
 	
+	/*
 	/**
 	 * 
 	 * @param dir
-	 */
+	 *
 	private void calibrate(DIRECTION dir) {
 		DIRECTION currDir = robot.getRobotDir();
 		rotateRobot(dir);
 		moveRobot(calibrate);
 		rotateRobot(currDir);
 	}
+	*/
 	
 	/**
 	 * 
