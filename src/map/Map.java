@@ -332,7 +332,7 @@ public class Map extends JPanel {
 		for (Tile[] row : field)
 			for (Tile tile : row)
 				tile.reset();
-		
+
 		midPointRow = -1;
 		midPointCol = -1;
 		_bSetMid = false;
@@ -477,7 +477,7 @@ public class Map extends JPanel {
 			break;
 		}
 	}
-	
+
 	@Deprecated
 	public void clearMap() {
 		for (int row = 0; row < (MapConstant.MAP_ROWS); row++) {
