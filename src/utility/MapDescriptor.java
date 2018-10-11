@@ -137,7 +137,7 @@ public class MapDescriptor {
 		 mapString.append("11");
 		 for(int row = 0; row<MapConstant.MAP_ROWS;row++){
 			 for(int col = 0;col<MapConstant.MAP_COLS;col++){
-				 System.out.println(getMDFrow(row)+","+col);
+//				 System.out.println(getMDFrow(row)+","+col);
 				 if(map.getTile(getMDFrow(row), col).isExplored())
 					 mapString.append("1");
 				 else
@@ -149,9 +149,11 @@ public class MapDescriptor {
 	 }
 	 
 	 public static String generateMDFString2(Map map){
+		 System.out.println("MDF2");
 		 StringBuilder mapString = new StringBuilder("");
 		 for(int row = 0; row<MapConstant.MAP_ROWS;row++){
 			 for(int col = 0;col<MapConstant.MAP_COLS;col++){
+//				 System.out.println(getMDFrow(row)+","+col);
 				 if(map.getTile(getMDFrow(row), col).isExplored()){
 					 if(map.getTile(getMDFrow(row), col).isObstacle())
 						 mapString.append("1");
@@ -164,12 +166,16 @@ public class MapDescriptor {
 					 mapString.append("");
 			 }
 		 }
-		 if(mapString.length()%8 != 0){
-			int padding = mapString.length()%8;
+		 if(mapString.length()%4 != 0){
+			int padding = 4-mapString.length()%4;
+			System.out.println(padding);
 		 	for(int i=0;i<padding;i++)
 		 		mapString.append("1");
 		 	}
-		 return mapString.toString();
+		 String result = mapString.toString();
+		 System.out.println(result);
+		 System.out.println(result.length());
+		 return result;
 	 }
 	 
 	 //map -> mdf

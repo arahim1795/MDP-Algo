@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.concurrent.*;
 
 import map.Map;
@@ -38,6 +39,7 @@ public class Main {
 		
 		*/
 		
+		/*
 		// Messages Tracker
 		ArrayList<String> msgList = new ArrayList<String>();
 		boolean msgSent = false;
@@ -52,7 +54,7 @@ public class Main {
 		/*do {
 			tmp = Comms.receiveMsg();
 			System.out.println(tmp);
-		} while (tmp == null);*/
+		} while (tmp == null);
 		//msgList.add(tmp); 
 		msgCount++;
 		
@@ -71,6 +73,16 @@ public class Main {
 				System.out.println(tmp);
 			} while (tmp == null);
 			msgList.add(tmp); msgCount++;
+		}*/
+		
+		Scanner sc = new Scanner(System.in);
+		
+		double num;
+		while (true) {
+			System.out.print("Input Int: ");
+			String str = sc.nextLine();
+			num = Double.parseDouble(str);
+			System.out.println("Rounded: " + (Math.round(num / 10.0) * 10));
 		}
 		
 		
