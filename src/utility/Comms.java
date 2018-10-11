@@ -160,13 +160,17 @@ public class Comms {
 	@SuppressWarnings("deprecation")
 	public static String receiveMsg() {
 		StringBuilder msg = new StringBuilder();
+		StringBuilder outMsg = new StringBuilder();
 		try {
 			msg.append(is.readLine());
 
 		} catch (IOException e) {
 			System.err.println(e);
 		}
-		return msg.toString();
+		for(int i=2;i<msg.length()-1;i++){
+			outMsg.append(msg.charAt(i));
+		}	
+		return outMsg.toString();
 	}
 
 	/**
@@ -179,11 +183,32 @@ public class Comms {
   
 	// TODO complete method
 	public static int readCoor(String pos, String s){
+		int ptr=0;
+		StringBuilder result = new StringBuilder("");
 		switch(pos.toLowerCase()){
 		case "row":
-			return MapDescriptor.getMapRow(Integer.parseInt(s.substring(4,4)));
+			System.out.println("parsing row");
+			while(s.charAt(ptr)!=','){
+				ptr++;
+			}
+			ptr++;
+			System.out.println(ptr);
+			while(s.charAt(ptr)!= ',' && s.charAt(ptr)!='/' ){
+				System.out.println(ptr+","+s.charAt(ptr));
+				result.append(s.charAt(ptr));
+				ptr++;
+			}
+			System.out.println(result.toString());
+			return MapDescriptor.getMapRow(Integer.parseInt(result.toString()));
 		case"col":
-			return MapDescriptor.getMapCol(Integer.parseInt(s.substring(2,2)));
+			System.out.println("parsing col");
+			ptr=2;
+			while(s.charAt(ptr)!= ','){
+				result.append(s.charAt(ptr));
+				ptr++;
+			}
+			System.out.println(result.toString());
+			return MapDescriptor.getMapRow(Integer.parseInt(result.toString()));
 		default:
 			System.out.println("Could not read coordinates");
 			return -1;

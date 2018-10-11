@@ -45,7 +45,7 @@ public class Simulator {
 	private static int coverageValue;
 
 	public static void main(String[] args) {
-
+		
     	System.out.println("Starting Simulator...");
 		roboCop = new Robot(RobotConstant.DEFAULT_START_ROW, RobotConstant.DEFAULT_START_COL, realRun);
 
@@ -256,6 +256,7 @@ public class Simulator {
 			protected Void doInBackground() throws Exception {
 				long idleTime = System.currentTimeMillis();
 				boolean exReady = false;
+				boolean nulls= false;
 				String msg;
 				System.out.println("Explore Ready");
 				if(realRun)
@@ -269,15 +270,35 @@ public class Simulator {
 					
 					else{
 						msg = Comms.receiveMsg();
+						if(msg==null){
+							if(nulls)
+								System.out.println("nulls");
+							nulls = true;
+						}
+						else{
+							nulls = false;
+							System.out.println(msg);
+							System.out.println(msg.startsWith(Comms.MP));
+							System.out.println(msg.startsWith(Comms.MP)||msg.startsWith(Comms.SP));
+						}
 						if(msg.equals(Comms.EX)){
 							exReady = true;
 						}
+						
 						else if(msg.startsWith(Comms.MP)||msg.startsWith(Comms.SP)){
-							if(msg.startsWith(Comms.MP))
+							System.out.println("Setting Coordinates...");
+							if(msg.startsWith(Comms.MP)){
+								System.out.println("Setting MP...");
 								exploredMap.setMidPoint(Comms.readCoor("ROW", msg), Comms.readCoor("COL", msg));
-							else if(msg.startsWith(Comms.SP)){
-								roboCop.setBotPos(Comms.readCoor("ROW", msg), Comms.readCoor("COL", msg));
+								System.out.println("Waypoint set: ("+Comms.readCoor("ROW", msg)+","+Comms.readCoor("COL", msg)+")");
 							}
+							else if(msg.startsWith(Comms.SP)){
+								System.out.println("Setting SP");
+								roboCop.setBotPos(Comms.readCoor("ROW", msg), Comms.readCoor("COL", msg));
+								System.out.println("Start Point set: ("+Comms.readCoor("ROW", msg)+","+Comms.readCoor("COL", msg)+")");
+							}
+							else
+								System.out.println("Setting Coordinates failed");
 						}
 					}
 					if(System.currentTimeMillis()-idleTime >7000){
