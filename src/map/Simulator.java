@@ -34,7 +34,7 @@ public class Simulator {
 
 	// The robot
 	private static robot.Robot roboCop = null;
-	private static final boolean realRun = false;
+	private static final boolean realRun = true;
 	private static boolean ready = false;
 	private static boolean exploredDone = false;
 	private static boolean noInterrupt = true;
@@ -44,7 +44,6 @@ public class Simulator {
 	private static int coverageValue;
 
 	public static void main(String[] args) {
-
 
 		roboCop = new Robot(RobotConstant.DEFAULT_START_ROW, RobotConstant.DEFAULT_START_COL, realRun);
 
@@ -56,6 +55,7 @@ public class Simulator {
 		}*/
 
 		realMap = new Map(roboCop);
+		realMap.setAllUnExplored();
 		exploredMap = new Map (roboCop);
 		//TODO debug
 		//exploredMap.reset();

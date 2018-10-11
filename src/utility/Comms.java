@@ -176,11 +176,26 @@ public class Comms {
   
 	// TODO complete method
 	public static int readCoor(String pos, String s){
+		StringBuilder result = new StringBuilder();
+		int ptr=0;
 		switch(pos.toLowerCase()){
 		case "row":
-			return MapDescriptor.getMapRow(Integer.parseInt(s.substring(4,4)));
+			while(s.charAt(ptr)!=','){
+				ptr++;
+			}
+			ptr++;
+			while(s.charAt(ptr)!= ',' && s.charAt(ptr)!='/'){
+				result.append(s.charAt(ptr));
+				ptr++;
+			}
+			return MapDescriptor.getMapRow(Integer.parseInt(result.toString()));
 		case"col":
-			return MapDescriptor.getMapCol(Integer.parseInt(s.substring(2,2)));
+			ptr =2;
+			while(s.charAt(ptr)!= ','){
+				result.append(s.charAt(ptr));
+				ptr++;
+			}
+			return MapDescriptor.getMapCol(Integer.parseInt(result.toString()));
 		default:
 			System.out.println("Could not read coordinates");
 			return -1;
