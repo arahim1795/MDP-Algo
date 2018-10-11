@@ -284,9 +284,9 @@ public class FastestPath {
 		System.out.println("Attempting moveBotfromString");
 		System.out.println(s);
 		
-		Comms.sendMsg(Comms.ANDROID, Comms.INS, s);
+		Comms.sendMsg(Comms.ANDROID, Comms.MULTI, s);
 		System.out.println("Message sent to Android");
-		Comms.sendMsg(Comms.ARDUINO, Comms.INS, s);
+		Comms.sendMsg(Comms.ARDUINO, Comms.MULTI, s);
 		System.out.println("Message sent to Arduino");
 		
 		

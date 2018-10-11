@@ -42,6 +42,7 @@ public class Comms {
 	public static final String INS = "INSTR";      // PC>Arduino - Give Instruction
 	public static final String END = "END";
 	public static final String SENSE = "C"; 
+	public static final String MULTI = "MULTI"; //for mutli-movement string
 	// - from
 	public static final String ACK = "ACK";	//TODO tentative
 	// RPi Headers
