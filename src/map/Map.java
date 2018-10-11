@@ -385,7 +385,8 @@ public class Map extends JPanel{
                 if (!isExploredTile(mapRow, mapCol)) {
                 	if(isMidPoint(mapRow,mapCol))
                 		gridColor = GraphicConstant.C_UNEXPLORED_MID;
-                	gridColor = GraphicConstant.C_UNEXPLORED;
+                	else
+                		gridColor = GraphicConstant.C_UNEXPLORED;
 
                 }
                 else {
