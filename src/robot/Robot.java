@@ -252,6 +252,7 @@ public class Robot {
 		}
 		
 		if (realBot) {
+
 			System.out.println("Sending "+m.toString());
 			sendInstruction(m, sendToAndroid);
 		}

@@ -9,6 +9,7 @@ import robot.Robot;
 import robot.RobotConstant;
 import robot.RobotConstant.DIRECTION;
 import robot.RobotConstant.MOVEMENT;
+import utility.Comms;
 import map.Map;
 import map.Tile;
 import map.MapConstant;
@@ -253,7 +254,13 @@ public class FastestPath {
 		return actualPath;
 	}
 	//
-	public void moveBotfromString(String movementString){
+	public void moveBotfromString(String s, boolean realRun){
+		if(!realRun)
+			moveBotfromChars(s);
+		else
+			moveBotfromString(s);
+	}
+	public void moveBotfromChars(String movementString){
 		ArrayList<MOVEMENT> movementList = new ArrayList<>();
 		char c;
 		for(int i=0;i<movementString.length();i++){
@@ -268,6 +275,41 @@ public class FastestPath {
 			bot.move(m);
 		}
 
+	}
+
+	public void moveBotfromString(String s){
+		MOVEMENT m;
+		String msg;
+		try{
+		System.out.println("Attempting moveBotfromString");
+		System.out.println(s);
+		
+		Comms.sendMsg(Comms.ANDROID, Comms.INS, s);
+		System.out.println("Message sent to Android");
+		Comms.sendMsg(Comms.ARDUINO, Comms.INS, s);
+		System.out.println("Message sent to Arduino");
+		
+		
+
+		}catch(Exception e){
+			System.out.println("moveBotfromString did not send");
+			e.printStackTrace();
+		}
+		
+		for(int i=0;i<s.length();i++){
+			while(true){
+				msg = Comms.receiveMsg();
+				if(msg.equals(Comms.ACK))
+					break;
+				
+			}
+			m=MOVEMENT.get(s.charAt(i));
+			bot.move(m, false);
+			System.out.println("Move: " + MOVEMENT.print(m));
+		}
+		
+		System.out.println("moveBotfromString successful!");
+		
 	}
 
 	//overloaded method 

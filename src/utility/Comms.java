@@ -38,7 +38,7 @@ public class Comms {
 	public static final String END = "0AEND";
 	// - from
 	public static final String SENSOR_DATA = "SDATA";       // Arduino>PC - Sensor Data
-	
+	public static final String ACK = "ACK";	//TODO tentative
 	// RPi Headers
 	// - to
 	public static final String C = "CAM";
