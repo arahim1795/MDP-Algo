@@ -433,6 +433,7 @@ public class Explore {
 						moveRobot(turnLeft);
 						break;
 				}
+				break;
 			case LEFT:
 				switch (dir) {
 					case UP:
@@ -446,6 +447,7 @@ public class Explore {
 						moveRobot(turnLeft);
 						break;
 				}
+				break;
 			default:
 				switch (dir) {
 					case UP:

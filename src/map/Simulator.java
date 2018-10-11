@@ -277,7 +277,7 @@ public class Simulator {
 					
 					else{
 						msg = Comms.receiveMsg();
-						if(msg.equals(Comms.EX)){
+						if(msg.equals("b'exp'")){
 							exReady = true;
 						}
 						else if(msg.startsWith(Comms.MP)||msg.startsWith(Comms.SP)){
@@ -288,12 +288,15 @@ public class Simulator {
 							}
 						}
 					}
-					if(System.currentTimeMillis()-idleTime >7000){
-						idleTime = System.currentTimeMillis();
-						System.out.println("Explore Ready");
+					
+					if(exReady) {
+						if(System.currentTimeMillis()-idleTime >7000){
+							idleTime = System.currentTimeMillis();
+							System.out.println("Explore Ready, waiting");
+						}
+						else
+							System.out.print(msg);
 					}
-					else
-						System.out.print("");
 					if (exReady) break;
 				}
 

@@ -251,7 +251,10 @@ public class Robot {
 			break;
 		}
 		
-		if (realBot) sendInstruction(m, sendToAndroid);
+		if (realBot) {
+			System.out.println("Sending "+m.toString());
+			sendInstruction(m, sendToAndroid);
+		}
 		System.out.println("Move: " + MOVEMENT.print(m));
 
 	}
@@ -404,13 +407,18 @@ public class Robot {
 	 * @param sendMovetoAndroid
 	 */
 	private void sendInstruction(MOVEMENT m, boolean sendAndroidBool) {
-		Comms.sendMsg(Comms.ARDUINO, Comms.INS, MOVEMENT.print(m));
-		
-		if (m != MOVEMENT.CALIBRATE && sendAndroidBool) {
-			Comms.sendMsg(Comms.ANDROID, Comms.POS, Comms.encodeCoor(robotRow, robotCol));
-			return;
+		try {
+			Comms.sendMsg(Comms.ARDUINO, Comms.INS, MOVEMENT.print(m));
+			
+			if (m != MOVEMENT.CALIBRATE && sendAndroidBool) {
+				Comms.sendMsg(Comms.ANDROID, Comms.POS, Comms.encodeCoor(robotRow, robotCol));
+				return;
+			}
+		} catch (Exception e) {
+			System.out.println("Error sending instruction");
+			//e.printStackTrace();
 		}
-		System.out.println("Error sending instruction to Android");
+		
 	}
 
 }

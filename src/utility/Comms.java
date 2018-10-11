@@ -23,7 +23,7 @@ public class Comms {
 	// - to
 	public static final String MAP = "#mdf:";		// + "/", send map descriptor 
 	public static final String POS = "#setrobot:";	// + "/", send current bot position
-    public static final String EX = "#ex:";
+    public static final String EX = "#exp:";
     public static final String FP = "#fp:";
     
     public static final String MP = "mp";	// Android>PC - Setting Mid Point 
@@ -33,9 +33,9 @@ public class Comms {
   
 	// Arduino Headers
 	// - to
-	public static final String SET = "SETBT";     // PC>Arduino - Set-Up Bot
-	public static final String INS = "INSTR";      // PC>Arduino - Give Instruction
-	public static final String END = "END";
+	public static final String SET = "0ATBT";     // PC>Arduino - Set-Up Bot
+	public static final String INS = "0ASTR";      // PC>Arduino - Give Instruction
+	public static final String END = "0AEND";
 	// - from
 	public static final String SENSOR_DATA = "SDATA";       // Arduino>PC - Sensor Data
 	
@@ -97,9 +97,9 @@ public class Comms {
 				sb.append(major);
 				sb.append("_");
 				switch (sub) {
-					case "SETBT":
-					case "INSTR":
-					case "END":
+					case "0ATBT":
+					case "0ASTR":
+					case "0AEND":
 						sb.append(sub);
 						sb.append("_");
 						break;
@@ -160,12 +160,14 @@ public class Comms {
 	@SuppressWarnings("deprecation")
 	public static String receiveMsg() {
 		StringBuilder msg = new StringBuilder();
+		StringBuilder outMsg = new StringBuilder();
 		try {
 			msg.append(is.readLine());
 
 		} catch (IOException e) {
 			System.err.println(e);
 		}
+		
 		return msg.toString();
 	}
 
