@@ -35,7 +35,7 @@ public class Simulator {
 
 	// The robot
 	private static robot.Robot roboCop = null;
-	private static final boolean realRun = false;
+	private static final boolean realRun = true;
 	private static boolean ready = false;
 	private static boolean exploredDone = false;
 	private static boolean noInterrupt = true;
