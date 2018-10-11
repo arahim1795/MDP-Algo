@@ -14,17 +14,17 @@ import robot.RobotConstant.DIRECTION;
 public class Comms {
 
 	// Major Headers
-	public static final String ARDUINO = "A";
-	public static final String ANDROID = "B";
-	public static final String ARDnAND = "C";
-	public static final String RPI = "R";
+	public static final String ARDUINO = "00A";
+	public static final String ANDROID = "00B";
+	public static final String ARDnAND = "00C";
+	public static final String RPI = "00R";
 
 	// Android Headers
 	// - to
 	public static final String MAP = "#mdf:";		// + "/", send map descriptor 
 	public static final String POS = "#setrobot:";	// + "/", send current bot position
-    public static final String EX = "#ex:";
     public static final String FP = "#fp:";
+    public static final String EX = "ex";
     
     public static final String MP = "mp";	// Android>PC - Setting Mid Point 
     public static final String SP = "sp";	// Android>PC - Setting Mid Point 
@@ -33,9 +33,9 @@ public class Comms {
   
 	// Arduino Headers
 	// - to
-	public static final String SET = "0ATBT";     // PC>Arduino - Set-Up Bot
-	public static final String INS = "0ASTR";      // PC>Arduino - Give Instruction
-	public static final String END = "0AEND";
+	public static final String SET = "SET";     // PC>Arduino - Set-Up Bot
+	public static final String INS = "INS";      // PC>Arduino - Give Instruction
+	public static final String END = "END";
 	// - from
 	public static final String SENSOR_DATA = "SDATA";       // Arduino>PC - Sensor Data
 	public static final String ACK = "ACK";	//TODO tentative
@@ -93,13 +93,13 @@ public class Comms {
 	public static boolean sendMsg(String major, String sub, String content) {
 		StringBuilder sb = new StringBuilder();
 		switch (major) {
-			case "A":
+			case ARDUINO:
 				sb.append(major);
 				sb.append("_");
 				switch (sub) {
-					case "0ATBT":
-					case "0ASTR":
-					case "0END":
+					case END:
+					case SET:
+					case INS:
 						sb.append(sub);
 						sb.append("_");
 						break;
@@ -108,12 +108,11 @@ public class Comms {
 						return false;
 				}
 				break;
-			case "B":
+			case ANDROID:
 				switch (sub) {
-					case "#mdf:":
-					case "#setrobot:":
-					case "#ex:":
-					case "#fp:":
+					case MAP:
+					case POS:
+					case FP:
 						sb.append(sub);
 						break;
 					default:
@@ -121,12 +120,12 @@ public class Comms {
 						return false;
 				}
 				break;
-			case "R":
+			case RPI:
 				// TODO incorporate Image Tracking
 				sb.append(major);
 				sb.append("_");
 				switch (sub) {
-					case "C":
+					case C:
 						sb.append(sub);
 						sb.append("_");
 						break;
@@ -167,10 +166,12 @@ public class Comms {
 		} catch (IOException e) {
 			System.err.println(e);
 		}
+
 		for(int i=2;i<msg.length()-1;i++){
 			outMsg.append(msg.charAt(i));
 		}	
 		return outMsg.toString();
+
 	}
 
 	/**
@@ -187,27 +188,26 @@ public class Comms {
 		StringBuilder result = new StringBuilder("");
 		switch(pos.toLowerCase()){
 		case "row":
-			System.out.println("parsing row");
+//			System.out.println("parsing row");
 			while(s.charAt(ptr)!=','){
 				ptr++;
 			}
 			ptr++;
-			System.out.println(ptr);
+//			System.out.println(ptr);
 			while(s.charAt(ptr)!= ',' && s.charAt(ptr)!='/' ){
-				System.out.println(ptr+","+s.charAt(ptr));
+//				System.out.println(ptr+","+s.charAt(ptr));
 				result.append(s.charAt(ptr));
 				ptr++;
 			}
-			System.out.println(result.toString());
+//			System.out.println(result.toString());
 			return MapDescriptor.getMapRow(Integer.parseInt(result.toString()));
 		case"col":
-			System.out.println("parsing col");
 			ptr=2;
 			while(s.charAt(ptr)!= ','){
 				result.append(s.charAt(ptr));
 				ptr++;
 			}
-			System.out.println(result.toString());
+//			System.out.println(result.toString());
 			return MapDescriptor.getMapRow(Integer.parseInt(result.toString()));
 		default:
 			System.out.println("Could not read coordinates");

@@ -270,6 +270,7 @@ public class Simulator {
 					
 					else{
 						msg = Comms.receiveMsg();
+
 						if(msg==null){
 							if(nulls)
 								System.out.println("nulls");
@@ -301,12 +302,11 @@ public class Simulator {
 								System.out.println("Setting Coordinates failed");
 						}
 					}
+
 					if(System.currentTimeMillis()-idleTime >7000){
 						idleTime = System.currentTimeMillis();
 						System.out.println("Explore Waiting");
 					}
-					else
-						System.out.print("");
 					if (exReady) break;
 				}
 
@@ -537,14 +537,7 @@ public class Simulator {
 		});
 		mainButtons.add(btn_EnterSpeed);
 		
-//		JButton btn_setMid = new JButton ("recv Mid Point");
-//		formatButton(btn_setMid);
-//		btn_setMid.addMouseListener(new MouseAdapter() {
-//			public void mousePressed (MouseEvent e) {
-//				new receiveMidPoint().execute();
-//			}
-//		});
-//		mainButtons.add(btn_setMid);
+
 
 
 	}
