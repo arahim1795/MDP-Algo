@@ -194,28 +194,37 @@ public class Comms {
 		int ptr=0;
 		StringBuilder result = new StringBuilder("");
 		switch(pos.toLowerCase()){
-		case "row":
-			//			System.out.println("parsing row");
+
+		case "col":
+			// System.out.println("parsing row");
 			while(s.charAt(ptr)!=','){
 				ptr++;
 			}
 			ptr++;
-			//			System.out.println(ptr);
+			// System.out.println(ptr);
 			while(s.charAt(ptr)!= ',' && s.charAt(ptr)!='/' ){
-				//				System.out.println(ptr+","+s.charAt(ptr));
+				// System.out.println(ptr+","+s.charAt(ptr));
 				result.append(s.charAt(ptr));
 				ptr++;
 			}
-			//			System.out.println(result.toString());
-			return MapDescriptor.getMapRow(Integer.parseInt(result.toString()));
-		case"col":
+
+			// System.out.println(result.toString());
+			return MapDescriptor.getMapCol(Integer.parseInt(result.toString()));
+		case"row":
+
 			ptr=2;
 			while(s.charAt(ptr)!= ','){
 				result.append(s.charAt(ptr));
 				ptr++;
 			}
-			//			System.out.println(result.toString());
+
+			// System.out.println(result.toString());
 			return MapDescriptor.getMapRow(Integer.parseInt(result.toString()));
+		case "dir":
+			ptr = s.length()-2;
+			result.append(s.charAt(ptr));
+			return Integer.parseInt(result.toString());
+
 		default:
 			System.out.println("Could not read coordinates");
 			return -1;

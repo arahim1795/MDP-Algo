@@ -45,13 +45,15 @@ public class Simulator {
 	private static int coverageValue;
 
 	public static void main(String[] args) {
-		
-    	System.out.println("Starting Simulator...");
+
+
+		System.out.println("Starting Simulator...");
 		roboCop = new Robot(RobotConstant.DEFAULT_START_ROW, RobotConstant.DEFAULT_START_COL, realRun);
 
 		realMap = new Map(roboCop);
 		realMap.setAllExplored();
 		exploredMap = new Map (roboCop);
+
 
 
 		// Calculate map width & length based on grid size
@@ -82,10 +84,10 @@ public class Simulator {
 		contentPane.add(mapCards, BorderLayout.CENTER); //add mapCards to main frame's content pane
 		contentPane.add(mainButtons, BorderLayout.EAST);
 		contentPane.add(mapButtons, BorderLayout.SOUTH);
-		
+
 		if(realRun){
-		Comms.openSocket();
-		System.out.println("Comms Open");
+			Comms.openSocket();
+			System.out.println("Comms Open");
 		}
 
 		mainFrame.setVisible(true);
@@ -122,51 +124,51 @@ public class Simulator {
 	private static void addMainButtons() {
 
 		//init classes
-		
-//		class receiveMidPoint extends SwingWorker<Void, Void> {
-//
-//			//private Simulator simulator = null;
-//			private final String prReallyDone = "ReallyDone";
-//
-//			private void whenReallyDone() {
-//				//simulator.afterWorkerFinishes();
-//				System.out.println("FP done");
-//			}
-//
-//			public receiveMidPoint() {
-//
-//				getPropertyChangeSupport().addPropertyChangeListener(prReallyDone,
-//						new PropertyChangeListener() {
-//					public void propertyChange(PropertyChangeEvent e) {
-//						if (e.getNewValue().equals(true)) {
-//							whenReallyDone();
-//						}
-//					}
-//				});
-//			}
-//
-//			protected Void doInBackground() throws Exception {
-//				
-//				String msg;
-//
-//				while (true) {
-//					System.out.println("Waiting for Mid Point");
-//					msg = Comms.receiveMsg();
-////					if(Comms.receiveMsg()=="startFP"){
-//					if(Comms.isMidPointCoor(msg)){		            	
-//						break;
-//					}
-//				}
-//				//
-//				System.out.println("Mid Point received!");
-//				
-//
-//
-//				firePropertyChange(prReallyDone, false, true);
-//				return null;
-//			}
-//
-//		}
+
+		//		class receiveMidPoint extends SwingWorker<Void, Void> {
+		//
+		//			//private Simulator simulator = null;
+		//			private final String prReallyDone = "ReallyDone";
+		//
+		//			private void whenReallyDone() {
+		//				//simulator.afterWorkerFinishes();
+		//				System.out.println("FP done");
+		//			}
+		//
+		//			public receiveMidPoint() {
+		//
+		//				getPropertyChangeSupport().addPropertyChangeListener(prReallyDone,
+		//						new PropertyChangeListener() {
+		//					public void propertyChange(PropertyChangeEvent e) {
+		//						if (e.getNewValue().equals(true)) {
+		//							whenReallyDone();
+		//						}
+		//					}
+		//				});
+		//			}
+		//
+		//			protected Void doInBackground() throws Exception {
+		//				
+		//				String msg;
+		//
+		//				while (true) {
+		//					System.out.println("Waiting for Mid Point");
+		//					msg = Comms.receiveMsg();
+		////					if(Comms.receiveMsg()=="startFP"){
+		//					if(Comms.isMidPointCoor(msg)){		            	
+		//						break;
+		//					}
+		//				}
+		//				//
+		//				System.out.println("Mid Point received!");
+		//				
+		//
+		//
+		//				firePropertyChange(prReallyDone, false, true);
+		//				return null;
+		//			}
+		//
+		//		}
 
 		class fastestPathThread extends SwingWorker<Void, Void> {
 
@@ -194,7 +196,7 @@ public class Simulator {
 			protected Void doInBackground() throws Exception {
 				long idleTime = System.currentTimeMillis();
 				boolean fpReady = false;
-				
+
 				System.out.println("FP Ready");
 				while (true) {
 					if(!realRun){
@@ -259,44 +261,48 @@ public class Simulator {
 				boolean nulls= false;
 				String msg;
 				System.out.println("Explore Ready");
-				if(realRun)
-					Comms.sendMsg(Comms.ARDUINO, Comms.SET, null);
+				if(realRun);
+				// Comms.sendMsg(Comms.ARDUINO, Comms.SET, null);
 				switchMap();
 				while (true) {
-					
+
 					if(!realRun){
 						exReady = ready;
 					}
-					
+
 					else{
 						msg = Comms.receiveMsg();
 
-						if(msg==null){
-							if(nulls)
-								System.out.println("nulls");
-							nulls = true;
-						}
-						else{
-							nulls = false;
-							System.out.println(msg);
-							System.out.println(msg.startsWith(Comms.MP));
-							System.out.println(msg.startsWith(Comms.MP)||msg.startsWith(Comms.SP));
-						}
+						//						if(msg==null){
+						//							if(nulls)
+						//								System.out.println("nulls");
+						//							nulls = true;
+						//						}
+						//						else{
+						//							nulls = false;
+						//							System.out.println(msg);
+						//							System.out.println(msg.startsWith(Comms.MP));
+						//							System.out.println(msg.startsWith(Comms.MP)||msg.startsWith(Comms.SP));
+						//						}
 						if(msg.equals(Comms.EX)){
 							exReady = true;
 						}
-						
+
 						else if(msg.startsWith(Comms.MP)||msg.startsWith(Comms.SP)){
 							System.out.println("Setting Coordinates...");
 							if(msg.startsWith(Comms.MP)){
 								System.out.println("Setting MP...");
+								System.out.println(msg);
 								exploredMap.setMidPoint(Comms.readCoor("ROW", msg), Comms.readCoor("COL", msg));
+
 								System.out.println("Waypoint set: ("+Comms.readCoor("ROW", msg)+","+Comms.readCoor("COL", msg)+")");
 							}
 							else if(msg.startsWith(Comms.SP)){
 								System.out.println("Setting SP");
 								roboCop.setBotPos(Comms.readCoor("ROW", msg), Comms.readCoor("COL", msg));
+								roboCop.setRobotDir(DIRECTION.fromInt(Comms.readCoor("DIR", msg)));
 								System.out.println("Start Point set: ("+Comms.readCoor("ROW", msg)+","+Comms.readCoor("COL", msg)+")");
+								System.out.println("Robot Direction set:" + roboCop.getRobotDir());
 							}
 							else
 								System.out.println("Setting Coordinates failed");
@@ -313,17 +319,20 @@ public class Simulator {
 				System.out.println("Exploration Running");
 
 				Explore explore;
-				explore = new Explore(roboCop, exploredMap, realMap, 20, 100);
+				explore = new Explore(roboCop, exploredMap, realMap, 2000, 100);
 				explore.setupExplore();	
+
+				System.out.println("Exploration Starting");
 				while(noInterrupt && !explore.runFinished()){
 					explore.explore();
 				} 
 				explore.goToStart();
-				Comms.sendMsg(Comms.ARDUINO, "END", null);
-
 				exploredMap.repaint();
+				System.out.println("Sending E, waiting for Fastest Path");
+				Comms.sendMsg(Comms.ARDUINO, "E", null);
 
 				ready = false;
+				System.out.println("Starting fastestPathThread");
 				new fastestPathThread().execute();
 				//
 				firePropertyChange(exploreComplete, false, true);
@@ -536,7 +545,7 @@ public class Simulator {
 			}
 		});
 		mainButtons.add(btn_EnterSpeed);
-		
+
 
 
 
@@ -551,11 +560,11 @@ public class Simulator {
 		formatButton(btn_printMapDesc);
 		btn_printMapDesc.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
-//				System.out.println(MapDescriptor.generateMDFString2(realMap));
+				//				System.out.println(MapDescriptor.generateMDFString2(realMap));
 				System.out.println(MapDescriptor.generateMDFHex2(realMap));
 				// print descriptor string on console
-//				System.out.println("Print MapDesc");
-//				System.out.println(utility.MapDescriptor.generateMapString(realMap));
+				//				System.out.println("Print MapDesc");
+				//				System.out.println(utility.MapDescriptor.generateMapString(realMap));
 			}
 		});		
 
@@ -610,7 +619,7 @@ public class Simulator {
 					} catch (Exception e2) {
 						e2.printStackTrace();
 					}
-					
+
 					System.out.println(MapDescriptor.generateMDFString2(realMap));
 					// _loadedMapFilename = file.getName();
 					JOptionPane.showMessageDialog(mainFrame, "Loaded map information from " + file.getName(),
@@ -691,17 +700,18 @@ public class Simulator {
 
 		btn_clearObs.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
-				
-				roboCop.reAlign();
+
+				//roboCop.reAlign();
+				System.out.println(MapDescriptor.generateMDFHex2(exploredMap));
 				// Clear the current map
-//				System.out.println("Clearing Obstacles..");
-//				realMap.reset();
-//				exploredMap.reset();
+				// System.out.println("Clearing Obstacles..");
+				// realMap.reset();
+				//exploredMap.reset();
 			}
 		});
 		mapButtons.add(btn_clearObs);
 	}
-	
+
 	public static boolean returnRealRun(){
 		return realRun;
 	}

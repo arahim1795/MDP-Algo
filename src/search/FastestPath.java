@@ -4,6 +4,7 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Stack;
+import java.util.concurrent.TimeUnit;
 import java.lang.Math;
 import robot.Robot;
 import robot.RobotConstant;
@@ -281,35 +282,39 @@ public class FastestPath {
 		MOVEMENT m;
 		String msg;
 		try{
-		System.out.println("Attempting moveBotfromString");
-		System.out.println(s);
-		
-		Comms.sendMsg(Comms.ANDROID, Comms.INS, s);
-		System.out.println("Message sent to Android");
-		Comms.sendMsg(Comms.ARDUINO, Comms.INS, s);
-		System.out.println("Message sent to Arduino");
-		
-		
+			System.out.println("Attempting moveBotfromString");
+			System.out.println(s);
+
+			Comms.sendMsg(Comms.ANDROID, Comms.MULTI, s);
+			System.out.println("Message sent to Android");
+			Comms.sendMsg(Comms.ARDUINO, Comms.MULTI, s);
+			System.out.println("Message sent to Arduino");
+
+
 
 		}catch(Exception e){
 			System.out.println("moveBotfromString did not send");
 			e.printStackTrace();
 		}
-		
+
 		for(int i=0;i<s.length();i++){
-			/*while(true){
-				msg = Comms.receiveMsg();
-				if(msg.equals(Comms.ACK))
-					break;
-				
-			}*/
+			// while(true){
+			//	msg = Comms.receiveMsg();
+			//	if(msg.equals(Comms.ACK))
+			//	break;		
+			//	}
+			try {
+				TimeUnit.MILLISECONDS.sleep(350);
+			} catch (Exception e){
+				System.out.println("moveBotfromString : Sleep did not work");
+			}
 			m=MOVEMENT.get(s.charAt(i));
 			bot.move(m, false);
 			System.out.println("Move: " + MOVEMENT.print(m));
 		}
-		
+
 		System.out.println("moveBotfromString successful!");
-		
+
 	}
 
 	//overloaded method 
@@ -409,24 +414,24 @@ public class FastestPath {
 						log.append("("+neighbours[i].getRow()+","+neighbours[i].getCol()+")");
 
 
-					//if node is not already in toVisit list
-					if(!toVisit.contains(neighbours[i])){
-						parents.put(neighbours[i], current);
-						this.gCosts[neighbours[i].getRow()][neighbours[i].getCol()]=gCosts[current.getRow()][current.getCol()] + getGCost(current, neighbours[i],curDir);
-						toVisit.add(neighbours[i]);
+						//if node is not already in toVisit list
+						if(!toVisit.contains(neighbours[i])){
+							parents.put(neighbours[i], current);
+							this.gCosts[neighbours[i].getRow()][neighbours[i].getCol()]=gCosts[current.getRow()][current.getCol()] + getGCost(current, neighbours[i],curDir);
+							toVisit.add(neighbours[i]);
 
-					}else{
-						//calculate and update gCost if path to neighbour is shorter
-						double currentGScore = gCosts[neighbours[i].getRow()][neighbours[i].getCol()];
-						double newGScore = gCosts[current.getRow()][current.getCol()] + getGCost(current, neighbours[i], curDir);
-						if(newGScore < currentGScore){
-							gCosts[neighbours[i].getRow()][neighbours[i].getCol()] = newGScore;
-							parents.put(neighbours[i], current); //change parent of neighbour node to current node
+						}else{
+							//calculate and update gCost if path to neighbour is shorter
+							double currentGScore = gCosts[neighbours[i].getRow()][neighbours[i].getCol()];
+							double newGScore = gCosts[current.getRow()][current.getCol()] + getGCost(current, neighbours[i], curDir);
+							if(newGScore < currentGScore){
+								gCosts[neighbours[i].getRow()][neighbours[i].getCol()] = newGScore;
+								parents.put(neighbours[i], current); //change parent of neighbour node to current node
+							}
 						}
 					}
 				}
-			}
-			log.append(System.lineSeparator());}
+				log.append(System.lineSeparator());}
 			log.append("toVisit : ");
 			for(Tile t : toVisit){
 				log.append("("+t.getRow()+","+t.getCol()+") ["+(int)gCosts[t.getRow()][t.getCol()]+"]");
@@ -517,40 +522,40 @@ public class FastestPath {
 
 			}
 		}
-		
-//		else if(moveBot){
-//			for(MOVEMENT x : movementList){
-//				bot.move(x);
-//			}
-//
-//			
-//			int fCount = 0; //forwardCount
-//
-//            for (MOVEMENT x : movementList) {
-//                if (x == MOVEMENT.FORWARD) {
-//                    fCount++;
-//                    if (fCount == 10) {
-//                        bot.moveForwardMultiple(fCount);
-//                        fCount = 0;
-//                        exploredMap.repaint();
-//                    }
-//                } else if (x == MOVEMENT.TURNRIGHT || x == MOVEMENT.TURNLEFT) {
-//                    if (fCount > 0) {
-//                        bot.moveForwardMultiple(fCount);
-//                        fCount = 0;
-//                        exploredMap.repaint();
-//                    }
-//
-//                    bot.move(x);
-//                    exploredMap.repaint();
-//                }
-//            }
-//
-//            if (fCount > 0) {
-//                bot.moveForwardMultiple(fCount);
-//                exploredMap.repaint();
-//            }
-//		}
+
+		//		else if(moveBot){
+		//			for(MOVEMENT x : movementList){
+		//				bot.move(x);
+		//			}
+		//
+		//			
+		//			int fCount = 0; //forwardCount
+		//
+		//            for (MOVEMENT x : movementList) {
+		//                if (x == MOVEMENT.FORWARD) {
+		//                    fCount++;
+		//                    if (fCount == 10) {
+		//                        bot.moveForwardMultiple(fCount);
+		//                        fCount = 0;
+		//                        exploredMap.repaint();
+		//                    }
+		//                } else if (x == MOVEMENT.TURNRIGHT || x == MOVEMENT.TURNLEFT) {
+		//                    if (fCount > 0) {
+		//                        bot.moveForwardMultiple(fCount);
+		//                        fCount = 0;
+		//                        exploredMap.repaint();
+		//                    }
+		//
+		//                    bot.move(x);
+		//                    exploredMap.repaint();
+		//                }
+		//            }
+		//
+		//            if (fCount > 0) {
+		//                bot.moveForwardMultiple(fCount);
+		//                exploredMap.repaint();
+		//            }
+		//		}
 		//TODO : exploration code?
 
 		System.out.println("\nMovements: " + outputString.toString());
