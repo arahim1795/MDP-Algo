@@ -45,6 +45,7 @@ public class Simulator {
 	private static int coverageValue;
 
 	public static void main(String[] args) {
+	
 		
     	System.out.println("Starting Simulator...");
 		roboCop = new Robot(RobotConstant.DEFAULT_START_ROW, RobotConstant.DEFAULT_START_COL, realRun);

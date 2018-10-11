@@ -186,6 +186,8 @@ public class Map extends JPanel{
 		return field[row][col].isObstacle();
 	}
 	
+
+	
 	// Setter(s)
 	/**
 	 * Sets Tile as an obstacles, adjacent Tile(s) are set as virtual walls, except for
