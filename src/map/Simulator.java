@@ -320,7 +320,6 @@ public class Simulator {
 				
 				System.out.println("Exploration Starting");
 				while(noInterrupt && !explore.runFinished()){
-					System.out.println(MapDescriptor.generateMDFHex2(exploredMap));
 					explore.explore();
 				} 
 				explore.goToStart();
