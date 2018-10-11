@@ -352,13 +352,15 @@ public class Robot {
 		sb.append("/");
 		Comms.sendMsg(Comms.ANDROID, Comms.MAP, sb.toString());
 		sb.setLength(0);
+		Comms.getAndReceipt(Comms.DONE);
+		
 		// Send MDF2
-
 		sb.append("2:");
 		sb.append(MapDescriptor.generateMDFHex2(mapExplore));
 		sb.append("/");
 		Comms.sendMsg(Comms.ANDROID, Comms.MAP, sb.toString());
 		sb.setLength(0);
+		Comms.getAndReceipt(Comms.DONE);
 	}
 
 	private int rounding(String val) {
@@ -415,11 +417,14 @@ public class Robot {
 	private void sendInstruction(MOVEMENT m, boolean sendAndroidBool) {
 		try {
 			Comms.sendMsg(Comms.ARDUINO, Comms.INS, MOVEMENT.print(m));
+			if (m == MOVEMENT.CALIBRATE) Comms.getArdReceipt(Comms.SENSOR_DATA);
+			else Comms.getArdReceipt(Comms.DONE);
 			
-			if (m != MOVEMENT.CALIBRATE && sendAndroidBool) {
-				Comms.sendMsg(Comms.ANDROID, Comms.POS, Comms.encodeCoor(robotRow, robotCol));
+			 if (m != MOVEMENT.CALIBRATE && sendAndroidBool) {
+				Comms.sendMsg(Comms.ANDROID, Comms.POS, Comms.encodeCoor(MapDescriptor.getMDFcol(robotCol),MapDescriptor.getMDFrow(robotRow),DIRECTION.toInt(robotDir)));
+				Comms.getAndReceipt(Comms.DONE);
 				return;
-			}
+			 }
 		} catch (Exception e) {
 			System.out.println("Error sending instruction");
 			//e.printStackTrace();

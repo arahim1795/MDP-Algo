@@ -153,7 +153,7 @@ public class MapDescriptor {
 		 StringBuilder mapString = new StringBuilder("");
 		 for(int row = 0; row<MapConstant.MAP_ROWS;row++){
 			 for(int col = 0;col<MapConstant.MAP_COLS;col++){
-				 System.out.println(getMDFrow(row)+","+col);
+//				 System.out.println(getMDFrow(row)+","+col);
 				 if(map.getTile(getMDFrow(row), col).isExplored()){
 					 if(map.getTile(getMDFrow(row), col).isObstacle())
 						 mapString.append("1");
@@ -167,7 +167,7 @@ public class MapDescriptor {
 			 }
 		 }
 		 if(mapString.length()%8 != 0){
-			int padding = mapString.length()%8;
+			int padding = 8- mapString.length()%8;
 		 	for(int i=0;i<padding;i++)
 		 		mapString.append("1");
 		 	}
