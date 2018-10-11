@@ -41,7 +41,9 @@ public class Comms {
 	public static final String SET = "SET";     // PC>Arduino - Set-Up Bot
 	public static final String INS = "INSTR";      // PC>Arduino - Give Instruction
 	public static final String END = "END";
-	public static final String SENSE = "C";
+
+	public static final String SENSE = "C"; 
+	public static final String MULTI = "MULTI"; //for mutli-movement string
 	// - from
 	public static final String ACK = "ACK";	//TODO tentative
 	// RPi Headers
@@ -209,11 +211,12 @@ public class Comms {
 		case"col":
 			ptr=2;
 			while(s.charAt(ptr)!= ','){
+//				System.out.println(s.charAt(ptr));
 				result.append(s.charAt(ptr));
 				ptr++;
 			}
 //			System.out.println(result.toString());
-			return MapDescriptor.getMapRow(Integer.parseInt(result.toString()));
+			return MapDescriptor.getMapCol(Integer.parseInt(result.toString()));
 		default:
 			System.out.println("Could not read coordinates");
 			return -1;

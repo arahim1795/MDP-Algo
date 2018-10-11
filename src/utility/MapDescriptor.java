@@ -166,12 +166,17 @@ public class MapDescriptor {
 					 mapString.append("");
 			 }
 		 }
+
 		 if(mapString.length()%8 != 0){
 			int padding = 8- mapString.length()%8;
+
 		 	for(int i=0;i<padding;i++)
 		 		mapString.append("1");
 		 	}
-		 return mapString.toString();
+		 String result = mapString.toString();
+		 System.out.println(result);
+		 System.out.println(result.length());
+		 return result;
 	 }
 	 
 	 //map -> mdf

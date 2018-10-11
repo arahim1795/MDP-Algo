@@ -4,6 +4,7 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Stack;
+import java.util.concurrent.TimeUnit;
 import java.lang.Math;
 import robot.Robot;
 import robot.RobotConstant;
@@ -284,9 +285,9 @@ public class FastestPath {
 		System.out.println("Attempting moveBotfromString");
 		System.out.println(s);
 		
-		Comms.sendMsg(Comms.ANDROID, Comms.INS, s);
+		Comms.sendMsg(Comms.ANDROID, Comms.MULTI, s);
 		System.out.println("Message sent to Android");
-		Comms.sendMsg(Comms.ARDUINO, Comms.INS, s);
+		Comms.sendMsg(Comms.ARDUINO, Comms.MULTI, s);
 		System.out.println("Message sent to Arduino");
 		
 		
@@ -297,11 +298,16 @@ public class FastestPath {
 		}
 		
 		for(int i=0;i<s.length();i++){
-			while(true){
-				msg = Comms.receiveMsg();
-				if(msg.equals(Comms.ACK))
-					break;
-				
+//			while(true){
+//				msg = Comms.receiveMsg();
+//				if(msg.equals(Comms.ACK))
+//					break;
+//				
+//			}
+			try{
+			TimeUnit.MILLISECONDS.sleep(350);
+			} catch (Exception e){
+				System.out.println("moveBotfromString : Sleep did not work");
 			}
 			m=MOVEMENT.get(s.charAt(i));
 			bot.move(m, false);
