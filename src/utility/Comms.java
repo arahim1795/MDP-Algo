@@ -24,7 +24,7 @@ public class Comms {
 	public static final String MAP = "#mdf:";		// + "/", send map descriptor 
 	public static final String POS = "#setrobot:";	// + "/", send current bot position
     public static final String FP = "#fp:";
-    public static final String EX = "ex";
+    public static final String EX = "#exp";
     
     public static final String MP = "mp";	// Android>PC - Setting Mid Point 
     public static final String SP = "sp";	// Android>PC - Setting Mid Point 
@@ -204,11 +204,12 @@ public class Comms {
 		case"col":
 			ptr=2;
 			while(s.charAt(ptr)!= ','){
+//				System.out.println(s.charAt(ptr));
 				result.append(s.charAt(ptr));
 				ptr++;
 			}
 //			System.out.println(result.toString());
-			return MapDescriptor.getMapRow(Integer.parseInt(result.toString()));
+			return MapDescriptor.getMapCol(Integer.parseInt(result.toString()));
 		default:
 			System.out.println("Could not read coordinates");
 			return -1;
