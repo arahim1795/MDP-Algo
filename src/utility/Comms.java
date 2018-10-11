@@ -23,7 +23,7 @@ public class Comms {
 	// - to
 	public static final String MAP = "#mdf:";		// + "/", send map descriptor 
 	public static final String POS = "#setrobot:";	// + "/", send current bot position
-    public static final String EX = "#ex:";
+    public static final String EX = "#exp:";
     public static final String FP = "#fp:";
     
     public static final String MP = "mp";	// Android>PC - Setting Mid Point 
@@ -99,7 +99,7 @@ public class Comms {
 				switch (sub) {
 					case "0ATBT":
 					case "0ASTR":
-					case "0END":
+					case "0AEND":
 						sb.append(sub);
 						sb.append("_");
 						break;
@@ -160,12 +160,14 @@ public class Comms {
 	@SuppressWarnings("deprecation")
 	public static String receiveMsg() {
 		StringBuilder msg = new StringBuilder();
+		StringBuilder outMsg = new StringBuilder();
 		try {
 			msg.append(is.readLine());
 
 		} catch (IOException e) {
 			System.err.println(e);
 		}
+		
 		return msg.toString();
 	}
 
