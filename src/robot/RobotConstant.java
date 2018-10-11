@@ -76,6 +76,20 @@ public final class RobotConstant {
 		public static int toInt(DIRECTION d){
 			return d.ordinal()+1;
 		}
+		
+		public static DIRECTION fromInt(int i){
+			switch(i){
+			case 1:
+				return UP;
+			case 2:
+				return LEFT;
+			case 3:
+				return DOWN;
+			case 4:
+			default:
+				return RIGHT;
+			}
+		}
 	};
 	
 	// Colors for rendering the map

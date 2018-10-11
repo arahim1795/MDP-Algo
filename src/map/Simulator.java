@@ -35,7 +35,7 @@ public class Simulator {
 
 	// The robot
 	private static robot.Robot roboCop = null;
-	private static final boolean realRun = false;
+	private static final boolean realRun = true;
 	private static boolean ready = false;
 	private static boolean exploredDone = false;
 	private static boolean noInterrupt = true;
@@ -45,7 +45,7 @@ public class Simulator {
 	private static int coverageValue;
 
 	public static void main(String[] args) {
-	
+
 		
     	System.out.println("Starting Simulator...");
 		roboCop = new Robot(RobotConstant.DEFAULT_START_ROW, RobotConstant.DEFAULT_START_COL, realRun);
@@ -292,13 +292,17 @@ public class Simulator {
 							System.out.println("Setting Coordinates...");
 							if(msg.startsWith(Comms.MP)){
 								System.out.println("Setting MP...");
+								System.out.println(msg);
 								exploredMap.setMidPoint(Comms.readCoor("ROW", msg), Comms.readCoor("COL", msg));
+								
 								System.out.println("Waypoint set: ("+Comms.readCoor("ROW", msg)+","+Comms.readCoor("COL", msg)+")");
 							}
 							else if(msg.startsWith(Comms.SP)){
 								System.out.println("Setting SP");
 								roboCop.setBotPos(Comms.readCoor("ROW", msg), Comms.readCoor("COL", msg));
+								roboCop.setRobotDir(DIRECTION.fromInt(Comms.readCoor("DIR", msg)));
 								System.out.println("Start Point set: ("+Comms.readCoor("ROW", msg)+","+Comms.readCoor("COL", msg)+")");
+								System.out.println("Robot Direction set:" + roboCop.getRobotDir());
 							}
 							else
 								System.out.println("Setting Coordinates failed");

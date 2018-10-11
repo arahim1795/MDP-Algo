@@ -13,21 +13,21 @@ import robot.RobotConstant.DIRECTION;
  */
 public class Comms {
 
-	// Receipt Strings
+	// Receipt (Arduino)
 	public static final String DONE = "don";
 	public static final String SENSOR_DATA = "data"; 
 	
 	
 	// Major Headers
-	public static final String ARDUINO = "AAAA";
-	public static final String ANDROID = "BBBB";
-	public static final String ARDnAND = "CCCC";
-	public static final String RPI = "RRRR";
+	public static final String ARDUINO = "ZYXA";
+	public static final String ANDROID = "ZYXB";
+	public static final String ARDnAND = "ZYXC";
+	public static final String RPI = "ZYXR";
 
 	// Android Headers
 	// - to
 	public static final String MAP = "#mdB#mdf";		// + "/", send map descriptor 
-	public static final String POS = "#seB#setrobot:";	// + "/", send current bot position
+	public static final String POS = "#setrobot:";	// + "/", send current bot position
     public static final String FP = "#fp:";
     //  - from
     public static final String EX = "#exp";
@@ -41,11 +41,10 @@ public class Comms {
 	public static final String SET = "SET";     // PC>Arduino - Set-Up Bot
 	public static final String INS = "INSTR";      // PC>Arduino - Give Instruction
 	public static final String END = "END";
-
 	public static final String SENSE = "C"; 
 	public static final String MULTI = "MULTI"; //for mutli-movement string
 	// - from
-	public static final String ACK = "ACK";	//TODO tentative
+	public static final String ACK = "d";	//TODO tentative
 	// RPi Headers
 	// - to
 	public static final String C = "CAM";
@@ -194,7 +193,7 @@ public class Comms {
 		int ptr=0;
 		StringBuilder result = new StringBuilder("");
 		switch(pos.toLowerCase()){
-		case "row":
+		case "col":
 //			System.out.println("parsing row");
 			while(s.charAt(ptr)!=','){
 				ptr++;
@@ -207,16 +206,19 @@ public class Comms {
 				ptr++;
 			}
 //			System.out.println(result.toString());
-			return MapDescriptor.getMapRow(Integer.parseInt(result.toString()));
-		case"col":
+			return MapDescriptor.getMapCol(Integer.parseInt(result.toString()));
+		case"row":
 			ptr=2;
 			while(s.charAt(ptr)!= ','){
-//				System.out.println(s.charAt(ptr));
 				result.append(s.charAt(ptr));
 				ptr++;
 			}
 //			System.out.println(result.toString());
-			return MapDescriptor.getMapCol(Integer.parseInt(result.toString()));
+			return MapDescriptor.getMapRow(Integer.parseInt(result.toString()));
+		case "dir":
+			ptr = s.length()-2;
+			result.append(s.charAt(ptr));
+			return Integer.parseInt(result.toString());
 		default:
 			System.out.println("Could not read coordinates");
 			return -1;
@@ -251,16 +253,6 @@ public class Comms {
 			System.out.println(str);
 			strArr = str.split(";");
 			if (strArr[0].equals(expMsg.toLowerCase())) break;
-		}
-		return str;
-	}
-	
-	public static String getAndReceipt(String expMsg) {
-		String str;
-		while (true) {
-			str = Comms.receiveMsg().toLowerCase();
-			System.out.println(str);
-			if (str.equals(expMsg.toLowerCase())) break;
 		}
 		return str;
 	}
