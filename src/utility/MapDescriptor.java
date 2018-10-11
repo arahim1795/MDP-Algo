@@ -166,9 +166,10 @@ public class MapDescriptor {
 					 mapString.append("");
 			 }
 		 }
-		 if(mapString.length()%4 != 0){
-			int padding = 4-mapString.length()%4;
-			System.out.println(padding);
+
+		 if(mapString.length()%8 != 0){
+			int padding = 8- mapString.length()%8;
+
 		 	for(int i=0;i<padding;i++)
 		 		mapString.append("1");
 		 	}

@@ -13,27 +13,24 @@ import robot.RobotConstant.DIRECTION;
  */
 public class Comms {
 
-	// Receipt (Arduino)
+	// Receipt Strings
 	public static final String DONE = "don";
 	public static final String SENSOR_DATA = "data"; 
 	
 	
 	// Major Headers
-	public static final String ARDUINO = "ZYXA";
-	public static final String ANDROID = "ZYXB";
-	public static final String ARDnAND = "ZYXC";
-	public static final String RPI = "ZYXR";
+	public static final String ARDUINO = "AAAA";
+	public static final String ANDROID = "BBBB";
+	public static final String ARDnAND = "CCCC";
+	public static final String RPI = "RRRR";
 
 	// Android Headers
 	// - to
 	public static final String MAP = "#mdB#mdf";		// + "/", send map descriptor 
-	public static final String POS = "#setrobot:";	// + "/", send current bot position
-  public static final String FP = "#fp:";
-  public static final String EX = "#exp";
-
-
-
-
+	public static final String POS = "#seB#setrobot:";	// + "/", send current bot position
+    public static final String FP = "#fp:";
+    //  - from
+    public static final String EX = "#exp";
     public static final String MP = "mp";	// Android>PC - Setting Mid Point 
     public static final String SP = "sp";	// Android>PC - Setting Mid Point 
     public static final String START = "r1";
@@ -44,6 +41,7 @@ public class Comms {
 	public static final String SET = "SET";     // PC>Arduino - Set-Up Bot
 	public static final String INS = "INSTR";      // PC>Arduino - Give Instruction
 	public static final String END = "END";
+
 	public static final String SENSE = "C"; 
 	public static final String MULTI = "MULTI"; //for mutli-movement string
 	// - from
@@ -253,6 +251,16 @@ public class Comms {
 			System.out.println(str);
 			strArr = str.split(";");
 			if (strArr[0].equals(expMsg.toLowerCase())) break;
+		}
+		return str;
+	}
+	
+	public static String getAndReceipt(String expMsg) {
+		String str;
+		while (true) {
+			str = Comms.receiveMsg().toLowerCase();
+			System.out.println(str);
+			if (str.equals(expMsg.toLowerCase())) break;
 		}
 		return str;
 	}

@@ -83,36 +83,28 @@ public class Explore {
 			
 			System.out.println("Physical Robot Detected, Calibrating...");
 			robot.move(turnLeft, false);
-			str = Comms.getArdReceipt(Comms.DONE);
-			calList.add(str);
+
 			
 			robot.move(calibrate, false);
-			str = Comms.getArdReceipt(Comms.SENSOR_DATA);
-			calList.add(str);
+
 			
 			robot.move(turnLeft, false);
-			str = Comms.getArdReceipt(Comms.DONE);
-			calList.add(str);
+
 			
 			robot.move(calibrate, false);
-			str = Comms.getArdReceipt(Comms.SENSOR_DATA);
-			calList.add(str);
+
 			
 			robot.move(turnRight, false);
-			str = Comms.getArdReceipt(Comms.DONE);
-			calList.add(str);
+
 			
 			robot.move(calibrate, false);
-			str = Comms.getArdReceipt(Comms.SENSOR_DATA);
-			calList.add(str);
+
 			
 			robot.move(turnRight, false);
-			str = Comms.getArdReceipt(Comms.DONE);
-			calList.add(str);
+		
 			
 			robot.move(calibrate, false);
-			str = Comms.getArdReceipt(Comms.SENSOR_DATA);
-			calList.add(str);
+
 		}
 		if (calList.size() == 8) System.out.println("Robot Calibrated!");
 
@@ -351,6 +343,7 @@ public class Explore {
 		if (move != calibrate) senseEnv();
 		else Comms.receiveMsg();
 		
+		/*
 		if (robot.isRealBot()) {
 			if (canCalibrate(robot.getRobotDir())) {
 				calibrateCount = 0;
@@ -366,6 +359,7 @@ public class Explore {
 				}
 			}
 		}
+		*/
 	}
 
 	/**
@@ -459,11 +453,12 @@ public class Explore {
 		}
 	}
 	
+	/*
 	/**
 	 * 
 	 * @param dir
 	 * @return
-	 */
+	 *
 	private boolean canCalibrate(DIRECTION dir) {
 		int row, col;
 		row = robot.getRobotRow();
@@ -480,22 +475,26 @@ public class Explore {
 				return isInvalidOrObs(row+1,col+2) && isInvalidOrObs(row,col+2) && isInvalidOrObs(row-1,col+2);
 		}
 	}
+	*/
 	
+	/*
 	/**
 	 * 
 	 * @param row
 	 * @param col
 	 * @return
-	 */
+	 * 
 	private boolean isInvalidOrObs(int row, int col) {
 		if (!Map.isValidTile(row, col)) return true;
 		else return mapExplore.getTile(row, col).isObstacle();
 	}
+	*/
 	
+	/*
 	/**
 	 * 
 	 * @return
-	 */
+	 * 
 	private DIRECTION counterCal() {
 		DIRECTION currDir, checkedDir;
 		currDir = robot.getRobotDir();
@@ -519,13 +518,14 @@ public class Explore {
 	/**
 	 * 
 	 * @param dir
-	 */
+	 *
 	private void calibrate(DIRECTION dir) {
 		DIRECTION currDir = robot.getRobotDir();
 		rotateRobot(dir);
 		moveRobot(calibrate);
 		rotateRobot(currDir);
 	}
+	*/
 	
 	/**
 	 * 
@@ -535,6 +535,12 @@ public class Explore {
 		return endRun;
 	}
 	
+	/**
+	 * 
+	 * @param desRow
+	 * @param desCol
+	 * @return
+	 */
 	public boolean isCamPosValid(int desRow, int desCol) {
 		// check centre tile
 		Tile centreTile = mapExplore.getTile(desRow, desCol);
