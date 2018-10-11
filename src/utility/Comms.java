@@ -14,16 +14,15 @@ import robot.RobotConstant.DIRECTION;
 public class Comms {
 
 	// Major Headers
-	public static final String ARDUINO = "A";
-	public static final String ANDROID = "B";
-	public static final String ARDnAND = "C";
-	public static final String RPI = "R";
+	public static final String ARDUINO = "00A";
+	public static final String ANDROID = "00B";
+	public static final String ARDnAND = "00C";
+	public static final String RPI = "00R";
 
 	// Android Headers
 	// - to
 	public static final String MAP = "#mdf:";		// + "/", send map descriptor 
 	public static final String POS = "#setrobot:";	// + "/", send current bot position
-    public static final String EX = "#exp:";
     public static final String FP = "#fp:";
     
     public static final String MP = "mp";	// Android>PC - Setting Mid Point 
@@ -33,9 +32,9 @@ public class Comms {
   
 	// Arduino Headers
 	// - to
-	public static final String SET = "0ATBT";     // PC>Arduino - Set-Up Bot
-	public static final String INS = "0ASTR";      // PC>Arduino - Give Instruction
-	public static final String END = "0AEND";
+	public static final String SET = "SET";     // PC>Arduino - Set-Up Bot
+	public static final String INS = "INS";      // PC>Arduino - Give Instruction
+	public static final String END = "END";
 	// - from
 	public static final String SENSOR_DATA = "SDATA";       // Arduino>PC - Sensor Data
 	public static final String ACK = "ACK";	//TODO tentative
@@ -93,13 +92,13 @@ public class Comms {
 	public static boolean sendMsg(String major, String sub, String content) {
 		StringBuilder sb = new StringBuilder();
 		switch (major) {
-			case "A":
+			case ARDUINO:
 				sb.append(major);
 				sb.append("_");
 				switch (sub) {
-					case "0ATBT":
-					case "0ASTR":
-					case "0AEND":
+					case END:
+					case SET:
+					case INS:
 						sb.append(sub);
 						sb.append("_");
 						break;
@@ -108,12 +107,11 @@ public class Comms {
 						return false;
 				}
 				break;
-			case "B":
+			case ANDROID:
 				switch (sub) {
-					case "#mdf:":
-					case "#setrobot:":
-					case "#ex:":
-					case "#fp:":
+					case MAP:
+					case POS:
+					case FP:
 						sb.append(sub);
 						break;
 					default:
@@ -121,12 +119,12 @@ public class Comms {
 						return false;
 				}
 				break;
-			case "R":
+			case RPI:
 				// TODO incorporate Image Tracking
 				sb.append(major);
 				sb.append("_");
 				switch (sub) {
-					case "C":
+					case C:
 						sb.append(sub);
 						sb.append("_");
 						break;
