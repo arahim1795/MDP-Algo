@@ -316,7 +316,7 @@ public class Simulator {
 				explore = new Explore(roboCop, exploredMap, realMap, 20, 100);
 				explore.setupExplore();	
 				while(noInterrupt && !explore.runFinished()){
-					explore.exploreSim();
+					explore.explore();
 				} 
 				explore.goToStart();
 				Comms.sendMsg(Comms.ARDUINO, "END", null);
@@ -358,7 +358,7 @@ public class Simulator {
 				explore = new Explore(roboCop, exploredMap, realMap, 20, coverageValue);
 				explore.setupExplore();	
 				while(noInterrupt && !explore.runFinished()){
-					explore.exploreSim();
+					explore.explore();
 				} 
 				explore.goToStart();
 
@@ -399,7 +399,7 @@ public class Simulator {
 				explore = new Explore(roboCop, exploredMap, realMap, timeLimit, 100);
 				explore.setupExplore();	
 				while(noInterrupt && !explore.runFinished()){
-					explore.exploreSim();
+					explore.explore();
 				} 
 				explore.goToStart();
 

@@ -13,32 +13,39 @@ import robot.RobotConstant.DIRECTION;
  */
 public class Comms {
 
+	// Receipt Strings
+	public static final String DONE = "don";
+	public static final String SENSOR_DATA = "data";
+
 	// Major Headers
-	public static final String ARDUINO = "ZYXA";
-	public static final String ANDROID = "ZYXB";
-	public static final String ARDnAND = "ZYXC";
-	public static final String RPI = "ZYXR";
+	public static final String ARDUINO = "AAAA";
+	public static final String ANDROID = "BBBB";
+	public static final String ARDnAND = "CCCC";
+	public static final String RPI = "RRRR";
 
 	// Android Headers
 	// - to
-	public static final String MAP = "#mdf:";		// + "/", send map descriptor 
-	public static final String POS = "#setrobot:";	// + "/", send current bot position
-    public static final String FP = "#fp:";
-    public static final String EX = "ex";
-    
-    public static final String MP = "mp";	// Android>PC - Setting Mid Point 
-    public static final String SP = "sp";	// Android>PC - Setting Mid Point 
-    public static final String START = "r1";
-    public static final String STOP = "r0";
-  
+	public static final String MAP = "#mdB#mdf";		// + "/", send map descriptor 
+	public static final String POS = "#seB#setrobot:";	// + "/", send current bot position
+	public static final String FP = "#fp:";
+	// - from
+	public static final String EX = "ex";
+
+	public static final String MP = "mp";	// Android>PC - Setting Mid Point 
+	public static final String SP = "sp";	// Android>PC - Setting Mid Point 
+	public static final String START = "r1";
+	public static final String STOP = "r0";
+
 	// Arduino Headers
 	// - to
 	public static final String SET = "SET";     // PC>Arduino - Set-Up Bot
 	public static final String INS = "INSTR";      // PC>Arduino - Give Instruction
 	public static final String END = "END";
+	public static final String SENSE = "C"; 
+	public static final String MULTI = "MULTI"; //for mutli-movement string
 	// - from
-	public static final String SENSOR_DATA = "SDATA";       // Arduino>PC - Sensor Data
 	public static final String ACK = "ACK";	//TODO tentative
+	
 	// RPi Headers
 	// - to
 	public static final String C = "CAM";
@@ -93,54 +100,54 @@ public class Comms {
 	public static boolean sendMsg(String major, String sub, String content) {
 		StringBuilder sb = new StringBuilder();
 		switch (major) {
-			case ARDUINO:
-				sb.append(major);
+		case ARDUINO:
+			sb.append(major);
+			sb.append("_");
+			switch (sub) {
+			case END:
+			case SET:
+			case INS:
+				sb.append(sub);
 				sb.append("_");
-				switch (sub) {
-					case END:
-					case SET:
-					case INS:
-						sb.append(sub);
-						sb.append("_");
-						break;
-					default:
-						System.out.println("Invalid Purpose");
-						return false;
-				}
-				break;
-			case ANDROID:
-				switch (sub) {
-					case MAP:
-					case POS:
-					case FP:
-						sb.append(sub);
-						break;
-					default:
-						System.err.println("Invalid Purpose");
-						return false;
-				}
-				break;
-			case RPI:
-				// TODO incorporate Image Tracking
-				sb.append(major);
-				sb.append("_");
-				switch (sub) {
-					case C:
-						sb.append(sub);
-						sb.append("_");
-						break;
-					default:
-						System.err.println("Invalid Purpose");
-						return false;
-				}
 				break;
 			default:
-				System.err.println("Invalid Destination");
+				System.out.println("Invalid Purpose");
 				return false;
+			}
+			break;
+		case ANDROID:
+			switch (sub) {
+			case MAP:
+			case POS:
+			case FP:
+				sb.append(sub);
+				break;
+			default:
+				System.err.println("Invalid Purpose");
+				return false;
+			}
+			break;
+		case RPI:
+			// TODO incorporate Image Tracking
+			sb.append(major);
+			sb.append("_");
+			switch (sub) {
+			case C:
+				sb.append(sub);
+				sb.append("_");
+				break;
+			default:
+				System.err.println("Invalid Purpose");
+				return false;
+			}
+			break;
+		default:
+			System.err.println("Invalid Destination");
+			return false;
 		}
-		
+
 		if (content != null && content.length() != 0) sb.append(content);
-    
+
 		boolean sent;
 		try {
 			os.writeBytes(sb.toString());
@@ -181,25 +188,25 @@ public class Comms {
 	public static boolean connectionActive() {
 		return robotComms == null && is == null && os == null;
 	}
-  
+
 	// TODO complete method
 	public static int readCoor(String pos, String s){
 		int ptr=0;
 		StringBuilder result = new StringBuilder("");
 		switch(pos.toLowerCase()){
 		case "row":
-//			System.out.println("parsing row");
+			//			System.out.println("parsing row");
 			while(s.charAt(ptr)!=','){
 				ptr++;
 			}
 			ptr++;
-//			System.out.println(ptr);
+			//			System.out.println(ptr);
 			while(s.charAt(ptr)!= ',' && s.charAt(ptr)!='/' ){
-//				System.out.println(ptr+","+s.charAt(ptr));
+				//				System.out.println(ptr+","+s.charAt(ptr));
 				result.append(s.charAt(ptr));
 				ptr++;
 			}
-//			System.out.println(result.toString());
+			//			System.out.println(result.toString());
 			return MapDescriptor.getMapRow(Integer.parseInt(result.toString()));
 		case"col":
 			ptr=2;
@@ -207,14 +214,14 @@ public class Comms {
 				result.append(s.charAt(ptr));
 				ptr++;
 			}
-//			System.out.println(result.toString());
+			//			System.out.println(result.toString());
 			return MapDescriptor.getMapRow(Integer.parseInt(result.toString()));
 		default:
 			System.out.println("Could not read coordinates");
 			return -1;
 		}
 	}
-	
+
 	public static String encodeCoor(int row, int col){
 		StringBuilder sb = new StringBuilder();
 		sb.append(row);
@@ -223,7 +230,7 @@ public class Comms {
 		sb.append("/");
 		return sb.toString();
 	}
-	
+
 	public static String encodeCoor(int row, int col, int dir){
 		StringBuilder sb = new StringBuilder();
 		sb.append(row);
@@ -234,4 +241,28 @@ public class Comms {
 		sb.append("/");
 		return sb.toString();
 	}
+
+	public static String getArdReceipt(String expMsg) {
+		String str;
+		String[] strArr;
+		while (true) {
+			str = Comms.receiveMsg().toLowerCase();
+			System.out.println(str);
+			strArr = str.split(";");
+			if (strArr[0].equals(expMsg.toLowerCase())) break;
+		}
+		return str;
+	}
+
+	public static String getAndReceipt(String expMsg) {
+		String str;
+		while (true) {
+			str = Comms.receiveMsg().toLowerCase();
+			System.out.println(str);
+			if (str.equals(expMsg.toLowerCase())) break;
+		}
+		return str;
+	}
+
+
 }
