@@ -263,7 +263,7 @@ public class Robot {
 	}
 
 	/**
-	 * Execute robot's move functions
+	 * Execute robot's move functions (physically integrated function)
 	 * @param m Intended robot's movement
 	 */
 	public void move(MOVEMENT m) {
@@ -340,7 +340,7 @@ public class Robot {
 			result[5] = (int) rounding(str.split("_")[5]);
 		}
 
-		// Use Sensor Values and update mapExplore
+		// Use sensor values and update mapExplore
 		SRFrontLeft.sense(mapExplore, result[0]);
 		SRFrontCenter.sense(mapExplore, result[1]);
 		SRFrontRight.sense(mapExplore, result[2]);
