@@ -251,7 +251,7 @@ public class Robot {
 			System.out.println("Error in Robot.move()!");
 			break;
 		}
-		
+
 		if (realBot) {
 
 			System.out.println("Sending "+m.toString());
@@ -288,14 +288,14 @@ public class Robot {
 		if (m == MOVEMENT.TURNRIGHT) return DIRECTION.getRight(robotDir);
 		else return DIRECTION.getLeft(robotDir);
 	}
-	
+
 	public void reAlign(){
 		if(robotRow==MapConstant.START_GRID_ROW && robotCol==MapConstant.START_GRID_COL){
 			//send start pos to android
 			int dirInt = DIRECTION.toInt(robotDir);
 			System.out.println(Comms.encodeCoor(robotRow, robotCol,dirInt));
-//				Comms.sendMsg(Comms.ANDROID, Comms.POS, Comms.encodeCoor(robotRow, robotCol,dirInt));
-			}
+			//				Comms.sendMsg(Comms.ANDROID, Comms.POS, Comms.encodeCoor(robotRow, robotCol,dirInt));
+		}
 		else{
 			System.out.println("alignment error");
 		}
@@ -315,7 +315,7 @@ public class Robot {
 		SRRight.sense(mapExplore, mapActual);
 		LRRight.sense(mapExplore, mapActual);
 	}
-	
+
 	/**
 	 * Execute physical 'sense' function for all 6 sensors
 	 * @param mapExplore
@@ -327,7 +327,7 @@ public class Robot {
 		Comms.sendMsg(Comms.ARDUINO, Comms.INS, Comms.SENSE);
 		str = Comms.getArdReceipt(Comms.SENSOR_DATA);
 		strArr = str.split(";"); // P;SDATA;<>_<>_<>
-		
+
 		if (strArr[0].equals(Comms.SENSOR_DATA)) {
 			str = strArr[1];
 			result[0] = (int) rounding(str.split("_")[0]);
@@ -345,7 +345,7 @@ public class Robot {
 		SRRight.sense(mapExplore, result[4]);
 		LRRight.sense(mapExplore, result[5]);
 
-		
+
 		// Send MDF1
 		sb.append("1:");
 		sb.append(MapDescriptor.generateMDFHex1(mapExplore));
@@ -353,7 +353,7 @@ public class Robot {
 		Comms.sendMsg(Comms.ANDROID, Comms.MAP, sb.toString());
 		sb.setLength(0);
 		Comms.getAndReceipt(Comms.DONE);
-		
+
 		// Send MDF2
 		sb.append("2:");
 		sb.append(MapDescriptor.generateMDFHex2(mapExplore));
@@ -367,6 +367,13 @@ public class Robot {
 		double num = Double.parseDouble(val);
 		System.out.println("V: " + (Math.round(num / 10.0)));
 		return (int) (Math.round(num / 10.0));
+
+	}
+
+	private int rounding(String val) {
+		double num = Double.parseDouble(val);
+		System.out.println("V: " + (Math.round(num / 10.0)));
+		return (int) (Math.round(num / 10.0));
 	}
 	
 	/**
@@ -374,38 +381,38 @@ public class Robot {
 	 */
 	public void moveSensor() {
 		switch (robotDir) {
-			case UP:
-				SRFrontLeft.setSensor(robotRow-1, robotCol-1, robotDir);
-				SRFrontCenter.setSensor(robotRow-1, robotCol, robotDir);
-				SRFrontRight.setSensor(robotRow-1, robotCol+1, robotDir);
-				SRLeft.setSensor(robotRow-1, robotCol-1, DIRECTION.LEFT);
-				SRRight.setSensor(robotRow-1, robotCol+1, DIRECTION.RIGHT);
-				LRRight.setSensor(robotRow, robotCol+1, DIRECTION.RIGHT);
-				break;
-			case DOWN:
-				SRFrontLeft.setSensor(robotRow+1, robotCol+1, robotDir);
-				SRFrontCenter.setSensor(robotRow+1, robotCol, robotDir);
-				SRFrontRight.setSensor(robotRow+1, robotCol-1, robotDir);
-				SRLeft.setSensor(robotRow+1, robotCol+1, DIRECTION.RIGHT);
-				SRRight.setSensor(robotRow+1, robotCol-1, DIRECTION.LEFT);
-				LRRight.setSensor(robotRow, robotCol-1, DIRECTION.LEFT);
-				break;
-			case LEFT:
-				SRFrontLeft.setSensor(robotRow+1, robotCol-1, robotDir);
-				SRFrontCenter.setSensor(robotRow, robotCol-1, robotDir);
-				SRFrontRight.setSensor(robotRow-1, robotCol-1, robotDir);
-				SRLeft.setSensor(robotRow+1, robotCol-1, DIRECTION.DOWN);
-				SRRight.setSensor(robotRow-1, robotCol-1, DIRECTION.UP);
-				LRRight.setSensor(robotRow-1, robotCol, DIRECTION.UP);
-				break;
-			default:
-				SRFrontLeft.setSensor(robotRow-1, robotCol+1, robotDir);
-				SRFrontCenter.setSensor(robotRow, robotCol+1, robotDir);
-				SRFrontRight.setSensor(robotRow+1, robotCol+1, robotDir);
-				SRLeft.setSensor(robotRow-1, robotCol+1, DIRECTION.UP);
-				SRRight.setSensor(robotRow+1, robotCol+1, DIRECTION.DOWN);
-				LRRight.setSensor(robotRow+1, robotCol, DIRECTION.DOWN);
-				break;
+		case UP:
+			SRFrontLeft.setSensor(robotRow-1, robotCol-1, robotDir);
+			SRFrontCenter.setSensor(robotRow-1, robotCol, robotDir);
+			SRFrontRight.setSensor(robotRow-1, robotCol+1, robotDir);
+			SRLeft.setSensor(robotRow-1, robotCol-1, DIRECTION.LEFT);
+			SRRight.setSensor(robotRow-1, robotCol+1, DIRECTION.RIGHT);
+			LRRight.setSensor(robotRow, robotCol+1, DIRECTION.RIGHT);
+			break;
+		case DOWN:
+			SRFrontLeft.setSensor(robotRow+1, robotCol+1, robotDir);
+			SRFrontCenter.setSensor(robotRow+1, robotCol, robotDir);
+			SRFrontRight.setSensor(robotRow+1, robotCol-1, robotDir);
+			SRLeft.setSensor(robotRow+1, robotCol+1, DIRECTION.RIGHT);
+			SRRight.setSensor(robotRow+1, robotCol-1, DIRECTION.LEFT);
+			LRRight.setSensor(robotRow, robotCol-1, DIRECTION.LEFT);
+			break;
+		case LEFT:
+			SRFrontLeft.setSensor(robotRow+1, robotCol-1, robotDir);
+			SRFrontCenter.setSensor(robotRow, robotCol-1, robotDir);
+			SRFrontRight.setSensor(robotRow-1, robotCol-1, robotDir);
+			SRLeft.setSensor(robotRow+1, robotCol-1, DIRECTION.DOWN);
+			SRRight.setSensor(robotRow-1, robotCol-1, DIRECTION.UP);
+			LRRight.setSensor(robotRow-1, robotCol, DIRECTION.UP);
+			break;
+		default:
+			SRFrontLeft.setSensor(robotRow-1, robotCol+1, robotDir);
+			SRFrontCenter.setSensor(robotRow, robotCol+1, robotDir);
+			SRFrontRight.setSensor(robotRow+1, robotCol+1, robotDir);
+			SRLeft.setSensor(robotRow-1, robotCol+1, DIRECTION.UP);
+			SRRight.setSensor(robotRow+1, robotCol+1, DIRECTION.DOWN);
+			LRRight.setSensor(robotRow+1, robotCol, DIRECTION.DOWN);
+			break;
 		}
 	}
 
@@ -419,8 +426,9 @@ public class Robot {
 			Comms.sendMsg(Comms.ARDUINO, Comms.INS, MOVEMENT.print(m));
 			if (m == MOVEMENT.CALIBRATE) Comms.getArdReceipt(Comms.SENSOR_DATA);
 			else Comms.getArdReceipt(Comms.DONE);
-			
-			 if (m != MOVEMENT.CALIBRATE && sendAndroidBool) {
+
+			if (m != MOVEMENT.CALIBRATE && sendAndroidBool) {
+
 				Comms.sendMsg(Comms.ANDROID, Comms.POS, Comms.encodeCoor(MapDescriptor.getMDFcol(robotCol),MapDescriptor.getMDFrow(robotRow),DIRECTION.toInt(robotDir)));
 				Comms.getAndReceipt(Comms.DONE);
 				return;
@@ -429,7 +437,7 @@ public class Robot {
 			System.out.println("Error sending instruction");
 			//e.printStackTrace();
 		}
-		
+
 	}
 
 }

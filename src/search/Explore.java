@@ -13,14 +13,14 @@ import search.FastestPath;
 import utility.Comms;
 
 public class Explore {
-	
+
 	// Cardinal Reference
 	private MOVEMENT forward = MOVEMENT.FORWARD;
 	private MOVEMENT backward = MOVEMENT.BACKWARD;
 	private MOVEMENT turnLeft = MOVEMENT.TURNLEFT;
 	private MOVEMENT turnRight = MOVEMENT.TURNRIGHT;
 	private MOVEMENT calibrate = MOVEMENT.CALIBRATE;
-	
+
 	// Robot Tracker
 	private Robot robot;
 	private int calibrateCount = 0;
@@ -75,8 +75,10 @@ public class Explore {
 	 */
 	public void setupExplore() {	
 		System.out.println("Setting up...");
-		
+
+    /* Deprecated
 		String str; String[] strArr;
+
 		// call turn commands, and calibrate
 		List<String> calList = new ArrayList<String>();
 		if (robot.isRealBot()) {
@@ -84,29 +86,19 @@ public class Explore {
 			System.out.println("Physical Robot Detected, Calibrating...");
 			robot.move(turnLeft, false);
 
-			
 			robot.move(calibrate, false);
 
-			
 			robot.move(turnLeft, false);
-
-			
 			robot.move(calibrate, false);
 
-			
 			robot.move(turnRight, false);
-
-			
 			robot.move(calibrate, false);
 
-			
 			robot.move(turnRight, false);
-		
-			
 			robot.move(calibrate, false);
-
 		}
 		if (calList.size() == 8) System.out.println("Robot Calibrated!");
+		 */
 
 		timeStart = System.currentTimeMillis();
 		timeEnd = timeStart + duration;
@@ -167,10 +159,10 @@ public class Explore {
 				fp.moveBotfromString(str,Simulator.returnRealRun());
 			}
 		}
-		
+
 		System.out.println("Exploration Complete...");
 		updateExplore();
-		
+
 		if (robot.isRealBot()) {
 			rotateRobot(DIRECTION.LEFT);
 			moveRobot(MOVEMENT.CALIBRATE);
@@ -223,14 +215,14 @@ public class Explore {
 	 */
 	private boolean peekRight() {
 		switch(robot.getRobotDir()) {
-			case UP:
-				return isRightFree();
-			case DOWN:
-				return isLeftFree();
-			case LEFT:
-				return isUpFree();
-			default:
-				return isDownFree();
+		case UP:
+			return isRightFree();
+		case DOWN:
+			return isLeftFree();
+		case LEFT:
+			return isUpFree();
+		default:
+			return isDownFree();
 		}
 	}
 
@@ -240,14 +232,14 @@ public class Explore {
 	 */
 	private boolean peekDown() {
 		switch(robot.getRobotDir()) {
-			case UP:
-				return isDownFree();
-			case DOWN:
-				return isUpFree();
-			case LEFT:
-				return isRightFree();
-			default:
-				return isDownFree();
+		case UP:
+			return isDownFree();
+		case DOWN:
+			return isUpFree();
+		case LEFT:
+			return isRightFree();
+		default:
+			return isDownFree();
 		}	
 	}
 
@@ -257,14 +249,14 @@ public class Explore {
 	 */
 	private boolean peekUp() {
 		switch(robot.getRobotDir()) {
-			case UP:
-				return isUpFree();
-			case DOWN:
-				return isDownFree();
-			case LEFT:
-				return isLeftFree();
-			default:
-				return isRightFree();
+		case UP:
+			return isUpFree();
+		case DOWN:
+			return isDownFree();
+		case LEFT:
+			return isLeftFree();
+		default:
+			return isRightFree();
 		}
 	}
 
@@ -339,10 +331,10 @@ public class Explore {
 	private void moveRobot(MOVEMENT move) {
 		robot.move(move, true);
 		if (robot.getRobotRow() == MapConstant.GOAL_GRID_ROW && robot.getRobotCol() == MapConstant.GOAL_GRID_COL) visitedGoal = true;
-		
+
 		if (move != calibrate) senseEnv();
 		else Comms.receiveMsg();
-		
+
 		/*
 		if (robot.isRealBot()) {
 			if (canCalibrate(robot.getRobotDir())) {
@@ -368,10 +360,10 @@ public class Explore {
 	private void senseEnv() {
 		// update virtual robot's sensor positions
 		robot.moveSensor();
-		
+
 		if (robot.isRealBot()) robot.multiSense(mapExplore);
 		else robot.multiSense(mapExplore, mapActual);
-		
+
 		mapExplore.repaint();
 	}
 
@@ -394,65 +386,65 @@ public class Explore {
 		DIRECTION robotDir = robot.getRobotDir();
 		if (robotDir == dir) return;
 		switch (robotDir) {
-			case UP:
-				switch (dir) {
-					case DOWN:
-						moveRobot(turnLeft);
-						moveRobot(turnLeft);
-						break;
-					case LEFT:
-						moveRobot(turnLeft);
-						break;
-					default:
-						moveRobot(turnRight);
-						break;
-				}
-				break;
+		case UP:
+			switch (dir) {
 			case DOWN:
-				switch (dir) {
-					case UP:
-						moveRobot(turnLeft);
-						moveRobot(turnLeft);
-						break;
-					case LEFT:
-						moveRobot(turnRight);
-						break;
-					default:
-						moveRobot(turnLeft);
-						break;
-				}
+				moveRobot(turnLeft);
+				moveRobot(turnLeft);
 				break;
 			case LEFT:
-				switch (dir) {
-					case UP:
-						moveRobot(turnRight);
-						break;
-					case DOWN:
-						moveRobot(turnLeft);
-						break;
-					default:
-						moveRobot(turnLeft);
-						moveRobot(turnLeft);
-						break;
-				}
+				moveRobot(turnLeft);
 				break;
 			default:
-				switch (dir) {
-					case UP:
-						moveRobot(turnLeft);
-						break;
-					case DOWN:
-						moveRobot(turnRight);
-						break;
-					default:
-						moveRobot(turnLeft);
-						moveRobot(turnLeft);
-						break;
-				}
+				moveRobot(turnRight);
 				break;
+			}
+			break;
+		case DOWN:
+			switch (dir) {
+			case UP:
+				moveRobot(turnLeft);
+				moveRobot(turnLeft);
+				break;
+			case LEFT:
+				moveRobot(turnRight);
+				break;
+			default:
+				moveRobot(turnLeft);
+				break;
+			}
+			break;
+		case LEFT:
+			switch (dir) {
+			case UP:
+				moveRobot(turnRight);
+				break;
+			case DOWN:
+				moveRobot(turnLeft);
+				break;
+			default:
+				moveRobot(turnLeft);
+				moveRobot(turnLeft);
+				break;
+			}
+			break;
+		default:
+			switch (dir) {
+			case UP:
+				moveRobot(turnLeft);
+				break;
+			case DOWN:
+				moveRobot(turnRight);
+				break;
+			default:
+				moveRobot(turnLeft);
+				moveRobot(turnLeft);
+				break;
+			}
+			break;
 		}
 	}
-	
+  
 	/*
 	/**
 	 * 
@@ -463,58 +455,60 @@ public class Explore {
 		int row, col;
 		row = robot.getRobotRow();
 		col = robot.getRobotCol();
-		
+
 		switch (dir) {
-			case UP:
-				return isInvalidOrObs(row-2,col-1) && isInvalidOrObs(row-2,col) && isInvalidOrObs(row-2,col+1);
-			case DOWN:
-				return isInvalidOrObs(row+2,col-1) && isInvalidOrObs(row+2,col) && isInvalidOrObs(row+2,col+1);
-			case LEFT:
-				return isInvalidOrObs(row+1,col-2) && isInvalidOrObs(row,col-2) && isInvalidOrObs(row-1,col-2);
-			default:
-				return isInvalidOrObs(row+1,col+2) && isInvalidOrObs(row,col+2) && isInvalidOrObs(row-1,col+2);
+		case UP:
+			return isInvalidOrObs(row-2,col-1) && isInvalidOrObs(row-2,col) && isInvalidOrObs(row-2,col+1);
+		case DOWN:
+			return isInvalidOrObs(row+2,col-1) && isInvalidOrObs(row+2,col) && isInvalidOrObs(row+2,col+1);
+		case LEFT:
+			return isInvalidOrObs(row+1,col-2) && isInvalidOrObs(row,col-2) && isInvalidOrObs(row-1,col-2);
+		default:
+			return isInvalidOrObs(row+1,col+2) && isInvalidOrObs(row,col+2) && isInvalidOrObs(row-1,col+2);
 		}
 	}
 	*/
-	
+  
 	/*
 	/**
 	 * 
 	 * @param row
 	 * @param col
 	 * @return
-	 * 
+	 *
 	private boolean isInvalidOrObs(int row, int col) {
 		if (!Map.isValidTile(row, col)) return true;
 		else return mapExplore.getTile(row, col).isObstacle();
 	}
 	*/
-	
+
 	/*
 	/**
 	 * 
 	 * @return
-	 * 
+	 *
 	private DIRECTION counterCal() {
 		DIRECTION currDir, checkedDir;
 		currDir = robot.getRobotDir();
-		
+
 		// Check Left
 		checkedDir = DIRECTION.getLeft(currDir);
 		if (canCalibrate(checkedDir)) return checkedDir;
-		
+
 		// Check Right
 		checkedDir = DIRECTION.getRight(currDir);
 		if (canCalibrate(checkedDir)) return checkedDir;
-		
+
 		// Check Reverse
 		checkedDir = DIRECTION.getRight(checkedDir);
 		if (canCalibrate(checkedDir)) return checkedDir;
-		
+
 		// if all fail, return null
 		return null;
 	}
-	
+	*/
+
+	/*
 	/**
 	 * 
 	 * @param dir
@@ -526,7 +520,7 @@ public class Explore {
 		rotateRobot(currDir);
 	}
 	*/
-	
+
 	/**
 	 * 
 	 * @return
@@ -534,7 +528,7 @@ public class Explore {
 	public boolean runFinished() {
 		return endRun;
 	}
-	
+  
 	/**
 	 * 
 	 * @param desRow
@@ -546,11 +540,11 @@ public class Explore {
 		Tile centreTile = mapExplore.getTile(desRow, desCol);
 		boolean robCenterValid = !centreTile.isObstacle() && !centreTile.isVirtualWall();
 		if (!robCenterValid) return false;
-		
+
 		// check adjacent coordinates
 		List<int[]> adjCoor = Map.getAdjCoor(desRow, desCol);
 		if (adjCoor.isEmpty() || adjCoor.size() != 8) return false;
-		
+
 		for (int[] coor : adjCoor) 
 			if (mapExplore.getTile(coor[0], coor[1]).isObstacle()) return false;
 
