@@ -75,26 +75,83 @@ public class Explore {
 	public void setupExplore() {	
 		System.out.println("Setting up...");
 		
+		String str; String[] strArr;
 		// call turn commands, and calibrate
 		List<String> calList = new ArrayList<String>();
 		if (robot.isRealBot()) {
+			
 			System.out.println("Physical Robot Detected, Calibrating...");
 			robot.move(turnLeft, false);
-			calList.add(Comms.receiveMsg());
+			while (true) {
+				str = Comms.receiveMsg();
+				strArr = str.split(";");
+				if (strArr[1].equals(Comms.SENSOR_DATA))
+					break;
+			}
+			calList.add(str);
+			
 			robot.move(calibrate, false);
-			calList.add(Comms.receiveMsg());
+			while (true) {
+				str = Comms.receiveMsg();
+				strArr = str.split(";");
+				if (strArr[1].equals(Comms.SENSOR_DATA))
+					break;
+			}
+			calList.add(str);
+			
 			robot.move(turnLeft, false);
-			calList.add(Comms.receiveMsg());
+			while (true) {
+				str = Comms.receiveMsg();
+				strArr = str.split(";");
+				if (strArr[1].equals(Comms.SENSOR_DATA))
+					break;
+			}
+			calList.add(str);
+			
 			robot.move(calibrate, false);
-			calList.add(Comms.receiveMsg());
+			while (true) {
+				str = Comms.receiveMsg();
+				strArr = str.split(";");
+				if (strArr[1].equals(Comms.SENSOR_DATA))
+					break;
+			}
+			calList.add(str);
+			
 			robot.move(turnRight, false);
-			calList.add(Comms.receiveMsg());
+			while (true) {
+				str = Comms.receiveMsg();
+				strArr = str.split(";");
+				if (strArr[1].equals(Comms.SENSOR_DATA))
+					break;
+			}
+			calList.add(str);
+			
 			robot.move(calibrate, false);
-			calList.add(Comms.receiveMsg());
+			while (true) {
+				str = Comms.receiveMsg();
+				strArr = str.split(";");
+				if (strArr[1].equals(Comms.SENSOR_DATA))
+					break;
+			}
+			calList.add(str);
+			
 			robot.move(turnRight, false);
-			calList.add(Comms.receiveMsg());
+			while (true) {
+				str = Comms.receiveMsg();
+				strArr = str.split(";");
+				if (strArr[1].equals(Comms.SENSOR_DATA))
+					break;
+			}
+			calList.add(str);
+			
 			robot.move(calibrate, false);
-			calList.add(Comms.receiveMsg());
+			while (true) {
+				str = Comms.receiveMsg();
+				strArr = str.split(";");
+				if (strArr[1].equals(Comms.SENSOR_DATA))
+					break;
+			}
+			calList.add(str);
 		}
 		if (calList.size() == 8) System.out.println("Robot Calibrated!");
 

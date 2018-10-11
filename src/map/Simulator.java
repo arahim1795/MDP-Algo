@@ -271,17 +271,17 @@ public class Simulator {
 					else{
 						msg = Comms.receiveMsg();
 
-						if(msg==null){
-							if(nulls)
-								System.out.println("nulls");
-							nulls = true;
-						}
-						else{
-							nulls = false;
-							System.out.println(msg);
-							System.out.println(msg.startsWith(Comms.MP));
-							System.out.println(msg.startsWith(Comms.MP)||msg.startsWith(Comms.SP));
-						}
+//						if(msg==null){
+//							if(nulls)
+//								System.out.println("nulls");
+//							nulls = true;
+//						}
+//						else{
+//							nulls = false;
+//							System.out.println(msg);
+//							System.out.println(msg.startsWith(Comms.MP));
+//							System.out.println(msg.startsWith(Comms.MP)||msg.startsWith(Comms.SP));
+//						}
 						if(msg.equals(Comms.EX)){
 							exReady = true;
 						}

@@ -25,8 +25,7 @@ public class Comms {
 	public static final String POS = "#setrobot:";	// + "/", send current bot position
     public static final String FP = "#fp:";
     //  - from
-    public static final String EX = "#ex";
-    
+    public static final String EX = "#exp";
     public static final String MP = "mp";	// Android>PC - Setting Mid Point 
     public static final String SP = "sp";	// Android>PC - Setting Mid Point 
     public static final String START = "r1";

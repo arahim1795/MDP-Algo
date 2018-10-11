@@ -330,7 +330,7 @@ public class Robot {
 		String msg = Comms.receiveMsg();
 		String[] msgArr = msg.split(";"); // P;SDATA;<>_<>_<>
 
-		if (msgArr[2].equals(Comms.SENSOR_DATA)) {
+		if (msgArr[1].equals(Comms.SENSOR_DATA)) {
 			result[0] = Integer.parseInt(msgArr[1].split("_")[1]);
 			result[1] = Integer.parseInt(msgArr[2].split("_")[1]);
 			result[2] = Integer.parseInt(msgArr[3].split("_")[1]);
