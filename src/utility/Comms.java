@@ -14,10 +14,10 @@ import robot.RobotConstant.DIRECTION;
 public class Comms {
 
 	// Major Headers
-	public static final String ARDUINO = "00A";
-	public static final String ANDROID = "00B";
-	public static final String ARDnAND = "00C";
-	public static final String RPI = "00R";
+	public static final String ARDUINO = "ZYXA";
+	public static final String ANDROID = "ZYXB";
+	public static final String ARDnAND = "ZYXC";
+	public static final String RPI = "ZYXR";
 
 	// Android Headers
 	// - to
@@ -34,7 +34,7 @@ public class Comms {
 	// Arduino Headers
 	// - to
 	public static final String SET = "SET";     // PC>Arduino - Set-Up Bot
-	public static final String INS = "INS";      // PC>Arduino - Give Instruction
+	public static final String INS = "INSTR";      // PC>Arduino - Give Instruction
 	public static final String END = "END";
 	// - from
 	public static final String SENSOR_DATA = "SDATA";       // Arduino>PC - Sensor Data
