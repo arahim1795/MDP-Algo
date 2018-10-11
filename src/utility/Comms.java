@@ -35,12 +35,13 @@ public class Comms {
 	public static final String SP = "sp";	// Android>PC - Setting Mid Point 
 	public static final String START = "r1";
 	public static final String STOP = "r0";
-
+  
 	// Arduino Headers
 	// - to
 	public static final String SET = "SET";     // PC>Arduino - Set-Up Bot
 	public static final String INS = "INSTR";      // PC>Arduino - Give Instruction
 	public static final String END = "END";
+
 	public static final String SENSE = "C"; 
 	public static final String MULTI = "MULTI"; //for mutli-movement string
 	// - from
@@ -211,6 +212,7 @@ public class Comms {
 		case"col":
 			ptr=2;
 			while(s.charAt(ptr)!= ','){
+//				System.out.println(s.charAt(ptr));
 				result.append(s.charAt(ptr));
 				ptr++;
 			}
@@ -263,6 +265,4 @@ public class Comms {
 		}
 		return str;
 	}
-
-
 }

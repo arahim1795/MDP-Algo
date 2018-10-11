@@ -35,7 +35,7 @@ public class Simulator {
 
 	// The robot
 	private static robot.Robot roboCop = null;
-	private static final boolean realRun = true;
+	private static final boolean realRun = false;
 	private static boolean ready = false;
 	private static boolean exploredDone = false;
 	private static boolean noInterrupt = true;
@@ -45,6 +45,7 @@ public class Simulator {
 	private static int coverageValue;
 
 	public static void main(String[] args) {
+	
 		
     	System.out.println("Starting Simulator...");
 		roboCop = new Robot(RobotConstant.DEFAULT_START_ROW, RobotConstant.DEFAULT_START_COL, realRun);
@@ -52,6 +53,7 @@ public class Simulator {
 		realMap = new Map(roboCop);
 		realMap.setAllExplored();
 		exploredMap = new Map (roboCop);
+
 
 
 		// Calculate map width & length based on grid size
@@ -259,8 +261,8 @@ public class Simulator {
 				boolean nulls= false;
 				String msg;
 				System.out.println("Explore Ready");
-				if(realRun)
-					Comms.sendMsg(Comms.ARDUINO, Comms.SET, null);
+				if(realRun);
+					// Comms.sendMsg(Comms.ARDUINO, Comms.SET, null);
 				switchMap();
 				while (true) {
 					
@@ -271,17 +273,17 @@ public class Simulator {
 					else{
 						msg = Comms.receiveMsg();
 
-						if(msg==null){
-							if(nulls)
-								System.out.println("nulls");
-							nulls = true;
-						}
-						else{
-							nulls = false;
-							System.out.println(msg);
-							System.out.println(msg.startsWith(Comms.MP));
-							System.out.println(msg.startsWith(Comms.MP)||msg.startsWith(Comms.SP));
-						}
+//						if(msg==null){
+//							if(nulls)
+//								System.out.println("nulls");
+//							nulls = true;
+//						}
+//						else{
+//							nulls = false;
+//							System.out.println(msg);
+//							System.out.println(msg.startsWith(Comms.MP));
+//							System.out.println(msg.startsWith(Comms.MP)||msg.startsWith(Comms.SP));
+//						}
 						if(msg.equals(Comms.EX)){
 							exReady = true;
 						}
@@ -313,17 +315,20 @@ public class Simulator {
 				System.out.println("Exploration Running");
 
 				Explore explore;
-				explore = new Explore(roboCop, exploredMap, realMap, 20, 100);
+				explore = new Explore(roboCop, exploredMap, realMap, 2000, 100);
 				explore.setupExplore();	
+				
+				System.out.println("Exploration Starting");
 				while(noInterrupt && !explore.runFinished()){
 					explore.explore();
 				} 
 				explore.goToStart();
-				Comms.sendMsg(Comms.ARDUINO, "END", null);
-
 				exploredMap.repaint();
+				System.out.println("Sending E, waiting for Fastest Path");
+				Comms.sendMsg(Comms.ARDUINO, "E", null);
 
 				ready = false;
+				System.out.println("Starting fastestPathThread");
 				new fastestPathThread().execute();
 				//
 				firePropertyChange(exploreComplete, false, true);
@@ -692,7 +697,8 @@ public class Simulator {
 		btn_clearObs.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 				
-				roboCop.reAlign();
+				//roboCop.reAlign();
+				System.out.println(MapDescriptor.generateMDFHex2(exploredMap));
 				// Clear the current map
 //				System.out.println("Clearing Obstacles..");
 //				realMap.reset();

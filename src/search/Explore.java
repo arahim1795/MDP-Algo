@@ -34,6 +34,7 @@ public class Explore {
 	private Map mapExplore;
 	private boolean visitedGoal = false;
 	private boolean endRun = false;
+	public static boolean firstSense = true;
 
 
 	// Obstacles Tracker
@@ -75,12 +76,16 @@ public class Explore {
 	public void setupExplore() {	
 		System.out.println("Setting up...");
 
-		/* Deprecated
+    /* Deprecated
+		String str; String[] strArr;
+
 		// call turn commands, and calibrate
 		List<String> calList = new ArrayList<String>();
 		if (robot.isRealBot()) {
+			
 			System.out.println("Physical Robot Detected, Calibrating...");
 			robot.move(turnLeft, false);
+
 			robot.move(calibrate, false);
 
 			robot.move(turnLeft, false);
@@ -107,11 +112,12 @@ public class Explore {
 			mapExplore.getTile(coor[0], coor[1]).setExplored(true);
 
 		maxCoverage = (int) (coveragePercent / 100 * 300);
-
+		System.out.println("starting senseEnv");
 		senseEnv();
 		updateExplore();
 
 		// start exploration
+		System.out.println("starting exploreSim");
 		explore();
 	}
 
@@ -123,6 +129,7 @@ public class Explore {
 			endRun = true;
 			return;
 		} else {
+			System.out.println("entering loop!");
 			move();
 			updateExplore();
 		}
@@ -322,7 +329,7 @@ public class Explore {
 	 * @param move
 	 */
 	private void moveRobot(MOVEMENT move) {
-		robot.move(move); // sendToAndroid);
+		robot.move(move, true);
 		if (robot.getRobotRow() == MapConstant.GOAL_GRID_ROW && robot.getRobotCol() == MapConstant.GOAL_GRID_COL) visitedGoal = true;
 
 		if (move != calibrate) senseEnv();
@@ -437,7 +444,7 @@ public class Explore {
 			break;
 		}
 	}
-
+  
 	/*
 	/**
 	 * 
@@ -461,7 +468,7 @@ public class Explore {
 		}
 	}
 	*/
-
+  
 	/*
 	/**
 	 * 
@@ -521,7 +528,13 @@ public class Explore {
 	public boolean runFinished() {
 		return endRun;
 	}
-
+  
+	/**
+	 * 
+	 * @param desRow
+	 * @param desCol
+	 * @return
+	 */
 	public boolean isCamPosValid(int desRow, int desCol) {
 		// check centre tile
 		Tile centreTile = mapExplore.getTile(desRow, desCol);

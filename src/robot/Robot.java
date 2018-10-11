@@ -7,6 +7,7 @@ import map.MapConstant;
 import robot.RobotConstant;
 import robot.RobotConstant.DIRECTION;
 import robot.RobotConstant.MOVEMENT;
+import search.Explore;
 import utility.Comms;
 import utility.MapDescriptor;
 import map.Tile;
@@ -366,8 +367,15 @@ public class Robot {
 		double num = Double.parseDouble(val);
 		System.out.println("V: " + (Math.round(num / 10.0)));
 		return (int) (Math.round(num / 10.0));
+
 	}
 
+	private int rounding(String val) {
+		double num = Double.parseDouble(val);
+		System.out.println("V: " + (Math.round(num / 10.0)));
+		return (int) (Math.round(num / 10.0));
+	}
+	
 	/**
 	 * 
 	 */
@@ -420,10 +428,11 @@ public class Robot {
 			else Comms.getArdReceipt(Comms.DONE);
 
 			if (m != MOVEMENT.CALIBRATE && sendAndroidBool) {
+
 				Comms.sendMsg(Comms.ANDROID, Comms.POS, Comms.encodeCoor(MapDescriptor.getMDFcol(robotCol),MapDescriptor.getMDFrow(robotRow),DIRECTION.toInt(robotDir)));
 				Comms.getAndReceipt(Comms.DONE);
 				return;
-			}
+			 }
 		} catch (Exception e) {
 			System.out.println("Error sending instruction");
 			//e.printStackTrace();
