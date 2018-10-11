@@ -186,6 +186,8 @@ public class Map extends JPanel{
 		return field[row][col].isObstacle();
 	}
 	
+
+	
 	// Setter(s)
 	/**
 	 * Sets Tile as an obstacles, adjacent Tile(s) are set as virtual walls, except for
@@ -383,7 +385,10 @@ public class Map extends JPanel{
                 
 
                 if (!isExploredTile(mapRow, mapCol)) {
-                	gridColor = GraphicConstant.C_UNEXPLORED;
+                	if(isMidPoint(mapRow,mapCol))
+                		gridColor = GraphicConstant.C_UNEXPLORED_MID;
+                	else
+                		gridColor = GraphicConstant.C_UNEXPLORED;
 
                 }
                 else {
