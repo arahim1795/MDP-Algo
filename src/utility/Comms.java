@@ -23,7 +23,6 @@ public class Comms {
 	// - to
 	public static final String MAP = "#mdf:";		// + "/", send map descriptor 
 	public static final String POS = "#setrobot:";	// + "/", send current bot position
-    public static final String EX = "#exp:";
     public static final String FP = "#fp:";
     
     public static final String MP = "mp";	// Android>PC - Setting Mid Point 
@@ -112,7 +111,6 @@ public class Comms {
 				switch (sub) {
 					case MAP:
 					case POS:
-					case EX:
 					case FP:
 						sb.append(sub);
 						break;
