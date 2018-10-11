@@ -34,6 +34,7 @@ public class Explore {
 	private Map mapExplore;
 	private boolean visitedGoal = false;
 	private boolean endRun = false;
+	public static boolean firstSense = true;
 
 
 	// Obstacles Tracker
@@ -82,75 +83,35 @@ public class Explore {
 			
 			System.out.println("Physical Robot Detected, Calibrating...");
 			robot.move(turnLeft, false);
-			while (true) {
-				str = Comms.receiveMsg();
-				strArr = str.split(";");
-				if (strArr[1].equals(Comms.SENSOR_DATA))
-					break;
-			}
+			str = Comms.getArdReceipt(Comms.DONE);
 			calList.add(str);
 			
 			robot.move(calibrate, false);
-			while (true) {
-				str = Comms.receiveMsg();
-				strArr = str.split(";");
-				if (strArr[1].equals(Comms.SENSOR_DATA))
-					break;
-			}
+			str = Comms.getArdReceipt(Comms.SENSOR_DATA);
 			calList.add(str);
 			
 			robot.move(turnLeft, false);
-			while (true) {
-				str = Comms.receiveMsg();
-				strArr = str.split(";");
-				if (strArr[1].equals(Comms.SENSOR_DATA))
-					break;
-			}
+			str = Comms.getArdReceipt(Comms.DONE);
 			calList.add(str);
 			
 			robot.move(calibrate, false);
-			while (true) {
-				str = Comms.receiveMsg();
-				strArr = str.split(";");
-				if (strArr[1].equals(Comms.SENSOR_DATA))
-					break;
-			}
+			str = Comms.getArdReceipt(Comms.SENSOR_DATA);
 			calList.add(str);
 			
 			robot.move(turnRight, false);
-			while (true) {
-				str = Comms.receiveMsg();
-				strArr = str.split(";");
-				if (strArr[1].equals(Comms.SENSOR_DATA))
-					break;
-			}
+			str = Comms.getArdReceipt(Comms.DONE);
 			calList.add(str);
 			
 			robot.move(calibrate, false);
-			while (true) {
-				str = Comms.receiveMsg();
-				strArr = str.split(";");
-				if (strArr[1].equals(Comms.SENSOR_DATA))
-					break;
-			}
+			str = Comms.getArdReceipt(Comms.SENSOR_DATA);
 			calList.add(str);
 			
 			robot.move(turnRight, false);
-			while (true) {
-				str = Comms.receiveMsg();
-				strArr = str.split(";");
-				if (strArr[1].equals(Comms.SENSOR_DATA))
-					break;
-			}
+			str = Comms.getArdReceipt(Comms.DONE);
 			calList.add(str);
 			
 			robot.move(calibrate, false);
-			while (true) {
-				str = Comms.receiveMsg();
-				strArr = str.split(";");
-				if (strArr[1].equals(Comms.SENSOR_DATA))
-					break;
-			}
+			str = Comms.getArdReceipt(Comms.SENSOR_DATA);
 			calList.add(str);
 		}
 		if (calList.size() == 8) System.out.println("Robot Calibrated!");
@@ -167,51 +128,27 @@ public class Explore {
 			mapExplore.getTile(coor[0], coor[1]).setExplored(true);
 
 		maxCoverage = (int) (coveragePercent / 100 * 300);
-
+		System.out.println("starting senseEnv");
 		senseEnv();
 		updateExplore();
 
 		// start exploration
-		if (robot.isRealBot()) explorePhys();
-		else exploreSim();
+		System.out.println("starting exploreSim");
+		explore();
 	}
 
 	/**
 	 * 
 	 */
-	public void exploreSim() {
+	public void explore() {
 		if (System.currentTimeMillis() >= timeEnd || explored >= maxCoverage) {
 			endRun = true;
 			return;
 		} else {
+			System.out.println("entering loop!");
 			move();
 			updateExplore();
 		}
-	}
-	
-	/**
-	 * 
-	 */
-	public void explorePhys() {
-		do {
-			// TODO test listenTerminate
-			// crude, untested method to receive message
-			if (listenTerminate()) break;
-			
-			move();
-			// Debug Scripts
-			/*
-			int col, row;
-			DIRECTION dir;
-			row = robot.getRobotRow();
-			col = robot.getRobotCol();
-			dir = robot.getRobotDir();
-			System.out.println("R: " + row + " C: " + col + " D: " + dir);
-			 */
-			updateExplore();
-		} while (System.currentTimeMillis() <= timeEnd && explored <= maxCoverage);
-		
-		goToStart();
 	}
 
 	/**
@@ -408,7 +345,7 @@ public class Explore {
 	 * @param move
 	 */
 	private void moveRobot(MOVEMENT move) {
-		robot.move(move); // sendToAndroid);
+		robot.move(move, true);
 		if (robot.getRobotRow() == MapConstant.GOAL_GRID_ROW && robot.getRobotCol() == MapConstant.GOAL_GRID_COL) visitedGoal = true;
 		
 		if (move != calibrate) senseEnv();
@@ -612,15 +549,6 @@ public class Explore {
 			if (mapExplore.getTile(coor[0], coor[1]).isObstacle()) return false;
 
 		return true;
-	}
-
-	private boolean listenTerminate() {
-		String str = Comms.receiveMsg();
-		if (str != null) {
-			String[] strArr = str.split("_");
-			if (strArr[1].equals(Comms.STOP)) return true;
-		}
-		return false;
 	}
 
 }

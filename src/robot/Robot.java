@@ -7,6 +7,7 @@ import map.MapConstant;
 import robot.RobotConstant;
 import robot.RobotConstant.DIRECTION;
 import robot.RobotConstant.MOVEMENT;
+import search.Explore;
 import utility.Comms;
 import utility.MapDescriptor;
 import map.Tile;
@@ -322,21 +323,19 @@ public class Robot {
 	public void multiSense(Map mapExplore) {
 		int[] result = new int[6];
 		StringBuilder sb = new StringBuilder();
-
+		String str; String[] strArr;
+		Comms.sendMsg(Comms.ARDUINO, Comms.INS, Comms.SENSE);
+		str = Comms.getArdReceipt(Comms.SENSOR_DATA);
+		strArr = str.split(";"); // P;SDATA;<>_<>_<>
 		
-		// if Comms is not setup properly, attempt to set up
-		while (!Comms.connectionActive()) Comms.openSocket();
-		
-		String msg = Comms.receiveMsg();
-		String[] msgArr = msg.split(";"); // P;SDATA;<>_<>_<>
-
-		if (msgArr[1].equals(Comms.SENSOR_DATA)) {
-			result[0] = Integer.parseInt(msgArr[1].split("_")[1]);
-			result[1] = Integer.parseInt(msgArr[2].split("_")[1]);
-			result[2] = Integer.parseInt(msgArr[3].split("_")[1]);
-			result[3] = Integer.parseInt(msgArr[4].split("_")[1]);
-			result[4] = Integer.parseInt(msgArr[5].split("_")[1]);
-			result[5] = Integer.parseInt(msgArr[6].split("_")[1]);
+		if (strArr[0].equals(Comms.SENSOR_DATA)) {
+			str = strArr[1];
+			result[0] = (int) rounding(str.split("_")[0]);
+			result[1] = (int) rounding(str.split("_")[1]);
+			result[2] = (int) rounding(str.split("_")[2]);
+			result[3] = (int) rounding(str.split("_")[3]);
+			result[4] = (int) rounding(str.split("_")[4]);
+			result[5] = (int) rounding(str.split("_")[5]);
 		}
 
 		SRFrontLeft.sense(mapExplore, result[0]);
@@ -362,6 +361,12 @@ public class Robot {
 		sb.setLength(0);
 	}
 
+	private int rounding(String val) {
+		double num = Double.parseDouble(val);
+		System.out.println("V: " + (Math.round(num / 10.0)));
+		return (int) (Math.round(num / 10.0));
+	}
+	
 	/**
 	 * 
 	 */

@@ -137,7 +137,7 @@ public class MapDescriptor {
 		 mapString.append("11");
 		 for(int row = 0; row<MapConstant.MAP_ROWS;row++){
 			 for(int col = 0;col<MapConstant.MAP_COLS;col++){
-				 System.out.println(getMDFrow(row)+","+col);
+//				 System.out.println(getMDFrow(row)+","+col);
 				 if(map.getTile(getMDFrow(row), col).isExplored())
 					 mapString.append("1");
 				 else
@@ -149,9 +149,11 @@ public class MapDescriptor {
 	 }
 	 
 	 public static String generateMDFString2(Map map){
+		 System.out.println("MDF2");
 		 StringBuilder mapString = new StringBuilder("");
 		 for(int row = 0; row<MapConstant.MAP_ROWS;row++){
 			 for(int col = 0;col<MapConstant.MAP_COLS;col++){
+				 System.out.println(getMDFrow(row)+","+col);
 				 if(map.getTile(getMDFrow(row), col).isExplored()){
 					 if(map.getTile(getMDFrow(row), col).isObstacle())
 						 mapString.append("1");

@@ -13,6 +13,11 @@ import robot.RobotConstant.DIRECTION;
  */
 public class Comms {
 
+	// Receipt (Arduino)
+	public static final String DONE = "don";
+	public static final String SENSOR_DATA = "data"; 
+	
+	
 	// Major Headers
 	public static final String ARDUINO = "ZYXA";
 	public static final String ANDROID = "ZYXB";
@@ -21,7 +26,7 @@ public class Comms {
 
 	// Android Headers
 	// - to
-	public static final String MAP = "#mdf:";		// + "/", send map descriptor 
+	public static final String MAP = "#mdB#mdf";		// + "/", send map descriptor 
 	public static final String POS = "#setrobot:";	// + "/", send current bot position
     public static final String FP = "#fp:";
     //  - from
@@ -36,8 +41,8 @@ public class Comms {
 	public static final String SET = "SET";     // PC>Arduino - Set-Up Bot
 	public static final String INS = "INSTR";      // PC>Arduino - Give Instruction
 	public static final String END = "END";
+	public static final String SENSE = "C"; 
 	// - from
-	public static final String SENSOR_DATA = "SDATA";       // Arduino>PC - Sensor Data
 	public static final String ACK = "ACK";	//TODO tentative
 	// RPi Headers
 	// - to
@@ -234,4 +239,17 @@ public class Comms {
 		sb.append("/");
 		return sb.toString();
 	}
+	
+	public static String getArdReceipt(String expMsg) {
+		String str;
+		String[] strArr;
+		while (true) {
+			str = Comms.receiveMsg().toLowerCase();
+			System.out.println(str);
+			strArr = str.split(";");
+			if (strArr[0].equals(expMsg.toLowerCase())) break;
+		}
+		return str;
+	}
+	
 }

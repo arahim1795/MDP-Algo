@@ -123,18 +123,18 @@ public class Sensor {
 	 */
 	public void sense(Map mapExplore, int sensorVal) {
 		switch (sensorDir) {
-		case UP:
-			senseInfo(mapExplore, sensorVal, -1, 0);
-			return;
-		case DOWN:
-			senseInfo(mapExplore, sensorVal, 1, 0);
-			break;
-		case LEFT:
-			senseInfo(mapExplore, sensorVal, 0, -1);
-			break;
-		default:
-			senseInfo(mapExplore, sensorVal, 0, 1);
-			break;
+			case UP:
+				senseInfo(mapExplore, sensorVal, -1, 0);
+				return;
+			case DOWN:
+				senseInfo(mapExplore, sensorVal, 1, 0);
+				break;
+			case LEFT:
+				senseInfo(mapExplore, sensorVal, 0, -1);
+				break;
+			default:
+				senseInfo(mapExplore, sensorVal, 0, 1);
+				break;
 		}
 	}
 
@@ -165,8 +165,8 @@ public class Sensor {
 
 		// Update map according to sensor's value.
 		for (int i = sensorLowerLimit; i <= sensorUpperLimit; i++) {
-			row = this.sensorRow + (rowMul * i);
-			col = this.sensorCol + (colMul * i);
+			row = sensorRow + (rowMul * i);
+			col = sensorCol + (colMul * i);
 
 			if (!Map.isValidTile(row, col)) continue;
 
