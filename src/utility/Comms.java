@@ -27,9 +27,9 @@ public class Comms {
 	// - to
 	public static final String MAP = "#mdB#mdf";		// + "/", send map descriptor 
 	public static final String POS = "#seB#setrobot:";	// + "/", send current bot position
-	public static final String FP = "#fp:";
+	public static final String FP = "#fp";
 	// - from
-	public static final String EX = "ex";
+	public static final String EX = "#exp";
 
 	public static final String MP = "mp";	// Android>PC - Setting Mid Point 
 	public static final String SP = "sp";	// Android>PC - Setting Mid Point 
@@ -107,6 +107,8 @@ public class Comms {
 			case SET:
 			case INS:
 			case SENSE:
+			case MULTI:
+			case "E":
 				sb.append(sub);
 				sb.append("_");
 				break;
@@ -120,12 +122,24 @@ public class Comms {
 			case MAP:
 			case POS:
 			case FP:
+			case MULTI:
 				sb.append(sub);
 				break;
 			default:
 				System.err.println("Invalid Purpose");
 				return false;
 			}
+			break;
+		case ARDnAND:
+			sb.append(major);
+			switch (sub) {
+				case MULTI:
+					sb.append(sub);
+					break;
+				default:
+					System.err.println("Invalid Purpose");
+					return false;
+				}
 			break;
 		case RPI:
 			// TODO incorporate Image Tracking

@@ -200,7 +200,7 @@ public class Robot {
 	 * @param m
 	 * @param sendToAndroid
 	 */
-	public void move(MOVEMENT m, boolean sendToAndroid) {
+	public void move(MOVEMENT m, boolean sendToAndroid, boolean real) {
 
 		// Simulate Real-Time Movement
 		if (!realBot) 
@@ -252,9 +252,10 @@ public class Robot {
 		}
 
 		if (realBot) {
-
-			System.out.println("Sending "+m.toString());
-			sendInstruction(m, sendToAndroid);
+			if (real) {
+				System.out.println("Sending "+m.toString());
+				sendInstruction(m, sendToAndroid);
+			}
 		}
 		System.out.println("Move: " + MOVEMENT.print(m));
 
@@ -265,7 +266,11 @@ public class Robot {
 	 * @param m
 	 */
 	public void move(MOVEMENT m){
-		move(m,realBot);
+		move(m,realBot,true);
+	}
+	
+	public void moveDigital(MOVEMENT m) {
+		move(m,realBot,false);
 	}
 
 	/**
@@ -349,6 +354,7 @@ public class Robot {
 		sb.append(MapDescriptor.generateMDFHex1(mapExplore));
 		sb.append("/");
 		Comms.sendMsg(Comms.ANDROID, Comms.MAP, sb.toString());
+		Comms.getAndReceipt(Comms.DONE);
 		sb.setLength(0);
 		// Send MDF2
 
@@ -356,6 +362,7 @@ public class Robot {
 		sb.append(MapDescriptor.generateMDFHex2(mapExplore));
 		sb.append("/");
 		Comms.sendMsg(Comms.ANDROID, Comms.MAP, sb.toString());
+		Comms.getAndReceipt(Comms.DONE);
 		sb.setLength(0);
 	}
 
@@ -422,7 +429,6 @@ public class Robot {
 			else Comms.getArdReceipt(Comms.DONE);
 
 			if (m != MOVEMENT.CALIBRATE && sendAndroidBool) {
-
 				Comms.sendMsg(Comms.ANDROID, Comms.POS, Comms.encodeCoor(MapDescriptor.getMDFcol(robotCol),MapDescriptor.getMDFrow(robotRow),DIRECTION.toInt(robotDir)));
 				Comms.getAndReceipt(Comms.DONE);
 				return;

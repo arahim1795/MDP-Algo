@@ -74,6 +74,7 @@ public class Explore {
 	 */
 	public void setupExplore() {	
 		System.out.println("Setting up...");
+		// Comms.sendMsg(Comms.ARDnAND, Comms.MULTI, null);
 		
 		/*
 		// call turn commands, and calibrate
@@ -157,12 +158,14 @@ public class Explore {
 		System.out.println("Exploration Complete...");
 		updateExplore();
 		
+		/*
 		if (robot.isRealBot()) {
 			rotateRobot(DIRECTION.LEFT);
 			moveRobot(MOVEMENT.CALIBRATE);
 			rotateRobot(DIRECTION.DOWN);
 			moveRobot(MOVEMENT.CALIBRATE);
 		}
+		*/
 		rotateRobot(DIRECTION.UP);
 	}
 

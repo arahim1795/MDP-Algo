@@ -54,8 +54,6 @@ public class Simulator {
 		realMap.setAllExplored();
 		exploredMap = new Map (roboCop);
 
-
-
 		// Calculate map width & length based on grid size
 		// mapWidth = MapConstant.MAP_COLS * GraphicConstant.TILE_SIZE;
 		// mapLength = MapConstant.MAP_ROWS * GraphicConstant.TILE_SIZE;
@@ -196,14 +194,18 @@ public class Simulator {
 			protected Void doInBackground() throws Exception {
 				long idleTime = System.currentTimeMillis();
 				boolean fpReady = false;
+				String msg;
 
 				System.out.println("FP Ready");
 				while (true) {
 					if(!realRun){
 						fpReady = ready;
 					}
-					else if(Comms.receiveMsg()=="fp"){
-						fpReady = true;
+					else {
+						msg = Comms.receiveMsg();
+						if(msg.equals(Comms.FP)) {
+							fpReady = true;
+						}
 					}
 					if(System.currentTimeMillis()-idleTime >7000){
 						idleTime = System.currentTimeMillis();
@@ -319,17 +321,17 @@ public class Simulator {
 				System.out.println("Exploration Running");
 
 				Explore explore;
-				explore = new Explore(roboCop, exploredMap, realMap, 2000, 100);
+				explore = new Explore(roboCop, exploredMap, realMap, 120, 100);
 				explore.setupExplore();	
 
 				System.out.println("Exploration Starting");
 				while(noInterrupt && !explore.runFinished()){
 					explore.explore();
 				} 
+				Comms.sendMsg(Comms.ARDUINO, Comms.INS, "E");
 				explore.goToStart();
 				exploredMap.repaint();
 				System.out.println("Sending E, waiting for Fastest Path");
-				Comms.sendMsg(Comms.ARDUINO, "E", null);
 
 				ready = false;
 				System.out.println("Starting fastestPathThread");

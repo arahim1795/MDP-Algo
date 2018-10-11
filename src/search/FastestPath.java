@@ -285,9 +285,8 @@ public class FastestPath {
 			System.out.println("Attempting moveBotfromString");
 			System.out.println(s);
 
-			Comms.sendMsg(Comms.ANDROID, Comms.MULTI, s);
+			Comms.sendMsg(Comms.ARDnAND, Comms.MULTI, s);
 			System.out.println("Message sent to Android");
-			Comms.sendMsg(Comms.ARDUINO, Comms.MULTI, s);
 			System.out.println("Message sent to Arduino");
 
 
@@ -309,7 +308,12 @@ public class FastestPath {
 				System.out.println("moveBotfromString : Sleep did not work");
 			}
 			m=MOVEMENT.get(s.charAt(i));
-			bot.move(m, false);
+			try {
+				TimeUnit.MILLISECONDS.sleep(100);
+				bot.moveDigital(m);
+			} catch (Exception e){
+				System.out.println("moveBotfromString : Sleep did not work");
+			}
 			System.out.println("Move: " + MOVEMENT.print(m));
 		}
 
