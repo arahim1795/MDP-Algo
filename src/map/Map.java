@@ -326,7 +326,7 @@ public class Map extends JPanel {
 	}
 
 	/**
-	 * Reset all tile objects within initialised map
+	 * Reset all tile objects within initialised map, except persistence
 	 */
 	public void reset() {
 		for (Tile[] row : field)
