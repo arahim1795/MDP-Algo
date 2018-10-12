@@ -110,6 +110,9 @@ public class Simulator {
 
 	private static void switchMap(){
 		CardLayout cl = ((CardLayout) mapCards.getLayout());
+		if(realMap.hasMidPoint()){
+			exploredMap.setMidPoint(realMap.getMidPointRow(), realMap.getMidPointCol());
+		}
 		cl.show(mapCards, "EXPLORATION");
 	}
 
@@ -329,7 +332,8 @@ public class Simulator {
 				while(noInterrupt && !explore.runFinished()){
 					explore.explore();
 				} 
-				Comms.sendMsg(Comms.ARDUINO, Comms.INS, "E");
+				if(realRun)
+					Comms.sendMsg(Comms.ARDUINO, Comms.INS, "E");
 				explore.goToStart();
 				exploredMap.repaint();
 				System.out.println("Sending E, waiting for Fastest Path");
