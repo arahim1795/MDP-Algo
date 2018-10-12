@@ -488,10 +488,6 @@ public class Map extends JPanel {
 		this.repaint();
 	}
 
-	public Map getMap (Map map) {
-		return map;
-	}
-
 	private class ColorTile {
 
 		public int borderX;
