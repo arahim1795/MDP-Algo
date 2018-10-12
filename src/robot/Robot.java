@@ -338,6 +338,7 @@ public class Robot {
 			result[3] = (int) rounding(str.split("_")[3]);
 			result[4] = (int) rounding(str.split("_")[4]);
 			result[5] = (int) rounding(str.split("_")[5]);
+			System.out.print("\n");
 		}
 
 		// Use sensor values and update mapExplore
@@ -372,7 +373,7 @@ public class Robot {
 	 */
 	private int rounding(String value) {
 		double num = Double.parseDouble(value);
-		System.out.println("V: " + (Math.round(num / 10.0)));
+		System.out.print("V: " + (Math.round(num / 10.0)));
 		return (int) (Math.round(num / 10.0));
 	}
 
