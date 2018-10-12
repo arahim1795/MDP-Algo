@@ -14,6 +14,9 @@ import utility.Comms;
 
 public class Explore {
 	
+	// Explore Run Limit
+	
+	
 	// Cardinal Reference
 	private MOVEMENT forward = MOVEMENT.FORWARD;
 	private MOVEMENT backward = MOVEMENT.BACKWARD;

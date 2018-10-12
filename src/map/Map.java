@@ -17,13 +17,8 @@ import robot.RobotConstant;
 
 /**
  * @author 18/19 S1 G3
- * getTile
- * setObstacleTile
- * setBoundary
- * getAdjCoor
- * 
  */
-public class Map extends JPanel{
+public class Map extends JPanel {
 	private Tile[][] field;
 	private ColorTile[][] mapColorTiles = null;
 	public static int row = MapConstant.MAP_ROWS, col = MapConstant.MAP_COLS;
@@ -44,10 +39,8 @@ public class Map extends JPanel{
 
 	// Constructor
 	/**
-	 * Create map of Tiles with col = 15 and row = 15
-	 * Up-Left Coordinates: 0,0
-	 * Down-Right Coordinates: 14,19
-	 * @see Tile
+	 * Initialise an empty map
+	 * @param bot Instantiated robot
 	 */
 	public Map(Robot bot) {
 
@@ -99,51 +92,93 @@ public class Map extends JPanel{
 
 	}
 
+
 	// Getter(s)
 	/**
-	 * 
-	 * @param row
-	 * @param col
-	 * @return
+	 * Returns tile object at [row (y), col (x)]
+	 * @param row Tile row coordinate
+	 * @param col Tile col coordinate
+	 * @return tile object at [row,col]
 	 */
-	public Tile getTile(int row, int col){
+	public Tile getTile(int row, int col) {
 		return field[row][col];
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Return true if tile object at [row (y), col (x)] is explored
+	 * @param row Tile row coordinate
+	 * @param col Tile col coordinate
+	 * @return true if tile object at [row,col] is explored, false otherwise
 	 */
-	public Tile getMidPoint(){
-		if(_bSetMid)
-			return field[midPointRow][midPointCol];
-		System.out.println("No mid point set");
+	public boolean isExploredTile(int row, int col) {
+		return field[row][col].isExplored();
+	}
+
+	/**
+	 * Returns true if tile object at [row (y), col (x)] is an obstacle
+	 * @param row Tile row coordinate
+	 * @param col Tile col coordinate
+	 * @return true if tile object at [row,col] is an obstacle, false otherwise
+	 */
+	public boolean isObstacleTile(int row, int col) {
+		return field[row][col].isObstacle();
+	}
+
+	/**
+	 * Returns true if tile object at [row (y), col (x)] is a virtual wall
+	 * @param row Tile row coordinate
+	 * @param col Tile col coordinate
+	 * @return true if tile object at [row,col] is a virtual wall, false otherwise
+	 */
+	public boolean isVirtualWall(int row, int col) {
+		return field[row][col].isVirtualWall();
+	}
+
+	/**
+	 * Returns true if tile object at [row (y), col (x) is a midpoint
+	 * @param row Tile row coordinate
+	 * @param col Tile col coordinate
+	 * @return true if tile object at [row,col] is a midpoint, false otherwise
+	 */
+	public boolean isMidPoint(int row, int col){
+		return field[row][col].isMidPoint();
+	}
+
+	/**
+	 * Returns tile object at [row (y), col (x)] if tile is a midpoint
+	 * @return tile object at [row,col] if tile is a midpoint, null otherwise
+	 */
+	public Tile getMidPoint() {
+		if (_bSetMid) return field[midPointRow][midPointCol];
+
+		System.err.println("No midpoint set");
 		return null;
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Returns midpoint row coordinate
+	 * @return midpoint row coordinate
 	 */
-	public int getMidPointRow(){
+	public int getMidPointRow() {
 		return midPointRow;
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Returns midpoint col coordinate
+	 * @return midpoint col coordinate
 	 */
-	public int getMidPointCol(){
+	public int getMidPointCol() {
 		return midPointCol;
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Returns true if midpoint has been set
+	 * @return true if midpoint has been set, false otherwise
 	 */
 	public boolean hasMidPoint(){
 		return _bSetMid;
 	}
+
 
 	// Setters
 	/**
@@ -165,27 +200,6 @@ public class Map extends JPanel{
 			midPointCol = col;
 		}
 	}
-
-	/**
-	 * 
-	 * @param row
-	 * @param col
-	 * @return
-	 */
-	public boolean isExploredTile(int row, int col) {
-		return field[row][col].isExplored();
-	}
-
-	/**
-	 * 
-	 * @param row
-	 * @param col
-	 * @return
-	 */
-	public boolean isObstacleTile(int row, int col) {
-		return field[row][col].isObstacle();
-	}
-
 
 
 	// Setter(s)
@@ -209,41 +223,59 @@ public class Map extends JPanel{
 
 	// Validity Functions
 	/**
-	 * 
-	 * @param checkRow row(y)-coordinates
-	 * @param checkCol col(x)-coordinates
-	 * @return true if row(y) and col(x)-coordinates are within 0 and maxRow(19) or maxCol(14)
-	 * respectively, false otherwise
+	 * Returns true if [row (y), col (x)] is valid (within map boundary)
+	 * @param checkRow Row coordinate
+	 * @param checkCol Col coordinate
+	 * @return true if [row,col] is valid, false otherwise
 	 */
 	public static boolean isValidTile(int checkRow, int checkCol){
 		return checkRow >= 0 && checkRow < row && checkCol >= 0 && checkCol < col;
 	}
 
 	/**
-	 * 
-	 * @param checkRow row(y)-coordinates
-	 * @param checkCol col(x)-coordinates
-	 * @return true if either row(y) and col(x)-coordinates are 0 or at maxRow(19) or maxCol(14)
-	 * respectively, false otherwise
+	 * Returns true if [row (y), col (x)] is at map boundary
+	 * @param checkRow Row coordinate
+	 * @param checkCol Col coordinate
+	 * @return true if [row,col] is at map boundary, false otherwise
 	 */
 	public static boolean isBoundaryTile(int checkRow, int checkCol) {
 		return checkRow == 0 || checkRow == (row - 1) || checkCol == 0 || checkCol == (col - 1);
 	}
 
+	/**
+	 * Returns true if [rpw (y), col (x)] is within start zone
+	 * @param checkRow Row coordinate
+	 * @param checkCol Col coordinate
+	 * @return true if [row,col] is within start zone, false otherwise
+	 */
+	public boolean isStartZone(int checkRow, int checkCol) {
+		return ((checkRow >= (MapConstant.START_GRID_ROW-1)) && (checkRow <= (MapConstant.START_GRID_ROW +1)) && 
+				(checkCol >= (MapConstant.START_GRID_COL-1)) && (checkCol <= (MapConstant.START_GRID_COL +1)));
+	}
+
+	/**
+	 * Returns true if [rpw (y), col (x)] is within goal zone
+	 * @param checkRow Row coordinate
+	 * @param checkCol Col coordinate
+	 * @return true if [row,col] is within goal zone, false otherwise
+	 */
+	public boolean isGoalZone(int row, int col) {
+		return ((row >= (MapConstant.GOAL_GRID_ROW-1)) && (row <= (MapConstant.GOAL_GRID_ROW +1)) 
+				&& (col >= (MapConstant.GOAL_GRID_COL-1)) && (col <= (MapConstant.GOAL_GRID_COL +1)));
+	}
+
 
 	// Other Function(s)
 	/**
-	 * 
-	 * @param row 
-	 * @param col 
-	 * @return list of integer arrays in [row(y),col(x)] format (valid adjacent coordinates to
-	 * passed row(x) & col(y))
+	 * Returns list of valid adjacent coordinates [row (y), col (x)] to referenced coordinate
+	 * @param row Row coordinate
+	 * @param col Col coordinate
+	 * @return list of valid adjacent coordinates [row,col]
 	 */
 	public static List<int[]> getAdjCoor(int row, int col) {
 		List<int[]> listCoor = new ArrayList<int[]>();
 
 		int r, c;
-
 
 		for (int y = -1; y <= 1; y++) {
 			for (int x = -1; x <= 1; x++) {
@@ -281,27 +313,8 @@ public class Map extends JPanel{
 		return map;
 	}
 
-	// check if given tile is in start zone
-	public boolean isStartZone(int row, int col) {
-		return ((row >= (MapConstant.START_GRID_ROW-1)) && (row <= (MapConstant.START_GRID_ROW +1)) && 
-				(col >= (MapConstant.START_GRID_COL-1)) && (col <= (MapConstant.START_GRID_COL +1)));
-	}
-
-	// check if given tile is in goal zone
-	public boolean isGoalZone(int row, int col) {
-		return ((row >= (MapConstant.GOAL_GRID_ROW-1)) && (row <= (MapConstant.GOAL_GRID_ROW +1)) 
-				&& (col >= (MapConstant.GOAL_GRID_COL-1)) && (col <= (MapConstant.GOAL_GRID_COL +1)));
-	}
-
-	public boolean isVirtualWall(int row, int col){
-		return(this.field[row][col].isVirtualWall());
-	}
-	public boolean isMidPoint(int row, int col){
-		return(this.field[row][col].isMidPoint());
-	}
-
 	/**
-	 * Prints map to console for debugging purposes
+	 * Prints map to console
 	 */
 	public void printMap() {
 		for (int r = 0; r < row; r++) 
@@ -313,21 +326,20 @@ public class Map extends JPanel{
 	}
 
 	/**
-	 * 
+	 * Reset all tile objects within initialised map, except persistence
 	 */
 	public void reset() {
 		for (Tile[] row : field)
 			for (Tile tile : row)
 				tile.reset();
-		if(_bSetMid){
-			this.midPointRow = -1;
-			this.midPointCol = -1;
-			_bSetMid = false;
-		}
+
+		midPointRow = -1;
+		midPointCol = -1;
+		_bSetMid = false;
 	}
 
 	/**
-	 * 
+	 * Set all tile objects as explored
 	 */
 	public void setAllExplored() {
 		for(Tile[] row : field)
@@ -336,7 +348,7 @@ public class Map extends JPanel{
 	}
 
 	/**
-	 * 
+	 * Set all tile objects as unexplored
 	 */
 	public void setAllUnExplored() {
 		for(Tile[] row : field)
@@ -345,8 +357,10 @@ public class Map extends JPanel{
 	}
 
 
+	/**
+	 * 
+	 */
 	public void paintComponent(Graphics g) {
-
 		if (!_bMeasured) {
 			//TODO dummy debug
 
@@ -463,6 +477,7 @@ public class Map extends JPanel{
 			break;
 		}
 	}
+
 	@Deprecated
 	public void clearMap() {
 		for (int row = 0; row < (MapConstant.MAP_ROWS); row++) {
