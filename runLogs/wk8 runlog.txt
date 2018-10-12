@@ -1,0 +1,848 @@
+Starting Simulator...
+Comms Open
+Explore Ready
+Explore Waiting
+Exploration Running
+Setting up...
+data;26.48_36.80_55.17_6.15_20.74_61.8
+V: 3
+V: 4
+V: 6
+V: 1
+V: 2
+V: 6
+don
+MDF2
+0000000000000011
+16
+don
+Explored: 14 Cells
+4.67% Coverage
+Duration: 1 seconds
+Sending FORWARD
+don
+don
+Move: F
+data;23.71_38.98_47.04_6.16_19.82_66.2
+V: 2
+V: 4
+V: 5
+V: 1
+V: 2
+V: 7
+don
+MDF2
+000000000000000000011111
+24
+don
+Explored: 19 Cells
+6.33% Coverage
+Duration: 5 seconds
+Exploration Starting
+Sending FORWARD
+don
+don
+Move: F
+data;23.42_31.19_50.01_6.18_20.18_152.2
+V: 2
+V: 3
+V: 5
+V: 1
+V: 2
+V: 15
+don
+MDF2
+000000000000000000000000
+24
+don
+Explored: 24 Cells
+8.00% Coverage
+Duration: 8 seconds
+Sending FORWARD
+don
+don
+Move: F
+data;28.19_47.66_52.76_6.28_21.33_23.3
+V: 3
+V: 5
+V: 5
+V: 1
+V: 2
+V: 2
+don
+MDF2
+00000000000000000000010000000111
+32
+don
+Explored: 29 Cells
+9.67% Coverage
+Duration: 11 seconds
+Sending FORWARD
+don
+don
+Move: F
+data;23.42_30.55_85.47_6.26_20.55_43.8
+V: 2
+V: 3
+V: 9
+V: 1
+V: 2
+V: 4
+don
+MDF2
+0000000000000000000001000000000000111111
+40
+don
+Explored: 34 Cells
+11.33% Coverage
+Duration: 14 seconds
+Sending FORWARD
+don
+don
+Move: F
+data;22.04_28.74_29.05_6.17_19.82_167.5
+V: 2
+V: 3
+V: 3
+V: 1
+V: 2
+V: 17
+don
+MDF2
+0000000000000000000001000000000000000001
+40
+don
+Explored: 39 Cells
+13.00% Coverage
+Duration: 18 seconds
+Sending FORWARD
+don
+don
+Move: F
+data;18.36_21.14_23.57_6.11_18.12_170.0
+V: 2
+V: 2
+V: 2
+V: 1
+V: 2
+V: 17
+don
+MDF2
+000000000000000000000100000000000000000000001111
+48
+don
+Explored: 44 Cells
+14.67% Coverage
+Duration: 21 seconds
+Sending FORWARD
+don
+don
+Move: F
+data;14.38_13.82_14.04_6.10_16.13_209.4
+V: 1
+V: 1
+V: 1
+V: 1
+V: 2
+V: 21
+don
+MDF2
+00000000000000000000010000000000000000000000001111111111
+56
+don
+Explored: 49 Cells
+16.33% Coverage
+Duration: 25 seconds
+Sending TURNRIGHT
+don
+don
+Move: R
+data;44.63_89.84_104.50_13.58_26.44_87.4
+V: 4
+V: 9
+V: 10
+V: 1
+V: 3
+V: 9
+don
+MDF2
+00000000000000000000010000000000000000000000001111111111
+56
+don
+Sending FORWARD
+don
+don
+Move: F
+data;38.57_76.44_1412.24_13.40_24.58_71.8
+V: 4
+V: 8
+V: 141
+V: 1
+V: 2
+V: 7
+don
+MDF2
+00000000000000000000010000000000000000000000000111111111
+56
+don
+Explored: 51 Cells
+17.00% Coverage
+Duration: 31 seconds
+Sending FORWARD
+don
+don
+Move: F
+data;37.53_126.94_222.19_12.72_24.58_19.0
+V: 4
+V: 13
+V: 22
+V: 1
+V: 2
+V: 2
+don
+MDF2
+00000000000000000000010001000000000000000000000000111111
+56
+don
+Explored: 55 Cells
+18.33% Coverage
+Duration: 34 seconds
+Sending FORWARD
+don
+don
+Move: F
+data;39.29_156.87_162.19_46.38_25.40_19.2
+V: 4
+V: 16
+V: 16
+V: 5
+V: 3
+V: 2
+don
+MDF2
+0000000000000000000001000110000000000000000000000000001111101111
+64
+don
+Explored: 60 Cells
+20.00% Coverage
+Duration: 38 seconds
+Sending FORWARD
+don
+don
+Move: F
+data;30.10_53.46_625.17_136.45_23.08_19.6
+V: 3
+V: 5
+V: 63
+V: 14
+V: 2
+V: 2
+don
+MDF2
+000000000000000000000100011100000000000000000000000000000001111100111111
+72
+don
+Explored: 66 Cells
+22.00% Coverage
+Duration: 41 seconds
+Sending FORWARD
+don
+don
+Move: F
+data;27.40_45.39_80.10_265.63_21.95_56.7
+V: 3
+V: 5
+V: 8
+V: 27
+V: 2
+V: 6
+don
+MDF2
+000000000000000000000100011100000000000000000000000000000000000011111000
+72
+don
+Explored: 72 Cells
+24.00% Coverage
+Duration: 44 seconds
+Sending TURNLEFT
+don
+don
+Move: L
+data;25.95_40.34_121.45_187.92_21.23_67.8
+V: 3
+V: 4
+V: 12
+V: 19
+V: 2
+V: 7
+don
+MDF2
+00000000000000000000010001110000000000000000000000000000000000000111110001111111
+80
+don
+Sending FORWARD
+don
+don
+Move: F
+data;27.99_54.05_562.21_83.08_21.53_33.0
+V: 3
+V: 5
+V: 56
+V: 8
+V: 2
+V: 3
+don
+MDF2
+00000000000000000000010001110000000000000000000000000000000000000011111000000011
+80
+don
+Explored: 78 Cells
+26.00% Coverage
+Duration: 51 seconds
+Sending FORWARD
+don
+don
+Move: F
+data;32.00_74.20_222.19_72.25_23.08_34.3
+V: 3
+V: 7
+V: 22
+V: 7
+V: 2
+V: 3
+don
+MDF2
+0000000000000000000001000111000000000000000000000000000000000000001111100000000000001111
+88
+don
+Explored: 84 Cells
+28.00% Coverage
+Duration: 55 seconds
+Sending FORWARD
+don
+don
+Move: F
+data;26.30_40.69_71.08_10.58_20.83_26.9
+V: 3
+V: 4
+V: 7
+V: 1
+V: 2
+V: 3
+don
+MDF2
+000000000000000000000100011100000000000000000000000000000000000000111110000000000010000000111111
+96
+don
+Explored: 90 Cells
+30.00% Coverage
+Duration: 58 seconds
+Sending FORWARD
+don
+don
+Move: F
+data;29.44_55.90_562.21_34.31_23.08_28.2
+V: 3
+V: 6
+V: 56
+V: 3
+V: 2
+V: 3
+don
+MDF2
+000000000000000000000100011100000000000000000000000000000000000000111110000000000010000000000000
+96
+don
+Explored: 96 Cells
+32.00% Coverage
+Duration: 61 seconds
+Sending FORWARD
+don
+don
+Move: F
+data;25.95_40.69_167.24_84.66_21.53_93.9
+V: 3
+V: 4
+V: 17
+V: 8
+V: 2
+V: 9
+don
+MDF2
+00000000000000000000010001110000000000000000000000000000000000000011111000000000001000000000000000000011
+104
+don
+Explored: 102 Cells
+34.00% Coverage
+Duration: 64 seconds
+Sending FORWARD
+don
+don
+Move: F
+data;18.17_21.14_46.12_1131.52_18.05_64.7
+V: 2
+V: 2
+V: 5
+V: 113
+V: 2
+V: 6
+don
+MDF2
+0000000000000000000001000111000000000000000000000000000000000000001111100000000000100000000000000000000000001111
+112
+don
+Explored: 108 Cells
+36.00% Coverage
+Duration: 67 seconds
+Sending TURNLEFT
+don
+don
+Move: L
+data;25.78_40.34_5.78_282.28_21.03_37.6
+V: 3
+V: 4
+V: 1
+V: 28
+V: 2
+V: 4
+don
+MDF2
+0000000000000000000001000111000000000000000000000000000000000000001111100000000000100000000000000000100000000111
+112
+don
+Explored: 109 Cells
+36.33% Coverage
+Duration: 71 seconds
+Sending TURNLEFT
+don
+don
+Move: L
+data;43.73_1872.80_562.21_347.61_25.84_46.9
+V: 4
+V: 187
+V: 56
+V: 35
+V: 3
+V: 5
+don
+MDF2
+0000000000000000000001000111000000000000000000000000000000000000001111100000000000100000000000000000010000000011
+112
+don
+Sending FORWARD
+don
+don
+Move: F
+data;42.43_465.20_108.86_187.92_24.85_46.1
+V: 4
+V: 47
+V: 11
+V: 19
+V: 2
+V: 5
+don
+MDF2
+0000000000000000000001000111000000000000000000000000000000000000001111100000000000100000000000000000001000000001
+112
+don
+Explored: 111 Cells
+37.00% Coverage
+Duration: 77 seconds
+Sending TURNLEFT
+don
+don
+Move: L
+data;36.87_177.63_1884.49_84.66_24.19_4030.8
+V: 4
+V: 18
+V: 188
+V: 8
+V: 2
+V: 403
+don
+MDF2
+0000000000000000000001000111000000000000000000000000000000000000001111100000000000100000000000000000001000000001
+112
+don
+Sending FORWARD
+don
+don
+Move: F
+data;30.33_65.51_85.47_72.25_22.61_4030.8
+V: 3
+V: 7
+V: 9
+V: 7
+V: 2
+V: 403
+don
+MDF2
+0000000000000000000001000111000000000000000000000000000000000000001111100000000000100000000000000000001000000001
+112
+don
+Explored: 111 Cells
+37.00% Coverage
+Duration: 83 seconds
+Sending TURNLEFT
+don
+don
+Move: L
+data;26.66_45.39_47.99_180.37_21.23_66.2
+V: 3
+V: 5
+V: 5
+V: 18
+V: 2
+V: 7
+don
+MDF2
+0000000000000000000001000111000000000000000000000000000000000000001111100000000000100000000000000000000100000000
+112
+don
+Sending FORWARD
+don
+don
+Move: F
+data;24.63_33.79_41.22_187.92_20.64_69.5
+V: 2
+V: 3
+V: 4
+V: 19
+V: 2
+V: 7
+don
+MDF2
+000000000000000000000100011100000000000000000000000000000000000000111110000000000010000000000000000000001000000000011111
+120
+don
+Explored: 115 Cells
+38.33% Coverage
+Duration: 90 seconds
+Sending TURNLEFT
+don
+don
+Move: L
+data;21.29_28.93_36.00_155.38_19.06_36.1
+V: 2
+V: 3
+V: 4
+V: 16
+V: 2
+V: 4
+don
+MDF2
+000000000000000000000100011100000000000000000000000000000000000000111110000000000010000000000000000000001000000000001111
+120
+don
+Sending FORWARD
+don
+don
+Move: F
+data;26.48_41.78_23.71_180.37_21.33_38.7
+V: 3
+V: 4
+V: 2
+V: 18
+V: 2
+V: 4
+don
+MDF2
+000000000000000000000100011100000000000000000000000000000000000000111110000000000010000000000000000000001000000000000111
+120
+don
+Explored: 117 Cells
+39.00% Coverage
+Duration: 97 seconds
+Sending TURNLEFT
+don
+don
+Move: L
+data;42.43_1872.80_1884.49_322.72_25.12_44.5
+V: 4
+V: 187
+V: 188
+V: 32
+V: 3
+V: 4
+don
+MDF2
+000000000000000000000100011100000000000000000000000000000000000000111110000000000010000000000000000000001000000000000111
+120
+don
+Sending FORWARD
+don
+don
+Move: F
+data;44.63_1872.80_118.71_140.74_25.69_35.3
+V: 4
+V: 187
+V: 12
+V: 14
+V: 3
+V: 4
+don
+MDF2
+000000000000000000000100011100000000000000000000000000000000000000111110000000000010000000000000000000001000000000000111
+120
+don
+Explored: 117 Cells
+39.00% Coverage
+Duration: 103 seconds
+Sending TURNLEFT
+don
+don
+Move: L
+data;37.20_140.37_54.55_112.43_24.32_4030.8
+V: 4
+V: 14
+V: 5
+V: 11
+V: 2
+V: 403
+don
+MDF2
+000000000000000000000100011100000000000000000000000000000000000000111110000000000010000000000000000000001000000000000111
+120
+don
+Sending FORWARD
+don
+don
+Move: F
+data;43.28_54.05_63.79_77.29_25.26_3022.3
+V: 4
+V: 5
+V: 6
+V: 8
+V: 3
+V: 302
+don
+MDF2
+000000000000000000000100011100000000000000000000000000000000000000111110000000000010000000000000000000001000000000000111
+120
+don
+Explored: 117 Cells
+39.00% Coverage
+Duration: 109 seconds
+Sending TURNLEFT
+don
+don
+Move: L
+data;29.88_59.98_53.34_282.28_22.28_68.3
+V: 3
+V: 6
+V: 5
+V: 28
+V: 2
+V: 7
+don
+MDF2
+000000000000000000000100011100000000000000000000000000000000000000111110000000000010000000000000000000001000000000000111
+120
+don
+Sending FORWARD
+don
+don
+Move: F
+data;26.84_43.72_42.74_282.28_21.53_1097.2
+V: 3
+V: 4
+V: 4
+V: 28
+V: 2
+V: 110
+don
+MDF2
+000000000000000000000100011100000000000000000000000000000000000000111110000000000010000000000000000000001000000000000111
+120
+don
+Explored: 117 Cells
+39.00% Coverage
+Duration: 116 seconds
+Sending TURNLEFT
+don
+don
+Move: L
+data;44.63_1872.80_67.25_78.66_25.12_37.8
+V: 4
+V: 187
+V: 7
+V: 8
+V: 3
+V: 4
+don
+MDF2
+000000000000000000000100011100000000000000000000000000000000000000111110000000000010000000000000000000001000000000000111
+120
+don
+Sending FORWARD
+don
+don
+Move: F
+data;32.78_89.84_52.76_160.96_22.73_42.1
+V: 3
+V: 9
+V: 5
+V: 16
+V: 2
+V: 4
+don
+MDF2
+000000000000000000000100011100000000000000000000000000000000000000111110000000000010000000000000000000001000000000000111
+120
+don
+Explored: 117 Cells
+39.00% Coverage
+Duration: 122 seconds
+FP init
+5,6
+visiting(5,6)
+visiting(5,5)
+visiting(6,6)
+visiting(7,6)
+visiting(8,6)
+visiting(9,6)
+visiting(10,6)
+visiting(11,6)
+visiting(12,6)
+visiting(4,6)
+visiting(12,5)
+visiting(12,4)
+visiting(12,3)
+visiting(12,2)
+visiting(12,1)
+visiting(11,5)
+visiting(11,4)
+visiting(11,3)
+visiting(11,2)
+visiting(11,1)
+visiting(11,7)
+visiting(10,7)
+visiting(9,7)
+visiting(8,7)
+visiting(7,7)
+visiting(6,7)
+visiting(5,7)
+visiting(5,8)
+visiting(6,8)
+visiting(7,8)
+visiting(8,8)
+visiting(9,8)
+visiting(10,8)
+visiting(4,7)
+visiting(13,1)
+visiting(14,1)
+visiting(15,1)
+visiting(16,1)
+visiting(17,1)
+visiting(18,1)
+
+Looped 40 times.
+The number of steps is: 18
+
+Path:
+(5, 6) --> (6, 6) --> (7, 6) --> (8, 6) --> (9, 6) --> (10, 6) --> (11, 6) --> (12, 6) --> (12, 5) --> (12, 4) --> (12, 3) --> (12, 2) --> (12, 1) --> (13, 1) --> (14, 1) --> (15, 1) --> (16, 1) --> (17, 1) --> (18, 1)
+
+executing
+5,6
+Target Direction: DOWN, Bot DirectionLEFT
+Movement L from (5, 6) to (6, 6)
+Move: L
+Movement F from (5, 6) to (6, 6)
+Move: F
+Movement F from (6, 6) to (7, 6)
+Move: F
+Movement F from (7, 6) to (8, 6)
+Move: F
+Movement F from (8, 6) to (9, 6)
+Move: F
+Movement F from (9, 6) to (10, 6)
+Move: F
+Movement F from (10, 6) to (11, 6)
+Move: F
+Movement F from (11, 6) to (12, 6)
+Move: F
+Target Direction: LEFT, Bot DirectionDOWN
+Movement R from (12, 6) to (12, 5)
+Move: R
+Movement F from (12, 6) to (12, 5)
+Move: F
+Movement F from (12, 5) to (12, 4)
+Move: F
+Movement F from (12, 4) to (12, 3)
+Move: F
+Movement F from (12, 3) to (12, 2)
+Move: F
+Movement F from (12, 2) to (12, 1)
+Move: F
+Target Direction: DOWN, Bot DirectionLEFT
+Movement L from (12, 1) to (13, 1)
+Move: L
+Movement F from (12, 1) to (13, 1)
+Move: F
+Movement F from (13, 1) to (14, 1)
+Move: F
+Movement F from (14, 1) to (15, 1)
+Move: F
+Movement F from (15, 1) to (16, 1)
+Move: F
+Movement F from (16, 1) to (17, 1)
+Move: F
+Movement F from (17, 1) to (18, 1)
+Move: F
+DOWN
+
+Movements: LFFFFFFFRFFFFFLFFFFFF
+LFFFFFFFRFFFFFLFFFFFF
+Attempting moveBotfromString
+LFFFFFFFRFFFFFLFFFFFF
+Message sent to Android
+Message sent to Arduino
+Move: L
+Move: L
+Move: F
+Move: F
+Move: F
+Move: F
+Move: F
+Move: F
+Move: F
+Move: F
+Move: F
+Move: F
+Move: F
+Move: F
+Move: F
+Move: F
+Move: R
+Move: R
+Move: F
+Move: F
+Move: F
+Move: F
+Move: F
+Move: F
+Move: F
+Move: F
+Move: F
+Move: F
+Move: L
+Move: L
+Move: F
+Move: F
+Move: F
+Move: F
+Move: F
+Move: F
+Move: F
+Move: F
+Move: F
+Move: F
+Move: F
+Move: F
+moveBotfromString successful!
+Exploration Complete...
+Explored: 117 Cells
+39.00% Coverage
+Duration: 134 seconds
+Sending TURNLEFT
+r0
