@@ -272,8 +272,13 @@ public class FastestPath {
 		}
 
 		for(MOVEMENT m : movementList){
-			System.out.println("Move: " + MOVEMENT.print(m));
+			try {
+				TimeUnit.MILLISECONDS.sleep(50);
+			} catch (Exception e){
+				System.out.println("moveCharsfromString : Sleep did not work");
+			}
 			bot.move(m);
+			System.out.println("Move: " + MOVEMENT.print(m));
 		}
 
 	}
