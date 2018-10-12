@@ -9,17 +9,15 @@ import robot.RobotConstant.DIRECTION;
 import robot.RobotConstant.MOVEMENT;
 import utility.Comms;
 import utility.MapDescriptor;
-import map.Tile;
 
 /**
  * @author 18/19 S1 G3
  */
 public class Robot {
 
-	// Robot
-	private int robotRow; // Coordinate of centre component
-	private int robotCol; // Coordinate of centre component
-	private DIRECTION robotDir;
+	// Variables
+	private int robotRow, robotCol; // centre component coordinate
+	private DIRECTION robotDir; // direction robot face
 	private boolean realBot;
 	private int speed;
 
@@ -36,7 +34,6 @@ public class Robot {
 	 * (Legend) 
 	 *  S = Short-Range
 	 * 	L = Long-Range
-	 *  U = Ultra-Range
 	 */
 
 	private final Sensor SRFrontLeft;		// S2
@@ -48,18 +45,17 @@ public class Robot {
 
 	// Constructor(s)
 	/**
-	 * Instantiate a robot 'placed' at coordinate [col(y),row(x)]
-	 * facing up (default), with 6 sensors
-	 * @param startRow Centre row(y)-coordinate of Robot
-	 * @param startCol Centre col(x)-coordinate of Robot
-	 * @param isReal
+	 * Initialise robot at [robotRow, robotCol], face up
+	 * @param startRow Centre component row (y) coordinate 
+	 * @param startCol Centre component col (x) coordinate
+	 * @param isRealRobot If set to true, robot assumes physically integrated functions, pure virtual simulation otherwise
 	 */
-	public Robot (int startRow, int startCol, boolean isReal){
+	public Robot (int startRow, int startCol, boolean isRealRobot) {
 		robotRow = startRow;
 		robotCol = startCol;
 		robotDir = RobotConstant.DEFAULT_START_DIR;
 		speed = RobotConstant.SPEED;
-		realBot = isReal;
+		realBot = isRealRobot;
 
 		int srLowerLimit = SensorConstant.SR_LOWER;
 		int srUpperLimit = SensorConstant.SR_UPPER;
@@ -74,14 +70,12 @@ public class Robot {
 		LRRight = new Sensor(lrLowerLimit, lrUpperLimit, robotRow, robotCol+1, DIRECTION.RIGHT, "L1");
 	}
 
-
 	/**
-	 * Instantiate a robot 'placed' at coordinate [row(y),col(x)]
-	 * facing in set direction, with an blank map
-	 * @param startRow Centre row(y)-coordinate of Robot
-	 * @param startCol Centre col(x)-coordinate of Robot
-	 * @param isReal
-	 * @param direction Direction Robot's facing
+	 * Initialise robot at [robotRow, robotCol], face up
+	 * @param startRow Centre component row (y) coordinate 
+	 * @param startCol Centre component col (x) coordinate
+	 * @param startDir Direction robot faces
+	 * @param isReal If set to true, robot assumes physically integrated functions, pure virtual simulation otherwise
 	 */
 	public Robot(int startRow, int startCol, DIRECTION startDir, boolean isReal) {
 		robotRow = startRow;
@@ -98,109 +92,116 @@ public class Robot {
 		SRFrontLeft = new Sensor(srLowerLimit, srUpperLimit, robotRow-1, robotCol-1, robotDir, "S2");
 		SRFrontCenter = new Sensor(srLowerLimit, srUpperLimit, robotRow-1, robotCol, robotDir, "S3");
 		SRFrontRight = new Sensor(srLowerLimit, srUpperLimit, robotRow-1, robotCol+1, robotDir, "S4");
-		SRLeft = new Sensor(srLowerLimit, srUpperLimit, robotRow-1, robotCol-1, findNewDirection(MOVEMENT.TURNLEFT), "S1");
-		SRRight = new Sensor(srLowerLimit, srUpperLimit, robotRow-1, robotCol+1, findNewDirection(MOVEMENT.TURNRIGHT), "S5");
-		LRRight = new Sensor(lrLowerLimit, lrUpperLimit, robotRow, robotCol+1, findNewDirection(MOVEMENT.TURNRIGHT), "L1");
+		SRLeft = new Sensor(srLowerLimit, srUpperLimit, robotRow-1, robotCol-1, findTurnDirection(MOVEMENT.TURNLEFT), "S1");
+		SRRight = new Sensor(srLowerLimit, srUpperLimit, robotRow-1, robotCol+1, findTurnDirection(MOVEMENT.TURNRIGHT), "S5");
+		LRRight = new Sensor(lrLowerLimit, lrUpperLimit, robotRow, robotCol+1, findTurnDirection(MOVEMENT.TURNRIGHT), "L1");
 	} 
 
 
 	// Getter(s)
 	/**
-	 * 
-	 * @param row
-	 * @param col
-	 * @return
-	 */
-	public boolean isAtPos(int row, int col){
-		return (robotRow == row && robotCol == col);
-	}
-
-	/**
-	 * 
-	 * @return
+	 * Returns centre component row (y) coordinate
+	 * @return centre component row coordinate
 	 */
 	public int getRobotRow() {
 		return robotRow;
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Returns centre component col (x) coordinate
+	 * @return centre component col coordinate
 	 */
 	public int getRobotCol() {
 		return robotCol;
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Returns direction robot faces
+	 * @return direction robot faces
 	 */
 	public DIRECTION getRobotDir() {
 		return robotDir;
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Returns true if robot is initialised with physically integrated functions
+	 * @return true if robot is initialised with physically integrated functions, false otherwise
 	 */
 	public boolean isRealBot() {
 		return realBot;
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Returns robot's speed
+	 * @return robot's speed
 	 */
 	public int getRobotSpeed() {
 		return speed;
 	}
 
+	/**
+	 * Returns true if robot is at [row (y), col (y)]
+	 * @param row Centre component row (y) coordinate 
+	 * @param col Centre component col (x) coordinate
+	 * @return true if robot is at [row, col], false otherwise
+	 */
+	public boolean isAtPos(int row, int col) {
+		return (robotRow == row && robotCol == col);
+	}
+
 
 	// Setter
-	public void setBotPos(int row, int col){
-		robotRow = row;
-		robotCol = col;
-	}
 	/**
-	 * 
-	 * @param robotRow
+	 * Set centre component's row (y) coordinate
+	 * @param newRow Intended centre component row coordinate
 	 */
 	public void setRobotRow(int newRow) {
 		robotRow = newRow;
 	}
 
 	/**
-	 * 
-	 * @param robotCol
+	 * Set centre component's col (x) coordinate
+	 * @param robotCol Intended centre component col coordinate
 	 */
 	public void setRobotCol(int newCol) {
 		robotCol = newCol;
 	}
 
 	/**
-	 * 
-	 * @param newDir
+	 * Set direction robot faces
+	 * @param newDir Intended direction robot faces
 	 */
 	public void setRobotDir(DIRECTION newDir) {
 		robotDir = newDir;
 	}
 
 	/**
-	 * 
-	 * @param robotSpeed
+	 * Set robot speed
+	 * @param newSpeed Intended robot speed
 	 */
-	public void setRobotSpeed (int robotSpeed) {
-		speed = robotSpeed;
+	public void setRobotSpeed (int newSpeed) {
+		speed = newSpeed;
+	}
+
+	/**
+	 * Set centre component's coordinates at [row (y), col (x)]
+	 * @param newRow Intended centre component row coordinate 
+	 * @param newCol Intended centre component col coordinate
+	 */
+	public void setBotPos(int newRow, int newCol) {
+		robotRow = newRow;
+		robotCol = newCol;
 	}
 
 
 	// Other Function(s)
 	/**
-	 * 
-	 * @param m
-	 * @param sendToAndroid
+	 * Execute robot's move functions
+	 * @param m Intended robot's movement
+	 * @param sendArduino If set to true, move command is transmitted to Arduino module (physically integrated function)
+	 * @param sendAndroid If set to true, move command is transmitted to Android module (physically integrated function)
 	 */
-	public void move(MOVEMENT m, boolean sendToAndroid, boolean real) {
+	private void move(MOVEMENT m, boolean sendArduino, boolean sendAndroid) {
 
 		// Simulate Real-Time Movement
 		if (!realBot) 
@@ -242,7 +243,7 @@ public class Robot {
 			break;
 		case TURNLEFT:
 		case TURNRIGHT:
-			robotDir = updateTurnDirection(m);
+			robotDir = findTurnDirection(m);
 			break;
 		case CALIBRATE:
 			break;  
@@ -251,65 +252,58 @@ public class Robot {
 			break;
 		}
 
-		if (realBot) {
-			if (real) {
-				System.out.println("Sending "+m.toString());
-				sendInstruction(m, sendToAndroid);
+		if (realBot)
+			if (sendArduino) {
+				System.out.println("Sending "+ m.toString());
+				sendInstruction(m, sendAndroid);
 			}
-		}
+
 		System.out.println("Move: " + MOVEMENT.print(m));
 
 	}
 
 	/**
-	 * 
-	 * @param m
+	 * Execute robot's move functions (physically integrated function)
+	 * @param m Intended robot's movement
 	 */
-	public void move(MOVEMENT m){
-		move(m,realBot,true);
-	}
-	
-	public void moveDigital(MOVEMENT m) {
-		move(m,realBot,false);
+	public void move(MOVEMENT m) {
+		move(m, true, true);
 	}
 
 	/**
-	 * 
-	 * @param m
-	 * @return
+	 * Execute robot's move functions on simulator only
+	 * @param m Intended robot's movement
 	 */
-	private DIRECTION updateTurnDirection(MOVEMENT m){
+	public void moveDigital(MOVEMENT m) {
+		move(m, false, false);
+	}
+
+	/**
+	 * Execute robot's turn function
+	 * @param m Intended robot's turn type (either TURNLEFT or TURNRIGHT)
+	 * @return Robot's new direction after turn function execution
+	 */
+	private DIRECTION findTurnDirection(MOVEMENT m) {
 		if (m == MOVEMENT.TURNLEFT) return DIRECTION.getLeft(robotDir);
 		else return DIRECTION.getRight(robotDir);
 	}
 
 	/**
-	 * Uses the current direction of the robot and the given movement to find the new direction of the robot
-	 * @param m
-	 * @return
+	 * 
 	 */
-	private DIRECTION findNewDirection(MOVEMENT m) {
-		if (m == MOVEMENT.TURNRIGHT) return DIRECTION.getRight(robotDir);
-		else return DIRECTION.getLeft(robotDir);
-	}
-
-	public void reAlign(){
-		if(robotRow==MapConstant.START_GRID_ROW && robotCol==MapConstant.START_GRID_COL){
-			//send start pos to android
+	public void reAlign() {
+		if (robotRow == MapConstant.START_GRID_ROW && robotCol == MapConstant.START_GRID_COL) {
+			// send start pos to android
 			int dirInt = DIRECTION.toInt(robotDir);
 			System.out.println(Comms.encodeCoor(robotRow, robotCol,dirInt));
-			//				Comms.sendMsg(Comms.ANDROID, Comms.POS, Comms.encodeCoor(robotRow, robotCol,dirInt));
-		}
-		else{
-			System.out.println("alignment error");
-		}
-		return;
+			// Comms.sendMsg(Comms.ANDROID, Comms.POS, Comms.encodeCoor(robotRow, robotCol,dirInt));
+		} else System.out.println("alignment error");
 	}
 
 	/**
-	 * Execute simulated 'sense' function for all 6 sensors
-	 * @param mapExplore
-	 * @param mapActual
+	 * Execute simulated sensor functions
+	 * @param mapExplore Map used to track visited tiles and respective types of reference map
+	 * @param mapActual Reference map, substitute of physical environment
 	 */
 	public void multiSense(Map mapExplore, Map mapActual) {
 		SRFrontLeft.sense(mapExplore, mapActual);
@@ -321,16 +315,20 @@ public class Robot {
 	}
 
 	/**
-	 * Execute physical 'sense' function for all 6 sensors
-	 * @param mapExplore
+	 * Execute sensor function (physically integrated function)
+	 * @param mapExplore Map used to track visited tiles and respective types of physical environment
 	 */
 	public void multiSense(Map mapExplore) {
 		int[] result = new int[6];
 		StringBuilder sb = new StringBuilder();
 		String str; String[] strArr;
+
+		// Request Sensor Data in P;SDATA;<>_<>_<>_<>_<>_<>
 		Comms.sendMsg(Comms.ARDUINO, Comms.INS, Comms.SENSE);
+
+		// Process Sensor Data
 		str = Comms.getArdReceipt(Comms.SENSOR_DATA);
-		strArr = str.split(";"); // P;SDATA;<>_<>_<>
+		strArr = str.split(";");
 
 		if (strArr[0].equals(Comms.SENSOR_DATA)) {
 			str = strArr[1];
@@ -342,6 +340,7 @@ public class Robot {
 			result[5] = (int) rounding(str.split("_")[5]);
 		}
 
+		// Use sensor values and update mapExplore
 		SRFrontLeft.sense(mapExplore, result[0]);
 		SRFrontCenter.sense(mapExplore, result[1]);
 		SRFrontRight.sense(mapExplore, result[2]);
@@ -356,8 +355,8 @@ public class Robot {
 		Comms.sendMsg(Comms.ANDROID, Comms.MAP, sb.toString());
 		Comms.getAndReceipt(Comms.DONE);
 		sb.setLength(0);
-		// Send MDF2
 
+		// Send MDF2
 		sb.append("2:");
 		sb.append(MapDescriptor.generateMDFHex2(mapExplore));
 		sb.append("/");
@@ -367,18 +366,18 @@ public class Robot {
 	}
 
 	/**
-	 * 
-	 * @param val
-	 * @return
+	 * Returns a rounded up or down integer used in determining the presence of an obstacle
+	 * @param value String value from sensor
+	 * @return a rounded up or down integer
 	 */
-	private int rounding(String val) {
-		double num = Double.parseDouble(val);
+	private int rounding(String value) {
+		double num = Double.parseDouble(value);
 		System.out.println("V: " + (Math.round(num / 10.0)));
 		return (int) (Math.round(num / 10.0));
 	}
 
 	/**
-	 * 
+	 * Update sensor's coordinates when a robot executes a turn (either TURNLEFT or TURNRIGHT) function
 	 */
 	public void moveSensor() {
 		switch (robotDir) {
@@ -418,9 +417,9 @@ public class Robot {
 	}
 
 	/**
-	 * 
-	 * @param m
-	 * @param sendMovetoAndroid
+	 * Transmits movement command to Arduino module and optionally, to Android module (physically integrated function)
+	 * @param m Intended robot's movement function
+	 * @param sendAndroidBool If set to true, movement command is transmitted to Android module
 	 */
 	private void sendInstruction(MOVEMENT m, boolean sendAndroidBool) {
 		try {
@@ -434,8 +433,7 @@ public class Robot {
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println("Error sending instruction");
-			//e.printStackTrace();
+			System.err.println("Error sending instruction");
 		}
 
 	}
