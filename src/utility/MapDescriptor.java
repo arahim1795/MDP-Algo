@@ -147,7 +147,6 @@ public class MapDescriptor {
 	}
 
 	public static String generateMDFString2(Map map){
-		System.out.println("MDF2");
 		StringBuilder mapString = new StringBuilder("");
 		for(int row = 0; row<MapConstant.MAP_ROWS;row++){
 			for(int col = 0;col<MapConstant.MAP_COLS;col++){
@@ -172,8 +171,8 @@ public class MapDescriptor {
 				mapString.append("1");
 		}
 		String result = mapString.toString();
-		System.out.println(result);
-		System.out.println(result.length());
+//		System.out.println(result);
+//		System.out.println(result.length());
 		return result;
 	}
 
