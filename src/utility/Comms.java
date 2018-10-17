@@ -4,7 +4,9 @@ import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 
+import robot.RobotConstant;
 import robot.RobotConstant.DIRECTION;
 
 /**
@@ -14,41 +16,46 @@ import robot.RobotConstant.DIRECTION;
 public class Comms {
 
 	// Receipt Strings
-	public static final String DONE = "don";
-	public static final String SENSOR_DATA = "data";
+	
+	
 
 	// Major Headers
-	public static final String ARDUINO = "AAAA";
-	public static final String ANDROID = "BBBB";
 	public static final String ARDnAND = "CCCC";
 	public static final String RPI = "RRRR";
 
-	// Android Headers
-	// - to
-	public static final String MAP = "#mdB#mdf";		// + "/", send map descriptor 
-	public static final String POS = "#seB#setrobot:";	// + "/", send current bot position
-	public static final String FP = "#fp";
-	// - from
-	public static final String EX = "#exp";
+	// android
+	public static final String an = "BBBB";
+	// pc > an
+	public static final String anMdf = "BBBB#mdf";		// + "/", send map descriptor 
+	public static final String anPos = "BBBB#setrobot:";	// + "/", send current bot position
+	// an > pc
+	public static final String anDone = "#done";
+	public static final String anEx = "#exp";
+	public static final String anFp = "#fp";
+	public static final String anWp = "mp"; // set way point
+	public static final String anSp = "sp"; // set start point
+	public static final String anStart = "r1";
+	public static final String anStop = "r0";
 
-	public static final String MP = "mp";	// Android>PC - Setting Mid Point 
-	public static final String SP = "sp";	// Android>PC - Setting Mid Point 
-	public static final String START = "r1";
-	public static final String STOP = "r0";
-
-	// Arduino Headers
-	// - to
-	public static final String SET = "SET";     // PC>Arduino - Set-Up Bot
-	public static final String INS = "INSTR";      // PC>Arduino - Give Instruction
-	public static final String END = "END";
-
-	public static final String SENSE = "C"; 
+	// arduino
+	public static final String ar = "AAAA";
+	// pc > ar
+	public static final String arIns = "INSTR";      // PC>Arduino - Give Instruction
+	public static final String arEnd = "END";
+	public static final String arSense = "C";
+	public static final String arDone = "done";
+	public static final String arData = "sdata";
+	public static final String arCal = "S";
+	public static final char charCal = 'S';
+	
+	// arduino & android
 	public static final String MULTI = "MULTI"; //for mutli-movement string
 
 	// RPi Headers
-	// - to
-	public static final String C = "CAM";
+	// pc > rpi
+	public static final String rpCam = "CAM";
 
+	// Robot Information
 	private static String robotName = "192.168.3.1";
 	private static int portNum = 1224;
 
@@ -99,14 +106,14 @@ public class Comms {
 	public static boolean sendMsg(String major, String sub, String content) {
 		StringBuilder sb = new StringBuilder();
 		switch (major) {
-		case ARDUINO:
+		case ar:
 			sb.append(major);
 			sb.append("_");
 			switch (sub) {
-			case END:
-			case SET:
-			case INS:
-			case SENSE:
+			case arEnd:
+			case arIns:
+			case arSense:
+			case arCal:
 			case MULTI:
 			case "E":
 				sb.append(sub);
@@ -117,11 +124,11 @@ public class Comms {
 				return false;
 			}
 			break;
-		case ANDROID:
+		case an:
 			switch (sub) {
-			case MAP:
-			case POS:
-			case FP:
+			case anMdf:
+			case anPos:
+			case anFp:
 			case MULTI:
 				sb.append(sub);
 				break;
@@ -146,7 +153,7 @@ public class Comms {
 			sb.append(major);
 			sb.append("_");
 			switch (sub) {
-			case C:
+			case rpCam:
 				sb.append(sub);
 				sb.append("_");
 				break;
@@ -179,20 +186,30 @@ public class Comms {
 	 */
 	@SuppressWarnings("deprecation")
 	public static String receiveMsg() {
-		StringBuilder msg = new StringBuilder();
-		StringBuilder outMsg = new StringBuilder();
+		String msg;
+		StringBuilder msgBuilder = new StringBuilder();
+		
 		try {
-			msg.append(is.readLine());
-
+			msgBuilder.append(is.readLine());
 		} catch (IOException e) {
 			System.err.println(e);
 		}
-
-		for(int i=2;i<msg.length()-1;i++){
-			outMsg.append(msg.charAt(i));
-		}	
-		return outMsg.toString();
-
+		
+		msg = msgBuilder.toString().toLowerCase();
+		
+		if (msg.contains(";")) {
+			String[] strArr = msg.split(";");
+			StringBuilder outMsg = new StringBuilder();
+			for (String s : strArr) {
+				outMsg.append(s);
+				outMsg.append(";");
+			}
+			return outMsg.toString();
+		}
+		
+		if (msg.contains("#")) return msg;
+		
+		return "Error";
 	}
 
 	/**
@@ -203,7 +220,6 @@ public class Comms {
 		return robotComms == null && is == null && os == null;
 	}
 
-	// TODO complete method
 	public static int readCoor(String pos, String s){
 		int ptr=0;
 		StringBuilder result = new StringBuilder("");
@@ -269,7 +285,7 @@ public class Comms {
 		String str;
 		String[] strArr;
 		while (true) {
-			str = Comms.receiveMsg().toLowerCase();
+			str = Comms.receiveMsg();
 			System.out.println(str);
 			strArr = str.split(";");
 			if (strArr[0].equals(expMsg.toLowerCase())) break;
@@ -285,5 +301,13 @@ public class Comms {
 			if (str.equals(expMsg.toLowerCase())) break;
 		}
 		return str;
+	}
+	
+	public static void sleepWait() {
+		try {
+			TimeUnit.MILLISECONDS.sleep(RobotConstant.SPEED);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 }

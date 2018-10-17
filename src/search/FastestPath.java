@@ -65,12 +65,12 @@ public class FastestPath {
 		this.exploredMap = map;
 
 		//init dummy
-		this.dummyBot = new Robot(bot.getRobotRow(),bot.getRobotCol(),bot.getRobotDir(),false);
+		this.dummyBot = new Robot(false, bot.getRow(), bot.getCol(), bot.getDir(), null);
 		//init arrays
 		initArrays();
 
 		//initialize robot orientation
-		initCurrent(bot.getRobotRow(),bot.getRobotCol(),bot.getRobotDir());
+		initCurrent(bot.getRow(),bot.getCol(),bot.getDir());
 
 		initGCosts(this.current);
 
@@ -84,7 +84,7 @@ public class FastestPath {
 	public void fpDiag_Init(){
 		System.out.println("==========FP DIAG==============");
 		System.out.println("Robot");
-		System.out.println(bot.getRobotRow()+","+bot.getRobotCol()+","+bot.getRobotDir());
+		System.out.println(bot.getRow()+","+bot.getCol()+","+bot.getDir());
 		System.out.println("Current");
 		System.out.println(current.getRow()+","+current.getCol());
 		System.out.println(curDir);
@@ -129,7 +129,7 @@ public class FastestPath {
 		//
 		toVisit.add(current);
 		//initialize starting point
-		gCosts[bot.getRobotRow()][bot.getRobotCol()] = 0;
+		gCosts[bot.getRow()][bot.getCol()] = 0;
 
 	}
 
@@ -273,7 +273,7 @@ public class FastestPath {
 
 		for(MOVEMENT m : movementList){
 			System.out.println("Move: " + MOVEMENT.print(m));
-			bot.move(m);
+			bot.move(m, true, true);
 		}
 
 	}
@@ -324,7 +324,7 @@ public class FastestPath {
 	//overloaded method 
 	public String searchFastestPath(int startRow, int startCol, int goalRow, int goalCol){
 		initArrays();
-		initCurrent(startRow,startCol,dummyBot.getRobotDir());
+		initCurrent(startRow,startCol,dummyBot.getDir());
 		initGCosts(exploredMap.getTile(startRow, startCol));
 		dummyBot.setBotPos(startRow, startCol);
 		return searchFastestPath(goalRow,goalCol);
@@ -470,38 +470,38 @@ public class FastestPath {
 		DIRECTION targetDir;
 
 		ArrayList<MOVEMENT> movementList = new ArrayList<>();
-		Robot tempBot = new Robot(dummyBot.getRobotRow(),dummyBot.getRobotCol(),dummyBot.getRobotDir(), false);
-		System.out.println(dummyBot.getRobotRow()+","+dummyBot.getRobotCol());
+		Robot tempBot = new Robot(dummyBot.isRealBot(), dummyBot.getRow(), dummyBot.getCol(), dummyBot.getDir(), dummyBot.getSpeed());
+		System.out.println(dummyBot.getRow()+","+dummyBot.getCol());
 		//tempBot.setSpeed(0);
 		//while robot position not on goal tile
-		while((tempBot.getRobotRow()!= goalRow) || (tempBot.getRobotCol()!= goalCol)){
+		while((tempBot.getRow()!= goalRow) || (tempBot.getCol()!= goalCol)){
 			//if robot on path tile
-			if(tempBot.getRobotRow()==temp.getRow() && tempBot.getRobotCol()==temp.getCol()){
+			if(tempBot.getRow()==temp.getRow() && tempBot.getCol()==temp.getCol()){
 				temp = path.pop();
 			}
-			targetDir = getTargetDirection(tempBot.getRobotRow(),tempBot.getRobotCol(),tempBot.getRobotDir(),temp);
+			targetDir = getTargetDirection(tempBot.getRow(),tempBot.getCol(),tempBot.getDir(),temp);
 
 			MOVEMENT m;
 
 			//if robot not facing correct direction, orientate robot
-			if(tempBot.getRobotDir() != targetDir){
-				System.out.println("Target Direction: "+targetDir+", Bot Direction"+tempBot.getRobotDir());
-				m = getTargetMove(tempBot.getRobotDir(),targetDir);
+			if(tempBot.getDir() != targetDir){
+				System.out.println("Target Direction: "+targetDir+", Bot Direction"+tempBot.getDir());
+				m = getTargetMove(tempBot.getDir(),targetDir);
 			}else{
 				m = MOVEMENT.FORWARD;
 			}
 
-			System.out.println("Movement " + MOVEMENT.print(m) + " from (" + tempBot.getRobotRow()+ ", " + tempBot.getRobotCol() + ") to (" + temp.getRow() + ", " + temp.getCol() + ")");
+			System.out.println("Movement " + MOVEMENT.print(m) + " from (" + tempBot.getRow()+ ", " + tempBot.getCol() + ") to (" + temp.getRow() + ", " + temp.getCol() + ")");
 
 			//TODO : move method in Robot class
-			tempBot.move(m);
+			tempBot.move(m, true, true);
 			movementList.add(m);
 			outputString.append(MOVEMENT.print(m));
 
 		}
 		//store current direction
-		System.out.println(tempBot.getRobotDir());
-		dummyBot.setRobotDir(tempBot.getRobotDir());
+		System.out.println(tempBot.getDir());
+		dummyBot.setRobotDir(tempBot.getDir());
 
 		if(!bot.isRealBot()||this.exploreMode){
 			for (MOVEMENT n : movementList){
@@ -512,7 +512,7 @@ public class FastestPath {
 					}
 				}
 				if(moveBot){
-					bot.move(n);
+					bot.move(n, true, true);
 					exploredMap.repaint();
 				}
 
@@ -629,10 +629,10 @@ public class FastestPath {
 
 	//determines if path ahead can be traversed
 	private boolean canMoveForward() {
-		int row = bot.getRobotRow();
-		int col = bot.getRobotCol();
+		int row = bot.getRow();
+		int col = bot.getCol();
 		int rowMIN=-5,rowMAX=-5,colMIN=-5,colMAX=-5;
-		switch (bot.getRobotDir()) {
+		switch (bot.getDir()) {
 
 		case UP:
 			rowMIN=-2;rowMAX=-2;colMIN=-1;colMAX=1;break;          
@@ -772,7 +772,7 @@ public class FastestPath {
 
 	public void printDecisionlog(Tile g){
 		for(Tile t : toVisit){
-			System.out.println("toVisit: "+t.getRow()+","+t.getCol()+" : "+getGCost(t, g, bot.getRobotDir()));
+			System.out.println("toVisit: "+t.getRow()+","+t.getCol()+" : "+getGCost(t, g, bot.getDir()));
 		}
 
 	}

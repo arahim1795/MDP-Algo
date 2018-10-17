@@ -35,7 +35,7 @@ public class Simulator {
 
 	// The robot
 	private static robot.Robot roboCop = null;
-	private static final boolean realRun = false;
+	private static final boolean realRun = true;
 	private static final int MaxExploredDuration = 330;
 	private static boolean ready = false;
 	private static boolean exploredDone = false;
@@ -49,7 +49,7 @@ public class Simulator {
 
 
 		System.out.println("Starting Simulator...");
-		roboCop = new Robot(RobotConstant.DEFAULT_START_ROW, RobotConstant.DEFAULT_START_COL, realRun);
+		roboCop = new Robot(realRun);
 
 		realMap = new Map(roboCop);
 		realMap.setAllExplored();
@@ -204,7 +204,7 @@ public class Simulator {
 					}
 					else {
 						msg = Comms.receiveMsg();
-						if(msg.equals(Comms.FP)) {
+						if(msg.equals(Comms.anFp)) {
 							fpReady = true;
 						}
 					}
@@ -275,6 +275,7 @@ public class Simulator {
 
 					else{
 						msg = Comms.receiveMsg();
+						System.out.println(msg);
 
 						//						if(msg==null){
 						//							if(nulls)
@@ -287,25 +288,25 @@ public class Simulator {
 						//							System.out.println(msg.startsWith(Comms.MP));
 						//							System.out.println(msg.startsWith(Comms.MP)||msg.startsWith(Comms.SP));
 						//						}
-						if(msg.equals(Comms.EX)){
+						if(msg.equals(Comms.anEx)){
 							exReady = true;
 						}
 
-						else if(msg.startsWith(Comms.MP)||msg.startsWith(Comms.SP)){
+						else if(msg.startsWith(Comms.anWp)||msg.startsWith(Comms.anSp)){
 							System.out.println("Setting Coordinates...");
-							if(msg.startsWith(Comms.MP)){
+							if(msg.startsWith(Comms.anWp)){
 								System.out.println("Setting MP...");
 								System.out.println(msg);
 								exploredMap.setMidPoint(Comms.readCoor("ROW", msg), Comms.readCoor("COL", msg));
 
 								System.out.println("Waypoint set: ("+Comms.readCoor("ROW", msg)+","+Comms.readCoor("COL", msg)+")");
 							}
-							else if(msg.startsWith(Comms.SP)){
+							else if(msg.startsWith(Comms.anSp)){
 								System.out.println("Setting SP");
 								roboCop.setBotPos(Comms.readCoor("ROW", msg), Comms.readCoor("COL", msg));
 								roboCop.setRobotDir(DIRECTION.fromInt(Comms.readCoor("DIR", msg)));
 								System.out.println("Start Point set: ("+Comms.readCoor("ROW", msg)+","+Comms.readCoor("COL", msg)+")");
-								System.out.println("Robot Direction set:" + roboCop.getRobotDir());
+								System.out.println("Robot Direction set:" + roboCop.getDir());
 							}
 							else
 								System.out.println("Setting Coordinates failed");
@@ -329,7 +330,7 @@ public class Simulator {
 				while(noInterrupt && !explore.runFinished()){
 					explore.explore();
 				} 
-				Comms.sendMsg(Comms.ARDUINO, Comms.INS, "E");
+				Comms.sendMsg(Comms.ar, Comms.arIns, "E");
 				explore.goToStart();
 				exploredMap.repaint();
 				System.out.println("Sending E, waiting for Fastest Path");

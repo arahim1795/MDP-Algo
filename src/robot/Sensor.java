@@ -2,6 +2,7 @@ package robot;
 
 import map.Map;
 import robot.RobotConstant.DIRECTION;
+import robot.SensorConstant.SENSORTYPE;
 
 /**
  * @author 18/19 S1 G3
@@ -9,26 +10,39 @@ import robot.RobotConstant.DIRECTION;
 public class Sensor {
 
 	// Variables
-	private final int sensorLowerLimit, sensorUpperLimit; // 1 unit = 1 10cm block
-	int sensorRow, sensorCol;
-	DIRECTION sensorDir;
-	String sensorID;
+	private int sensorLowerLimit, sensorUpperLimit;
+	private int sensorRow, sensorCol; // position
+	private DIRECTION sensorDir;
+	private final SENSORTYPE sensorType;
+	private int sensorID;
+
 
 	// Constructor
 	/**
 	 * 
-	 * @param lowerLimit
-	 * @param upperLimit
+	 * @param row
+	 * @param col
+	 * @param dir
+	 * @param type
+	 * @param id
 	 */
-	public Sensor (int lowerLimit, int upperLimit, int row, int col, DIRECTION dir, String id) {
-		sensorLowerLimit = lowerLimit;
-		sensorUpperLimit = upperLimit;
+	public Sensor (int row, int col, DIRECTION dir, SENSORTYPE type, int id) {
 		sensorRow = row;
 		sensorCol = col;
 		sensorDir = dir;
 		sensorID = id;
+		sensorType = type;
+		
+		if (type == SENSORTYPE.SHORT) {
+			sensorLowerLimit = SensorConstant.SR_LOWER;
+			sensorUpperLimit = SensorConstant.SR_UPPER;
+		} else {
+			sensorLowerLimit = SensorConstant.LR_LOWER;
+			sensorUpperLimit = SensorConstant.LR_UPPER;
+		}
 	}
 
+	
 	// Setter(s)
 	/**
 	 * 
@@ -165,8 +179,8 @@ public class Sensor {
 
 		// Update map according to sensor's value.
 		for (int i = sensorLowerLimit; i <= sensorUpperLimit; i++) {
-			row = this.sensorRow + (rowMul * i);
-			col = this.sensorCol + (colMul * i);
+			row = sensorRow + (rowMul * i);
+			col = sensorCol + (colMul * i);
 
 			if (!Map.isValidTile(row, col)) continue;
 
@@ -177,9 +191,9 @@ public class Sensor {
 				break;
 			}
 
-			// Override values set by Long Range sensor when front Short Range sensor detects discrepancies
-			boolean frontSensor = sensorID.equals("S2") || sensorID.equals("S3") || sensorID.equals("S4"); 
-			if (exploredMap.getTile(row, col).isObstacle() && frontSensor) exploredMap.setObstacleTile(row, col, false);
+			// Override values set by Long Range sensor when any short range sensor detects discrepancies 
+			if (exploredMap.getTile(row, col).isObstacle() && (sensorID == 1 || sensorID == 2 || sensorID == 3))
+				exploredMap.setObstacleTile(row, col, false);
 			else break;
 		}
 	}

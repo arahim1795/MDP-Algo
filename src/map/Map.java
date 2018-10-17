@@ -435,8 +435,8 @@ public class Map extends JPanel {
 
 
 		g.setColor(GraphicConstant.C_ROBOT);
-		int r = bot.getRobotRow();
-		int c = bot.getRobotCol();
+		int r = bot.getRow();
+		int c = bot.getCol();
 
 		//TODO dummy
 		//System.out.println(r + "," + c);
@@ -449,7 +449,7 @@ public class Map extends JPanel {
 
 		// Paint the robot's direction indicator on-screen.
 		g.setColor(GraphicConstant.C_ROBOT_DIR);
-		RobotConstant.DIRECTION d = bot.getRobotDir();
+		RobotConstant.DIRECTION d = bot.getDir();
 		switch (d) {
 		case UP:
 			g.fillOval((c) * GraphicConstant.TILE_SIZE + GraphicConstant.ROBOT_X_OFFSET, 

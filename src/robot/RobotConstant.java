@@ -2,6 +2,8 @@ package robot;
 
 import java.awt.Color;
 
+import utility.Comms;
+
 public final class RobotConstant {
 	//
 	public static final int SPEED = 100;		// delay between movements (ms)
@@ -27,7 +29,7 @@ public final class RobotConstant {
 			case TURNLEFT:
 				return "L";
 			case CALIBRATE:
-				return "C";
+				return Comms.arCal;
 			default:
 				return "E";
 			}
@@ -43,7 +45,7 @@ public final class RobotConstant {
 				return TURNRIGHT;
 			case 'L':
 				return TURNLEFT;
-			case 'C':
+			case Comms.charCal:
 				return CALIBRATE;
 			default:
 				return ERROR;

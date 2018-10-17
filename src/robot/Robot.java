@@ -7,6 +7,7 @@ import map.MapConstant;
 import robot.RobotConstant;
 import robot.RobotConstant.DIRECTION;
 import robot.RobotConstant.MOVEMENT;
+import robot.SensorConstant.SENSORTYPE;
 import utility.Comms;
 import utility.MapDescriptor;
 
@@ -23,78 +24,71 @@ public class Robot {
 
 	// Sensor(s)
 	/*
-	 * 		  ^       ^      ^
-	 * 		  S2      S3     S4
-	 * 	< S1  X   |   X  |   X  S5 >
-	 * 		  -   +   -  +   -
-	 *		  X   |   X  |   X  L1 > 
-	 * 		  -   +   -  +   -
-	 * 		  X   |   X  |   X 
+	 * 		 ^     ^     ^
+	 * 		 1     2     3
+	 * 	< 4  X  |  X  |  X  5 >
+	 * 		 -  +  -  +  -
+	 *		 X  |  X  |  X  6 > 
+	 * 		 -  +  -  +  -
+	 * 		 X  |  X  |  X 
 	 * 
 	 * (Legend) 
 	 *  S = Short-Range
 	 * 	L = Long-Range
 	 */
 
-	private final Sensor SRFrontLeft;		// S2
-	private final Sensor SRFrontCenter;		// S3
-	private final Sensor SRFrontRight;		// S4
-	private final Sensor SRLeft;			// S1
-	private final Sensor SRRight;			// S5
-	private final Sensor LRRight;			// L1
+	private final Sensor SRFrontLeft;		// 1
+	private final Sensor SRFrontCenter;		// 2
+	private final Sensor SRFrontRight;		// 3
+	private final Sensor SRLeft;			// 4
+	private final Sensor SRRight;			// 5
+	private final Sensor LRRight;			// 6
 
 	// Constructor(s)
 	/**
-	 * Initialise robot at [robotRow, robotCol], face up
-	 * @param startRow Centre component row (y) coordinate 
-	 * @param startCol Centre component col (x) coordinate
-	 * @param isRealRobot If set to true, robot assumes physically integrated functions, pure virtual simulation otherwise
-	 */
-	public Robot (int startRow, int startCol, boolean isRealRobot) {
-		robotRow = startRow;
-		robotCol = startCol;
-		robotDir = RobotConstant.DEFAULT_START_DIR;
-		speed = RobotConstant.SPEED;
-		realBot = isRealRobot;
-
-		int srLowerLimit = SensorConstant.SR_LOWER;
-		int srUpperLimit = SensorConstant.SR_UPPER;
-		int lrLowerLimit = SensorConstant.LR_LOWER;
-		int lrUpperLimit = SensorConstant.LR_UPPER;
-
-		SRFrontLeft = new Sensor(srLowerLimit, srUpperLimit, robotRow-1, robotCol-1, robotDir, "S2");
-		SRFrontCenter = new Sensor(srLowerLimit, srUpperLimit, robotRow-1, robotCol, robotDir, "S3");
-		SRFrontRight = new Sensor(srLowerLimit, srUpperLimit, robotRow-1, robotCol+1, robotDir, "S4");
-		SRLeft = new Sensor(srLowerLimit, srUpperLimit, robotRow-1, robotCol-1, DIRECTION.LEFT, "S1");
-		SRRight = new Sensor(srLowerLimit, srUpperLimit, robotRow-1, robotCol+1, DIRECTION.RIGHT, "S5");
-		LRRight = new Sensor(lrLowerLimit, lrUpperLimit, robotRow, robotCol+1, DIRECTION.RIGHT, "L1");
-	}
-
-	/**
-	 * Initialise robot at [robotRow, robotCol], face up
-	 * @param startRow Centre component row (y) coordinate 
-	 * @param startCol Centre component col (x) coordinate
-	 * @param startDir Direction robot faces
+	 * Initialise robot at [18 (y), 1 (x)], face up, at normal speed
 	 * @param isReal If set to true, robot assumes physically integrated functions, pure virtual simulation otherwise
 	 */
-	public Robot(int startRow, int startCol, DIRECTION startDir, boolean isReal) {
-		robotRow = startRow;
-		robotCol = startCol;
-		robotDir = startDir;
+	public Robot (boolean isReal) {
+		robotRow = RobotConstant.DEFAULT_START_ROW;
+		robotCol = RobotConstant.DEFAULT_START_COL;
+		robotDir = RobotConstant.DEFAULT_START_DIR;
 		speed = RobotConstant.SPEED;
 		realBot = isReal;
 
-		int srLowerLimit = SensorConstant.SR_LOWER;
-		int srUpperLimit = SensorConstant.SR_UPPER;
-		int lrLowerLimit = SensorConstant.LR_LOWER;
-		int lrUpperLimit = SensorConstant.LR_UPPER;
+		SRFrontLeft = new Sensor(robotRow-1, robotCol+1, robotDir, SENSORTYPE.SHORT, 1);
+		SRFrontCenter = new Sensor(robotRow-1, robotCol, robotDir, SENSORTYPE.SHORT, 2);
+		SRFrontRight = new Sensor(robotRow-1, robotCol+1, robotDir, SENSORTYPE.SHORT, 3);
+		SRLeft = new Sensor(robotRow-1, robotCol-1, DIRECTION.LEFT, SENSORTYPE.SHORT, 4);
+		SRRight = new Sensor(robotRow-1, robotCol+1, DIRECTION.RIGHT, SENSORTYPE.SHORT, 5);
+		LRRight = new Sensor(robotRow, robotCol+1, DIRECTION.RIGHT, SENSORTYPE.LONG, 6);
+	}
 
-		SRFrontLeft = new Sensor(srLowerLimit, srUpperLimit, robotRow-1, robotCol-1, robotDir, "S2");
-		SRFrontCenter = new Sensor(srLowerLimit, srUpperLimit, robotRow-1, robotCol, robotDir, "S3");
-		SRFrontRight = new Sensor(srLowerLimit, srUpperLimit, robotRow-1, robotCol+1, robotDir, "S4");
-		SRLeft = new Sensor(srLowerLimit, srUpperLimit, robotRow-1, robotCol-1, findTurnDirection(MOVEMENT.TURNLEFT), "S1");
-		SRRight = new Sensor(srLowerLimit, srUpperLimit, robotRow-1, robotCol+1, findTurnDirection(MOVEMENT.TURNRIGHT), "S5");
-		LRRight = new Sensor(lrLowerLimit, lrUpperLimit, robotRow, robotCol+1, findTurnDirection(MOVEMENT.TURNRIGHT), "L1");
+	/**
+	 * Initialise robot at intended [robotRow, robotCol], face intended direction, at intended speed
+	 * @param isReal If set to true, robot assumes physically integrated functions, pure virtual simulation otherwise
+	 * @param startRow Centre component row (y) coordinate 
+	 * @param startCol Centre component col (x) coordinate
+	 * @param startDir Direction robot faces
+	 * @param setSpeed Robot's speed
+	 */
+	public Robot(boolean isReal, Integer startRow, Integer startCol, DIRECTION startDir, Integer setSpeed) {
+		if (startRow != null) robotRow = startRow;
+		else robotRow = RobotConstant.DEFAULT_START_ROW;
+		if (startCol != null) robotCol = startCol;
+		else robotCol = RobotConstant.DEFAULT_START_COL;
+		if (startDir != null) robotDir = startDir;
+		else robotDir = RobotConstant.DEFAULT_START_DIR;
+		if (setSpeed != null) speed = setSpeed;
+		else speed = RobotConstant.SPEED;
+		realBot = isReal;
+
+		SRFrontLeft = new Sensor(robotRow-1, robotCol-1, robotDir, SENSORTYPE.SHORT, 1);
+		SRFrontCenter = new Sensor(robotRow-1, robotCol, robotDir, SENSORTYPE.SHORT, 2);
+		SRFrontRight = new Sensor(robotRow-1, robotCol+1, robotDir, SENSORTYPE.SHORT, 3);
+		SRLeft = new Sensor(robotRow-1, robotCol-1, findTurnDirection(MOVEMENT.TURNLEFT), SENSORTYPE.SHORT, 4);
+		SRRight = new Sensor(robotRow-1, robotCol+1, findTurnDirection(MOVEMENT.TURNRIGHT), SENSORTYPE.SHORT, 5);
+		LRRight = new Sensor(robotRow, robotCol+1, findTurnDirection(MOVEMENT.TURNRIGHT), SENSORTYPE.LONG, 6);
 	} 
 
 
@@ -103,7 +97,7 @@ public class Robot {
 	 * Returns centre component row (y) coordinate
 	 * @return centre component row coordinate
 	 */
-	public int getRobotRow() {
+	public int getRow() {
 		return robotRow;
 	}
 
@@ -111,7 +105,7 @@ public class Robot {
 	 * Returns centre component col (x) coordinate
 	 * @return centre component col coordinate
 	 */
-	public int getRobotCol() {
+	public int getCol() {
 		return robotCol;
 	}
 
@@ -119,7 +113,7 @@ public class Robot {
 	 * Returns direction robot faces
 	 * @return direction robot faces
 	 */
-	public DIRECTION getRobotDir() {
+	public DIRECTION getDir() {
 		return robotDir;
 	}
 
@@ -135,7 +129,7 @@ public class Robot {
 	 * Returns robot's speed
 	 * @return robot's speed
 	 */
-	public int getRobotSpeed() {
+	public int getSpeed() {
 		return speed;
 	}
 
@@ -201,7 +195,7 @@ public class Robot {
 	 * @param sendArduino If set to true, move command is transmitted to Arduino module (physically integrated function)
 	 * @param sendAndroid If set to true, move command is transmitted to Android module (physically integrated function)
 	 */
-	private void move(MOVEMENT m, boolean sendArduino, boolean sendAndroid) {
+	public void move(MOVEMENT m, boolean sendArduino, boolean sendAndroid) {
 
 		// Simulate Real-Time Movement
 		if (!realBot) 
@@ -263,14 +257,6 @@ public class Robot {
 	}
 
 	/**
-	 * Execute robot's move functions (physically integrated function)
-	 * @param m Intended robot's movement
-	 */
-	public void move(MOVEMENT m) {
-		move(m, true, true);
-	}
-
-	/**
 	 * Execute robot's move functions on simulator only
 	 * @param m Intended robot's movement
 	 */
@@ -283,7 +269,7 @@ public class Robot {
 	 * @param m Intended robot's turn type (either TURNLEFT or TURNRIGHT)
 	 * @return Robot's new direction after turn function execution
 	 */
-	private DIRECTION findTurnDirection(MOVEMENT m) {
+	public DIRECTION findTurnDirection(MOVEMENT m) {
 		if (m == MOVEMENT.TURNLEFT) return DIRECTION.getLeft(robotDir);
 		else return DIRECTION.getRight(robotDir);
 	}
@@ -321,23 +307,30 @@ public class Robot {
 	public void multiSense(Map mapExplore) {
 		int[] result = new int[6];
 		StringBuilder sb = new StringBuilder();
-		String str; String[] strArr;
+		String str; String[] sArr1, sArr2;
 
 		// Request Sensor Data in P;SDATA;<>_<>_<>_<>_<>_<>
-		Comms.sendMsg(Comms.ARDUINO, Comms.INS, Comms.SENSE);
+		Comms.sendMsg(Comms.ar, Comms.arIns, Comms.arSense);
 
 		// Process Sensor Data
-		str = Comms.getArdReceipt(Comms.SENSOR_DATA);
-		strArr = str.split(";");
+		str = Comms.getArdReceipt(Comms.arData);
+		sArr1 = str.split(";");
 
-		if (strArr[0].equals(Comms.SENSOR_DATA)) {
-			str = strArr[1];
-			result[0] = (int) rounding(str.split("_")[0]);
-			result[1] = (int) rounding(str.split("_")[1]);
-			result[2] = (int) rounding(str.split("_")[2]);
-			result[3] = (int) rounding(str.split("_")[3]);
-			result[4] = (int) rounding(str.split("_")[4]);
-			result[5] = (int) rounding(str.split("_")[5]);
+		if (sArr1[0].equals(Comms.arData)) {
+			str = sArr1[1];
+			sArr2 = str.split("_");
+			System.out.println(rounding(SENSORTYPE.SHORT, sArr2[0]));
+			result[0] = rounding(SENSORTYPE.SHORT, sArr2[0]);
+			System.out.println(rounding(SENSORTYPE.SHORT, sArr2[1]));
+			result[1] = rounding(SENSORTYPE.SHORT, sArr2[1]);
+			System.out.println(rounding(SENSORTYPE.SHORT, sArr2[2]));
+			result[2] = rounding(SENSORTYPE.SHORT, sArr2[2]);
+			System.out.println(rounding(SENSORTYPE.SHORT, sArr2[3]));
+			result[3] = rounding(SENSORTYPE.SHORT, sArr2[3]);
+			System.out.println(rounding(SENSORTYPE.SHORT, sArr2[4]));
+			result[4] = rounding(SENSORTYPE.SHORT, sArr2[4]);
+			System.out.println(rounding(SENSORTYPE.SHORT, sArr2[5]));
+			result[5] = rounding(SENSORTYPE.LONG, sArr2[5]);
 		}
 
 		// Use sensor values and update mapExplore
@@ -352,28 +345,53 @@ public class Robot {
 		sb.append("1:");
 		sb.append(MapDescriptor.generateMDFHex1(mapExplore));
 		sb.append("/");
-		Comms.sendMsg(Comms.ANDROID, Comms.MAP, sb.toString());
-		Comms.getAndReceipt(Comms.DONE);
+		Comms.sendMsg(Comms.an, Comms.anMdf, sb.toString());
+		// Comms.sleepWait();
+		Comms.getAndReceipt(Comms.anDone);
 		sb.setLength(0);
 
 		// Send MDF2
 		sb.append("2:");
 		sb.append(MapDescriptor.generateMDFHex2(mapExplore));
 		sb.append("/");
-		Comms.sendMsg(Comms.ANDROID, Comms.MAP, sb.toString());
-		Comms.getAndReceipt(Comms.DONE);
+		Comms.sendMsg(Comms.an, Comms.anMdf, sb.toString());
+		// Comms.sleepWait();
+		Comms.getAndReceipt(Comms.anDone);
 		sb.setLength(0);
 	}
 
 	/**
-	 * Returns a rounded up or down integer used in determining the presence of an obstacle
-	 * @param value String value from sensor
-	 * @return a rounded up or down integer
+	 * Returns the number of 10cm squares sensor seen
+	 * @param type Sensor type
+	 * @param value Sensor's string value
+	 * @return number of 10cm squares seen
 	 */
-	private int rounding(String value) {
+	private int rounding(SENSORTYPE type, String value) {
 		double num = Double.parseDouble(value);
-		System.out.println("V: " + (Math.round(num / 10.0)));
-		return (int) (Math.round(num / 10.0));
+		// System.out.print("V: " + (Math.round(num / 10.0)));
+
+		if (type == SENSORTYPE.SHORT) {
+			if (between(12.0, num, 19.9)) return 1;
+			if (between(20.0, num, 29.9)) return 2;
+			if (num >= 30.0) return 3;
+		} else {
+			if (between(20.0, num, 29.9)) return 2;
+			if (between(30.0, num, 39.9)) return 3;
+			if (between(40.0, num, 48.9)) return 4;
+			if (num >= 49.0) return 5;
+		}
+		return 0;
+	}
+
+	/**
+	 * Returns true if num is between lower (inclusive) and upper (inclusive)
+	 * @param lower Lower limit
+	 * @param num Intended comparison number
+	 * @param upper Upper limit
+	 * @return true if num is between lower and upper, false otherwise
+	 */
+	private static boolean between(double lower, double num, double upper) {
+		return (num >= lower) && (num <= upper);
 	}
 
 	/**
@@ -423,13 +441,14 @@ public class Robot {
 	 */
 	private void sendInstruction(MOVEMENT m, boolean sendAndroidBool) {
 		try {
-			Comms.sendMsg(Comms.ARDUINO, Comms.INS, MOVEMENT.print(m));
-			if (m == MOVEMENT.CALIBRATE) Comms.getArdReceipt(Comms.SENSOR_DATA);
-			else Comms.getArdReceipt(Comms.DONE);
+			Comms.sendMsg(Comms.ar, Comms.arIns, MOVEMENT.print(m));
+			// Comms.sleepWait();
+			Comms.getArdReceipt(Comms.arDone);
 
 			if (m != MOVEMENT.CALIBRATE && sendAndroidBool) {
-				Comms.sendMsg(Comms.ANDROID, Comms.POS, Comms.encodeCoor(MapDescriptor.getMDFcol(robotCol),MapDescriptor.getMDFrow(robotRow),DIRECTION.toInt(robotDir)));
-				Comms.getAndReceipt(Comms.DONE);
+				Comms.sendMsg(Comms.an, Comms.anPos, Comms.encodeCoor(MapDescriptor.getMDFcol(robotCol),MapDescriptor.getMDFrow(robotRow),DIRECTION.toInt(robotDir)));
+				// Comms.sleepWait();
+				Comms.getAndReceipt(Comms.anDone);
 				return;
 			}
 		} catch (Exception e) {
