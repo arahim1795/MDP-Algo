@@ -1,6 +1,7 @@
 package robot;
 
 import map.Map;
+import map.Tile;
 import robot.RobotConstant.DIRECTION;
 import robot.SensorConstant.SENSORTYPE;
 
@@ -32,7 +33,7 @@ public class Sensor {
 		sensorDir = dir;
 		sensorID = id;
 		sensorType = type;
-		
+
 		if (type == SENSORTYPE.SHORT) {
 			sensorLowerLimit = SensorConstant.SR_LOWER;
 			sensorUpperLimit = SensorConstant.SR_UPPER;
@@ -42,7 +43,7 @@ public class Sensor {
 		}
 	}
 
-	
+
 	// Setter(s)
 	/**
 	 * 
@@ -160,34 +161,50 @@ public class Sensor {
 	 * @param colMul Numerically adjust where the sense would occur, on the col(y)-axis
 	 */
 	private void senseInfo(Map exploredMap, int sensorVal, int rowMul, int colMul) {
+		int row, col;
 		/*
 		 * Check if obstacle exist between sensor and lower limit
 		 * (used only by sensor with lower limit above 1)
 		 */
-		if (sensorVal == 0) return;  // return value for LR sensor if obstacle before lowerRange
-
-		int row, col;
-		// If above fails, check if starting point is valid for sensors with lowerRange > 1.
-		for (int i = 1; i < sensorLowerLimit; i++) {
-			row = sensorRow + (rowMul * i);
-			col = sensorCol + (colMul * i);
-
-			// if 'sensed' tile within blindspot is invalid/does not exist/an obstacle, terminate immediately
-			if (!Map.isValidTile(row, col) ||
-					exploredMap.getTile(row, col).isObstacle()) return;
+		if (sensorVal == 0) {
+			if (sensorID == 6) return;
+			else {
+				row = sensorRow+(1*rowMul);
+				col = sensorCol+(1*colMul);
+				if (Map.isValidTile(row, col)) {
+					Tile obsTile = exploredMap.getTile(sensorRow+(1*rowMul), sensorCol+(1*colMul));
+					obsTile.setExplored(true);
+					obsTile.setObstacle(true);
+				}
+				return;
+			}
 		}
 
-		// Update map according to sensor's value.
+		// If above fails, check if starting point is valid for sensors with lowerRange > 1.
+		if (sensorID == 6) {
+			for (int i = 1; i < sensorLowerLimit; i++) {
+				row = sensorRow + (rowMul * i);
+				col = sensorCol + (colMul * i);
+
+				// if 'sensed' tile within blindspot is invalid/does not exist/an obstacle, terminate immediately
+				if (!Map.isValidTile(row, col) ||
+						exploredMap.getTile(row, col).isObstacle()) return;
+			}
+		}
+
+		// update map
 		for (int i = sensorLowerLimit; i <= sensorUpperLimit; i++) {
 			row = sensorRow + (rowMul * i);
 			col = sensorCol + (colMul * i);
 
-			if (!Map.isValidTile(row, col)) continue;
+			if (!Map.isValidTile(row, col)) return;
 
 			exploredMap.getTile(row, col).setExplored(true);
 
-			if (sensorVal == i) {
-				exploredMap.setObstacleTile(row, col, true);
+			if ((sensorVal == 1 || sensorVal == 2) && sensorVal == i) {
+				Tile obsTile = exploredMap.getTile(row+(1*rowMul), col+(1*colMul));
+				obsTile.setExplored(true);
+				obsTile.setObstacle(true);
 				break;
 			}
 

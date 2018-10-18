@@ -322,7 +322,7 @@ public class Robot {
 		result[3] = rounding(SENSORTYPE.SHORT, max[3]);
 		System.out.println(rounding(SENSORTYPE.SHORT, max[4]));
 		result[4] = rounding(SENSORTYPE.SHORT, max[4]);
-		System.out.println(rounding(SENSORTYPE.SHORT, max[5]));
+		System.out.println(rounding(SENSORTYPE.LONG, max[5]));
 		result[5] = rounding(SENSORTYPE.LONG, max[5]);
 
 
