@@ -131,7 +131,7 @@ public class Explore {
 		} else {
 			move();
 			updateExplore();
-			
+
 			// if @ corners
 			// if robotdir can calibrate
 			DIRECTION dir = robot.getDir();
@@ -467,7 +467,7 @@ public class Explore {
 		int row, col;
 		row = robot.getRow();
 		col = robot.getCol();
-		
+
 		DIRECTION robotDir = robot.getDir();
 
 		switch (robotDir) {

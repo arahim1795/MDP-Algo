@@ -16,8 +16,8 @@ import robot.RobotConstant.DIRECTION;
 public class Comms {
 
 	// Receipt Strings
-	
-	
+
+
 
 	// Major Headers
 	public static final String ARDnAND = "CCCC";
@@ -47,7 +47,7 @@ public class Comms {
 	public static final String arData = "sdata";
 	public static final String arCal = "S";
 	public static final char charCal = 'S';
-	
+
 	// arduino & android
 	public static final String MULTI = "MULTI"; //for mutli-movement string
 
@@ -140,13 +140,13 @@ public class Comms {
 		case ARDnAND:
 			sb.append(major);
 			switch (sub) {
-				case MULTI:
-					sb.append(sub);
-					break;
-				default:
-					System.err.println("Invalid Purpose");
-					return false;
-				}
+			case MULTI:
+				sb.append(sub);
+				break;
+			default:
+				System.err.println("Invalid Purpose");
+				return false;
+			}
 			break;
 		case RPI:
 			// TODO incorporate Image Tracking
@@ -188,15 +188,16 @@ public class Comms {
 	public static String receiveMsg() {
 		String msg;
 		StringBuilder msgBuilder = new StringBuilder();
-		
+
 		try {
 			msgBuilder.append(is.readLine());
 		} catch (IOException e) {
 			System.err.println(e);
 		}
-		
+
 		msg = msgBuilder.toString().toLowerCase();
-		
+		System.out.println(msg);
+
 		if (msg.contains(";")) {
 			String[] strArr = msg.split(";");
 			StringBuilder outMsg = new StringBuilder();
@@ -204,12 +205,26 @@ public class Comms {
 				outMsg.append(s);
 				outMsg.append(";");
 			}
-			return outMsg.toString();
+			return outMsg.toString().trim();
 		}
-		
-		if (msg.contains("#")) return msg;
-		
+
+		if (msg.contains("#")) {
+			String[] strArr = msg.split("'");
+			return strArr[0];
+		}
+
+		/*
+		StringBuilder result = new StringBuilder();
+		for (int i = 0; i < msg.length(); i++) {
+			if (i < 2 || i == msg.length()-1);
+			else result.append(msg.charAt(i));
+		}
+
+		return result.toString();
+		 */
+
 		return "Error";
+
 	}
 
 	/**
@@ -286,9 +301,11 @@ public class Comms {
 		String[] strArr;
 		while (true) {
 			str = Comms.receiveMsg();
+			System.out.println("gate1: " + str);
+			System.out.println("gate2: " + expMsg);
 			System.out.println(str);
 			strArr = str.split(";");
-			if (strArr[0].equals(expMsg.toLowerCase())) break;
+			if (strArr[1].equals(expMsg.toLowerCase())) break;
 		}
 		return str;
 	}
@@ -302,7 +319,7 @@ public class Comms {
 		}
 		return str;
 	}
-	
+
 	public static void sleepWait() {
 		try {
 			TimeUnit.MILLISECONDS.sleep(RobotConstant.SPEED);

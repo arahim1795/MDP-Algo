@@ -1,5 +1,7 @@
 package robot;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import map.Map;
@@ -307,31 +309,22 @@ public class Robot {
 	public void multiSense(Map mapExplore) {
 		int[] result = new int[6];
 		StringBuilder sb = new StringBuilder();
-		String str; String[] sArr1, sArr2;
 
-		// Request Sensor Data in P;SDATA;<>_<>_<>_<>_<>_<>
-		Comms.sendMsg(Comms.ar, Comms.arIns, Comms.arSense);
+		double[] max = sampling(2);
 
-		// Process Sensor Data
-		str = Comms.getArdReceipt(Comms.arData);
-		sArr1 = str.split(";");
+		System.out.println(rounding(SENSORTYPE.SHORT, max[0]));
+		result[0] = rounding(SENSORTYPE.SHORT, max[0]);
+		System.out.println(rounding(SENSORTYPE.SHORT, max[1]));
+		result[1] = rounding(SENSORTYPE.SHORT, max[1]);
+		System.out.println(rounding(SENSORTYPE.SHORT, max[2]));
+		result[2] = rounding(SENSORTYPE.SHORT, max[2]);
+		System.out.println(rounding(SENSORTYPE.SHORT, max[3]));
+		result[3] = rounding(SENSORTYPE.SHORT, max[3]);
+		System.out.println(rounding(SENSORTYPE.SHORT, max[4]));
+		result[4] = rounding(SENSORTYPE.SHORT, max[4]);
+		System.out.println(rounding(SENSORTYPE.SHORT, max[5]));
+		result[5] = rounding(SENSORTYPE.LONG, max[5]);
 
-		if (sArr1[0].equals(Comms.arData)) {
-			str = sArr1[1];
-			sArr2 = str.split("_");
-			System.out.println(rounding(SENSORTYPE.SHORT, sArr2[0]));
-			result[0] = rounding(SENSORTYPE.SHORT, sArr2[0]);
-			System.out.println(rounding(SENSORTYPE.SHORT, sArr2[1]));
-			result[1] = rounding(SENSORTYPE.SHORT, sArr2[1]);
-			System.out.println(rounding(SENSORTYPE.SHORT, sArr2[2]));
-			result[2] = rounding(SENSORTYPE.SHORT, sArr2[2]);
-			System.out.println(rounding(SENSORTYPE.SHORT, sArr2[3]));
-			result[3] = rounding(SENSORTYPE.SHORT, sArr2[3]);
-			System.out.println(rounding(SENSORTYPE.SHORT, sArr2[4]));
-			result[4] = rounding(SENSORTYPE.SHORT, sArr2[4]);
-			System.out.println(rounding(SENSORTYPE.SHORT, sArr2[5]));
-			result[5] = rounding(SENSORTYPE.LONG, sArr2[5]);
-		}
 
 		// Use sensor values and update mapExplore
 		SRFrontLeft.sense(mapExplore, result[0]);
@@ -360,25 +353,53 @@ public class Robot {
 		sb.setLength(0);
 	}
 
+	private double[] sampling(int numSample) {
+		String sample; String[] sampleArr;
+		List<String[]> samples = new ArrayList<String[]>();
+		for (int i = 0; i < numSample; i++) {
+			Comms.sendMsg(Comms.ar, Comms.arIns, Comms.arSense);
+			sample = Comms.getArdReceipt(Comms.arData);
+			// sample = sample.replace("/", "");
+			sampleArr = sample.split(";");
+			if (sampleArr[1].equals(Comms.arData)) samples.add(sampleArr[2].split("_"));
+
+			// to vary samples taken
+			try {
+				TimeUnit.MILLISECONDS.sleep(250);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+
+		double[] max = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+		double tmp;
+		for (int i = 0; i < 6; i++)
+			for (String[] arr : samples) {
+				tmp = Double.parseDouble(arr[i]);
+				if (tmp > max[i]) max[i] = tmp;
+			}
+
+		return max;
+	}
+
 	/**
 	 * Returns the number of 10cm squares sensor seen
 	 * @param type Sensor type
 	 * @param value Sensor's string value
 	 * @return number of 10cm squares seen
 	 */
-	private int rounding(SENSORTYPE type, String value) {
-		double num = Double.parseDouble(value);
+	private int rounding(SENSORTYPE type, double value) {
 		// System.out.print("V: " + (Math.round(num / 10.0)));
 
 		if (type == SENSORTYPE.SHORT) {
-			if (between(12.0, num, 19.9)) return 1;
-			if (between(20.0, num, 29.9)) return 2;
-			if (num >= 30.0) return 3;
+			if (between(12.0, value, 18.9)) return 1;
+			if (between(19.0, value, 29.9)) return 2;
+			if (value >= 30.0) return 3;
 		} else {
-			if (between(20.0, num, 29.9)) return 2;
-			if (between(30.0, num, 39.9)) return 3;
-			if (between(40.0, num, 48.9)) return 4;
-			if (num >= 49.0) return 5;
+			if (between(20.0, value, 29.9)) return 2;
+			if (between(30.0, value, 39.9)) return 3;
+			if (between(40.0, value, 48.9)) return 4;
+			if (value >= 49.0) return 5;
 		}
 		return 0;
 	}
