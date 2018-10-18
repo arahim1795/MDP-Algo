@@ -260,9 +260,10 @@ public class Simulator {
 			}
 			//TODO main code 
 			protected Void doInBackground() throws Exception {
+				try {
 				long idleTime = System.currentTimeMillis();
 				boolean exReady = false;
-//				boolean nulls= false;
+				//				boolean nulls= false;
 				String msg;
 				System.out.println("Explore Ready");
 				if(realRun);
@@ -345,6 +346,10 @@ public class Simulator {
 				//
 				firePropertyChange(exploreComplete, false, true);
 				return null;
+				} catch (Exception e) {
+					e.printStackTrace();
+					return null;
+				}
 			}
 		}
 

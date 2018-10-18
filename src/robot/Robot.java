@@ -310,7 +310,7 @@ public class Robot {
 		int[] result = new int[6];
 		StringBuilder sb = new StringBuilder();
 
-		double[] max = sampling(2);
+		double[] max = sampling(1);
 
 		System.out.print(rounding(SENSORTYPE.SHORT, max[0]) + ",");
 		result[0] = rounding(SENSORTYPE.SHORT, max[0]);
@@ -393,8 +393,8 @@ public class Robot {
 
 		if (type == SENSORTYPE.SHORT) {
 			if (between(12.0, value, 18.9)) return 1;
-			if (between(19.0, value, 29.9)) return 2;
-			if (value >= 30.0) return 3;
+			if (between(19.0, value, 28.9)) return 2;
+			if (value >= 29.0) return 3;
 		} else {
 			if (between(20.0, value, 29.9)) return 2;
 			if (between(30.0, value, 39.9)) return 3;
@@ -469,13 +469,22 @@ public class Robot {
 			if (m != MOVEMENT.CALIBRATE && sendAndroidBool) {
 				Comms.sendMsg(Comms.an, Comms.anPos, Comms.encodeCoor(MapDescriptor.getMDFcol(robotCol),MapDescriptor.getMDFrow(robotRow),DIRECTION.toInt(robotDir)));
 				// Comms.sleepWait();
-				Comms.getAndReceipt(Comms.anDone);
+				try {
+					TimeUnit.MILLISECONDS.sleep(100);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 				return;
 			}
 		} catch (Exception e) {
 			System.err.println("Error sending instruction");
 		}
 
+		try {
+			TimeUnit.MILLISECONDS.sleep(10);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

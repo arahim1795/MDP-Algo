@@ -172,6 +172,7 @@ public class Comms {
 		boolean sent;
 		try {
 			os.writeBytes(sb.toString());
+			os.flush();
 			sent = true;
 		} catch (IOException e) {
 			System.err.println(e);
@@ -210,7 +211,7 @@ public class Comms {
 
 		if (msg.contains("#")) {
 			String[] strArr = msg.split("'");
-			return strArr[0];
+			return strArr[1];
 		}
 
 		/*
@@ -322,7 +323,7 @@ public class Comms {
 
 	public static void sleepWait() {
 		try {
-			TimeUnit.MILLISECONDS.sleep(RobotConstant.SPEED);
+			TimeUnit.MILLISECONDS.sleep(200);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

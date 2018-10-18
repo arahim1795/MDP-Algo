@@ -174,7 +174,7 @@ public class Sensor {
 				if (Map.isValidTile(row, col)) {
 					Tile obsTile = exploredMap.getTile(sensorRow+(1*rowMul), sensorCol+(1*colMul));
 					obsTile.setExplored(true);
-					obsTile.setObstacle(true);
+					exploredMap.setObstacleTile(row, col, true);
 				}
 				return;
 			}
@@ -202,9 +202,10 @@ public class Sensor {
 			exploredMap.getTile(row, col).setExplored(true);
 
 			if ((sensorVal == 1 || sensorVal == 2) && sensorVal == i) {
+				if (!Map.isValidTile(row+(1*rowMul), col+(1*colMul))) return;
 				Tile obsTile = exploredMap.getTile(row+(1*rowMul), col+(1*colMul));
 				obsTile.setExplored(true);
-				obsTile.setObstacle(true);
+				exploredMap.setObstacleTile(row+(1*rowMul), col+(1*colMul), true);
 				System.out.println("tile" + obsTile.getRow() + "," + obsTile.getCol() + "setObstacle");
 				return;
 			}
