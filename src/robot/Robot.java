@@ -58,7 +58,7 @@ public class Robot {
 		speed = RobotConstant.SPEED;
 		realBot = isReal;
 
-		SRFrontLeft = new Sensor(robotRow-1, robotCol+1, robotDir, SENSORTYPE.SHORT, 1);
+		SRFrontLeft = new Sensor(robotRow-1, robotCol-1, robotDir, SENSORTYPE.SHORT, 1);
 		SRFrontCenter = new Sensor(robotRow-1, robotCol, robotDir, SENSORTYPE.SHORT, 2);
 		SRFrontRight = new Sensor(robotRow-1, robotCol+1, robotDir, SENSORTYPE.SHORT, 3);
 		SRLeft = new Sensor(robotRow-1, robotCol-1, DIRECTION.LEFT, SENSORTYPE.SHORT, 4);
@@ -312,15 +312,15 @@ public class Robot {
 
 		double[] max = sampling(2);
 
-		System.out.println(rounding(SENSORTYPE.SHORT, max[0]));
+		System.out.print(rounding(SENSORTYPE.SHORT, max[0]) + ",");
 		result[0] = rounding(SENSORTYPE.SHORT, max[0]);
-		System.out.println(rounding(SENSORTYPE.SHORT, max[1]));
+		System.out.print(rounding(SENSORTYPE.SHORT, max[1])+ ",");
 		result[1] = rounding(SENSORTYPE.SHORT, max[1]);
-		System.out.println(rounding(SENSORTYPE.SHORT, max[2]));
+		System.out.print(rounding(SENSORTYPE.SHORT, max[2])+ ",");
 		result[2] = rounding(SENSORTYPE.SHORT, max[2]);
-		System.out.println(rounding(SENSORTYPE.SHORT, max[3]));
+		System.out.print(rounding(SENSORTYPE.SHORT, max[3])+ ",");
 		result[3] = rounding(SENSORTYPE.SHORT, max[3]);
-		System.out.println(rounding(SENSORTYPE.SHORT, max[4]));
+		System.out.print(rounding(SENSORTYPE.SHORT, max[4])+ ",");
 		result[4] = rounding(SENSORTYPE.SHORT, max[4]);
 		System.out.println(rounding(SENSORTYPE.LONG, max[5]));
 		result[5] = rounding(SENSORTYPE.LONG, max[5]);

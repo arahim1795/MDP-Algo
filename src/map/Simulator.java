@@ -38,6 +38,7 @@ public class Simulator {
 	private static final boolean realRun = true;
 	private static final int MaxExploredDuration = 330;
 	private static boolean ready = false;
+	private static boolean rstep = false;
 	private static boolean exploredDone = false;
 	private static boolean noInterrupt = true;
 
@@ -261,7 +262,7 @@ public class Simulator {
 			protected Void doInBackground() throws Exception {
 				long idleTime = System.currentTimeMillis();
 				boolean exReady = false;
-				boolean nulls= false;
+//				boolean nulls= false;
 				String msg;
 				System.out.println("Explore Ready");
 				if(realRun);
@@ -322,13 +323,16 @@ public class Simulator {
 
 				System.out.println("Exploration Running");
 
+				int step = 1;
 				Explore explore;
 				explore = new Explore(roboCop, exploredMap, realMap, MaxExploredDuration, 100);
 				explore.setupExplore();	
 
 				System.out.println("Exploration Starting");
 				while(noInterrupt && !explore.runFinished()){
+					System.out.println("exp step:" + step);
 					explore.explore();
+					step++;
 				} 
 				Comms.sendMsg(Comms.ar, Comms.arIns, "E");
 				explore.goToStart();
@@ -457,6 +461,8 @@ public class Simulator {
 			public void mousePressed(MouseEvent e) {
 				if(!realRun)
 					ready = true;
+				else
+					rstep = true;
 			}
 		});
 		mainButtons.add(btn_ready);

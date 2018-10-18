@@ -301,8 +301,8 @@ public class Comms {
 		String[] strArr;
 		while (true) {
 			str = Comms.receiveMsg();
-			System.out.println("gate1: " + str);
-			System.out.println("gate2: " + expMsg);
+//			System.out.println("gate1: " + str);
+//			System.out.println("gate2: " + expMsg);
 			System.out.println(str);
 			strArr = str.split(";");
 			if (strArr[1].equals(expMsg.toLowerCase())) break;

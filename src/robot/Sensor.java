@@ -193,7 +193,7 @@ public class Sensor {
 		}
 
 		// update map
-		for (int i = sensorLowerLimit; i <= sensorUpperLimit; i++) {
+		for (int i = sensorLowerLimit; i <= sensorVal; i++) {
 			row = sensorRow + (rowMul * i);
 			col = sensorCol + (colMul * i);
 
@@ -205,13 +205,13 @@ public class Sensor {
 				Tile obsTile = exploredMap.getTile(row+(1*rowMul), col+(1*colMul));
 				obsTile.setExplored(true);
 				obsTile.setObstacle(true);
-				break;
+				System.out.println("tile" + obsTile.getRow() + "," + obsTile.getCol() + "setObstacle");
+				return;
 			}
 
 			// Override values set by Long Range sensor when any short range sensor detects discrepancies 
 			if (exploredMap.getTile(row, col).isObstacle() && (sensorID == 1 || sensorID == 2 || sensorID == 3))
 				exploredMap.setObstacleTile(row, col, false);
-			else break;
 		}
 	}
 
