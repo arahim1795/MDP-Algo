@@ -545,13 +545,4 @@ public class Explore {
 		return true;
 	}
 
-	private boolean listenTerminate() {
-		String str = Comms.receiveMsg();
-		if (str != null) {
-			String[] strArr = str.split("_");
-			if (strArr[1].equals(Comms.anStop)) return true;
-		}
-		return false;
-	}
-
 }

@@ -261,91 +261,91 @@ public class Simulator {
 			//TODO main code 
 			protected Void doInBackground() throws Exception {
 				try {
-				long idleTime = System.currentTimeMillis();
-				boolean exReady = false;
-				//				boolean nulls= false;
-				String msg;
-				System.out.println("Explore Ready");
-				if(realRun);
-				// Comms.sendMsg(Comms.ARDUINO, Comms.SET, null);
-				switchMap();
-				while (true) {
+					long idleTime = System.currentTimeMillis();
+					boolean exReady = false;
+					//				boolean nulls= false;
+					String msg;
+					System.out.println("Explore Ready");
+					if(realRun);
+					// Comms.sendMsg(Comms.ARDUINO, Comms.SET, null);
+					switchMap();
+					while (true) {
 
-					if(!realRun){
-						exReady = ready;
-					}
-
-					else{
-						msg = Comms.receiveMsg();
-						System.out.println(msg);
-
-						//						if(msg==null){
-						//							if(nulls)
-						//								System.out.println("nulls");
-						//							nulls = true;
-						//						}
-						//						else{
-						//							nulls = false;
-						//							System.out.println(msg);
-						//							System.out.println(msg.startsWith(Comms.MP));
-						//							System.out.println(msg.startsWith(Comms.MP)||msg.startsWith(Comms.SP));
-						//						}
-						if(msg.equals(Comms.anEx)){
-							exReady = true;
+						if(!realRun){
+							exReady = ready;
 						}
 
-						else if(msg.startsWith(Comms.anWp)||msg.startsWith(Comms.anSp)){
-							System.out.println("Setting Coordinates...");
-							if(msg.startsWith(Comms.anWp)){
-								System.out.println("Setting MP...");
-								System.out.println(msg);
-								exploredMap.setMidPoint(Comms.readCoor("ROW", msg), Comms.readCoor("COL", msg));
+						else{
+							msg = Comms.receiveMsg();
+							System.out.println(msg);
 
-								System.out.println("Waypoint set: ("+Comms.readCoor("ROW", msg)+","+Comms.readCoor("COL", msg)+")");
+							//						if(msg==null){
+							//							if(nulls)
+							//								System.out.println("nulls");
+							//							nulls = true;
+							//						}
+							//						else{
+							//							nulls = false;
+							//							System.out.println(msg);
+							//							System.out.println(msg.startsWith(Comms.MP));
+							//							System.out.println(msg.startsWith(Comms.MP)||msg.startsWith(Comms.SP));
+							//						}
+							if(msg.equals(Comms.anEx)){
+								exReady = true;
 							}
-							else if(msg.startsWith(Comms.anSp)){
-								System.out.println("Setting SP");
-								roboCop.setBotPos(Comms.readCoor("ROW", msg), Comms.readCoor("COL", msg));
-								roboCop.setRobotDir(DIRECTION.fromInt(Comms.readCoor("DIR", msg)));
-								System.out.println("Start Point set: ("+Comms.readCoor("ROW", msg)+","+Comms.readCoor("COL", msg)+")");
-								System.out.println("Robot Direction set:" + roboCop.getDir());
+
+							else if(msg.startsWith(Comms.anWp)||msg.startsWith(Comms.anSp)){
+								System.out.println("Setting Coordinates...");
+								if(msg.startsWith(Comms.anWp)){
+									System.out.println("Setting MP...");
+									System.out.println(msg);
+									exploredMap.setMidPoint(Comms.readCoor("ROW", msg), Comms.readCoor("COL", msg));
+
+									System.out.println("Waypoint set: ("+Comms.readCoor("ROW", msg)+","+Comms.readCoor("COL", msg)+")");
+								}
+								else if(msg.startsWith(Comms.anSp)){
+									System.out.println("Setting SP");
+									roboCop.setBotPos(Comms.readCoor("ROW", msg), Comms.readCoor("COL", msg));
+									roboCop.setRobotDir(DIRECTION.fromInt(Comms.readCoor("DIR", msg)));
+									System.out.println("Start Point set: ("+Comms.readCoor("ROW", msg)+","+Comms.readCoor("COL", msg)+")");
+									System.out.println("Robot Direction set:" + roboCop.getDir());
+								}
+								else
+									System.out.println("Setting Coordinates failed");
 							}
-							else
-								System.out.println("Setting Coordinates failed");
 						}
+
+						if(System.currentTimeMillis()-idleTime >7000){
+							idleTime = System.currentTimeMillis();
+							System.out.println("Explore Waiting");
+						}
+						if (exReady) break;
 					}
 
-					if(System.currentTimeMillis()-idleTime >7000){
-						idleTime = System.currentTimeMillis();
-						System.out.println("Explore Waiting");
-					}
-					if (exReady) break;
-				}
+					System.out.println("Exploration Running");
 
-				System.out.println("Exploration Running");
+					int step = 1;
+					Explore explore;
+					explore = new Explore(roboCop, exploredMap, realMap, MaxExploredDuration, 100);
+					explore.setupExplore();	
 
-				int step = 1;
-				Explore explore;
-				explore = new Explore(roboCop, exploredMap, realMap, MaxExploredDuration, 100);
-				explore.setupExplore();	
+					System.out.println("Exploration Starting");
+					while(noInterrupt && !explore.runFinished()){
+						System.out.println("exp step:" + step);
+						explore.explore();
+						step++;
+					} 
+					Comms.sendMsg(Comms.ar, Comms.arIns, "E");
+					explore.goToStart();
+					exploredMap.repaint();
+					System.out.println("Sending E, waiting for Fastest Path");
 
-				System.out.println("Exploration Starting");
-				while(noInterrupt && !explore.runFinished()){
-					System.out.println("exp step:" + step);
-					explore.explore();
-					step++;
-				} 
-				Comms.sendMsg(Comms.ar, Comms.arIns, "E");
-				explore.goToStart();
-				exploredMap.repaint();
-				System.out.println("Sending E, waiting for Fastest Path");
-
-				ready = false;
-				System.out.println("Starting fastestPathThread");
-				new fastestPathThread().execute();
-				//
-				firePropertyChange(exploreComplete, false, true);
-				return null;
+					ready = false;
+					System.out.println("Starting fastestPathThread");
+					new fastestPathThread().execute();
+					//
+					firePropertyChange(exploreComplete, false, true);
+					return null;
 				} catch (Exception e) {
 					e.printStackTrace();
 					return null;

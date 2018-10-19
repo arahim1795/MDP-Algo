@@ -339,8 +339,8 @@ public class Robot {
 		sb.append(MapDescriptor.generateMDFHex1(mapExplore));
 		sb.append("/");
 		Comms.sendMsg(Comms.an, Comms.anMdf, sb.toString());
-		// Comms.sleepWait();
-		Comms.getAndReceipt(Comms.anDone);
+		Comms.sleepWait();
+		// Comms.getAndReceipt(Comms.anDone);
 		sb.setLength(0);
 
 		// Send MDF2
@@ -348,8 +348,8 @@ public class Robot {
 		sb.append(MapDescriptor.generateMDFHex2(mapExplore));
 		sb.append("/");
 		Comms.sendMsg(Comms.an, Comms.anMdf, sb.toString());
-		// Comms.sleepWait();
-		Comms.getAndReceipt(Comms.anDone);
+		Comms.sleepWait();
+		// Comms.getAndReceipt(Comms.anDone);
 		sb.setLength(0);
 	}
 
@@ -365,7 +365,7 @@ public class Robot {
 
 			// to vary samples taken
 			try {
-				TimeUnit.MILLISECONDS.sleep(250);
+				TimeUnit.MILLISECONDS.sleep(50);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -468,22 +468,11 @@ public class Robot {
 
 			if (m != MOVEMENT.CALIBRATE && sendAndroidBool) {
 				Comms.sendMsg(Comms.an, Comms.anPos, Comms.encodeCoor(MapDescriptor.getMDFcol(robotCol),MapDescriptor.getMDFrow(robotRow),DIRECTION.toInt(robotDir)));
-				// Comms.sleepWait();
-				try {
-					TimeUnit.MILLISECONDS.sleep(100);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+				Comms.sleepWait();
 				return;
 			}
 		} catch (Exception e) {
 			System.err.println("Error sending instruction");
-		}
-
-		try {
-			TimeUnit.MILLISECONDS.sleep(10);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
 		}
 	}
 

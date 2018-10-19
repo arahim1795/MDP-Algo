@@ -203,6 +203,7 @@ public class Sensor {
 
 			if ((sensorVal == 1 || sensorVal == 2) && sensorVal == i) {
 				if (!Map.isValidTile(row+(1*rowMul), col+(1*colMul))) return;
+				
 				Tile obsTile = exploredMap.getTile(row+(1*rowMul), col+(1*colMul));
 				obsTile.setExplored(true);
 				exploredMap.setObstacleTile(row+(1*rowMul), col+(1*colMul), true);
