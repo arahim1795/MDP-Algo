@@ -2,7 +2,6 @@ package utility;
 
 import map.Map;
 import map.MapConstant;
-import java.io.*;
 
 public class MapDescriptor {
 	public static void 	loadMapfromFile (Map map, String bin){

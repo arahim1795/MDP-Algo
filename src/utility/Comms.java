@@ -3,11 +3,7 @@ package utility;
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
-
-import robot.RobotConstant;
-import robot.RobotConstant.DIRECTION;
 
 /**
  * @author 18/19 S1 G3
@@ -197,6 +193,7 @@ public class Comms {
 		}
 
 		msg = msgBuilder.toString().toLowerCase();
+		
 		System.out.println(msg);
 
 		if (msg.contains(";")) {
@@ -206,6 +203,7 @@ public class Comms {
 				outMsg.append(s);
 				outMsg.append(";");
 			}
+			outMsg.deleteCharAt(outMsg.length()-1);
 			return outMsg.toString().trim();
 		}
 
@@ -302,21 +300,8 @@ public class Comms {
 		String[] strArr;
 		while (true) {
 			str = Comms.receiveMsg();
-//			System.out.println("gate1: " + str);
-//			System.out.println("gate2: " + expMsg);
-			System.out.println(str);
 			strArr = str.split(";");
 			if (strArr[1].equals(expMsg.toLowerCase())) break;
-		}
-		return str;
-	}
-
-	public static String getAndReceipt(String expMsg) {
-		String str;
-		while (true) {
-			str = Comms.receiveMsg().toLowerCase();
-			System.out.println(str);
-			if (str.equals(expMsg.toLowerCase())) break;
 		}
 		return str;
 	}

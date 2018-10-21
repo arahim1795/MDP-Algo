@@ -43,7 +43,7 @@ public class Robot {
 	private final Sensor SRFrontCenter;		// 2
 	private final Sensor SRFrontRight;		// 3
 	private final Sensor SRLeft;			// 4
-	private final Sensor SRRight;			// 5
+	private final Sensor SRLeftBack;			// 5
 	private final Sensor LRRight;			// 6
 
 	// Constructor(s)
@@ -62,7 +62,7 @@ public class Robot {
 		SRFrontCenter = new Sensor(robotRow-1, robotCol, robotDir, SENSORTYPE.SHORT, 2);
 		SRFrontRight = new Sensor(robotRow-1, robotCol+1, robotDir, SENSORTYPE.SHORT, 3);
 		SRLeft = new Sensor(robotRow-1, robotCol-1, DIRECTION.LEFT, SENSORTYPE.SHORT, 4);
-		SRRight = new Sensor(robotRow-1, robotCol+1, DIRECTION.RIGHT, SENSORTYPE.SHORT, 5);
+		SRLeftBack = new Sensor(robotRow+1, robotCol-1, DIRECTION.LEFT, SENSORTYPE.SHORT, 5);
 		LRRight = new Sensor(robotRow, robotCol+1, DIRECTION.RIGHT, SENSORTYPE.LONG, 6);
 	}
 
@@ -89,7 +89,7 @@ public class Robot {
 		SRFrontCenter = new Sensor(robotRow-1, robotCol, robotDir, SENSORTYPE.SHORT, 2);
 		SRFrontRight = new Sensor(robotRow-1, robotCol+1, robotDir, SENSORTYPE.SHORT, 3);
 		SRLeft = new Sensor(robotRow-1, robotCol-1, findTurnDirection(MOVEMENT.TURNLEFT), SENSORTYPE.SHORT, 4);
-		SRRight = new Sensor(robotRow-1, robotCol+1, findTurnDirection(MOVEMENT.TURNRIGHT), SENSORTYPE.SHORT, 5);
+		SRLeftBack = new Sensor(robotRow-1, robotCol+1, findTurnDirection(MOVEMENT.TURNRIGHT), SENSORTYPE.SHORT, 5);
 		LRRight = new Sensor(robotRow, robotCol+1, findTurnDirection(MOVEMENT.TURNRIGHT), SENSORTYPE.LONG, 6);
 	} 
 
@@ -197,8 +197,9 @@ public class Robot {
 	 * @param sendArduino If set to true, move command is transmitted to Arduino module (physically integrated function)
 	 * @param sendAndroid If set to true, move command is transmitted to Android module (physically integrated function)
 	 */
-	public void move(MOVEMENT m, boolean sendArduino, boolean sendAndroid) {
+	public String move(MOVEMENT m, boolean sendArduino, boolean sendAndroid) {
 
+		String msg = "I should only be seen in Simulator mode";
 		// Simulate Real-Time Movement
 		if (!realBot) 
 			try { TimeUnit.MILLISECONDS.sleep(speed); } 
@@ -250,12 +251,29 @@ public class Robot {
 
 		if (realBot)
 			if (sendArduino) {
-				System.out.println("Sending "+ m.toString());
-				sendInstruction(m, sendAndroid);
+				System.out.println("Sending " + m.toString());
+				msg = sendInstruction(m, sendAndroid);
 			}
-
 		System.out.println("Move: " + MOVEMENT.print(m));
-
+		
+		return msg;
+	}
+	
+	/**
+	 * Transmits movement command to Arduino module and optionally, to Android module (physically integrated function)
+	 * @param m Intended robot's movement function
+	 * @param sendAndroidBool If set to true, movement command is transmitted to Android module
+	 */
+	private String sendInstruction(MOVEMENT m, boolean sendAndroidBool) {
+		Comms.sendMsg(Comms.ar, Comms.arIns, MOVEMENT.print(m));
+		String msg = Comms.getArdReceipt(Comms.arData);
+		
+		if (sendAndroidBool && m != MOVEMENT.CALIBRATE) {
+			Comms.sendMsg(Comms.an, Comms.anPos, Comms.encodeCoor(MapDescriptor.getMDFcol(robotCol),MapDescriptor.getMDFrow(robotRow),DIRECTION.toInt(robotDir)));
+			Comms.sleepWait();
+		}
+		
+		return msg;
 	}
 
 	/**
@@ -298,7 +316,7 @@ public class Robot {
 		SRFrontCenter.sense(mapExplore, mapActual);
 		SRFrontRight.sense(mapExplore, mapActual);
 		SRLeft.sense(mapExplore, mapActual);
-		SRRight.sense(mapExplore, mapActual);
+		SRLeftBack.sense(mapExplore, mapActual);
 		LRRight.sense(mapExplore, mapActual);
 	}
 
@@ -306,50 +324,47 @@ public class Robot {
 	 * Execute sensor function (physically integrated function)
 	 * @param mapExplore Map used to track visited tiles and respective types of physical environment
 	 */
-	public void multiSense(Map mapExplore) {
+	public void multiSense(Map mapExplore, String msg) {
 		int[] result = new int[6];
-		StringBuilder sb = new StringBuilder();
+		
+		String[] msgArr = msg.split(";");
+		msgArr = msgArr[2].split("_");
+		
+		result[0] = rounding(SENSORTYPE.SHORT, msgArr[0]);
+		result[1] = rounding(SENSORTYPE.SHORT, msgArr[1]);
+		result[2] = rounding(SENSORTYPE.SHORT, msgArr[2]);
+		result[3] = rounding(SENSORTYPE.SHORT, msgArr[3]);
+		result[4] = rounding(SENSORTYPE.SHORT, msgArr[4]);
+		result[5] = rounding(SENSORTYPE.LONG, msgArr[5]);
+		
+		System.out.print(
+				"1: " + result[0] + ", 2: " + result[1] + ", " +
+				"3: " + result[2] + ", 4: " + result[3] + ", " +
+				"5: " + result[4] + ", 6: " + result[5] + "\n");
 
-		double[] max = sampling(1);
-
-		System.out.print(rounding(SENSORTYPE.SHORT, max[0]) + ",");
-		result[0] = rounding(SENSORTYPE.SHORT, max[0]);
-		System.out.print(rounding(SENSORTYPE.SHORT, max[1])+ ",");
-		result[1] = rounding(SENSORTYPE.SHORT, max[1]);
-		System.out.print(rounding(SENSORTYPE.SHORT, max[2])+ ",");
-		result[2] = rounding(SENSORTYPE.SHORT, max[2]);
-		System.out.print(rounding(SENSORTYPE.SHORT, max[3])+ ",");
-		result[3] = rounding(SENSORTYPE.SHORT, max[3]);
-		System.out.print(rounding(SENSORTYPE.SHORT, max[4])+ ",");
-		result[4] = rounding(SENSORTYPE.SHORT, max[4]);
-		System.out.println(rounding(SENSORTYPE.LONG, max[5]));
-		result[5] = rounding(SENSORTYPE.LONG, max[5]);
-
-
-		// Use sensor values and update mapExplore
+		// update map explore
 		SRFrontLeft.sense(mapExplore, result[0]);
 		SRFrontCenter.sense(mapExplore, result[1]);
 		SRFrontRight.sense(mapExplore, result[2]);
 		SRLeft.sense(mapExplore, result[3]);
-		SRRight.sense(mapExplore, result[4]);
+		SRLeftBack.sense(mapExplore, result[4]);
 		LRRight.sense(mapExplore, result[5]);
 
-		// Send MDF1
+		// send MDF strings
+		StringBuilder sb = new StringBuilder();
+		// MDF1
 		sb.append("1:");
 		sb.append(MapDescriptor.generateMDFHex1(mapExplore));
 		sb.append("/");
 		Comms.sendMsg(Comms.an, Comms.anMdf, sb.toString());
 		Comms.sleepWait();
-		// Comms.getAndReceipt(Comms.anDone);
 		sb.setLength(0);
-
-		// Send MDF2
+		// MDF2
 		sb.append("2:");
 		sb.append(MapDescriptor.generateMDFHex2(mapExplore));
 		sb.append("/");
 		Comms.sendMsg(Comms.an, Comms.anMdf, sb.toString());
 		Comms.sleepWait();
-		// Comms.getAndReceipt(Comms.anDone);
 		sb.setLength(0);
 	}
 
@@ -385,34 +400,21 @@ public class Robot {
 	/**
 	 * Returns the number of 10cm squares sensor seen
 	 * @param type Sensor type
-	 * @param value Sensor's string value
+	 * @param num Sensor's string value
 	 * @return number of 10cm squares seen
 	 */
-	private int rounding(SENSORTYPE type, double value) {
-		// System.out.print("V: " + (Math.round(num / 10.0)));
-
-		if (type == SENSORTYPE.SHORT) {
-			if (between(12.0, value, 18.9)) return 1;
-			if (between(19.0, value, 28.9)) return 2;
-			if (value >= 29.0) return 3;
-		} else {
-			if (between(20.0, value, 29.9)) return 2;
-			if (between(30.0, value, 39.9)) return 3;
-			if (between(40.0, value, 48.9)) return 4;
-			if (value >= 49.0) return 5;
-		}
+	private int rounding(SENSORTYPE type, String str) {
+		double num = Double.parseDouble(str);
+		if (type == SENSORTYPE.SHORT)
+			if (num >= 26.0) return 3;
+			else if (num >= 16.0) return 2;
+			else if (num >= 11.5) return 1;
+		else
+			if (num >= 49.0) return 5;
+			else if (num >= 40.0) return 4;
+			else if (num >= 30.0) return 3;
+			else if (num >= 20.0) return 2;
 		return 0;
-	}
-
-	/**
-	 * Returns true if num is between lower (inclusive) and upper (inclusive)
-	 * @param lower Lower limit
-	 * @param num Intended comparison number
-	 * @param upper Upper limit
-	 * @return true if num is between lower and upper, false otherwise
-	 */
-	private static boolean between(double lower, double num, double upper) {
-		return (num >= lower) && (num <= upper);
 	}
 
 	/**
@@ -425,7 +427,7 @@ public class Robot {
 			SRFrontCenter.setSensor(robotRow-1, robotCol, robotDir);
 			SRFrontRight.setSensor(robotRow-1, robotCol+1, robotDir);
 			SRLeft.setSensor(robotRow-1, robotCol-1, DIRECTION.LEFT);
-			SRRight.setSensor(robotRow-1, robotCol+1, DIRECTION.RIGHT);
+			SRLeftBack.setSensor(robotRow+1, robotCol-1, DIRECTION.LEFT);
 			LRRight.setSensor(robotRow, robotCol+1, DIRECTION.RIGHT);
 			break;
 		case DOWN:
@@ -433,7 +435,7 @@ public class Robot {
 			SRFrontCenter.setSensor(robotRow+1, robotCol, robotDir);
 			SRFrontRight.setSensor(robotRow+1, robotCol-1, robotDir);
 			SRLeft.setSensor(robotRow+1, robotCol+1, DIRECTION.RIGHT);
-			SRRight.setSensor(robotRow+1, robotCol-1, DIRECTION.LEFT);
+			SRLeftBack.setSensor(robotRow-1, robotCol+1, DIRECTION.RIGHT);
 			LRRight.setSensor(robotRow, robotCol-1, DIRECTION.LEFT);
 			break;
 		case LEFT:
@@ -441,7 +443,7 @@ public class Robot {
 			SRFrontCenter.setSensor(robotRow, robotCol-1, robotDir);
 			SRFrontRight.setSensor(robotRow-1, robotCol-1, robotDir);
 			SRLeft.setSensor(robotRow+1, robotCol-1, DIRECTION.DOWN);
-			SRRight.setSensor(robotRow-1, robotCol-1, DIRECTION.UP);
+			SRLeftBack.setSensor(robotRow+1, robotCol+1, DIRECTION.DOWN);
 			LRRight.setSensor(robotRow-1, robotCol, DIRECTION.UP);
 			break;
 		default:
@@ -449,31 +451,9 @@ public class Robot {
 			SRFrontCenter.setSensor(robotRow, robotCol+1, robotDir);
 			SRFrontRight.setSensor(robotRow+1, robotCol+1, robotDir);
 			SRLeft.setSensor(robotRow-1, robotCol+1, DIRECTION.UP);
-			SRRight.setSensor(robotRow+1, robotCol+1, DIRECTION.DOWN);
+			SRLeftBack.setSensor(robotRow-1, robotCol-1, DIRECTION.UP);
 			LRRight.setSensor(robotRow+1, robotCol, DIRECTION.DOWN);
 			break;
 		}
 	}
-
-	/**
-	 * Transmits movement command to Arduino module and optionally, to Android module (physically integrated function)
-	 * @param m Intended robot's movement function
-	 * @param sendAndroidBool If set to true, movement command is transmitted to Android module
-	 */
-	private void sendInstruction(MOVEMENT m, boolean sendAndroidBool) {
-		try {
-			Comms.sendMsg(Comms.ar, Comms.arIns, MOVEMENT.print(m));
-			// Comms.sleepWait();
-			Comms.getArdReceipt(Comms.arDone);
-
-			if (m != MOVEMENT.CALIBRATE && sendAndroidBool) {
-				Comms.sendMsg(Comms.an, Comms.anPos, Comms.encodeCoor(MapDescriptor.getMDFcol(robotCol),MapDescriptor.getMDFrow(robotRow),DIRECTION.toInt(robotDir)));
-				Comms.sleepWait();
-				return;
-			}
-		} catch (Exception e) {
-			System.err.println("Error sending instruction");
-		}
-	}
-
 }
