@@ -14,6 +14,7 @@ import utility.Comms;
 import map.Map;
 import map.Tile;
 import map.MapConstant;
+import map.Simulator;
 
 
 /**
@@ -271,9 +272,11 @@ public class FastestPath {
 			//System.out.print(MOVEMENT.get(c)+"\n");
 		}
 
-		for(MOVEMENT m : movementList){
-			System.out.println("Move: " + MOVEMENT.print(m));
-			bot.move(m, true, true);
+		if (Simulator.realRun) {
+			for(MOVEMENT m : movementList){
+				System.out.println("Move: " + MOVEMENT.print(m));
+				bot.move(m, true, true);
+			}
 		}
 
 	}
@@ -285,7 +288,9 @@ public class FastestPath {
 			System.out.println("Attempting moveBotfromString");
 			System.out.println(s);
 
-			Comms.sendMsg(Comms.ARDnAND, Comms.MULTI, s);
+			if (Simulator.realRun) {
+				Comms.sendMsg(Comms.ARDnAND, Comms.MULTI, s);
+			}
 			System.out.println("Message sent to Android");
 			System.out.println("Message sent to Arduino");
 

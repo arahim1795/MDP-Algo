@@ -35,7 +35,7 @@ public class Simulator {
 
 	// The robot
 	private static robot.Robot roboCop = null;
-	private static final boolean realRun = true;
+	public static final boolean realRun = true;
 	private static final int MaxExploredDuration = 330;
 	private static boolean ready = false;
 	private static boolean rstep = false;
@@ -326,7 +326,7 @@ public class Simulator {
 
 					int step = 1;
 					Explore explore;
-					explore = new Explore(roboCop, exploredMap, realMap, MaxExploredDuration, 100);
+					explore = new Explore(roboCop, exploredMap, realMap, MaxExploredDuration, 95);
 					explore.setupExplore();	
 
 					System.out.println("Exploration Starting");
@@ -334,8 +334,10 @@ public class Simulator {
 						System.out.println("exp step:" + step);
 						explore.explore();
 						step++;
-					} 
-					Comms.sendMsg(Comms.ar, Comms.arIns, "E");
+					}
+					if (realRun) {
+						Comms.sendMsg(Comms.ar, Comms.arIns, "E");
+					}
 					explore.goToStart();
 					exploredMap.repaint();
 					System.out.println("Sending E, waiting for Fastest Path");
