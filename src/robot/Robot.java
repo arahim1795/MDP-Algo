@@ -255,10 +255,10 @@ public class Robot {
 				msg = sendInstruction(m, sendAndroid);
 			}
 		System.out.println("Move: " + MOVEMENT.print(m));
-		
+
 		return msg;
 	}
-	
+
 	/**
 	 * Transmits movement command to Arduino module and optionally, to Android module (physically integrated function)
 	 * @param m Intended robot's movement function
@@ -267,12 +267,12 @@ public class Robot {
 	private String sendInstruction(MOVEMENT m, boolean sendAndroidBool) {
 		Comms.sendMsg(Comms.ar, Comms.arIns, MOVEMENT.print(m));
 		String msg = Comms.getArdReceipt(Comms.arData);
-		
+
 		if (sendAndroidBool && m != MOVEMENT.CALIBRATE) {
 			Comms.sendMsg(Comms.an, Comms.anPos, Comms.encodeCoor(MapDescriptor.getMDFcol(robotCol),MapDescriptor.getMDFrow(robotRow),DIRECTION.toInt(robotDir)));
 			Comms.sleepWait();
 		}
-		
+
 		return msg;
 	}
 
@@ -290,8 +290,12 @@ public class Robot {
 	 * @return Robot's new direction after turn function execution
 	 */
 	public DIRECTION findTurnDirection(MOVEMENT m) {
-		if (m == MOVEMENT.TURNLEFT) return DIRECTION.getLeft(robotDir);
-		else return DIRECTION.getRight(robotDir);
+		if (m == MOVEMENT.TURNLEFT) {
+			return DIRECTION.getLeft(robotDir);
+		}
+		else {
+			return DIRECTION.getRight(robotDir);
+		}
 	}
 
 	/**
@@ -303,7 +307,9 @@ public class Robot {
 			int dirInt = DIRECTION.toInt(robotDir);
 			System.out.println(Comms.encodeCoor(robotRow, robotCol,dirInt));
 			// Comms.sendMsg(Comms.ANDROID, Comms.POS, Comms.encodeCoor(robotRow, robotCol,dirInt));
-		} else System.out.println("alignment error");
+		} else {
+			System.out.println("alignment error");
+		}
 	}
 
 	/**
@@ -326,21 +332,24 @@ public class Robot {
 	 */
 	public void multiSense(Map mapExplore, String msg) {
 		int[] result = new int[6];
-		
+
 		String[] msgArr = msg.split(";");
 		msgArr = msgArr[2].split("_");
-		
+
 		result[0] = rounding(SENSORTYPE.SHORT, msgArr[0]);
 		result[1] = rounding(SENSORTYPE.SHORT, msgArr[1]);
 		result[2] = rounding(SENSORTYPE.SHORT, msgArr[2]);
 		result[3] = rounding(SENSORTYPE.SHORT, msgArr[3]);
 		result[4] = rounding(SENSORTYPE.SHORT, msgArr[4]);
 		result[5] = rounding(SENSORTYPE.LONG, msgArr[5]);
-		
-		System.out.print(
-				"1: " + result[0] + ", 2: " + result[1] + ", " +
-				"3: " + result[2] + ", 4: " + result[3] + ", " +
-				"5: " + result[4] + ", 6: " + result[5] + "\n");
+
+		System.out.print("1: " + result[0] + 
+				", 2: " + result[1] + 
+				", 3: " + result[2] + 
+				", 4: " + result[3] + 
+				", 5: " + result[4] + 
+				", 6: " + result[5] + 
+				"\n");
 
 		// update map explore
 		SRFrontLeft.sense(mapExplore, result[0]);
@@ -368,6 +377,8 @@ public class Robot {
 		sb.setLength(0);
 	}
 
+	// Legacy Sampling Code
+	/*
 	private double[] sampling(int numSample) {
 		String sample; String[] sampleArr;
 		List<String[]> samples = new ArrayList<String[]>();
@@ -396,6 +407,7 @@ public class Robot {
 
 		return max;
 	}
+	*/
 
 	/**
 	 * Returns the number of 10cm squares sensor seen
@@ -405,15 +417,30 @@ public class Robot {
 	 */
 	private int rounding(SENSORTYPE type, String str) {
 		double num = Double.parseDouble(str);
-		if (type == SENSORTYPE.SHORT)
-			if (num >= 26.0) return 3;
-			else if (num >= 16.0) return 2;
-			else if (num >= 11.5) return 1;
-		else
-			if (num >= 49.0) return 5;
-			else if (num >= 40.0) return 4;
-			else if (num >= 30.0) return 3;
-			else if (num >= 20.0) return 2;
+		
+		if (type == SENSORTYPE.SHORT) {
+			if (num >= 26.0) { 
+				return 3; 
+			} else if (num >= 16.0) { 
+				return 2; 
+			} else if (num >= 11.5) { 
+				return 1; 
+			}
+		} else {
+			if (num >= 52.0) {
+			} else if (num >= 48.0) { 
+				return 5; 
+			} else if (num >= 40.0) { 
+				return 4;
+			} else if (num >= 30.0) { 
+				return 3; 
+			} else if (num >= 20.0) { 
+				return 2; 
+			} else if (num >= 10.0) { 
+				return 1; 
+			}
+		}
+		
 		return 0;
 	}
 
@@ -422,38 +449,39 @@ public class Robot {
 	 */
 	public void moveSensor() {
 		switch (robotDir) {
-		case UP:
-			SRFrontLeft.setSensor(robotRow-1, robotCol-1, robotDir);
-			SRFrontCenter.setSensor(robotRow-1, robotCol, robotDir);
-			SRFrontRight.setSensor(robotRow-1, robotCol+1, robotDir);
-			SRLeft.setSensor(robotRow-1, robotCol-1, DIRECTION.LEFT);
-			SRLeftBack.setSensor(robotRow+1, robotCol-1, DIRECTION.LEFT);
-			LRRight.setSensor(robotRow, robotCol+1, DIRECTION.RIGHT);
-			break;
-		case DOWN:
-			SRFrontLeft.setSensor(robotRow+1, robotCol+1, robotDir);
-			SRFrontCenter.setSensor(robotRow+1, robotCol, robotDir);
-			SRFrontRight.setSensor(robotRow+1, robotCol-1, robotDir);
-			SRLeft.setSensor(robotRow+1, robotCol+1, DIRECTION.RIGHT);
-			SRLeftBack.setSensor(robotRow-1, robotCol+1, DIRECTION.RIGHT);
-			LRRight.setSensor(robotRow, robotCol-1, DIRECTION.LEFT);
-			break;
-		case LEFT:
-			SRFrontLeft.setSensor(robotRow+1, robotCol-1, robotDir);
-			SRFrontCenter.setSensor(robotRow, robotCol-1, robotDir);
-			SRFrontRight.setSensor(robotRow-1, robotCol-1, robotDir);
-			SRLeft.setSensor(robotRow+1, robotCol-1, DIRECTION.DOWN);
-			SRLeftBack.setSensor(robotRow+1, robotCol+1, DIRECTION.DOWN);
-			LRRight.setSensor(robotRow-1, robotCol, DIRECTION.UP);
-			break;
-		default:
-			SRFrontLeft.setSensor(robotRow-1, robotCol+1, robotDir);
-			SRFrontCenter.setSensor(robotRow, robotCol+1, robotDir);
-			SRFrontRight.setSensor(robotRow+1, robotCol+1, robotDir);
-			SRLeft.setSensor(robotRow-1, robotCol+1, DIRECTION.UP);
-			SRLeftBack.setSensor(robotRow-1, robotCol-1, DIRECTION.UP);
-			LRRight.setSensor(robotRow+1, robotCol, DIRECTION.DOWN);
-			break;
+			case UP:
+				SRFrontLeft.setSensor(robotRow-1, robotCol-1, robotDir);
+				SRFrontCenter.setSensor(robotRow-1, robotCol, robotDir);
+				SRFrontRight.setSensor(robotRow-1, robotCol+1, robotDir);
+				SRLeft.setSensor(robotRow-1, robotCol-1, DIRECTION.LEFT);
+				SRLeftBack.setSensor(robotRow+1, robotCol-1, DIRECTION.LEFT);
+				LRRight.setSensor(robotRow, robotCol+1, DIRECTION.RIGHT);
+				break;
+			case DOWN:
+				SRFrontLeft.setSensor(robotRow+1, robotCol+1, robotDir);
+				SRFrontCenter.setSensor(robotRow+1, robotCol, robotDir);
+				SRFrontRight.setSensor(robotRow+1, robotCol-1, robotDir);
+				SRLeft.setSensor(robotRow+1, robotCol+1, DIRECTION.RIGHT);
+				SRLeftBack.setSensor(robotRow-1, robotCol+1, DIRECTION.RIGHT);
+				LRRight.setSensor(robotRow, robotCol-1, DIRECTION.LEFT);
+				break;
+			case LEFT:
+				SRFrontLeft.setSensor(robotRow+1, robotCol-1, robotDir);
+				SRFrontCenter.setSensor(robotRow, robotCol-1, robotDir);
+				SRFrontRight.setSensor(robotRow-1, robotCol-1, robotDir);
+				SRLeft.setSensor(robotRow+1, robotCol-1, DIRECTION.DOWN);
+				SRLeftBack.setSensor(robotRow+1, robotCol+1, DIRECTION.DOWN);
+				LRRight.setSensor(robotRow-1, robotCol, DIRECTION.UP);
+				break;
+			default:
+				SRFrontLeft.setSensor(robotRow-1, robotCol+1, robotDir);
+				SRFrontCenter.setSensor(robotRow, robotCol+1, robotDir);
+				SRFrontRight.setSensor(robotRow+1, robotCol+1, robotDir);
+				SRLeft.setSensor(robotRow-1, robotCol+1, DIRECTION.UP);
+				SRLeftBack.setSensor(robotRow-1, robotCol-1, DIRECTION.UP);
+				LRRight.setSensor(robotRow+1, robotCol, DIRECTION.DOWN);
+				break;
 		}
 	}
+	
 }

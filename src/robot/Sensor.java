@@ -104,7 +104,9 @@ public class Sensor {
 
 				// if 'sensed' tile within blindspot is invalid/does not exist/an obstacle, terminate immediately
 				if (!Map.isValidTile(sensedRow, sensedCol) ||
-						mapActual.getTile(sensedRow, sensedCol).isObstacle()) return;
+						mapActual.getTile(sensedRow, sensedCol).isObstacle()) {
+					return;
+				}
 			}
 		}
 
@@ -114,7 +116,9 @@ public class Sensor {
 			sensedCol = sensorCol + (colMul * i);
 
 			// if 'sensed' tile is invalid/does not exist, terminate immediately
-			if (!Map.isValidTile(sensedRow, sensedCol)) return;
+			if (!Map.isValidTile(sensedRow, sensedCol)) {
+				return;
+			}
 
 			// if 'sensed tile is an obstacle, set Tile to obstacle and terminate immediately
 			if (mapActual.getTile(sensedRow, sensedCol).isObstacle()) {
@@ -138,18 +142,18 @@ public class Sensor {
 	 */
 	public void sense(Map mapExplore, int sensorVal) {
 		switch (sensorDir) {
-		case UP:
-			senseInfo(mapExplore, sensorVal, -1, 0);
-			return;
-		case DOWN:
-			senseInfo(mapExplore, sensorVal, 1, 0);
-			break;
-		case LEFT:
-			senseInfo(mapExplore, sensorVal, 0, -1);
-			break;
-		default:
-			senseInfo(mapExplore, sensorVal, 0, 1);
-			break;
+			case UP:
+				senseInfo(mapExplore, sensorVal, -1, 0);
+				return;
+			case DOWN:
+				senseInfo(mapExplore, sensorVal, 1, 0);
+				return;
+			case LEFT:
+				senseInfo(mapExplore, sensorVal, 0, -1);
+				return;
+			case RIGHT:
+				senseInfo(mapExplore, sensorVal, 0, 1);
+				return;
 		}
 	}
 
@@ -167,8 +171,9 @@ public class Sensor {
 		 * (used only by sensor with lower limit above 1)
 		 */
 		if (sensorVal == 0) {
-			if (sensorID == 6) return;
-			else {
+			if (sensorID == 6) {
+				return;
+			} else {
 				row = sensorRow+(1*rowMul);
 				col = sensorCol+(1*colMul);
 				if (Map.isValidTile(row, col)) {
@@ -197,10 +202,14 @@ public class Sensor {
 			row = sensorRow + (rowMul * i);
 			col = sensorCol + (colMul * i);
 
-			if (!Map.isValidTile(row, col)) return;
+			if (!Map.isValidTile(row, col)) {
+				return;
+			}
 
 			exploredMap.getTile(row, col).setExplored(true);
 
+			// AutoLogic Set Blockers
+			/*
 			if ((sensorVal == 1 || sensorVal == 2) && sensorVal == i) {
 				if (!Map.isValidTile(row+(1*rowMul), col+(1*colMul))) return;
 				
@@ -210,10 +219,13 @@ public class Sensor {
 				System.out.println("tile" + obsTile.getRow() + "," + obsTile.getCol() + "setObstacle");
 				return;
 			}
+			*/
 
 			// Override values set by Long Range sensor when any short range sensor detects discrepancies 
-			if (exploredMap.getTile(row, col).isObstacle() && (sensorID == 1 || sensorID == 2 || sensorID == 3))
+			if (exploredMap.getTile(row, col).isObstacle() && (sensorID == 1 || sensorID == 2 || sensorID == 3)) {
 				exploredMap.setObstacleTile(row, col, false);
+			}
+				
 		}
 	}
 
