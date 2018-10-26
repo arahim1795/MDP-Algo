@@ -201,7 +201,6 @@ public class Map extends JPanel {
 		}
 	}
 
-
 	// Setter(s)
 	/**
 	 * Sets Tile as an obstacles, adjacent Tile(s) are set as virtual walls, except for
