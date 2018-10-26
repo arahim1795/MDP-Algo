@@ -278,6 +278,12 @@ public class FastestPath {
 				bot.move(m, true, true);
 			}
 		}
+		else{
+			for(MOVEMENT m : movementList){
+				System.out.println("Move: " + MOVEMENT.print(m));
+				bot.moveDigital(m);
+			}
+		}
 
 	}
 
@@ -292,7 +298,6 @@ public class FastestPath {
 				Comms.sendMsg(Comms.ARDnAND, Comms.MULTI, s);
 			}
 			System.out.println("Message sent to Android");
-			System.out.println("Message sent to Arduino");
 
 
 
