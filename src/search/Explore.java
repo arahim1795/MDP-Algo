@@ -188,7 +188,6 @@ public class Explore {
 
 		FastestPath fp = new FastestPath(mapExplore, robot);;
 		String str;
-
 		if (mapExplore.getTile(goalRow, goalCol).isExplored() && !visitedGoal) {
 			str = fp.searchFastestPath(robot.getRow(),robot.getCol(),goalRow, goalCol);
 			str += fp.searchFastestPath(goalRow,goalCol,startRow,startCol);
@@ -196,7 +195,6 @@ public class Explore {
 		} else {
 			if (!robot.isAtPos(startRow, startCol)) {
 				str = fp.searchFastestPath(startRow, startCol);
-				System.out.println(str);
 				fp.moveBotfromString(str,Simulator.returnRealRun());
 			}
 		}
