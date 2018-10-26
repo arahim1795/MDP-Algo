@@ -133,17 +133,46 @@ public class Explore {
 			// if @ corners
 			// if robotdir can calibrate
 			DIRECTION dir = robot.getDir();
-			if (canCalibrate(1)) {
-				if (canCalibrate(2) || canCalibrate(3)) {
-					calibrateCount = 0;
+			if (canCalibrate(1)) { // if front-3 is obs/edge
+				if (rightNotExplored()) { // if right-3 is not explored
 					calibrate();
+					calibrateCount = 0;
+					moveRobot(turnRight, isReal, isReal);
+					if (canCalibrate(1)) {
+						calibrate();
+						moveRobot(turnRight, isReal, isReal);
+						calibrateCount = 0;
+					}
+				} else if (canCalibrate(3)) { // if right-3 is obs/edge
+					calibrate();
+					moveRobot(turnRight, isReal, isReal);
+					calibrate();
+					calibrateCount = 0;
+				} else if (canCalibrate(2)) { // if left-3 is obs/edge
+					calibrate();
+					moveRobot(turnLeft, isReal, isReal);
+					calibrate();
+					calibrateCount = 0;
 				}
 			}
 			
 			if (calibrateCount >= 3) {
-				calibrate();
-				calibrateCount = 0;
+				if (canCalibrate(1)) {
+					calibrate();
+					calibrateCount = 0;
+				} else if (canCalibrate(3)) {
+					moveRobot(turnRight, isReal, isReal);
+					calibrate();
+					moveRobot(turnLeft, isReal, isReal);
+					calibrateCount = 0;
+				} else if (canCalibrate(2)) {
+					moveRobot(turnLeft, isReal, isReal);
+					calibrate();
+					moveRobot(turnRight, isReal, isReal);
+					calibrateCount = 0;
+				}
 			}
+			
 		}
 	}
 
@@ -348,6 +377,10 @@ public class Explore {
 			robot.move(move, false, false);
 			robot.moveSensor();
 			robot.multiSense(mapExplore, mapActual);
+		}
+		
+		if (robot.getRow() == RobotConstant.DEFAULT_GOAL_ROW && robot.getCol() == RobotConstant.DEFAULT_GOAL_COL) {
+			visitedGoal = true;
 		}
 		
 		mapExplore.repaint();
