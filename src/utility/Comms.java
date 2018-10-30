@@ -135,9 +135,11 @@ public class Comms {
 			break;
 		case ARDnAND:
 			sb.append(major);
+			sb.append("_");
 			switch (sub) {
 			case MULTI:
 				sb.append(sub);
+				sb.append("_");
 				break;
 			default:
 				System.err.println("Invalid Purpose");
