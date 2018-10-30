@@ -83,13 +83,8 @@ public class Explore {
 	/**
 	 * 
 	 */
-	public void setupExplore() {	
-		System.out.println("Setting up...");
-		
-		// calibration
+	public void initialCalibrate() {
 		if (isReal) {
-			System.out.println("Calibrating...");
-
 			rotateRobot(down);
 			calibrate();
 
@@ -98,7 +93,12 @@ public class Explore {
 
 			rotateRobot(up);
 		}
-
+	}
+	
+	/**
+	 * 
+	 */
+	public void setupExplore() {	
 		timeStart = System.currentTimeMillis();
 		timeEnd = timeStart + duration;
 		softEnd = timeStart + TimeUnit.SECONDS.toMillis(250);

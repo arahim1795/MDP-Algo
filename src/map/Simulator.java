@@ -277,7 +277,7 @@ public class Simulator {
 
 						else{
 							msg = Comms.receiveMsg();
-							System.out.println(msg);
+							// System.out.println(msg);
 
 							//						if(msg==null){
 							//							if(nulls)
@@ -322,13 +322,22 @@ public class Simulator {
 						if (exReady) break;
 					}
 
-					System.out.println("Exploration Running");
-
-					int step = 1;
 					Explore explore;
 					explore = new Explore(roboCop, exploredMap, realMap, MaxExploredDuration, 95);
-					explore.setupExplore();	
-
+					
+					if (realRun) {
+						System.out.println("Calibrating...");
+						explore.initialCalibrate();
+					}
+					
+					explore.setupExplore();
+					
+					if (realRun) {
+						do {
+							msg = Comms.receiveMsg();
+						} while (!msg.equals(Comms.anEx));
+					}
+					
 					System.out.println("Exploration Starting");
 					while(noInterrupt && !explore.runFinished()){
 						// System.out.println("exp step:" + step);
