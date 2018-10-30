@@ -36,7 +36,7 @@ public class Simulator {
 	// The robot
 	private static robot.Robot roboCop = null;
 	public static final boolean realRun = true;
-	private static final int MaxExploredDuration = 330;
+	private static final int MaxExploredDuration = 300;
 	private static boolean ready = false;
 	private static boolean rstep = false;
 	private static boolean exploredDone = false;
@@ -331,9 +331,9 @@ public class Simulator {
 
 					System.out.println("Exploration Starting");
 					while(noInterrupt && !explore.runFinished()){
-						System.out.println("exp step:" + step);
+						// System.out.println("exp step:" + step);
 						explore.explore();
-						step++;
+						// step++;
 					}
 					if (realRun) {
 //						Comms.sendMsg(Comms.ar, Comms.arIns, "E");

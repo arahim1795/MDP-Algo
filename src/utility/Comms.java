@@ -196,7 +196,7 @@ public class Comms {
 
 		msg = msgBuilder.toString().toLowerCase();
 		
-		System.out.println(msg);
+		// System.out.println(msg);
 
 		if (msg.contains(";")) {
 			String[] strArr = msg.split(";");

@@ -37,7 +37,7 @@ public class Explore {
 	private int explored = 0; // explore counter
 	private double coveragePercent;
 	private int maxCoverage;
-	private long timeStart, timeEnd;
+	private long timeStart, timeEnd, softEnd;
 	private long duration;
 	private Map mapExplore;
 	private boolean visitedGoal = false;
@@ -101,6 +101,7 @@ public class Explore {
 
 		timeStart = System.currentTimeMillis();
 		timeEnd = timeStart + duration;
+		softEnd = timeStart + TimeUnit.SECONDS.toMillis(250);
 
 		int robotRow = robot.getRow();
 		int robotCol = robot.getCol();
@@ -122,7 +123,8 @@ public class Explore {
 	 * 
 	 */
 	public void explore() {
-		if (System.currentTimeMillis() >= timeEnd || explored >= maxCoverage) {
+		if (System.currentTimeMillis() >= timeEnd || explored >= maxCoverage || 
+				( (System.currentTimeMillis() >= softEnd) && RobotConstant.isAtStart(robot.getRow(), robot.getCol())) ) {
 			endRun = true;
 			return;
 		} else {

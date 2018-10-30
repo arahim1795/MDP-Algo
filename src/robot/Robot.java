@@ -343,12 +343,12 @@ public class Robot {
 		result[4] = rounding(SENSORTYPE.SHORT, msgArr[4]);
 		result[5] = rounding(SENSORTYPE.LONG, msgArr[5]);
 
-		System.out.print("1: " + result[0] + 
-				", 2: " + result[1] + 
-				", 3: " + result[2] + 
-				", 4: " + result[3] + 
-				", 5: " + result[4] + 
-				", 6: " + result[5] + 
+		System.out.print("FL: " + result[0] + 
+				", FM: " + result[1] + 
+				", FR: " + result[2] + 
+				", LF: " + result[3] + 
+				", LB: " + result[4] + 
+				", RL: " + result[5] + 
 				"\n");
 
 		// update map explore
