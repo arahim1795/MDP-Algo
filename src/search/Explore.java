@@ -10,7 +10,6 @@ import robot.RobotConstant.DIRECTION;
 import robot.RobotConstant.MOVEMENT;
 
 import search.FastestPath;
-import utility.Comms;
 
 public class Explore {
 
@@ -103,8 +102,9 @@ public class Explore {
 		timeEnd = timeStart + duration;
 		softEnd = timeStart + TimeUnit.SECONDS.toMillis(250);
 
-		int robotRow = robot.getRow();
-		int robotCol = robot.getCol();
+		int robotRow, robotCol;
+		robotRow = robot.getRow();
+		robotCol = robot.getCol();
 		int[] startVal = {robotRow,robotCol};
 		List<int[]> initialReveal = Map.getAdjCoor(robotRow, robotCol);
 		initialReveal.add(startVal);
@@ -241,14 +241,14 @@ public class Explore {
 	 */
 	private boolean peekLeft() {
 		switch(robot.getDir()) {
-		case UP:
-			return isLeftFree();
-		case DOWN:
-			return isRightFree();
-		case LEFT:
-			return isDownFree();
-		default:
-			return isUpFree();
+			case UP:
+				return isLeftFree();
+			case DOWN:
+				return isRightFree();
+			case LEFT:
+				return isDownFree();
+			default:
+				return isUpFree();
 		}
 	}
 
@@ -258,14 +258,14 @@ public class Explore {
 	 */
 	private boolean peekRight() {
 		switch(robot.getDir()) {
-		case UP:
-			return isRightFree();
-		case DOWN:
-			return isLeftFree();
-		case LEFT:
-			return isUpFree();
-		default:
-			return isDownFree();
+			case UP:
+				return isRightFree();
+			case DOWN:
+				return isLeftFree();
+			case LEFT:
+				return isUpFree();
+			default:
+				return isDownFree();
 		}
 	}
 
@@ -275,14 +275,14 @@ public class Explore {
 	 */
 	private boolean peekDown() {
 		switch(robot.getDir()) {
-		case UP:
-			return isDownFree();
-		case DOWN:
-			return isUpFree();
-		case LEFT:
-			return isRightFree();
-		default:
-			return isDownFree();
+			case UP:
+				return isDownFree();
+			case DOWN:
+				return isUpFree();
+			case LEFT:
+				return isRightFree();
+			default:
+				return isDownFree();
 		}	
 	}
 
@@ -292,14 +292,14 @@ public class Explore {
 	 */
 	private boolean peekUp() {
 		switch(robot.getDir()) {
-		case UP:
-			return isUpFree();
-		case DOWN:
-			return isDownFree();
-		case LEFT:
-			return isLeftFree();
-		default:
-			return isRightFree();
+			case UP:
+				return isUpFree();
+			case DOWN:
+				return isDownFree();
+			case LEFT:
+				return isLeftFree();
+			default:
+				return isRightFree();
 		}
 	}
 

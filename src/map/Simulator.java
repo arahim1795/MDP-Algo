@@ -330,16 +330,16 @@ public class Simulator {
 						explore.initialCalibrate();
 					}
 					
-					explore.setupExplore();
-					
 					if (realRun) {
 						do {
 							msg = Comms.receiveMsg();
 						} while (!msg.equals(Comms.anEx));
 					}
 					
+					explore.setupExplore();
+					
 					System.out.println("Exploration Starting");
-					while(noInterrupt && !explore.runFinished()){
+					while (noInterrupt && !explore.runFinished()) {
 						// System.out.println("exp step:" + step);
 						explore.explore();
 						// step++;
