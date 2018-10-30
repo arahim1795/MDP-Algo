@@ -35,7 +35,7 @@ public class Simulator {
 
 	// The robot
 	private static robot.Robot roboCop = null;
-	public static final boolean realRun = false;
+	public static final boolean realRun = true;
 	private static final int MaxExploredDuration = 330;
 	private static boolean ready = false;
 	private static boolean rstep = false;
@@ -336,7 +336,7 @@ public class Simulator {
 						step++;
 					}
 					if (realRun) {
-						Comms.sendMsg(Comms.ar, Comms.arIns, "E");
+//						Comms.sendMsg(Comms.ar, Comms.arIns, "E");
 					}
 					explore.goToStart();
 					exploredMap.repaint();
