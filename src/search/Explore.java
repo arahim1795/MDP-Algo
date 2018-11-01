@@ -134,47 +134,47 @@ public class Explore {
 			
 			// if @ corners
 			// if robotdir can calibrate
-			DIRECTION dir = robot.getDir();
-			if (canCalibrate(1)) { // if front-3 is obs/edge
-				if (rightNotExplored()) { // if right-3 is not explored
-					calibrate();
-					calibrateCount = 0;
+			
+			// Situation(s): if front can calibrate, calibrate front then execute normally
+			// if left can calibrate, turn left, calibrate, turn right then execute normally
+			
+			boolean calibratedRight = false;
+			if (canCalibrate(1) && canCalibrate(2)) {
+				calibrate();
+				if (rightNotExplored()) {
 					moveRobot(turnRight, isReal, isReal);
 					if (canCalibrate(1)) {
 						calibrate();
-						moveRobot(turnRight, isReal, isReal);
-						calibrateCount = 0;
+						moveRobot(turnLeft, isReal, isReal);	
+						calibratedRight = true;
 					}
-				} else if (canCalibrate(3)) { // if right-3 is obs/edge
-					calibrate();
-					moveRobot(turnRight, isReal, isReal);
-					calibrate();
-					calibrateCount = 0;
-				} else if (canCalibrate(2)) { // if left-3 is obs/edge
-					calibrate();
+				}
+				if (!calibratedRight) {
 					moveRobot(turnLeft, isReal, isReal);
 					calibrate();
-					calibrateCount = 0;
+					moveRobot(turnRight, isReal, isReal);
 				}
-			}
+				calibrateCount = 0;
+			} 
+			
+			
 			
 			if (calibrateCount >= 4) {
 				if (canCalibrate(1)) {
 					calibrate();
-					calibrateCount = 0;
-				} else if (canCalibrate(3)) {
-					moveRobot(turnRight, isReal, isReal);
-					calibrate();
-					moveRobot(turnLeft, isReal, isReal);
 					calibrateCount = 0;
 				} else if (canCalibrate(2)) {
 					moveRobot(turnLeft, isReal, isReal);
 					calibrate();
 					moveRobot(turnRight, isReal, isReal);
 					calibrateCount = 0;
+				} else if (canCalibrate(3)) {
+					moveRobot(turnRight, isReal, isReal);
+					calibrate();
+					moveRobot(turnLeft, isReal, isReal);
+					calibrateCount = 0;
 				}
 			}
-			
 		}
 	}
 
@@ -488,56 +488,43 @@ public class Explore {
 		col = robot.getCol();
 
 		DIRECTION robotDir = robot.getDir();
-
-		switch (robotDir) {
-		case UP:
-			switch (i) {
-			case 2:
-				return isInvOrObs(row-1,col-2) && isInvOrObs(row,col-2) && isInvOrObs(row+1,col-2);
-			case 3:
-				return isInvOrObs(row-1,col+2) && isInvOrObs(row,col+2) && isInvOrObs(row+1,col+2);
-			default:
-				return isInvOrObs(row-2,col-1) && isInvOrObs(row-2,col) && isInvOrObs(row-2,col+1);
+		if (robotDir == up) {
+			if (i == 1) {
+				return (isCalibrateTile(row-2,col-1) && isCalibrateTile(row-2,col) && isCalibrateTile(row-2,col+1)); 
+			} else if (i == 2) {
+				return (isCalibrateTile(row-1,col-2) && isCalibrateTile(row,col-2) && isCalibrateTile(row+1,col-2)); 
+			} else {
+				return (isCalibrateTile(row-1,col+2) && isCalibrateTile(row,col+2) && isCalibrateTile(row+1,col+2)); 
 			}
-		case DOWN:
-			switch (i) {
-			case 2:
-				return isInvOrObs(row-1,col+2) && isInvOrObs(row,col+2) && isInvOrObs(row+1,col+2);
-			case 3:
-				return isInvOrObs(row-1,col-2) && isInvOrObs(row,col-2) && isInvOrObs(row+1,col-2);
-			default:
-				return isInvOrObs(row+2,col-1) && isInvOrObs(row+2,col) && isInvOrObs(row+2,col+1);
+		} else if (robotDir == left) {
+			if (i == 1) {
+				return (isCalibrateTile(row-1,col-2) && isCalibrateTile(row,col-2) && isCalibrateTile(row+1,col-2)); 
+			} else if (i == 2) {
+				return (isCalibrateTile(row+2,col-1) && isCalibrateTile(row+2,col) && isCalibrateTile(row+2,col+1)); 
+			} else {
+				return (isCalibrateTile(row-2,col-1) && isCalibrateTile(row-2,col) && isCalibrateTile(row-2,col+1)); 
 			}
-		case LEFT:
-			switch (i) {
-			case 2:
-				return isInvOrObs(row+2,col-1) && isInvOrObs(row+2,col) && isInvOrObs(row+2,col+1);
-			case 3:
-				return isInvOrObs(row-2,col-1) && isInvOrObs(row-2,col) && isInvOrObs(row-2,col+1);
-			default:
-				return isInvOrObs(row-1,col-2) && isInvOrObs(row,col-2) && isInvOrObs(row+1,col-2);
+		} else if (robotDir == right) {
+			if (i == 1) {
+				return (isCalibrateTile(row-1,col+2) && isCalibrateTile(row,col+2) && isCalibrateTile(row+1,col+2)); 
+			} else if (i == 2) {
+				return (isCalibrateTile(row-2,col-1) && isCalibrateTile(row-2,col) && isCalibrateTile(row-2,col+1));  
+			} else {
+				return (isCalibrateTile(row+2,col-1) && isCalibrateTile(row+2,col) && isCalibrateTile(row+2,col+1));  
 			}
-		default:
-			switch (i) {
-			case 2:
-				return isInvOrObs(row-2,col-1) && isInvOrObs(row-2,col) && isInvOrObs(row-2,col+1);
-			case 3:
-				return isInvOrObs(row+2,col-1) && isInvOrObs(row+2,col) && isInvOrObs(row+2,col+1);
-			default:
-				return isInvOrObs(row-1,col+2) && isInvOrObs(row,col+2) && isInvOrObs(row+1,col+2);
+		} else {
+			if (i == 1) {
+				return (isCalibrateTile(row+2,col-1) && isCalibrateTile(row+2,col) && isCalibrateTile(row+2,col+1));  
+			} else if (i == 2) {
+				return (isCalibrateTile(row-1,col+2) && isCalibrateTile(row,col+2) && isCalibrateTile(row+1,col+2)); 
+			} else {
+				return (isCalibrateTile(row-1,col-2) && isCalibrateTile(row,col-2) && isCalibrateTile(row+1,col-2)); 
 			}
 		}
 	}
-
-	/**
-	 * 
-	 * @param row
-	 * @param col
-	 * @return
-	 */
-	private boolean isInvOrObs(int row, int col) {
-		if (!Map.isValidTile(row, col)) return true;
-		else return mapExplore.getTile(row, col).isObstacle();
+	
+	private boolean isCalibrateTile(int row, int col) {
+		return !Map.isValidTile(row, col) || mapExplore.isObstacleTile(row, col);
 	}
 	
 	private boolean rightNotExplored() {
@@ -546,49 +533,22 @@ public class Explore {
 		switch (robot.getDir()) {
 			case UP:
 				if (Map.isValidTile(row-1,col+2) && Map.isValidTile(row,col+2) && Map.isValidTile(row+1,col+2)) {
-					return mapExplore.getTile(row-1, col+2).isExplored() && mapExplore.getTile(row, col+2).isExplored() && mapExplore.getTile(row+1, col+2).isExplored();
+					return !mapExplore.getTile(row-1, col+2).isExplored() || !mapExplore.getTile(row, col+2).isExplored() || !mapExplore.getTile(row+1, col+2).isExplored();
 				}
 				return false; 
 			case DOWN:
 				if (Map.isValidTile(row-1,col-2) && Map.isValidTile(row,col-2) && Map.isValidTile(row+1,col-2)) {
-					return mapExplore.getTile(row-1, col-2).isExplored() && mapExplore.getTile(row, col-2).isExplored() && mapExplore.getTile(row+1, col-2).isExplored();
+					return !mapExplore.getTile(row-1, col-2).isExplored() || !mapExplore.getTile(row, col-2).isExplored() || !mapExplore.getTile(row+1, col-2).isExplored();
 				}
 				return false; 
 			case LEFT:
 				if (Map.isValidTile(row-2,col-1) && Map.isValidTile(row-2,col) && Map.isValidTile(row-2,col+1)) {
-					return mapExplore.getTile(row-2, col-1).isExplored() && mapExplore.getTile(row-2, col).isExplored() && mapExplore.getTile(row-2, col+1).isExplored();
+					return !mapExplore.getTile(row-2, col-1).isExplored() || !mapExplore.getTile(row-2, col).isExplored() || !mapExplore.getTile(row-2, col+1).isExplored();
 				}
 				return false;
 			default:
 				if (Map.isValidTile(row+2,col-1) && Map.isValidTile(row+2,col) && Map.isValidTile(row+2,col+1)) {
-					return mapExplore.getTile(row+2, col-1).isExplored() && mapExplore.getTile(row+2, col).isExplored() && mapExplore.getTile(row+2, col+1).isExplored();
-				}
-				return false;
-		}
-	}
-	
-	private boolean leftNotExplored() {
-		int row, col;
-		row = robot.getRow(); col = robot.getCol();
-		switch (robot.getDir()) {
-			case DOWN:
-				if (Map.isValidTile(row-1,col+2) && Map.isValidTile(row,col+2) && Map.isValidTile(row+1,col+2)) {
-					return mapExplore.getTile(row-1, col+2).isExplored() && mapExplore.getTile(row, col+2).isExplored() && mapExplore.getTile(row+1, col+2).isExplored();
-				}
-				return false; 
-			case UP:
-				if (Map.isValidTile(row-1,col-2) && Map.isValidTile(row,col-2) && Map.isValidTile(row+1,col-2)) {
-					return mapExplore.getTile(row-1, col-2).isExplored() && mapExplore.getTile(row, col-2).isExplored() && mapExplore.getTile(row+1, col-2).isExplored();
-				}
-				return false; 
-			case RIGHT:
-				if (Map.isValidTile(row-2,col-1) && Map.isValidTile(row-2,col) && Map.isValidTile(row-2,col+1)) {
-					return mapExplore.getTile(row-2, col-1).isExplored() && mapExplore.getTile(row-2, col).isExplored() && mapExplore.getTile(row-2, col+1).isExplored();
-				}
-				return false;
-			default:
-				if (Map.isValidTile(row+2,col-1) && Map.isValidTile(row+2,col) && Map.isValidTile(row+2,col+1)) {
-					return mapExplore.getTile(row+2, col-1).isExplored() && mapExplore.getTile(row+2, col).isExplored() && mapExplore.getTile(row+2, col+1).isExplored();
+					return !mapExplore.getTile(row+2, col-1).isExplored() || !mapExplore.getTile(row+2, col).isExplored() || !mapExplore.getTile(row+2, col+1).isExplored();
 				}
 				return false;
 		}
