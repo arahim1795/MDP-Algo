@@ -8,7 +8,6 @@ import java.io.*;
 
 import map.MapConstant;
 
-import robot.RobotConstant;
 import robot.RobotConstant.DIRECTION;
 import robot.Robot;
 
@@ -18,7 +17,6 @@ import utility.Comms;
 import utility.MapDescriptor;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.concurrent.TimeUnit;
 
 public class Simulator {
 
@@ -38,6 +36,7 @@ public class Simulator {
 	public static final boolean realRun = true;
 	private static final int MaxExploredDuration = 300;
 	private static boolean ready = false;
+	@SuppressWarnings("unused")
 	private static boolean rstep = false;
 	private static boolean exploredDone = false;
 	private static boolean noInterrupt = true;
@@ -169,6 +168,102 @@ public class Simulator {
 		//			}
 		//
 		//		}
+		class realFastestPathThread extends SwingWorker<Void, Void> {
+
+			//private Simulator simulator = null;
+			private final String prReallyDone = "ReallyDone";
+
+			private void whenReallyDone() {
+				//simulator.afterWorkerFinishes();
+				System.out.println("FP done");
+			}
+
+			public realFastestPathThread() {
+				//this.simulator = sim;
+
+				getPropertyChangeSupport().addPropertyChangeListener(prReallyDone,
+						new PropertyChangeListener() {
+					public void propertyChange(PropertyChangeEvent e) {
+						if (e.getNewValue().equals(true)) {
+							whenReallyDone();
+						}
+					}
+				});
+			}
+
+			@SuppressWarnings("unused")
+			protected Void doInBackground() throws Exception {
+				long idleTime = System.currentTimeMillis();
+				boolean fpReady = false;
+				String msg;
+
+				System.out.println("FP Ready");
+				
+				Map FPMap;
+				if(exploredDone || realRun){
+					FPMap = exploredMap;            		
+				} else {
+					FPMap = realMap;
+				}
+				//
+				FastestPath fastestPathAlgo = new FastestPath(FPMap, roboCop);
+				String outStr;
+				if(FPMap.hasMidPoint()){	        	
+					outStr = fastestPathAlgo.searchFastestPath(FPMap.getMidPointRow(),FPMap.getMidPointCol());
+					outStr +=fastestPathAlgo.searchFastestPath(FPMap.getMidPointRow(),FPMap.getMidPointCol(),MapConstant.GOAL_GRID_ROW, MapConstant.GOAL_GRID_COL);
+				} 
+				else{
+					outStr = fastestPathAlgo.searchFastestPath(MapConstant.GOAL_GRID_ROW, MapConstant.GOAL_GRID_COL);
+				}
+				System.out.println("FP CALCULATED!");
+				while (true) {
+					if(!realRun){
+						fpReady = ready;
+					}
+					else {
+						msg = Comms.receiveMsg();
+						if(msg.equals(Comms.anFp)) {
+							fpReady = true;
+						}
+					}
+					if(System.currentTimeMillis()-idleTime >7000){
+						idleTime = System.currentTimeMillis();
+						System.out.println("FP Waiting...Calculated!");
+					}
+					else
+						System.out.print("");	
+					if(fpReady){		            	
+						break;
+					}
+				}
+				//
+				System.out.println("FP Running");
+				fastestPathAlgo.moveBotfromString(outStr,realRun,false);
+
+				firePropertyChange(prReallyDone, false, true);
+				
+
+				// send MDF strings
+				Comms.sleepWait();
+				StringBuilder sb = new StringBuilder();
+				// MDF1
+				sb.append("1:");
+				sb.append(MapDescriptor.generateMDFHex1(FPMap));
+				sb.append("/");
+				Comms.sendMsg(Comms.an, Comms.anMdf, sb.toString());
+				Comms.sleepWait();
+				sb.setLength(0);
+				// MDF2
+				sb.append("2:");
+				sb.append(MapDescriptor.generateMDFHex2(FPMap));
+				sb.append("/");
+				Comms.sendMsg(Comms.an, Comms.anMdf, sb.toString());
+				Comms.sleepWait();
+				sb.setLength(0);
+				return null;
+			}
+
+		}
 
 		class fastestPathThread extends SwingWorker<Void, Void> {
 
@@ -193,6 +288,7 @@ public class Simulator {
 				});
 			}
 
+			@SuppressWarnings("unused")
 			protected Void doInBackground() throws Exception {
 				long idleTime = System.currentTimeMillis();
 				boolean fpReady = false;
@@ -224,9 +320,9 @@ public class Simulator {
 				Map FPMap;
 				if(exploredDone || realRun){
 					FPMap = exploredMap;            		
-				}
-				else
+				} else {
 					FPMap = realMap;
+				}
 				//
 				FastestPath fastestPathAlgo = new FastestPath(FPMap, roboCop);
 				String outStr;
@@ -237,7 +333,7 @@ public class Simulator {
 				else{
 					outStr = fastestPathAlgo.searchFastestPath(MapConstant.GOAL_GRID_ROW, MapConstant.GOAL_GRID_COL);
 				}
-				fastestPathAlgo.moveBotfromString(outStr,realRun);
+				fastestPathAlgo.moveBotfromString(outStr,realRun,false);
 
 				firePropertyChange(prReallyDone, false, true);
 				
@@ -372,7 +468,7 @@ public class Simulator {
 
 					ready = false;
 					System.out.println("Starting fastestPathThread");
-					new fastestPathThread().execute();
+					new realFastestPathThread().execute();
 					//
 					
 					// send MDF strings

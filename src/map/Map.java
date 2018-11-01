@@ -18,6 +18,7 @@ import robot.RobotConstant;
 /**
  * @author 18/19 S1 G3
  */
+@SuppressWarnings("serial")
 public class Map extends JPanel {
 	private Tile[][] field;
 	private ColorTile[][] mapColorTiles = null;

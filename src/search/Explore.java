@@ -1,6 +1,5 @@
 package search;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -25,12 +24,15 @@ public class Explore {
 	private DIRECTION up = DIRECTION.UP;
 	private DIRECTION down = DIRECTION.DOWN;
 	private DIRECTION left = DIRECTION.LEFT;
-	private DIRECTION right = DIRECTION.RIGHT;
+	// private DIRECTION right = DIRECTION.RIGHT;
 
 	// Robot Tracker
 	private Robot robot;
 	private boolean isReal;
 	private int calibrateCount = 0;
+	
+	// Safety Catch
+	private int leftCount = 0;
 
 	// Map Exploration Tracker
 	private int explored = 0; // explore counter
@@ -43,10 +45,6 @@ public class Explore {
 	private boolean endRun = false;
 	
 	private String msg;
-
-
-	// Obstacles Tracker
-	private ArrayList<ExploreTile> obstacles = new ArrayList<ExploreTile>();
 
 	// Simulation Tracker
 	private Map mapActual;
@@ -201,11 +199,11 @@ public class Explore {
 		if (mapExplore.getTile(goalRow, goalCol).isExplored() && !visitedGoal) {
 			str = fp.searchFastestPath(robot.getRow(),robot.getCol(),goalRow, goalCol);
 			str += fp.searchFastestPath(goalRow,goalCol,startRow,startCol);
-			fp.moveBotfromString(str,Simulator.returnRealRun());
+			fp.moveBotfromString(str,Simulator.returnRealRun(),true);
 		} else {
 			if (!robot.isAtPos(startRow, startCol)) {
 				str = fp.searchFastestPath(startRow, startCol);
-				fp.moveBotfromString(str,Simulator.returnRealRun());
+				fp.moveBotfromString(str,Simulator.returnRealRun(),true);
 			}
 		}
 
@@ -229,16 +227,19 @@ public class Explore {
 	 * 
 	 */
 	private void move() {
-		if (peekLeft()) {
+		if (peekLeft() && leftCount < 4) {
 			moveRobot(turnLeft, isReal, isReal);
+			leftCount++;
 			if (peekUp()) {
 				moveRobot(forward, isReal, isReal);
 			}
 		} else if (peekUp()) {
+			leftCount = 0;
 			moveRobot(forward, isReal, isReal);
 		} 
 		
 		else if (peekRight()) {
+			leftCount = 0;
 			moveRobot(turnRight, isReal, isReal);
 			if (peekUp()) {
 				moveRobot(forward, isReal, isReal);
@@ -256,6 +257,7 @@ public class Explore {
 		*/
 		
 		else if (peekDown()) {
+			leftCount = 0;
 			moveRobot(turnLeft, isReal, isReal);
 			moveRobot(turnLeft, isReal, isReal);
 		}
@@ -549,6 +551,8 @@ public class Explore {
 		return !Map.isValidTile(row, col) || explore.isObstacleTile(row, col);
 	}
 	
+	// Right Blind Legacy Code
+	/*
 	private boolean rightNotExplored() {
 		int row, col;
 		row = robot.getRow(); col = robot.getCol();
@@ -575,6 +579,7 @@ public class Explore {
 				return false;
 		}
 	}
+	*/
 
 	/**
 	 * 

@@ -256,11 +256,11 @@ public class FastestPath {
 		return actualPath;
 	}
 	//
-	public void moveBotfromString(String s, boolean realRun){
+	public void moveBotfromString(String s, boolean realRun, boolean cal){
 		if(!realRun)
 			moveBotfromChars(s);
 		else
-			moveBotfromString(s);
+			moveBotfromString(s, cal);
 	}
 	public void moveBotfromChars(String movementString){
 		ArrayList<MOVEMENT> movementList = new ArrayList<>();
@@ -287,15 +287,20 @@ public class FastestPath {
 
 	}
 
-	public void moveBotfromString(String s){
+	private void moveBotfromString(String s, boolean cal) {
 		MOVEMENT m;
+		@SuppressWarnings("unused")
 		String msg;
 		try{
 			System.out.println("Attempting moveBotfromString");
 			System.out.println(s);
 
 			if (Simulator.realRun) {
-				s = 'M' + s + '/';
+				if (cal) {
+					s = 'M' + s + "T/";
+				} else {
+					s = 'M' + s + '/';
+				}
 				Comms.sendMsg(Comms.ARDnAND, Comms.MULTI, s);
 			}
 			System.out.println("Message sent to Android");
@@ -689,6 +694,7 @@ public class FastestPath {
 		System.out.println("\nLooped " + loopCount + " times.");
 		System.out.println("The number of steps is: " + (path.size() - 1) + "\n");
 
+		@SuppressWarnings("unchecked")
 		Stack<Tile> pathForPrint = (Stack<Tile>) path.clone();
 		Tile temp;
 		System.out.println("Path:");

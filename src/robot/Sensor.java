@@ -14,6 +14,7 @@ public class Sensor {
 	private int sensorLowerLimit, sensorUpperLimit;
 	private int sensorRow, sensorCol; // position
 	private DIRECTION sensorDir;
+	@SuppressWarnings("unused")
 	private final SENSORTYPE sensorType;
 	private int sensorID;
 

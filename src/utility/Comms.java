@@ -155,7 +155,6 @@ public class Comms {
 			}
 			break;
 		case RPI:
-			// TODO incorporate Image Tracking
 			sb.append(major);
 			sb.append("_");
 			switch (sub) {
@@ -318,7 +317,7 @@ public class Comms {
 
 	public static void sleepWait() {
 		try {
-			TimeUnit.MILLISECONDS.sleep(200);
+			TimeUnit.MILLISECONDS.sleep(150);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
