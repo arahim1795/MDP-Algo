@@ -177,10 +177,15 @@ public class Sensor {
 			} else {
 				row = sensorRow+(1*rowMul);
 				col = sensorCol+(1*colMul);
+				// invalid combo:
+				// 012,12 012,13 012,14
 				if (Map.isValidTile(row, col)) {
-					Tile obsTile = exploredMap.getTile(sensorRow+(1*rowMul), sensorCol+(1*colMul));
-					obsTile.setExplored(true);
-					exploredMap.setObstacleTile(row, col, true);
+					boolean goalCoor = ((row == 0 || row == 1 || row == 2) && (col == 12 || col == 13 || col == 14)); 
+					if (!goalCoor) {
+						Tile obsTile = exploredMap.getTile(sensorRow+(1*rowMul), sensorCol+(1*colMul));
+						obsTile.setExplored(true);
+						exploredMap.setObstacleTile(row, col, true);
+					}
 				}
 				return;
 			}
