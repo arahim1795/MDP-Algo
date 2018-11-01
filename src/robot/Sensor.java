@@ -171,6 +171,8 @@ public class Sensor {
 		 * Check if obstacle exist between sensor and lower limit
 		 * (used only by sensor with lower limit above 1)
 		 */
+		
+		/*
 		if (sensorVal == 0) {
 			if (sensorID == 6) {
 				return;
@@ -191,6 +193,24 @@ public class Sensor {
 				return;
 			}
 		}
+		*/
+		if (sensorVal == 0) {
+				row = sensorRow+(1*rowMul);
+				col = sensorCol+(1*colMul);
+				// invalid combo:
+				// 012,12 012,13 012,14
+				if (Map.isValidTile(row, col)) {
+					boolean goalCoor = ((row == 0 || row == 1 || row == 2) && (col == 12 || col == 13 || col == 14)); 
+					boolean startCoor = ((row == 19 || row == 18 || row == 17) && (col == 0 || col == 1 || col == 2)); 
+					if (!goalCoor && !startCoor) {
+						Tile obsTile = exploredMap.getTile(sensorRow+(1*rowMul), sensorCol+(1*colMul));
+						obsTile.setExplored(true);
+						exploredMap.setObstacleTile(row, col, true);
+					}
+				}
+				return;
+			}
+		
 
 		// If above fails, check if starting point is valid for sensors with lowerRange > 1.
 		/*if (sensorID == 6) {
