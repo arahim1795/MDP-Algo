@@ -482,34 +482,57 @@ public class FastestPath {
 
 		ArrayList<MOVEMENT> movementList = new ArrayList<>();
 		Robot tempBot = new Robot(dummyBot.isRealBot(), dummyBot.getRow(), dummyBot.getCol(), dummyBot.getDir(), dummyBot.getSpeed());
-		System.out.println(dummyBot.getRow()+","+dummyBot.getCol());
+		System.out.println(dummyBot.getRow() + "," + dummyBot.getCol());
 		//tempBot.setSpeed(0);
 		//while robot position not on goal tile
-		while((tempBot.getRow()!= goalRow) || (tempBot.getCol()!= goalCol)){
-			//if robot on path tile
-			if(tempBot.getRow()==temp.getRow() && tempBot.getCol()==temp.getCol()){
+		
+		MOVEMENT cal = MOVEMENT.CALIBRATE, left = MOVEMENT.TURNLEFT, right = MOVEMENT.TURNRIGHT;
+		
+		int calibrateCounter = 0;
+		while ( (tempBot.getRow() != goalRow) || (tempBot.getCol() != goalCol) ) {
+			// if robot on path tile
+			if (tempBot.getRow() == temp.getRow() && tempBot.getCol() == temp.getCol()) {
 				temp = path.pop();
 			}
+			
+			if (calibrateCounter >= 6) {
+				if (Explore.canCalibrate(1, tempBot, exploredMap)) {
+					outputString.append(MOVEMENT.print(cal));
+					calibrateCounter = 0;
+				} else if (Explore.canCalibrate(2, tempBot, exploredMap)) {
+					outputString.append(MOVEMENT.print(left));
+					outputString.append(MOVEMENT.print(cal));
+					outputString.append(MOVEMENT.print(right));
+					calibrateCounter = 0;
+				} else if (Explore.canCalibrate(3, tempBot, exploredMap)){
+					outputString.append(MOVEMENT.print(right));
+					outputString.append(MOVEMENT.print(cal));
+					outputString.append(MOVEMENT.print(left));
+					calibrateCounter = 0;
+				}
+			}
+			
+			
 			targetDir = getTargetDirection(tempBot.getRow(),tempBot.getCol(),tempBot.getDir(),temp);
 
 			MOVEMENT m;
 
 			//if robot not facing correct direction, orientate robot
-			if(tempBot.getDir() != targetDir){
+			if (tempBot.getDir() != targetDir) {
 				System.out.println("Target Direction: "+targetDir+", Bot Direction"+tempBot.getDir());
 				m = getTargetMove(tempBot.getDir(),targetDir);
-			}else{
+			} else {
 				m = MOVEMENT.FORWARD;
 			}
 
 			System.out.println("Movement " + MOVEMENT.print(m) + " from (" + tempBot.getRow()+ ", " + tempBot.getCol() + ") to (" + temp.getRow() + ", " + temp.getCol() + ")");
 
-			//TODO : move method in Robot class
 			tempBot.move(m, true, true);
 			movementList.add(m);
+			calibrateCounter++;
 			outputString.append(MOVEMENT.print(m));
-
 		}
+		
 		//store current direction
 		System.out.println(tempBot.getDir());
 		dummyBot.setRobotDir(tempBot.getDir());

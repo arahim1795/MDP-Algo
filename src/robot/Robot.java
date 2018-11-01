@@ -2,6 +2,8 @@ package robot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 import map.Map;
@@ -264,9 +266,31 @@ public class Robot {
 	 * @param m Intended robot's movement function
 	 * @param sendAndroidBool If set to true, movement command is transmitted to Android module
 	 */
+	
 	private String sendInstruction(MOVEMENT m, boolean sendAndroidBool) {
-		Comms.sendMsg(Comms.ar, Comms.arIns, MOVEMENT.print(m));
-		String msg = Comms.getArdReceipt(Comms.arData);
+		// Initialise Timer
+		String msg = "Invalid";
+		Timer timer = new Timer(true);
+		TimerTask task = new TimerTask() {
+			@Override
+			public void run() {
+				Comms.sendMsg(Comms.ar, Comms.arIns, MOVEMENT.print(m));
+			}
+		};
+		
+		// Timer Execution
+		if (m != MOVEMENT.CALIBRATE) {
+			timer.scheduleAtFixedRate(task, 0, 2500);
+		} else {
+			timer.scheduleAtFixedRate(task, 0, 6000);
+		}
+		
+		do {
+			msg = Comms.receiveMsg();
+		} while (!msg.contains(Comms.arData));
+		timer.cancel();
+		
+		
 
 		if (sendAndroidBool && m != MOVEMENT.CALIBRATE) {
 			Comms.sendMsg(Comms.an, Comms.anPos, Comms.encodeCoor(MapDescriptor.getMDFcol(robotCol),MapDescriptor.getMDFrow(robotRow),DIRECTION.toInt(robotDir)));

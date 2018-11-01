@@ -139,11 +139,11 @@ public class Explore {
 			// if left can calibrate, turn left, calibrate, turn right then execute normally
 			
 			boolean calibratedRight = false;
-			if (canCalibrate(1) && canCalibrate(2)) {
+			if (canCalibrate(1, robot, mapExplore) && canCalibrate(2, robot, mapExplore)) {
 				calibrate();
 				if (rightNotExplored()) {
 					moveRobot(turnRight, isReal, isReal);
-					if (canCalibrate(1)) {
+					if (canCalibrate(1, robot, mapExplore)) {
 						calibrate();
 						moveRobot(turnLeft, isReal, isReal);	
 						calibratedRight = true;
@@ -160,15 +160,15 @@ public class Explore {
 			
 			
 			if (calibrateCount >= 4) {
-				if (canCalibrate(1)) {
+				if (canCalibrate(1, robot, mapExplore)) {
 					calibrate();
 					calibrateCount = 0;
-				} else if (canCalibrate(2)) {
+				} else if (canCalibrate(2, robot, mapExplore)) {
 					moveRobot(turnLeft, isReal, isReal);
 					calibrate();
 					moveRobot(turnRight, isReal, isReal);
 					calibrateCount = 0;
-				} else if (canCalibrate(3)) {
+				} else if (canCalibrate(3, robot, mapExplore)) {
 					moveRobot(turnRight, isReal, isReal);
 					calibrate();
 					moveRobot(turnLeft, isReal, isReal);
@@ -480,51 +480,51 @@ public class Explore {
 	 * @param i
 	 * @return
 	 */
-	private boolean canCalibrate(int i) {
+	public static boolean canCalibrate(int i, Robot bot, Map map) {
 		if (i < 1 || i > 3) return false;
 
 		int row, col;
-		row = robot.getRow();
-		col = robot.getCol();
+		row = bot.getRow();
+		col = bot.getCol();
 
-		DIRECTION robotDir = robot.getDir();
-		if (robotDir == up) {
+		DIRECTION robotDir = bot.getDir();
+		if (robotDir == DIRECTION.UP) {
 			if (i == 1) {
-				return (isCalibrateTile(row-2,col-1) && isCalibrateTile(row-2,col) && isCalibrateTile(row-2,col+1)); 
+				return (isCalibrateTile(row-2,col-1,map) && isCalibrateTile(row-2,col,map) && isCalibrateTile(row-2,col+1,map)); 
 			} else if (i == 2) {
-				return (isCalibrateTile(row-1,col-2) && isCalibrateTile(row,col-2) && isCalibrateTile(row+1,col-2)); 
+				return (isCalibrateTile(row-1,col-2,map) && isCalibrateTile(row,col-2,map) && isCalibrateTile(row+1,col-2,map)); 
 			} else {
-				return (isCalibrateTile(row-1,col+2) && isCalibrateTile(row,col+2) && isCalibrateTile(row+1,col+2)); 
+				return (isCalibrateTile(row-1,col+2,map) && isCalibrateTile(row,col+2,map) && isCalibrateTile(row+1,col+2,map)); 
 			}
-		} else if (robotDir == left) {
+		} else if (robotDir == DIRECTION.LEFT) {
 			if (i == 1) {
-				return (isCalibrateTile(row-1,col-2) && isCalibrateTile(row,col-2) && isCalibrateTile(row+1,col-2)); 
+				return (isCalibrateTile(row-1,col-2,map) && isCalibrateTile(row,col-2,map) && isCalibrateTile(row+1,col-2,map)); 
 			} else if (i == 2) {
-				return (isCalibrateTile(row+2,col-1) && isCalibrateTile(row+2,col) && isCalibrateTile(row+2,col+1)); 
+				return (isCalibrateTile(row+2,col-1,map) && isCalibrateTile(row+2,col,map) && isCalibrateTile(row+2,col+1,map)); 
 			} else {
-				return (isCalibrateTile(row-2,col-1) && isCalibrateTile(row-2,col) && isCalibrateTile(row-2,col+1)); 
+				return (isCalibrateTile(row-2,col-1,map) && isCalibrateTile(row-2,col,map) && isCalibrateTile(row-2,col+1,map)); 
 			}
-		} else if (robotDir == right) {
+		} else if (robotDir == DIRECTION.RIGHT) {
 			if (i == 1) {
-				return (isCalibrateTile(row-1,col+2) && isCalibrateTile(row,col+2) && isCalibrateTile(row+1,col+2)); 
+				return (isCalibrateTile(row-1,col+2,map) && isCalibrateTile(row,col+2,map) && isCalibrateTile(row+1,col+2,map)); 
 			} else if (i == 2) {
-				return (isCalibrateTile(row-2,col-1) && isCalibrateTile(row-2,col) && isCalibrateTile(row-2,col+1));  
+				return (isCalibrateTile(row-2,col-1,map) && isCalibrateTile(row-2,col,map) && isCalibrateTile(row-2,col+1,map));  
 			} else {
-				return (isCalibrateTile(row+2,col-1) && isCalibrateTile(row+2,col) && isCalibrateTile(row+2,col+1));  
+				return (isCalibrateTile(row+2,col-1,map) && isCalibrateTile(row+2,col,map) && isCalibrateTile(row+2,col+1,map));  
 			}
 		} else {
 			if (i == 1) {
-				return (isCalibrateTile(row+2,col-1) && isCalibrateTile(row+2,col) && isCalibrateTile(row+2,col+1));  
+				return (isCalibrateTile(row+2,col-1,map) && isCalibrateTile(row+2,col,map) && isCalibrateTile(row+2,col+1,map));  
 			} else if (i == 2) {
-				return (isCalibrateTile(row-1,col+2) && isCalibrateTile(row,col+2) && isCalibrateTile(row+1,col+2)); 
+				return (isCalibrateTile(row-1,col+2,map) && isCalibrateTile(row,col+2,map) && isCalibrateTile(row+1,col+2,map)); 
 			} else {
-				return (isCalibrateTile(row-1,col-2) && isCalibrateTile(row,col-2) && isCalibrateTile(row+1,col-2)); 
+				return (isCalibrateTile(row-1,col-2,map) && isCalibrateTile(row,col-2,map) && isCalibrateTile(row+1,col-2,map)); 
 			}
 		}
 	}
 	
-	private boolean isCalibrateTile(int row, int col) {
-		return !Map.isValidTile(row, col) || mapExplore.isObstacleTile(row, col);
+	private static boolean isCalibrateTile(int row, int col, Map explore) {
+		return !Map.isValidTile(row, col) || explore.isObstacleTile(row, col);
 	}
 	
 	private boolean rightNotExplored() {

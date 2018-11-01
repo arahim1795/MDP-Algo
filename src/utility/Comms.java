@@ -3,6 +3,7 @@ package utility;
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -11,7 +12,13 @@ import java.util.concurrent.TimeUnit;
  */
 public class Comms {
 
-	// Receipt Strings
+	// Timer
+	TimerTask task = new TimerTask() {
+		public void run() {
+			System.out.println("Instruction Sent Once More");
+		}
+	};
+	long delay = 200;
 
 
 
@@ -101,6 +108,7 @@ public class Comms {
 	 */
 	public static boolean sendMsg(String major, String sub, String content) {
 		StringBuilder sb = new StringBuilder();
+		String str = "Invalid Destination/Purpose";
 		switch (major) {
 		case ar:
 			sb.append(major);
@@ -116,7 +124,7 @@ public class Comms {
 				sb.append("_");
 				break;
 			default:
-				System.out.println("Invalid Purpose");
+				System.err.println(str);
 				return false;
 			}
 			break;
@@ -129,7 +137,7 @@ public class Comms {
 				sb.append(sub);
 				break;
 			default:
-				System.err.println("Invalid Purpose");
+				System.err.println(str);
 				return false;
 			}
 			break;
@@ -142,7 +150,7 @@ public class Comms {
 				sb.append("_");
 				break;
 			default:
-				System.err.println("Invalid Purpose");
+				System.err.println(str);
 				return false;
 			}
 			break;
@@ -156,12 +164,12 @@ public class Comms {
 				sb.append("_");
 				break;
 			default:
-				System.err.println("Invalid Purpose");
+				System.err.println(str);
 				return false;
 			}
 			break;
 		default:
-			System.err.println("Invalid Destination");
+			System.err.println(str);
 			return false;
 		}
 
