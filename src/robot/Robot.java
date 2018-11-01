@@ -254,7 +254,7 @@ public class Robot {
 				System.out.println("Sending " + m.toString());
 				msg = sendInstruction(m, sendAndroid);
 			}
-		System.out.println("Move: " + MOVEMENT.print(m));
+		// System.out.println("Move: " + MOVEMENT.print(m));
 
 		return msg;
 	}
@@ -419,9 +419,7 @@ public class Robot {
 		double num = Double.parseDouble(str);
 		
 		if (type == SENSORTYPE.SHORT) {
-			if (num >= 26.0) { 
-				return 3; 
-			} else if (num >= 16.0) { 
+			if (num >= 16.0) { 
 				return 2; 
 			} else if (num >= 11.5) { 
 				return 1; 

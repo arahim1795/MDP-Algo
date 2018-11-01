@@ -310,7 +310,7 @@ public class Comms {
 
 	public static void sleepWait() {
 		try {
-			TimeUnit.MILLISECONDS.sleep(150);
+			TimeUnit.MILLISECONDS.sleep(160);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

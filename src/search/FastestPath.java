@@ -295,7 +295,7 @@ public class FastestPath {
 			System.out.println(s);
 
 			if (Simulator.realRun) {
-				s = 'M' + s;
+				s = 'M' + s + '/';
 				Comms.sendMsg(Comms.ARDnAND, Comms.MULTI, s);
 			}
 			System.out.println("Message sent to Android");

@@ -158,7 +158,7 @@ public class Explore {
 				}
 			}
 			
-			if (calibrateCount >= 3) {
+			if (calibrateCount >= 4) {
 				if (canCalibrate(1)) {
 					calibrate();
 					calibrateCount = 0;
@@ -223,12 +223,16 @@ public class Explore {
 	private void move() {
 		if (peekLeft()) {
 			moveRobot(turnLeft, isReal, isReal);
-			if (peekUp()) moveRobot(forward, isReal, isReal);
-		} else if (peekUp()) 
+			if (peekUp()) {
+				moveRobot(forward, isReal, isReal);
+			}
+		} else if (peekUp()) {
 			moveRobot(forward, isReal, isReal);
-		else if (rightNotExplored()) {
+		} else if (rightNotExplored()) {
 			moveRobot(turnRight, isReal, isReal);
-			if (peekUp()) moveRobot(forward, isReal, isReal);
+			if (peekUp()) {
+				moveRobot(forward, isReal, isReal);
+			}
 		} else if (peekDown()) {
 			moveRobot(turnLeft, isReal, isReal);
 			moveRobot(turnLeft, isReal, isReal);
@@ -372,8 +376,7 @@ public class Explore {
 			msg = robot.move(move, sendArd, sendAnd);
 			robot.moveSensor();
 			robot.multiSense(mapExplore, msg);
-		}
-		else {
+		} else {
 			robot.move(move, false, false);
 			robot.moveSensor();
 			robot.multiSense(mapExplore, mapActual);
@@ -541,22 +544,53 @@ public class Explore {
 		int row, col;
 		row = robot.getRow(); col = robot.getCol();
 		switch (robot.getDir()) {
-		case UP:
-			if (Map.isValidTile(row-1,col+1) && Map.isValidTile(row,col+1) && Map.isValidTile(row+1,col+1))
-				return mapExplore.getTile(row-1, col+1).isExplored() && mapExplore.getTile(row, col+1).isExplored() && mapExplore.getTile(row+1, col+1).isExplored();
-			return false; 
-		case DOWN:
-			if (Map.isValidTile(row-1,col-1) && Map.isValidTile(row,col-1) && Map.isValidTile(row+1,col-1))
-				return mapExplore.getTile(row-1, col-1).isExplored() && mapExplore.getTile(row, col-1).isExplored() && mapExplore.getTile(row+1, col-1).isExplored();
-			return false; 
-		case LEFT:
-			if (Map.isValidTile(row-1,col-1) && Map.isValidTile(row-1,col) && Map.isValidTile(row-1,col+1))
-				return mapExplore.getTile(row-1, col-1).isExplored() && mapExplore.getTile(row-1, col).isExplored() && mapExplore.getTile(row-1, col+1).isExplored();
-			return false;
-		default:
-			if (Map.isValidTile(row+1,col-1) && Map.isValidTile(row+1,col) && Map.isValidTile(row+1,col+1))
-				return mapExplore.getTile(row+1, col-1).isExplored() && mapExplore.getTile(row+1, col).isExplored() && mapExplore.getTile(row+1, col+1).isExplored();
-			return false;
+			case UP:
+				if (Map.isValidTile(row-1,col+2) && Map.isValidTile(row,col+2) && Map.isValidTile(row+1,col+2)) {
+					return mapExplore.getTile(row-1, col+2).isExplored() && mapExplore.getTile(row, col+2).isExplored() && mapExplore.getTile(row+1, col+2).isExplored();
+				}
+				return false; 
+			case DOWN:
+				if (Map.isValidTile(row-1,col-2) && Map.isValidTile(row,col-2) && Map.isValidTile(row+1,col-2)) {
+					return mapExplore.getTile(row-1, col-2).isExplored() && mapExplore.getTile(row, col-2).isExplored() && mapExplore.getTile(row+1, col-2).isExplored();
+				}
+				return false; 
+			case LEFT:
+				if (Map.isValidTile(row-2,col-1) && Map.isValidTile(row-2,col) && Map.isValidTile(row-2,col+1)) {
+					return mapExplore.getTile(row-2, col-1).isExplored() && mapExplore.getTile(row-2, col).isExplored() && mapExplore.getTile(row-2, col+1).isExplored();
+				}
+				return false;
+			default:
+				if (Map.isValidTile(row+2,col-1) && Map.isValidTile(row+2,col) && Map.isValidTile(row+2,col+1)) {
+					return mapExplore.getTile(row+2, col-1).isExplored() && mapExplore.getTile(row+2, col).isExplored() && mapExplore.getTile(row+2, col+1).isExplored();
+				}
+				return false;
+		}
+	}
+	
+	private boolean leftNotExplored() {
+		int row, col;
+		row = robot.getRow(); col = robot.getCol();
+		switch (robot.getDir()) {
+			case DOWN:
+				if (Map.isValidTile(row-1,col+2) && Map.isValidTile(row,col+2) && Map.isValidTile(row+1,col+2)) {
+					return mapExplore.getTile(row-1, col+2).isExplored() && mapExplore.getTile(row, col+2).isExplored() && mapExplore.getTile(row+1, col+2).isExplored();
+				}
+				return false; 
+			case UP:
+				if (Map.isValidTile(row-1,col-2) && Map.isValidTile(row,col-2) && Map.isValidTile(row+1,col-2)) {
+					return mapExplore.getTile(row-1, col-2).isExplored() && mapExplore.getTile(row, col-2).isExplored() && mapExplore.getTile(row+1, col-2).isExplored();
+				}
+				return false; 
+			case RIGHT:
+				if (Map.isValidTile(row-2,col-1) && Map.isValidTile(row-2,col) && Map.isValidTile(row-2,col+1)) {
+					return mapExplore.getTile(row-2, col-1).isExplored() && mapExplore.getTile(row-2, col).isExplored() && mapExplore.getTile(row-2, col+1).isExplored();
+				}
+				return false;
+			default:
+				if (Map.isValidTile(row+2,col-1) && Map.isValidTile(row+2,col) && Map.isValidTile(row+2,col+1)) {
+					return mapExplore.getTile(row+2, col-1).isExplored() && mapExplore.getTile(row+2, col).isExplored() && mapExplore.getTile(row+2, col+1).isExplored();
+				}
+				return false;
 		}
 	}
 
