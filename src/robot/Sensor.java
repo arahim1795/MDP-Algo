@@ -181,7 +181,8 @@ public class Sensor {
 				// 012,12 012,13 012,14
 				if (Map.isValidTile(row, col)) {
 					boolean goalCoor = ((row == 0 || row == 1 || row == 2) && (col == 12 || col == 13 || col == 14)); 
-					if (!goalCoor) {
+					boolean startCoor = ((row == 19 || row == 18 || row == 17) && (col == 0 || col == 1 || col == 2)); 
+					if (!goalCoor && !startCoor) {
 						Tile obsTile = exploredMap.getTile(sensorRow+(1*rowMul), sensorCol+(1*colMul));
 						obsTile.setExplored(true);
 						exploredMap.setObstacleTile(row, col, true);
