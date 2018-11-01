@@ -186,7 +186,7 @@ public class Sensor {
 		}
 
 		// If above fails, check if starting point is valid for sensors with lowerRange > 1.
-		if (sensorID == 6) {
+		/*if (sensorID == 6) {
 			for (int i = 1; i < sensorLowerLimit; i++) {
 				row = sensorRow + (rowMul * i);
 				col = sensorCol + (colMul * i);
@@ -195,9 +195,12 @@ public class Sensor {
 				if (!Map.isValidTile(row, col) ||
 						exploredMap.getTile(row, col).isObstacle()) return;
 			}
-		}
+		}*/
 
 		// update map
+		if (sensorID == 6) {
+			sensorVal = sensorVal + 2;
+		}
 		for (int i = sensorLowerLimit; i <= sensorVal; i++) {
 			row = sensorRow + (rowMul * i);
 			col = sensorCol + (colMul * i);

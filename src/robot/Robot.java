@@ -65,7 +65,7 @@ public class Robot {
 		SRFrontRight = new Sensor(robotRow-1, robotCol+1, robotDir, SENSORTYPE.SHORT, 3);
 		SRLeft = new Sensor(robotRow-1, robotCol-1, DIRECTION.LEFT, SENSORTYPE.SHORT, 4);
 		SRLeftBack = new Sensor(robotRow+1, robotCol-1, DIRECTION.LEFT, SENSORTYPE.SHORT, 5);
-		LRRight = new Sensor(robotRow, robotCol+1, DIRECTION.RIGHT, SENSORTYPE.LONG, 6);
+		LRRight = new Sensor(robotRow-1, robotCol-1, DIRECTION.RIGHT, SENSORTYPE.LONG, 6);
 	}
 
 	/**
@@ -92,7 +92,7 @@ public class Robot {
 		SRFrontRight = new Sensor(robotRow-1, robotCol+1, robotDir, SENSORTYPE.SHORT, 3);
 		SRLeft = new Sensor(robotRow-1, robotCol-1, findTurnDirection(MOVEMENT.TURNLEFT), SENSORTYPE.SHORT, 4);
 		SRLeftBack = new Sensor(robotRow-1, robotCol+1, findTurnDirection(MOVEMENT.TURNRIGHT), SENSORTYPE.SHORT, 5);
-		LRRight = new Sensor(robotRow, robotCol+1, findTurnDirection(MOVEMENT.TURNRIGHT), SENSORTYPE.LONG, 6);
+		LRRight = new Sensor(robotRow-1, robotCol-1, findTurnDirection(MOVEMENT.TURNRIGHT), SENSORTYPE.LONG, 6);
 	} 
 
 
@@ -452,17 +452,9 @@ public class Robot {
 				return 1; 
 			}
 		} else {
-			if (num >= 52.0) {
-			} else if (num >= 48.0) { 
-				return 5; 
-			} else if (num >= 40.0) { 
-				return 4;
-			} else if (num >= 30.0) { 
-				return 3; 
-			} else if (num >= 20.0) { 
-				return 2; 
-			} else if (num >= 10.0) { 
-				return 1; 
+			// 17 (value [return2])
+			if (num >= 11) {
+				return 1;
 			}
 		}
 		
@@ -480,7 +472,7 @@ public class Robot {
 				SRFrontRight.setSensor(robotRow-1, robotCol+1, robotDir);
 				SRLeft.setSensor(robotRow-1, robotCol-1, DIRECTION.LEFT);
 				SRLeftBack.setSensor(robotRow+1, robotCol-1, DIRECTION.LEFT);
-				LRRight.setSensor(robotRow, robotCol+1, DIRECTION.RIGHT);
+				LRRight.setSensor(robotRow-1, robotCol-1, DIRECTION.RIGHT);
 				break;
 			case DOWN:
 				SRFrontLeft.setSensor(robotRow+1, robotCol+1, robotDir);
@@ -488,7 +480,7 @@ public class Robot {
 				SRFrontRight.setSensor(robotRow+1, robotCol-1, robotDir);
 				SRLeft.setSensor(robotRow+1, robotCol+1, DIRECTION.RIGHT);
 				SRLeftBack.setSensor(robotRow-1, robotCol+1, DIRECTION.RIGHT);
-				LRRight.setSensor(robotRow, robotCol-1, DIRECTION.LEFT);
+				LRRight.setSensor(robotRow+1, robotCol+1, DIRECTION.LEFT);
 				break;
 			case LEFT:
 				SRFrontLeft.setSensor(robotRow+1, robotCol-1, robotDir);
@@ -496,7 +488,7 @@ public class Robot {
 				SRFrontRight.setSensor(robotRow-1, robotCol-1, robotDir);
 				SRLeft.setSensor(robotRow+1, robotCol-1, DIRECTION.DOWN);
 				SRLeftBack.setSensor(robotRow+1, robotCol+1, DIRECTION.DOWN);
-				LRRight.setSensor(robotRow-1, robotCol, DIRECTION.UP);
+				LRRight.setSensor(robotRow+1, robotCol-1, DIRECTION.UP);
 				break;
 			default:
 				SRFrontLeft.setSensor(robotRow-1, robotCol+1, robotDir);
@@ -504,7 +496,7 @@ public class Robot {
 				SRFrontRight.setSensor(robotRow+1, robotCol+1, robotDir);
 				SRLeft.setSensor(robotRow-1, robotCol+1, DIRECTION.UP);
 				SRLeftBack.setSensor(robotRow-1, robotCol-1, DIRECTION.UP);
-				LRRight.setSensor(robotRow+1, robotCol, DIRECTION.DOWN);
+				LRRight.setSensor(robotRow-1, robotCol+1, DIRECTION.DOWN);
 				break;
 		}
 	}

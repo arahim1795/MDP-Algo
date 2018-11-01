@@ -132,12 +132,8 @@ public class Explore {
 			calibrateCount++;
 			updateExplore();
 			
-			// if @ corners
-			// if robotdir can calibrate
-			
-			// Situation(s): if front can calibrate, calibrate front then execute normally
-			// if left can calibrate, turn left, calibrate, turn right then execute normally
-			
+			// Calibrate (w/right blind)
+			/*
 			boolean calibratedRight = false;
 			if (canCalibrate(1, robot, mapExplore) && canCalibrate(2, robot, mapExplore)) {
 				calibrate();
@@ -155,9 +151,21 @@ public class Explore {
 					moveRobot(turnRight, isReal, isReal);
 				}
 				calibrateCount = 0;
-			} 
+			} */
 			
-			
+			if (canCalibrate(1, robot, mapExplore) && canCalibrate(3, robot, mapExplore)) {
+				moveRobot(turnRight, isReal, isReal);
+				calibrate();
+				moveRobot(turnLeft, isReal, isReal);
+				calibrate();
+				calibrateCount = 0;
+			} else if (canCalibrate(1, robot, mapExplore) && canCalibrate(2, robot, mapExplore)) {
+				moveRobot(turnLeft, isReal, isReal);
+				calibrate();
+				moveRobot(turnRight, isReal, isReal);
+				calibrate();
+				calibrateCount = 0;
+			}
 			
 			if (calibrateCount >= 5) {
 				if (canCalibrate(1, robot, mapExplore)) {
@@ -228,12 +236,26 @@ public class Explore {
 			}
 		} else if (peekUp()) {
 			moveRobot(forward, isReal, isReal);
-		} else if (rightNotExplored()) {
+		} 
+		
+		else if (peekRight()) {
 			moveRobot(turnRight, isReal, isReal);
 			if (peekUp()) {
 				moveRobot(forward, isReal, isReal);
 			}
-		} else if (peekDown()) {
+		}
+		
+		// if right (blind)
+		/*
+		else if (rightNotExplored()) {
+			moveRobot(turnRight, isReal, isReal);
+			if (peekUp()) {
+				moveRobot(forward, isReal, isReal);
+			}
+		} 
+		*/
+		
+		else if (peekDown()) {
 			moveRobot(turnLeft, isReal, isReal);
 			moveRobot(turnLeft, isReal, isReal);
 		}
