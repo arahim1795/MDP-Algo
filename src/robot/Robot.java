@@ -280,18 +280,21 @@ public class Robot {
 		
 		// Timer Execution
 		if (m != MOVEMENT.CALIBRATE) {
-			timer.scheduleAtFixedRate(task, 0, 2500);
+			timer.scheduleAtFixedRate(task, 0, 3500);
+			do {
+				msg = Comms.receiveMsg().toLowerCase();
+			} while (!msg.contains("sdat1"));
+			timer.cancel();
 		} else {
 			timer.scheduleAtFixedRate(task, 0, 6000);
+			do {
+				msg = Comms.receiveMsg().toLowerCase();
+			} while (!msg.contains("sdat2"));
+			timer.cancel();
 		}
 		
-		do {
-			msg = Comms.receiveMsg();
-		} while (!msg.contains(Comms.arData));
-		timer.cancel();
 		
 		
-
 		if (sendAndroidBool && m != MOVEMENT.CALIBRATE) {
 			Comms.sendMsg(Comms.an, Comms.anPos, Comms.encodeCoor(MapDescriptor.getMDFcol(robotCol),MapDescriptor.getMDFrow(robotRow),DIRECTION.toInt(robotDir)));
 			Comms.sleepWait();

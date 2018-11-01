@@ -240,6 +240,25 @@ public class Simulator {
 				fastestPathAlgo.moveBotfromString(outStr,realRun);
 
 				firePropertyChange(prReallyDone, false, true);
+				
+
+				// send MDF strings
+				Comms.sleepWait();
+				StringBuilder sb = new StringBuilder();
+				// MDF1
+				sb.append("1:");
+				sb.append(MapDescriptor.generateMDFHex1(FPMap));
+				sb.append("/");
+				Comms.sendMsg(Comms.an, Comms.anMdf, sb.toString());
+				Comms.sleepWait();
+				sb.setLength(0);
+				// MDF2
+				sb.append("2:");
+				sb.append(MapDescriptor.generateMDFHex2(FPMap));
+				sb.append("/");
+				Comms.sendMsg(Comms.an, Comms.anMdf, sb.toString());
+				Comms.sleepWait();
+				sb.setLength(0);
 				return null;
 			}
 
@@ -355,6 +374,25 @@ public class Simulator {
 					System.out.println("Starting fastestPathThread");
 					new fastestPathThread().execute();
 					//
+					
+					// send MDF strings
+					Comms.sleepWait();
+					StringBuilder sb = new StringBuilder();
+					// MDF1
+					sb.append("1:");
+					sb.append(MapDescriptor.generateMDFHex1(exploredMap));
+					sb.append("/");
+					Comms.sendMsg(Comms.an, Comms.anMdf, sb.toString());
+					Comms.sleepWait();
+					sb.setLength(0);
+					// MDF2
+					sb.append("2:");
+					sb.append(MapDescriptor.generateMDFHex2(exploredMap));
+					sb.append("/");
+					Comms.sendMsg(Comms.an, Comms.anMdf, sb.toString());
+					Comms.sleepWait();
+					sb.setLength(0);
+					
 					firePropertyChange(exploreComplete, false, true);
 					return null;
 				} catch (Exception e) {

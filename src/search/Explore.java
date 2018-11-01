@@ -159,7 +159,7 @@ public class Explore {
 			
 			
 			
-			if (calibrateCount >= 4) {
+			if (calibrateCount >= 5) {
 				if (canCalibrate(1, robot, mapExplore)) {
 					calibrate();
 					calibrateCount = 0;
