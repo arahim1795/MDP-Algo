@@ -216,7 +216,7 @@ public class Comms {
 			return outMsg.toString().trim();
 		}
 
-		if (msg.contains("#")) {
+		if (msg.contains("#") || msg.contains(anWp)) {
 			String[] strArr = msg.split("'");
 			return strArr[1];
 		}
@@ -306,11 +306,9 @@ public class Comms {
 
 	public static String getArdReceipt(String expMsg) {
 		String str;
-		String[] strArr;
 		while (true) {
 			str = Comms.receiveMsg();
-			strArr = str.split(";");
-			if (strArr[1].equals(expMsg.toLowerCase())) break;
+			if (str.contains(expMsg.toLowerCase())) break;
 		}
 		return str;
 	}
