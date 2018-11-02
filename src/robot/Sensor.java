@@ -194,22 +194,36 @@ public class Sensor {
 			}
 		}
 		*/
+		boolean goalCoor, startCoor;
+		Tile obsTile;
 		if (sensorVal == 0) {
-				row = sensorRow+(1*rowMul);
-				col = sensorCol+(1*colMul);
-				// invalid combo:
-				// 012,12 012,13 012,14
+			if (sensorID == 6) {
+				row = sensorRow+(3*rowMul);
+				col = sensorCol+(3*colMul);
 				if (Map.isValidTile(row, col)) {
-					boolean goalCoor = ((row == 0 || row == 1 || row == 2) && (col == 12 || col == 13 || col == 14)); 
-					boolean startCoor = ((row == 19 || row == 18 || row == 17) && (col == 0 || col == 1 || col == 2)); 
-					if (!goalCoor && !startCoor) {
-						Tile obsTile = exploredMap.getTile(sensorRow+(1*rowMul), sensorCol+(1*colMul));
+					goalCoor = ((row == 0 || row == 1 || row == 2) && (col == 12 || col == 13 || col == 14)); 
+					startCoor = ((row == 19 || row == 18 || row == 17) && (col == 0 || col == 1 || col == 2));
+					if (!goalCoor && !startCoor){
+						obsTile = exploredMap.getTile(row, col);
 						obsTile.setExplored(true);
 						exploredMap.setObstacleTile(row, col, true);
 					}
 				}
-				return;
+			} else {
+				row = sensorRow+(1*rowMul);
+				col = sensorCol+(1*colMul);
+				if (Map.isValidTile(row, col)) {
+					goalCoor = ((row == 0 || row == 1 || row == 2) && (col == 12 || col == 13 || col == 14)); 
+					startCoor = ((row == 19 || row == 18 || row == 17) && (col == 0 || col == 1 || col == 2));
+					if (!goalCoor && !startCoor) {
+						obsTile = exploredMap.getTile(row, col);
+						obsTile.setExplored(true);
+						exploredMap.setObstacleTile(row, col, true);
+					}
+				}
 			}
+			return;
+		}
 		
 
 		// If above fails, check if starting point is valid for sensors with lowerRange > 1.
