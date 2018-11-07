@@ -33,7 +33,7 @@ public class Simulator {
 
 	// The robot
 	private static robot.Robot roboCop = null;
-	public static final boolean realRun = true;
+	public static final boolean realRun = false;
 	private static final int MaxExploredDuration = 315;
 	private static boolean ready = false;
 	@SuppressWarnings("unused")

@@ -200,26 +200,17 @@ public class Sensor {
 			if (sensorID == 6) {
 				row = sensorRow+(3*rowMul);
 				col = sensorCol+(3*colMul);
-				if (Map.isValidTile(row, col)) {
-					goalCoor = ((row == 0 || row == 1 || row == 2) && (col == 12 || col == 13 || col == 14)); 
-					startCoor = ((row == 19 || row == 18 || row == 17) && (col == 0 || col == 1 || col == 2));
-					if (!goalCoor && !startCoor){
-						obsTile = exploredMap.getTile(row, col);
-						obsTile.setExplored(true);
-						exploredMap.setObstacleTile(row, col, true);
-					}
-				}
 			} else {
 				row = sensorRow+(1*rowMul);
 				col = sensorCol+(1*colMul);
-				if (Map.isValidTile(row, col)) {
-					goalCoor = ((row == 0 || row == 1 || row == 2) && (col == 12 || col == 13 || col == 14)); 
-					startCoor = ((row == 19 || row == 18 || row == 17) && (col == 0 || col == 1 || col == 2));
-					if (!goalCoor && !startCoor) {
-						obsTile = exploredMap.getTile(row, col);
-						obsTile.setExplored(true);
-						exploredMap.setObstacleTile(row, col, true);
-					}
+			}
+			if (Map.isValidTile(row, col)) {
+				goalCoor = ((row == 0 || row == 1 || row == 2) && (col == 12 || col == 13 || col == 14)); 
+				startCoor = ((row == 19 || row == 18 || row == 17) && (col == 0 || col == 1 || col == 2));
+				if (!goalCoor && !startCoor){
+					obsTile = exploredMap.getTile(row, col);
+					obsTile.setExplored(true);
+					exploredMap.setObstacleTile(row, col, true);
 				}
 			}
 			return;
