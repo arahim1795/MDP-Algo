@@ -21,12 +21,13 @@ public class Sensor {
 
 	// Constructor
 	/**
-	 * 
-	 * @param row
-	 * @param col
-	 * @param dir
-	 * @param type
-	 * @param id
+	 * Initialise a sensor at intended [row, col], face an intended direction, 
+	 * of an intended type and id
+	 * @param row row (y) coordinate
+	 * @param col col (x) coordinate
+	 * @param dir Direction sensor faces
+	 * @param type Sensor's type
+	 * @param id Sensor's ID
 	 */
 	public Sensor (int row, int col, DIRECTION dir, SENSORTYPE type, int id) {
 		sensorRow = row;
@@ -47,10 +48,10 @@ public class Sensor {
 
 	// Setter(s)
 	/**
-	 * 
-	 * @param col
-	 * @param row
-	 * @param dir
+	 * Set sensor at intended [row, col], face an intended direction
+	 * @param row row (y) coordinate
+	 * @param col col (x) coordinate
+	 * @param dir Direction sensor faces
 	 */
 	public void setSensor(int row, int col, DIRECTION dir) {
 		sensorRow = row;
@@ -58,38 +59,37 @@ public class Sensor {
 		sensorDir = dir;
 	}
 
+	
 	// Simulator Function(s)
 	/**
-	 * 
-	 * @param mapExplore Map used to track exploration
+	 * Accounts for simulated sensor's direction when updating tracking map
+	 * from simulated map
+	 * @param mapExplore Tracking map used in Exploration
 	 * @param mapActual Simulated map
-	 * @return number of cells that is seen by the sensor, -1 if no obstacle/invalid map coordinates 
-	 * is within sensor and its upper limit
 	 */
 	public void sense(Map mapExplore, Map mapActual) {
 		switch (sensorDir) {
-		case UP:
-			senseInfo(mapExplore, mapActual, -1, 0);
-			return;
-		case DOWN:
-			senseInfo(mapExplore, mapActual, 1, 0);
-			return;
-		case LEFT:
-			senseInfo(mapExplore, mapActual, 0, -1);
-			return;
-		default:
-			senseInfo(mapExplore, mapActual, 0, 1);
-			return;
+			case UP:
+				senseInfo(mapExplore, mapActual, -1, 0);
+				return;
+			case DOWN:
+				senseInfo(mapExplore, mapActual, 1, 0);
+				return;
+			case LEFT:
+				senseInfo(mapExplore, mapActual, 0, -1);
+				return;
+			default:
+				senseInfo(mapExplore, mapActual, 0, 1);
+				return;
 		}		
 	}
 
-	// Simulated
 	/**
-	 * 
-	 * @param mapExplore Map used to track exploration
+	 * Updates tracking map from simulated map
+	 * @param mapExplore Tracking map used in Exploration
 	 * @param mapActual Simulated map
-	 * @param rowMul Numerically adjust where the sense would occur, on the row(x)-axis
-	 * @param colMul Numerically adjust where the sense would occur, on the col(y)-axis
+	 * @param rowMul Numeric accounting of sensed tiles, on the row (y) axis
+	 * @param colMul Numeric accounting of sensed tiles, on the col (x) axis
 	 */
 	private void senseInfo(Map mapExplore, Map mapActual, int rowMul, int colMul) {		
 		int sensedRow, sensedCol;
@@ -137,8 +137,9 @@ public class Sensor {
 
 	// Physical	
 	/**
-	 * 
-	 * @param mapExplore Map used to track exploration
+	 * Accounts for sensor's direction when updating tracking map
+	 * (physically integrated)
+	 * @param mapExplore Tracking map used in Exploration
 	 * @param sensorVal Sensor values
 	 */
 	public void sense(Map mapExplore, int sensorVal) {
@@ -159,41 +160,16 @@ public class Sensor {
 	}
 
 	/**
-	 * 
-	 * @param exploredMap Map used to track exploration
+	 * Updates tracking map from physical sensor values
+	 * (physically integrated)
+	 * @param exploredMap Tracking map used in Exploration
 	 * @param sensorVal Sensor values
-	 * @param rowMul Numerically adjust where the sense would occur, on the row(x)-axis
-	 * @param colMul Numerically adjust where the sense would occur, on the col(y)-axis
+	 * @param rowMul Numeric accounting of sensed tiles, on the row (y) axis
+	 * @param colMul Numeric accounting of sensed tiles, on the col (x) axis
 	 */
 	private void senseInfo(Map exploredMap, int sensorVal, int rowMul, int colMul) {
 		int row, col;
-		/*
-		 * Check if obstacle exist between sensor and lower limit
-		 * (used only by sensor with lower limit above 1)
-		 */
-		
-		/*
-		if (sensorVal == 0) {
-			if (sensorID == 6) {
-				return;
-			} else {
-				row = sensorRow+(1*rowMul);
-				col = sensorCol+(1*colMul);
-				// invalid combo:
-				// 012,12 012,13 012,14
-				if (Map.isValidTile(row, col)) {
-					boolean goalCoor = ((row == 0 || row == 1 || row == 2) && (col == 12 || col == 13 || col == 14)); 
-					boolean startCoor = ((row == 19 || row == 18 || row == 17) && (col == 0 || col == 1 || col == 2)); 
-					if (!goalCoor && !startCoor) {
-						Tile obsTile = exploredMap.getTile(sensorRow+(1*rowMul), sensorCol+(1*colMul));
-						obsTile.setExplored(true);
-						exploredMap.setObstacleTile(row, col, true);
-					}
-				}
-				return;
-			}
-		}
-		*/
+
 		boolean goalCoor, startCoor;
 		Tile obsTile;
 		if (sensorVal == 0) {
@@ -215,21 +191,7 @@ public class Sensor {
 			}
 			return;
 		}
-		
 
-		// If above fails, check if starting point is valid for sensors with lowerRange > 1.
-		/*if (sensorID == 6) {
-			for (int i = 1; i < sensorLowerLimit; i++) {
-				row = sensorRow + (rowMul * i);
-				col = sensorCol + (colMul * i);
-
-				// if 'sensed' tile within blindspot is invalid/does not exist/an obstacle, terminate immediately
-				if (!Map.isValidTile(row, col) ||
-						exploredMap.getTile(row, col).isObstacle()) return;
-			}
-		}*/
-
-		// update map
 		if (sensorID == 6) {
 			sensorVal = sensorVal + 2;
 		}
@@ -243,7 +205,7 @@ public class Sensor {
 
 			exploredMap.getTile(row, col).setExplored(true);
 
-			// AutoLogic Set Blockers
+			// Legacy Code - AutoLogic Set Blockers
 			/*
 			if ((sensorVal == 1 || sensorVal == 2) && sensorVal == i) {
 				if (!Map.isValidTile(row+(1*rowMul), col+(1*colMul))) return;

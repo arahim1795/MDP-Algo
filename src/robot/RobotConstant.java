@@ -5,8 +5,9 @@ import java.awt.Color;
 import utility.Comms;
 
 public final class RobotConstant {
-	//
-	public static final int SPEED = 100;		// delay between movements (ms)
+	
+	// Delay between each move (in ms)
+	public static final int SPEED = 100;
 
 	// Robot size
 	public static final int ROBOT_SIZE = 3;
@@ -135,21 +136,13 @@ public final class RobotConstant {
 	public static final int DEFAULT_TIME_LIMIT = 360;
 
 	/**
-	 * 
-	 * @return
+	 * Returns true if robot is currently at [18 (y), 1 (x)]
+	 * @return true if robot is currently at [18, 1], false otherwise
 	 */
 	public static boolean isAtStart(int row, int col) {
 		return row == DEFAULT_START_ROW && col == DEFAULT_START_COL;
 	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public static boolean isAtGoal(int row, int col) {
-		return row == DEFAULT_GOAL_ROW && col == DEFAULT_GOAL_COL;
-	}
-
+	
 	// Prevent instantiation
 	private RobotConstant() {}
 

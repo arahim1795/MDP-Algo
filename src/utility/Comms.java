@@ -12,22 +12,11 @@ import java.util.concurrent.TimeUnit;
  */
 public class Comms {
 
-	// Timer
-	TimerTask task = new TimerTask() {
-		public void run() {
-			System.out.println("Instruction Sent Once More");
-		}
-	};
-	long delay = 200;
-
-
-
-	// Major Headers
+	// Instruction Headers
+	public static final String an = "BBBB";
 	public static final String ARDnAND = "CCCC";
 	public static final String RPI = "RRRR";
 
-	// android
-	public static final String an = "BBBB";
 	// pc > an
 	public static final String anMdf = "BBBB#mdf";		// + "/", send map descriptor 
 	public static final String anPos = "BBBB#setrobot:";	// + "/", send current bot position
@@ -99,12 +88,14 @@ public class Comms {
 			System.err.println("I/O Connection to " + robotName + " still active");
 		}
 	}
+	
 	/**
-	 * 
-	 * @param major
-	 * @param sub
-	 * @param content
-	 * @return
+	 * Returns true if message is sent successfully to intended destination
+	 * @param major Instruction headers
+	 * @param sub Purpose headers
+	 * @param content Content (if any)
+	 * @return true if message is sent successfully to intended destination, false
+	 * otherwise
 	 */
 	public static boolean sendMsg(String major, String sub, String content) {
 		StringBuilder sb = new StringBuilder();
@@ -187,8 +178,8 @@ public class Comms {
 	}
 
 	/**
-	 * Receives messages from Pi
-	 * @return message
+	 * Return string received from other components
+	 * @return string recieved from other components
 	 */
 	@SuppressWarnings("deprecation")
 	public static String receiveMsg() {
@@ -220,16 +211,6 @@ public class Comms {
 			String[] strArr = msg.split("'");
 			return strArr[1];
 		}
-
-		/*
-		StringBuilder result = new StringBuilder();
-		for (int i = 0; i < msg.length(); i++) {
-			if (i < 2 || i == msg.length()-1);
-			else result.append(msg.charAt(i));
-		}
-
-		return result.toString();
-		 */
 
 		return "Error";
 
@@ -304,15 +285,9 @@ public class Comms {
 		return sb.toString();
 	}
 
-	public static String getArdReceipt(String expMsg) {
-		String str;
-		while (true) {
-			str = Comms.receiveMsg();
-			if (str.contains(expMsg.toLowerCase())) break;
-		}
-		return str;
-	}
-
+	/**
+	 * Sleeps robot to allow send of messages without race conditions
+	 */
 	public static void sleepWait() {
 		try {
 			TimeUnit.MILLISECONDS.sleep(150);

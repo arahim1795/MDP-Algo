@@ -26,24 +26,23 @@ public class Robot {
 
 	// Sensor(s)
 	/*
-	 * 		 ^     ^     ^
-	 * 		 1     2     3
-	 * 	< 4  X  |  X  |  X  5 >
-	 * 		 -  +  -  +  -
-	 *		 X  |  X  |  X  6 > 
-	 * 		 -  +  -  +  -
-	 * 		 X  |  X  |  X 
+	 * 		 	^S1     ^S2     ^S3
+	 * 	<S4 L5>	 X   |	 X	 |	 X
+	 * 			 -	 +	 -	 +	 -
+	 * 			 X   |	 X	 |	 X
+	 * 			 -	 +	 -	 +	 -
+	 * 	<S5		 X   |	 X	 |	 X
 	 * 
-	 * (Legend) 
-	 *  S = Short-Range
-	 * 	L = Long-Range
+	 * Legend:
+	 * 		S = Short-Range
+	 * 		L = Long-Range
 	 */
 
 	private final Sensor SRFrontLeft;		// 1
 	private final Sensor SRFrontCenter;		// 2
 	private final Sensor SRFrontRight;		// 3
 	private final Sensor SRLeft;			// 4
-	private final Sensor SRLeftBack;			// 5
+	private final Sensor SRLeftBack;		// 5
 	private final Sensor LRRight;			// 6
 
 	// Constructor(s)
@@ -208,34 +207,34 @@ public class Robot {
 		switch (m) {
 		case FORWARD:
 			switch (robotDir) {
-			case UP:
-				robotRow--;
-				break;
-			case DOWN:
-				robotRow++;
-				break;
-			case LEFT:
-				robotCol--;
-				break;
-			default:
-				robotCol++;
-				break;
+				case UP:
+					robotRow--;
+					break;
+				case DOWN:
+					robotRow++;
+					break;
+				case LEFT:
+					robotCol--;
+					break;
+				default:
+					robotCol++;
+					break;
 			}
 			break;
 		case BACKWARD:
 			switch (robotDir) {
-			case UP:
-				robotRow++;
-				break;
-			case DOWN:
-				robotRow--;
-				break;
-			case LEFT:
-				robotCol++;
-				break;
-			default:
-				robotCol--;
-				break;
+				case UP:
+					robotRow++;
+					break;
+				case DOWN:
+					robotRow--;
+					break;
+				case LEFT:
+					robotCol++;
+					break;
+				default:
+					robotCol--;
+					break;
 			}
 			break;
 		case TURNLEFT:
@@ -352,7 +351,7 @@ public class Robot {
 	}
 
 	/**
-	 * Execute sensor function (physically integrated function)
+	 * Execute sensor function and send MDF strings to Android (physically integrated function)
 	 * @param mapExplore Map used to track visited tiles and respective types of physical environment
 	 */
 	public void multiSense(Map mapExplore, String msg) {

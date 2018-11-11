@@ -12,9 +12,6 @@ import search.FastestPath;
 
 public class Explore {
 
-	// Explore Run Limit
-
-
 	// Cardinal Reference
 	private MOVEMENT forward = MOVEMENT.FORWARD;
 	private MOVEMENT turnLeft = MOVEMENT.TURNLEFT;
@@ -24,7 +21,6 @@ public class Explore {
 	private DIRECTION up = DIRECTION.UP;
 	private DIRECTION down = DIRECTION.DOWN;
 	private DIRECTION left = DIRECTION.LEFT;
-	// private DIRECTION right = DIRECTION.RIGHT;
 
 	// Robot Tracker
 	private Robot robot;
@@ -51,12 +47,12 @@ public class Explore {
 
 	// Constructor
 	/**
-	 * 
-	 * @param bot
-	 * @param explore
-	 * @param actual
-	 * @param seconds
-	 * @param coveragePercent
+	 * Initialise Exploration routine
+	 * @param bot Robot reference
+	 * @param explore Tracking map reference
+	 * @param actual Simulated map reference
+	 * @param seconds Exploration Duration (in seconds)
+	 * @param coveragePercent Minimum required coverage (in %)
 	 */
 	public Explore(Robot bot, Map explore, Map actual, long seconds, double coveragePercent) {
 		robot = bot;
@@ -69,8 +65,8 @@ public class Explore {
 
 	// Getter(s)
 	/**
-	 * 
-	 * @return
+	 * Return tracking map
+	 * @return tracking map
 	 */
 	public Map getMap() {
 		return mapExplore;
@@ -78,7 +74,8 @@ public class Explore {
 
 	// Main Functions
 	/**
-	 * 
+	 * Calibrates robot
+	 * (physically integrated)
 	 */
 	public void initialCalibrate() {
 		if (isReal) {
@@ -93,7 +90,7 @@ public class Explore {
 	}
 	
 	/**
-	 * 
+	 * Setup robot for exploration sequence
 	 */
 	public void setupExplore() {	
 		timeStart = System.currentTimeMillis();
@@ -118,7 +115,7 @@ public class Explore {
 	}
 
 	/**
-	 * 
+	 * Exploration sequence
 	 */
 	public void explore() {
 		if (System.currentTimeMillis() >= timeEnd || explored >= maxCoverage || 
@@ -185,7 +182,7 @@ public class Explore {
 	}
 
 	/**
-	 * 
+	 * Return to Start Zone
 	 */
 	public void goToStart() {
 		int startRow, startCol, goalRow, goalCol;
@@ -224,7 +221,7 @@ public class Explore {
 
 	// Support Function
 	/**
-	 * 
+	 * Checks for valid moves robot can take
 	 */
 	private void move() {
 		if (peekLeft() && leftCount < 4) {
@@ -236,27 +233,13 @@ public class Explore {
 		} else if (peekUp()) {
 			leftCount = 0;
 			moveRobot(forward, isReal, isReal);
-		} 
-		
-		else if (peekRight()) {
+		} else if (peekRight()) {
 			leftCount = 0;
 			moveRobot(turnRight, isReal, isReal);
 			if (peekUp()) {
 				moveRobot(forward, isReal, isReal);
 			}
-		}
-		
-		// if right (blind)
-		/*
-		else if (rightNotExplored()) {
-			moveRobot(turnRight, isReal, isReal);
-			if (peekUp()) {
-				moveRobot(forward, isReal, isReal);
-			}
-		} 
-		*/
-		
-		else if (peekDown()) {
+		} else if (peekDown()) {
 			leftCount = 0;
 			moveRobot(turnLeft, isReal, isReal);
 			moveRobot(turnLeft, isReal, isReal);
@@ -264,8 +247,8 @@ public class Explore {
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Return true if robot's left is a valid place to move into
+	 * @return true if robot's left is a valid place to move into, false otherwise
 	 */
 	private boolean peekLeft() {
 		switch(robot.getDir()) {
@@ -281,8 +264,8 @@ public class Explore {
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Return true if robot's right is a valid place to move into
+	 * @return true if robot's right is a valid place to move into, false otherwise
 	 */
 	private boolean peekRight() {
 		switch(robot.getDir()) {
@@ -298,8 +281,8 @@ public class Explore {
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Return true if robot's back is a valid place to move into
+	 * @return true if robot's back is a valid place to move into, false otherwise
 	 */
 	private boolean peekDown() {
 		switch(robot.getDir()) {
@@ -315,8 +298,8 @@ public class Explore {
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Return true if robot's front is a valid place to move into
+	 * @return true if robot's front is a valid place to move into, false otherwise
 	 */
 	private boolean peekUp() {
 		switch(robot.getDir()) {
@@ -332,8 +315,8 @@ public class Explore {
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Return true if robot's front is a valid place to move into
+	 * @return true if robot's front is a valid place to move into, false otherwise
 	 */
 	private boolean isUpFree() {
 		int y = robot.getRow(), x = robot.getCol();
@@ -341,8 +324,8 @@ public class Explore {
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Return true if robot's back is a valid place to move into
+	 * @return true if robot's back is a valid place to move into, false otherwise
 	 */
 	private boolean isDownFree() {
 		int y = robot.getRow(), x = robot.getCol();
@@ -350,8 +333,8 @@ public class Explore {
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Return true if robot's left is a valid place to move into
+	 * @return true if robot's left is a valid place to move into, false otherwise
 	 */
 	private boolean isLeftFree() {
 		int y = robot.getRow(), x = robot.getCol();
@@ -359,8 +342,8 @@ public class Explore {
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Return true if robot's right is a valid place to move into
+	 * @return true if robot's right is a valid place to move into, false otherwise
 	 */
 	private boolean isRightFree() {
 		int y = robot.getRow(), x = robot.getCol();
@@ -368,10 +351,10 @@ public class Explore {
 	}
 
 	/**
-	 * 
-	 * @param col
-	 * @param row
-	 * @return
+	 * Return true if tile at [row (y), col (x)] is explored and not an obstacle
+	 * @param row Tile row coordinate
+	 * @param col Tile col coordinate
+	 * @return true if tile is explored and not an obstacle, false otherwise
 	 */
 	private boolean notObs(int row, int col) {
 		if (Map.isValidTile(row, col)) {
@@ -382,10 +365,10 @@ public class Explore {
 	}
 
 	/**
-	 * 
-	 * @param col
-	 * @param row
-	 * @return
+	 * Return true if tile at [row (y), col (x)] is explored, not an obstacle and not a virtual wall
+	 * @param row Tile row coordinate
+	 * @param col Tile col coordinate
+	 * @return true if tile is explored, not an obstacle and not a virtual wall, false otherwise
 	 */
 	private boolean notVir(int row, int col) {
 		if (Map.isValidTile(row, col)) {
@@ -395,6 +378,12 @@ public class Explore {
 		return false;
 	}
 	
+	/**
+	 * Execute robot's movements
+	 * @param move Direction which robot would move to
+	 * @param sendArd If set to true, instruction would be transmitted to Arduino (physically integrated)
+	 * @param sendAnd If set to true, instruction would be transmitted to Android (physically integrated)
+	 */
 	private void moveRobot(MOVEMENT move, boolean sendArd, boolean sendAnd) {
 		if (robot.isRealBot()) {
 			msg = robot.move(move, sendArd, sendAnd);
@@ -414,7 +403,7 @@ public class Explore {
 	}
 
 	/**
-	 * 
+	 * Updates robot's exploration progress
 	 */
 	private void updateExplore() {
 		int count = 0;
@@ -428,6 +417,10 @@ public class Explore {
 		System.out.println("Duration: " + TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - timeStart) + " seconds");
 	}
 
+	/**
+	 * Rotate robot to face intended direction
+	 * @param dir Intended direction robot would face
+	 */
 	private void rotateRobot(DIRECTION dir) {
 		DIRECTION robotDir = robot.getDir();
 		if (robotDir == dir) return;
@@ -492,17 +485,18 @@ public class Explore {
 	}
 
 	/**
-	 * 
+	 * Execute calibration function (physically integrated)
 	 */
 	private void calibrate() {
 		robot.move(calibrate, true, false);
 	}
 
-	// 1 (current robot dir), 2 (left of robot dir), 3 (right of robot dir)
 	/**
-	 * 
-	 * @param i
-	 * @return
+	 * Evalutes whether the robot can calibrate at its current position, based on its tracking map
+	 * @param i 1 (current robot dir), 2 (left of robot dir), 3 (right of robot dir)
+	 * @param bot Robot reference
+	 * @param map Tracking map reference
+	 * @return true if robot can calibrate at current position, false otherwise 
 	 */
 	public static boolean canCalibrate(int i, Robot bot, Map map) {
 		if (i < 1 || i > 3) return false;
@@ -547,48 +541,35 @@ public class Explore {
 		}
 	}
 	
+	/**
+	 * Returns true if tile at [row (y), col (x)] is either invalid (i.e. beyond map boundaries)
+	 * or is an obstacle
+	 * @param row Tile row coordinate
+	 * @param col Tile col coordinate
+	 * @param explore Tracking map reference
+	 * @return true if tile at [row, col] is either invalid or is an obstacle, false otherwise
+	 */
 	private static boolean isCalibrateTile(int row, int col, Map explore) {
 		return !Map.isValidTile(row, col) || explore.isObstacleTile(row, col);
 	}
-	
-	// Right Blind Legacy Code
-	/*
-	private boolean rightNotExplored() {
-		int row, col;
-		row = robot.getRow(); col = robot.getCol();
-		switch (robot.getDir()) {
-			case UP:
-				if (Map.isValidTile(row-1,col+2) && Map.isValidTile(row,col+2) && Map.isValidTile(row+1,col+2)) {
-					return !mapExplore.getTile(row-1, col+2).isExplored() || !mapExplore.getTile(row, col+2).isExplored() || !mapExplore.getTile(row+1, col+2).isExplored();
-				}
-				return false; 
-			case DOWN:
-				if (Map.isValidTile(row-1,col-2) && Map.isValidTile(row,col-2) && Map.isValidTile(row+1,col-2)) {
-					return !mapExplore.getTile(row-1, col-2).isExplored() || !mapExplore.getTile(row, col-2).isExplored() || !mapExplore.getTile(row+1, col-2).isExplored();
-				}
-				return false; 
-			case LEFT:
-				if (Map.isValidTile(row-2,col-1) && Map.isValidTile(row-2,col) && Map.isValidTile(row-2,col+1)) {
-					return !mapExplore.getTile(row-2, col-1).isExplored() || !mapExplore.getTile(row-2, col).isExplored() || !mapExplore.getTile(row-2, col+1).isExplored();
-				}
-				return false;
-			default:
-				if (Map.isValidTile(row+2,col-1) && Map.isValidTile(row+2,col) && Map.isValidTile(row+2,col+1)) {
-					return !mapExplore.getTile(row+2, col-1).isExplored() || !mapExplore.getTile(row+2, col).isExplored() || !mapExplore.getTile(row+2, col+1).isExplored();
-				}
-				return false;
-		}
-	}
-	*/
 
 	/**
-	 * 
-	 * @return
+	 * Returns true if Exploration is complete
+	 * @return true if Exploration is complete, false otherwise
 	 */
 	public boolean runFinished() {
 		return endRun;
 	}
 
+	/* Legacy Code - Intended Arrow Detection Camera Code
+	 * Did not implement as a result of persisting issues with Arduino
+	 */
+	/**
+	 * 
+	 * @param desRow
+	 * @param desCol
+	 * @return
+	 *
 	public boolean isCamPosValid(int desRow, int desCol) {
 		// check centre tile
 		Tile centreTile = mapExplore.getTile(desRow, desCol);
@@ -604,5 +585,6 @@ public class Explore {
 
 		return true;
 	}
+	*/
 
 }

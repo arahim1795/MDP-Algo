@@ -4,22 +4,9 @@ import map.Map;
 import map.MapConstant;
 
 public class MapDescriptor {
-	public static void 	loadMapfromFile (Map map, String bin){
-		//		System.out.println(bin);
 
+	public static void 	loadMapfromFile (Map map, String bin){
 		try {
-			/*
-			System.out.println(filename);
-            InputStream inputStream = new FileInputStream(filename + ".txt");
-            BufferedReader buf = new BufferedReader(new InputStreamReader(inputStream));
-            String line = buf.readLine();
-            StringBuilder sb = new StringBuilder();
-            while (line != null) {
-                sb.append(line);
-                line = buf.readLine();
-            }
-            String bin = sb.toString();
-			 */
 			int binPtr = 0;
 			for (int row = 0 ; row < MapConstant.MAP_ROWS ; row++) {
 				for (int col = 0; col < MapConstant.MAP_COLS; col++) {
@@ -171,8 +158,6 @@ public class MapDescriptor {
 				mapString.append("1");
 		}
 		String result = mapString.toString();
-//		System.out.println(result);
-//		System.out.println(result.length());
 		return result;
 	}
 

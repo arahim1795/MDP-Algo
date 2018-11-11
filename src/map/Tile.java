@@ -127,8 +127,8 @@ public class Tile {
 	}
 
 	/**
-	 * Set tile as midpoint
-	 * @param bool If set to true, tile is midpoint
+	 * Set tile as waypoint
+	 * @param bool If set to true, tile is waypoint
 	 */
 	public void setMidPoint(boolean bool) {
 		midPoint = bool;

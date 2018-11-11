@@ -5,7 +5,6 @@ package map;
  */
 public final class MapConstant {
 
-	
 	// Default map sizes
 	public static final int MAP_ROWS = 20;
 	public static final int MAP_COLS = 15;

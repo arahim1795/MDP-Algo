@@ -157,24 +157,24 @@ public class Map extends JPanel {
 	}
 
 	/**
-	 * Returns midpoint row coordinate
-	 * @return midpoint row coordinate
+	 * Returns waypoint row (y) coordinate
+	 * @return waypoint row coordinate
 	 */
 	public int getMidPointRow() {
 		return midPointRow;
 	}
 
 	/**
-	 * Returns midpoint col coordinate
-	 * @return midpoint col coordinate
+	 * Returns waypoint col (x) coordinate
+	 * @return waypoint col coordinate
 	 */
 	public int getMidPointCol() {
 		return midPointCol;
 	}
 
 	/**
-	 * Returns true if midpoint has been set
-	 * @return true if midpoint has been set, false otherwise
+	 * Returns true if waypoint has been set
+	 * @return true if waypoint has been set, false otherwise
 	 */
 	public boolean hasMidPoint(){
 		return _bSetMid;
@@ -183,9 +183,9 @@ public class Map extends JPanel {
 
 	// Setters
 	/**
-	 * 
-	 * @param row
-	 * @param col
+	 * Sets waypoint at intended [row (y), col (x)]
+	 * @param row Tile row coordinate
+	 * @param col Tile col coordinate
 	 */
 	public void setMidPoint(int row, int col){
 		if(_bSetMid){
@@ -204,11 +204,11 @@ public class Map extends JPanel {
 
 	// Setter(s)
 	/**
-	 * Sets Tile as an obstacles, adjacent Tile(s) are set as virtual walls, except for
+	 * Sets Tile as an obstacle, adjacent Tile(s) are set as virtual walls, except for
 	 * persistent Tile(s)
-	 * @param row
-	 * @param col
-	 * @param bool
+	 * @param row Tile row coordinate
+	 * @param col Tile col coordinate
+	 * @param bool If set to true, tile is an obstacle
 	 * @return
 	 */
 	public void setObstacleTile(int row, int col, boolean bool) {
@@ -313,9 +313,9 @@ public class Map extends JPanel {
 		return map;
 	}
 
-	/**
+	/* DEBUG only
 	 * Prints map to console
-	 */
+	 *
 	public void printMap() {
 		for (int r = 0; r < row; r++) 
 			for (int c = 0; c < col; c++) {
@@ -324,6 +324,7 @@ public class Map extends JPanel {
 				if (c == (col-1)) System.out.print("\n");
 			}
 	}
+	*/
 
 	/**
 	 * Reset all tile objects within initialised map, except persistence
